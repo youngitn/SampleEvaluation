@@ -166,7 +166,7 @@ public class ShowSignHistory extends hproc {
 								+ htm1.toString() + "</font></td>");
 					}
 				}
-				subSb.append("</tr>");
+				subSb.append("</tr>"); 
 				subSb.append("</TABLE></DIV>");
 			}
 			subSb.append("</DIV>");
