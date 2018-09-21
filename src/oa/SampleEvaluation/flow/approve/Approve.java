@@ -32,7 +32,7 @@ public class Approve extends bProcFlow {
 		talk t = getTalk();
 
 		switch (FlowState.valueOf(state)) {
-		case 待處理:
+		case 組長:
 			
 			SampleEvaluationCheck s = new SampleEvaluationCheck();
 			s.setAppType(getValue("APP_TYPE"));
