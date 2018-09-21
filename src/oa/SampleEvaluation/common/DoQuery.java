@@ -54,7 +54,7 @@ public class DoQuery {
 		// 員工基本資料 姓名-工號-部門名稱
 		strSql.append(DoQuery.getEmpInfoSqlQueryStr(keyName, targetEmpidFieldName));
 		strSql.append(",");
-		strSql.append("APP_TYPE");
+		strSql.append("APP_TYPE"); 
 		strSql.append(",");
 		strSql.append("URGENCY");
 		strSql.append(",");
