@@ -3,7 +3,7 @@ package oa.SampleEvaluation.dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import oa.SampleEvaluation.common.SampleEvaluation;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
 
 public interface IMainTableDao {
 

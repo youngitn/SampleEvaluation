@@ -1,9 +1,8 @@
-package oa.SampleEvaluationCheck.object;
+package oa.SampleEvaluationCheck.tableObject;
 
 import java.io.Serializable;
 
-import oa.SampleEvaluation.common.SampleEvaluation;
-
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
 /**
 *  SampleEvaluation
 * 

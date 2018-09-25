@@ -1,4 +1,4 @@
-package oa.SampleEvaluationCheck.object;
+package oa.SampleEvaluationCheck.tableObject;
 import java.io.*;
 import java.sql.*;
 import java.util.*;

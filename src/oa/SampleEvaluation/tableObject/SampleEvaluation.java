@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.tableObject;
 
 import java.io.Serializable;
 import java.util.Date;

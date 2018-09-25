@@ -14,14 +14,14 @@ import jcx.db.talk;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
-import oa.SampleEvaluation.common.SampleEvaluation;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 
 
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
-import oa.SampleEvaluationCheck.object.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.object.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
+import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowc;
 
 public class Test {
 

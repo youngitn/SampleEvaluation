@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.common.SampleEvaluation;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
 
 /**
  * SampleEvaluation

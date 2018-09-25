@@ -1,0 +1,49 @@
+package oa.SampleEvaluationCheck.rule;
+
+import jcx.jform.bRule;
+
+import java.util.*;
+
+import jcx.db.*;
+
+public class Rule extends bRule {
+	public Vector getIDs(String value) throws Throwable {
+		// 回傳值為 Vector contails 符合這條規格的帳號
+		// value 為 "不動產、廠房及設備異動申請單_取得"
+		String state = getState();
+		String depNo = getData("RECEIPT_UNIT").trim(); // 受理單位號碼
+
+		Vector id = new Vector();
+		talk t = getTalk();
+
+		// 受理單位主管所分派之人員
+		if (state.equals("填寫請驗單號")) {
+
+			String ret = getData("PROJECT_LEADER").trim();
+
+			id.addElement("admin");
+			id.addElement(ret);
+
+			return id;
+		}
+		if (state.equals("實驗室經辦")) {
+
+			id.addElement("admin");
+
+			return id;
+		}
+
+		if (state.equals("請驗作業跟催")) {
+
+			id.addElement("admin");
+
+			return id;
+		}
+
+		return id;
+	}
+
+	public String getInformation() {
+		return "---------------\u8b93\u552e\u901a\u77e5\u55ae.Rule()----------------";
+	}
+}

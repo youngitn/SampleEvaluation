@@ -3,7 +3,7 @@ package oa.SampleEvaluationCheck.dao;
 import java.sql.*;
 import java.util.*;
 
-import oa.SampleEvaluationCheck.object.SampleEvaluationCheckFlowcHis;
+import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowcHis;
 
 public class SampleEvaluationCheckFlowcHisDao {
 

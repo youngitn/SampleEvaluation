@@ -14,7 +14,7 @@ import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.DoQuery;
 import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
-import oa.SampleEvaluation.common.SampleEvaluation;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluation.common.UIHidderString;
 import oa.SampleEvaluation.common.UIObj;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
@@ -65,6 +65,16 @@ public class Controller extends hproc {
 			break;
 		case FLOW_PAGE_INIT:
 			init.doPendingPageProcess();
+			if (getState().trim().equals("組長")) {
+				setEditable("IS_CHECK", true);
+				setEditable("IS_TRIAL_PRODUCTION", true);
+			}
+			if (getState().trim().equals("試製單號填寫")) {		
+				setEditable("NOTIFY_NO_TRIAL_PROD", true);
+			}
+			if (getState().trim().equals("受理單位主管分案")) {		
+				setEditable("PROJECT_LEADER", true);
+			}
 			break;
 		case QUERY_CLICK:
 
@@ -90,6 +100,7 @@ public class Controller extends hproc {
 			break;
 		}
 		return null;
+
 	}
 
 	public void doQuery() throws Throwable {
@@ -132,6 +143,8 @@ public class Controller extends hproc {
 
 		fieldMap.put("APPLICANT", AddUtil.addValidateField(getValue("APPLICANT").trim(), "申請人"));
 		fieldMap.put("APP_TYPE", AddUtil.addValidateField(getValue("APP_TYPE").trim(), "申請類型"));
+		fieldMap.put("APPLICANT", AddUtil.addValidateField(getValue("RECEIPT_UNIT").trim(), "受理單位"));
+
 		ArrayList<String> ret = AddUtil.emptyCheck(fieldMap);
 		if (ret != null && ret.size() > 0) {
 			message("以下欄位請選擇或輸入:" + ret);
