@@ -152,6 +152,31 @@ public class SampleEvaluation implements Serializable {
     * is_trial_production
     */
     private String isTrialProduction;
+    
+    private String assessor;
+    
+	private String designee;
+    
+    public String getDesignee() {
+		return designee;
+	}
+	public void setDesignee(String designee) {
+		this.designee = designee;
+	}
+	public String getAssessor() {
+		return assessor;
+	}
+	public void setAssessor(String assessor) {
+		this.assessor = assessor;
+	}
+	public String getLabExe() {
+		return labExe;
+	}
+	public void setLabExe(String labExe) {
+		this.labExe = labExe;
+	}
+
+	private String labExe;
 
     public SampleEvaluation() {
     	
@@ -187,6 +212,8 @@ public class SampleEvaluation implements Serializable {
 		this.qrNo = strings[25];
 		this.isCheck = strings[26];
 		this.isTrialProduction = strings[27];
+		this.labExe = strings[28];
+		this.assessor = strings[29];
 	}
 
 	

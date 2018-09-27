@@ -19,23 +19,24 @@ public class Rule extends bRule {
 		// 受理單位主管所分派之人員
 		if (state.equals("填寫請驗單號")) {
 
-			String ret = getData("PROJECT_LEADER").trim();
-
 			id.addElement("admin");
-			id.addElement(ret);
 
 			return id;
 		}
 		if (state.equals("實驗室經辦")) {
 
 			id.addElement("admin");
-
+			String[] u = getData("LAB_EXE").trim().split(" ");
+			id.addElement(u[0]);
 			return id;
 		}
 
 		if (state.equals("請驗作業跟催")) {
 
+			String[] ret = getData("DESIGNEE").trim().split(" ");
+
 			id.addElement("admin");
+			id.addElement(ret[0]);
 
 			return id;
 		}

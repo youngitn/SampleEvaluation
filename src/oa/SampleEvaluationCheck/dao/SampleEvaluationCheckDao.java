@@ -9,7 +9,7 @@ import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
 /**
  * SampleEvaluation
  * 
- * */
+ */
 
 public class SampleEvaluationCheckDao {
 
@@ -22,25 +22,27 @@ public class SampleEvaluationCheckDao {
 	public String add(SampleEvaluationCheck s) throws SQLException, Exception {
 
 		return t.execFromPool(
-				"insert into sample_evaluation_check  ( OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
+				"insert into sample_evaluation_check  ( OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
 				new Object[] { s.getOwnPno(), s.getPno(), s.getAppType(), s.getUrgency(), s.getMaterial(),
 						s.getSapCode(), s.getAbCode(), s.getMfgLotNo(), s.getQty(), s.getPack(), s.getUnit(),
 						s.getMfr(), s.getSupplier(), s.getProvideCoa(), s.getProvideSpec(), s.getProvideTestMethod(),
 						s.getProvideSds(), s.getProvideOthers(), s.getNote(), s.getApplicant(), s.getAppDate(),
 						s.getReceiptUnit(), s.getProjectCode(), s.getProjectLeader(), s.getNotifyNoCheck(),
-						s.getNotifyNoTrialProd(), s.getQrNo(), s.getIsCheck(), s.getIsTrialProduction() });
+						s.getNotifyNoTrialProd(), s.getQrNo(), s.getIsCheck(), s.getIsTrialProduction(), s.getLabExe(),
+						s.getAssessor(), s.getDesignee() });
 	}
 
 	public String update(SampleEvaluationCheck s) throws SQLException, Exception {
 		return t.execFromPool(
-				"UPDATE  sample_evaluation_check  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?"
+				"UPDATE  sample_evaluation_check  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?"
 						+ " where own_pno=?",
 				new Object[] { s.getAppType(), s.getUrgency(), s.getMaterial(), s.getSapCode(), s.getAbCode(),
 						s.getMfgLotNo(), s.getQty(), s.getPack(), s.getUnit(), s.getMfr(), s.getSupplier(),
 						s.getProvideCoa(), s.getProvideSpec(), s.getProvideTestMethod(), s.getProvideSds(),
 						s.getProvideOthers(), s.getNote(), s.getApplicant(), s.getAppDate(), s.getReceiptUnit(),
 						s.getProjectCode(), s.getProjectLeader(), s.getNotifyNoCheck(), s.getNotifyNoTrialProd(),
-						s.getQrNo(), s.getIsCheck(), s.getIsTrialProduction(), s.getOwnPno() });
+						s.getQrNo(), s.getIsCheck(), s.getIsTrialProduction(), s.getLabExe(), s.getAssessor(),s.getDesignee(),
+						s.getOwnPno() });
 
 	}
 

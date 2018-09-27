@@ -3,6 +3,7 @@ package oa.SampleEvaluation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -16,7 +17,7 @@ import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluation.common.UIHidderString;
-import oa.SampleEvaluation.common.UIObj;
+
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 /**
@@ -45,40 +46,61 @@ public class Controller extends hproc {
 //
 		// 按鈕動作處理進入點
 		switch (ButtonActionByName.valueOf(actionObjName.trim())) {
-		case QUERY_PAGE_INIT:
-			UIHide();
+		case QUERY_PAGE_INIT:// 進入查詢畫面
+			addScript(UIHidderString.hideDmakerAddButton());
 			init.doQueryPageProcess();
 			break;
 
-		case ADD_PAGE_INIT:
-			UIHide();
+		case ADD_PAGE_INIT:// 進入新增畫面
+			addScript(UIHidderString.hideDmakerAddButton());
 			init.doAddPageProcess();
 			break;
 
-		case PENING_PAGE_INIT:// 這個動作比較尷尬 屬於載入畫面但卻是按鈕發動
+		case PENING_PAGE_INIT:// 進入待處理畫面
 
 			init.doPendingPageProcess();
 			break;
 
-		case DETAIL_PAGE_INIT:
+		case DETAIL_PAGE_INIT:// 進入明細畫面
 			init.doDetailPageProcess();
 			break;
-		case FLOW_PAGE_INIT:
+		case FLOW_PAGE_INIT:// 進入流程簽核畫面
 			init.doPendingPageProcess();
+			// 簽核完後跳至主頁面
+			String pno = getValue("PNO").trim();
+			if (pno.length() <= 0) {
+				changeForm(getFunctionName());
+			} else {
+				String sql = "select f_inp_info from " + getTableName() + "_flowc where PNO = '" + pno + "'";
+				String[][] ret = getTalk().queryFromPool(sql);
+				if (ret.length > 0) {
+					String memo = ret[0][0];
+					if (memo.startsWith("[退簽]")) {
+						addScript("callRejectWarning();");
+					}
+				}
+			}
+			// 如果帶出的資料 試製選項有打勾 就顯示評估人員
+			if (getValue("IS_TRIAL_PRODUCTION").trim().equals("1")) {
+				setVisible("ASSESSOR", true);
+			}
 			if (getState().trim().equals("組長")) {
 				setEditable("IS_CHECK", true);
 				setEditable("IS_TRIAL_PRODUCTION", true);
+
+				setEditable("ASSESSOR", true);
+				setEditable("LAB_EXE", true);
+
 			}
-			if (getState().trim().equals("試製單號填寫")) {		
+			if (getState().trim().equals("試製單號填寫")) {
 				setEditable("NOTIFY_NO_TRIAL_PROD", true);
 			}
-			if (getState().trim().equals("受理單位主管分案")) {		
-				setEditable("PROJECT_LEADER", true);
+			if (getState().trim().equals("受理單位主管分案")) {
+				setEditable("DESIGNEE", true);
 			}
+
 			break;
 		case QUERY_CLICK:
-
-			UIHide();
 			/**
 			 * 
 			 */
@@ -242,21 +264,28 @@ public class Controller extends hproc {
 
 	}
 
-	public Hashtable getFormFieldKeyValueHashtableWithCaption() {
-		Hashtable<String, UIObj> ret = new Hashtable<String, UIObj>();
-		Hashtable h = getAllcLabels();
-		Set<String> keys = h.keySet();
-		// message( ((Hashtable)h.get("TO_ADD_PAGE")).get("caption")+"");
-		for (String key : keys) {
-			// System.out.println("Value of "+key+" is: "+hm.get(key));
-			// ret.put(key, new UIObj(name, caption, type, value));
-		}
-		return null;
-	}
-
 	public String arrayToString(String[] a) {
 		return Arrays.toString(a).replace("[", "").replace("]", "");
 
+	}
+
+	public String getCheckFlowStatus(String ownPno) {
+		String sql = "SELECT F_INP_STAT FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE OWN_PNO='" + ownPno + "'";
+		String[][] ret = null;
+		try {
+			ret = getTalk().queryFromPool(sql);
+			if (ret.length == 0) {
+				// 如果沒有請驗流程視為請驗已結案
+				return "結案";
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret[0][0];
 	}
 
 	/**
@@ -280,9 +309,12 @@ public class Controller extends hproc {
 				sign_flow_status_index = i;
 			}
 		}
+
 		for (int i = 0; i < queryResults.length; i++) {
-			if (queryResults[i][sign_flow_status_index].trim().equals("結案")
-					|| queryResults[i][sign_flow_status_index].trim().equals("歸檔")) {
+
+			if ((queryResults[i][sign_flow_status_index].trim().equals("結案")
+					|| queryResults[i][sign_flow_status_index].trim().equals("歸檔"))
+					&& getCheckFlowStatus(queryResults[i][0]+"CHECK").equals("結案")) {
 				queryResults[i][sign_flow_status_index] = "<font color=blue>(已生效)</font>";
 			} else {
 				Vector people = getApprovablePeople(getFunctionName(),

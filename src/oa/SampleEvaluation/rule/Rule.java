@@ -29,19 +29,20 @@ public class Rule extends bRule {
 			return id;
 		}
 		// 受理單位主管所分派之人員
-		if (state.equals("組長")) {
+		if (state.equals("組長") || state.equals("試製作業跟催")) {
 
-			String ret = getData("PROJECT_LEADER").trim();
+			String[] ret = getData("DESIGNEE").trim().split(" ");
 
 			id.addElement("admin");
-			id.addElement(ret);
+			id.addElement(ret[0]);
 
 			return id;
 		}
 		if (state.equals("評估人員")) {
 
 			id.addElement("admin");
-
+			String[] u = getData("ASSESSOR").trim().split(" ");
+			id.addElement(u[0]);
 			return id;
 		}
 
@@ -52,13 +53,21 @@ public class Rule extends bRule {
 			return id;
 		}
 
-		if (state.equals("試製作業跟催")) {
+		if (state.equals("實驗室經辦")) {
 
 			id.addElement("admin");
-
+			String[] u = getData("LAB_EXE").trim().split(" ");
+			id.addElement(u[0]);
 			return id;
 		}
-		
+
+//		if (state.equals("試製作業跟催")) {
+//
+//			id.addElement("admin");
+//
+//			return id;
+//		}
+
 		if (state.equals("實驗室經辦")) {
 
 			id.addElement("admin");
