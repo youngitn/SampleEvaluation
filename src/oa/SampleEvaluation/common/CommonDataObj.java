@@ -1,31 +1,42 @@
 package oa.SampleEvaluation.common;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import jcx.db.talk;
 
 public class CommonDataObj {
 
-	private String tableName;
-	private String tablePKName;
-	private String functionName;
-	private String[][] tableAllColumn;
-	private UserData userdata;
+	private String tableName;//資料表名稱 
+	private String tablePKName;//PK名稱 用來記錄單號
+	private String functionName;//表單名稱
+	private String[][] tableAllColumn;//裝資料表所有欄位之陣列
+	private UserData userdata;//員工基本資料物件
 
-	private String tableApplicantFieldName;
-	private String tableAppDateFieldName;
-	private String queryFieldNameEmpid;
-	private String queryFieldNameStartAppDate;
-	private String queryFieldNameEndAppDate;
-	private String queryFieldNameFlowStatus;
-	private String queryFieldNameBillId;
-	private String queryFieldValueEmpid;
-	private String queryFieldValueStartAppDate;
-	private String queryFieldValueEndAppDate;
-	private String queryFieldValueFlowStatus;
-	private String queryFieldValueBillId;
+	private String tableApplicantFieldName;//資料表中申請人欄位名稱
+	private String tableAppDateFieldName;//資料表申請日期欄位名稱
+	
+	private String queryFieldNameEmpid;//查詢頁面申請人員編欄位名稱
+	private String queryFieldNameStartAppDate;//查詢頁面申請日期 起日 欄位名稱
+	private String queryFieldNameEndAppDate;//查詢頁面申請日期 迄日 欄位名稱
+	private String queryFieldNameFlowStatus;//查詢頁面簽核狀態 欄位名稱
+	private String queryFieldNameBillId;//查詢頁面單號 欄位名稱
+	
+	private String queryFieldValueEmpid;//查詢頁面申請人員編值
+	private String queryFieldValueStartAppDate;//查詢頁面申請日期 起日 欄位值
+	private String queryFieldValueEndAppDate;//查詢頁面申請日期 迄日 欄位值
+	private String queryFieldValueFlowStatus;//查詢頁面簽核狀態 欄位值
+	private String queryFieldValueBillId;//查詢頁面單號 欄位值
 	private talk talk;
 	private String queryFieldNameSubFlowStatus;
+	private ArrayList<String> queryResultShowTableFieldList;
+	public ArrayList<String> getQueryResultShowTableFieldList() {
+		return queryResultShowTableFieldList;
+	}
+
+	public void setQueryResultShowTableFieldList(ArrayList<String> queryResultShowTableFieldList) {
+		this.queryResultShowTableFieldList = queryResultShowTableFieldList;
+	}
 
 	public CommonDataObj(String empid, talk t, String tableName, String tablePKName, String tableApplicantFieldName)
 			throws SQLException, Exception {

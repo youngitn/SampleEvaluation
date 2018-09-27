@@ -10,17 +10,17 @@ import jcx.util.datetime;
  * @author u52116
  *
  */
-public class FormInitUtil extends BaseFormOnload {
+public class FormInitUtil {
 
 	UserData userdata;
+	hproc c;
 
 	public FormInitUtil(hproc c) throws SQLException, Exception {
-		super(c);
+		this.c = c;
 		userdata = new UserData(c.getUser(), c.getTalk());
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
 	public void doQueryPageProcess() throws SQLException, Exception {
 		// TODO Auto-generated method stub
 		userdata = getNowApplicant();
@@ -38,7 +38,6 @@ public class FormInitUtil extends BaseFormOnload {
 		c.setNewView("QueryPage");
 	}
 
-	@Override
 	public void doAddPageProcess() throws SQLException, Exception {
 		// TODO Auto-generated method stub
 		userdata = getNowApplicant();
@@ -51,20 +50,6 @@ public class FormInitUtil extends BaseFormOnload {
 		userdata = null;
 	}
 
-	@Override
-	/**
-	 * 顯示簽核紀錄
-	 */
-	public void doFlowPageProcess() throws SQLException, Exception {
-		// TODO Auto-generated method stub
-		// 顯示退簽通知
-		setExistBillOtherData();
-		c.message("FLOW");
-		c.addScript("try{showRejectWarning();}catch(e){}");
-
-	}
-
-	@Override
 	public void doPendingPageProcess() throws SQLException, Exception {
 		// TODO Auto-generated method stub
 		setExistBillOtherData();
@@ -116,7 +101,6 @@ public class FormInitUtil extends BaseFormOnload {
 
 	}
 
-	@Override
 	public void doDetailPageProcess() throws SQLException, Exception {
 		// TODO Auto-generated method stub
 		setExistBillOtherData();
@@ -144,18 +128,6 @@ public class FormInitUtil extends BaseFormOnload {
 					+ getSpecUserData(c.getValue("PROJECT_LEADER")).getDep_name());
 		}
 		userdata = null;
-
-	}
-
-	@Override
-	public void doOtherPageProcess() throws SQLException, Exception {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void doViewProcess() throws SQLException, Exception {
-		// TODO Auto-generated method stub
 
 	}
 

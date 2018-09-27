@@ -30,6 +30,7 @@ public class Controller extends hproc {
 
 	public boolean confirm = true;
 	public CommonDataObj cdo;
+	
 
 	@Override
 	public String action(String arg0) throws Throwable {
@@ -43,7 +44,7 @@ public class Controller extends hproc {
 
 		String actionObjName = getActionName(getName());
 
-//
+		//
 		// 按鈕動作處理進入點
 		switch (ButtonActionByName.valueOf(actionObjName.trim())) {
 		case QUERY_PAGE_INIT:// 進入查詢畫面
@@ -99,15 +100,13 @@ public class Controller extends hproc {
 				setEditable("DESIGNEE", true);
 			}
 			if (getState().trim().equals("待處理")) {
-				//相關處理寫在UI的背景區塊ADD_BACKGROUND中
-				//因為這邊的邏輯 在待處理關卡吃不到
+				// 相關處理寫在UI的背景區塊ADD_BACKGROUND中
+				// 因為這邊的邏輯 在待處理關卡吃不到
 			}
 
 			break;
 		case QUERY_CLICK:
-			/**
-			 * 
-			 */
+			setCommonObiQueryData();
 			doQuery();
 			break;
 
@@ -129,9 +128,7 @@ public class Controller extends hproc {
 
 	}
 
-	public void doQuery() throws Throwable {
-		// TODO 執行時出現條件為NULL
-		// 申請人工號 table欄位名稱=APPLICANT DoQuery.getAdvancedCondition()<--用來組SQL用
+	public void setCommonObiQueryData() {
 		cdo.setTableApplicantFieldName("APPLICANT");
 		cdo.setTableAppDateFieldName("APP_DATE");
 		cdo.setQueryFieldNameBillId("QUERY_PNO");
@@ -146,6 +143,12 @@ public class Controller extends hproc {
 		cdo.setQueryFieldValueFlowStatus(getValue("r_status"));
 		cdo.setQueryFieldValueSubFlowStatus(getValue("r_sub_status"));
 		cdo.setFunctionName(getFunctionName());
+	}
+
+	public void doQuery() throws Throwable {
+		// TODO 執行時出現條件為NULL
+		// 申請人工號 table欄位名稱=APPLICANT DoQuery.getAdvancedCondition()<--用來組SQL用
+		
 		String[][] list = DoQuery.getQueryResult(cdo);
 		if (list.length != 0) {
 			ArrayList<String> flist = new ArrayList<String>();
@@ -160,7 +163,7 @@ public class Controller extends hproc {
 
 			setTableData("QUERY_LIST", getQueryResultAfterProcess(list, flist));
 		} else {
-			setTableData("QUERY_LIST",list);
+			setTableData("QUERY_LIST", list);
 			message("查無紀錄");
 		}
 
@@ -326,7 +329,7 @@ public class Controller extends hproc {
 				// 子或主流程有一方還未結案的顯示邏輯
 
 				// 主流程簽核人取得
-				Vector people = getApprovablePeople(getFunctionName(),
+				Vector<String> people = getApprovablePeople(getFunctionName(),
 						"a." + viewFieldOfResultList.get(uuid_index) + "='" + queryResults[i][0] + "'");
 				StringBuffer sb = new StringBuffer();
 				if (people != null) {
@@ -345,7 +348,7 @@ public class Controller extends hproc {
 				people = null;
 				// 子流程簽核人取得
 				people = getApprovablePeople(getFunctionName() + "_請驗流程",
-						"a." + "OWN_"+viewFieldOfResultList.get(uuid_index) + "='" + queryResults[i][0] + "CHECK'");
+						"a." + "OWN_" + viewFieldOfResultList.get(uuid_index) + "='" + queryResults[i][0] + "CHECK'");
 				StringBuffer subsb = new StringBuffer();
 				if (people != null) {
 					if (people.size() != 0) {
@@ -361,9 +364,8 @@ public class Controller extends hproc {
 					}
 				}
 
-				queryResults[i][sign_flow_status_index] = "<font color=red>簽核中</font>【主流程:"
-						+ mainFlowStatus + sb.toString() + "】" + "【請驗流程:"
-						+ checkFlowStatus + subsb.toString() + "】";
+				queryResults[i][sign_flow_status_index] = "<font color=red>簽核中</font>【主流程:" + mainFlowStatus
+						+ sb.toString() + "】" + "【請驗流程:" + checkFlowStatus + subsb.toString() + "】";
 			}
 		}
 

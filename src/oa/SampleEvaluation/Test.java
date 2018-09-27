@@ -25,7 +25,7 @@ import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowc;
 
 public class Test {
 
-	public static void main(String[] args) throws SQLException, Exception {
+	public static void main(String[] args) throws Throwable {
 		// TODO Auto-generated method stub
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 
@@ -77,7 +77,26 @@ public class Test {
 //		secf.setF_INP_TIME(time);
 //		SampleEvaluationCheckFlowcDao secfDao = new SampleEvaluationCheckFlowcDao();
 //		secfDao.create(t.getConnectionFromPool(), secf);
+		SampleEvaluationActionController s = new SampleEvaluationActionController();
+		
+		s.cdo = new CommonDataObj("52116",t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+		s.cdo.setTableApplicantFieldName("APPLICANT");
+		s.cdo.setTableAppDateFieldName("APP_DATE");
 
+		s.cdo.setQueryFieldNameEmpid("QUERY_EMP_ID");
+		s.cdo.setQueryFieldNameBillId("QUERY_PNO");
+		s.cdo.setQueryFieldNameStartAppDate("QUERY_REQ_SDATE");
+		s.cdo.setQueryFieldNameEndAppDate("QUERY_REQ_EDATE");
+		s.cdo.setQueryFieldNameFlowStatus("r_status");
+
+		s.cdo.setQueryFieldValueEmpid("52116");
+		s.cdo.setQueryFieldValueBillId("5211600001");
+		s.cdo.setQueryFieldValueStartAppDate("20180901");
+		s.cdo.setQueryFieldValueEndAppDate("20180930");
+		s.cdo.setQueryFieldValueFlowStatus("");
+		
+		s.cdo.setFunctionName("樣品評估申請作業");
+//		s.doQuery();
 	}
 
 }
