@@ -1,12 +1,13 @@
 package oa.SampleEvaluation.common;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import oa.SampleEvaluation.Controller;
 
 public class DoQuery {
-
 
 	/*
 	 * 取得查詢條件<br> KEY以查詢頁面UI 名稱為準<br>
@@ -26,21 +27,24 @@ public class DoQuery {
 		String sdate = cdo.getQueryFieldValueStartAppDate().trim();
 		String edate = cdo.getQueryFieldValueEndAppDate().trim();
 		String queryFlowStatus = cdo.getQueryFieldValueFlowStatus().trim();
-		
+
 		if (!"".equals(empid))
 			advanced_sql.append("and " + cdo.getTableApplicantFieldName() + " = '" + empid + "' ");
 		if (!"".equals(sdate))
 			advanced_sql.append("and " + cdo.getTableAppDateFieldName() + " >= '" + sdate + "' ");
 		if (!"".equals(edate))
-			advanced_sql.append("and " +cdo.getTableAppDateFieldName() + " <= '" + edate + "' ");
+			advanced_sql.append("and " + cdo.getTableAppDateFieldName() + " <= '" + edate + "' ");
 		if ("已結案".equals(queryFlowStatus))
 			advanced_sql.append("and F_INP_STAT = '結案' ");
 		if ("簽核中".equals(queryFlowStatus))
 			advanced_sql.append("and F_INP_STAT not in ('結案','取消') ");
-		if ("已取消".equals(queryFlowStatus))
-			advanced_sql.append("and F_INP_STAT = '取消' ");
+		if ("待處理".equals(queryFlowStatus))
+			advanced_sql.append("and F_INP_STAT = '待處理' ");
+
 		if (!"".equals(queryId))
 			advanced_sql.append("and a." + tablePKName + " like '%" + queryId + "%' ");
+
+		advanced_sql.append(" and a." + tablePKName + " =  b." + tablePKName);
 		return advanced_sql.toString();
 	}
 
@@ -54,7 +58,7 @@ public class DoQuery {
 		// 員工基本資料 姓名-工號-部門名稱
 		strSql.append(DoQuery.getEmpInfoSqlQueryStr(keyName, targetEmpidFieldName));
 		strSql.append(",");
-		strSql.append("APP_TYPE"); 
+		strSql.append("APP_TYPE");
 		strSql.append(",");
 		strSql.append("URGENCY");
 		strSql.append(",");
@@ -64,7 +68,7 @@ public class DoQuery {
 		strSql.append(",");
 		strSql.append("'明細','簽核紀錄'");
 
-		strSql.append(" from  " + cdo.getTableName() + " a," + cdo.getTableName()+"_FLOWC "+"where 1=1");
+		strSql.append(" from  " + cdo.getTableName() + " a," + cdo.getTableName() + "_FLOWC b " + "where 1=1");
 
 		// 主要查詢欄位
 
@@ -91,8 +95,6 @@ public class DoQuery {
 		return "(select f_inp_stat from " + tableName + "_flowc where " + key + "=a." + key + ") ";
 	}
 
-	
-
 	/**
 	 * 值行查詢並回傳結果
 	 * 
@@ -105,7 +107,14 @@ public class DoQuery {
 		String sql = DoQuery.getAdvancedCondition(cdo);
 		sql = DoQuery.getSqlQueryStr(cdo) + sql;
 		String[][] list = cdo.getTalk().queryFromPool(sql);
-
+		File saveFile = new File("Data.txt");
+		try {
+			FileWriter fwriter = new FileWriter(saveFile);
+			fwriter.write(sql);
+			fwriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return list;
 
 	}

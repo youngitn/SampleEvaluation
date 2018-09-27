@@ -32,6 +32,19 @@ public class Controller extends hproc {
 			setEditable("NOTIFY_NO_CHECK", true);
 			
 		}
+		String ownPno = getValue("OWN_PNO").trim();
+		if (ownPno.length() <= 0) {
+			changeForm(getFunctionName());
+		} else {
+			String sql = "select f_inp_info from " + getTableName() + "_flowc where OWN_PNO = '" + ownPno + "'";
+			String[][] ret = getTalk().queryFromPool(sql);
+			if (ret.length > 0) {
+				String memo = ret[0][0];
+				if (memo.startsWith("[∞h√±]")) {
+					addScript("callRejectWarning();");
+				}
+			}
+		}
 		return arg0;
 
 	}

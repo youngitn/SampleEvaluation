@@ -25,6 +25,7 @@ public class CommonDataObj {
 	private String queryFieldValueFlowStatus;
 	private String queryFieldValueBillId;
 	private talk talk;
+	private String queryFieldNameSubFlowStatus;
 
 	public CommonDataObj(String empid, talk t, String tableName, String tablePKName, String tableApplicantFieldName)
 			throws SQLException, Exception {
@@ -202,5 +203,15 @@ public class CommonDataObj {
 
 	public void setTableAppDateFieldName(String tableAppDateFieldName) {
 		this.tableAppDateFieldName = tableAppDateFieldName;
+	}
+
+	public void setQueryFieldValueSubFlowStatus(String queryFieldNameSubFlowStatus) {
+		// TODO Auto-generated method stub
+		this.queryFieldNameSubFlowStatus = queryFieldNameSubFlowStatus;
+	}
+
+	public String getQueryFieldValueSubFlowStatus() {
+		// TODO Auto-generated method stub
+		return this.queryFieldNameSubFlowStatus;
 	}
 }

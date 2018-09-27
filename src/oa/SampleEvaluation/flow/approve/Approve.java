@@ -11,6 +11,8 @@ import com.ysp.util.DateTimeUtil;
 
 import jcx.util.*;
 import oa.SampleEvaluation.common.AddUtil;
+import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDao;
@@ -134,6 +136,12 @@ public class Approve extends bProcFlow {
 			}
 
 			break;
+		case 待處理:
+			// 更新主表分案人欄位
+			SampleEvaluation s = new SampleEvaluation();
+			s = setAllValue(s);
+			new SampleEvaluationDaoImpl(t).update(s);
+			break;
 		default:
 			break;
 		}
@@ -199,6 +207,41 @@ public class Approve extends bProcFlow {
 		String ownPno = getValue("PNO") + "CHECK";
 		// 為子流程主檔填入ID
 		s.setOwnPno(ownPno);
+		return s;
+	}
+
+	private SampleEvaluation setAllValue(SampleEvaluation s) {
+		s.setAppType(getValue("APP_TYPE"));
+		s.setUrgency(getValue("URGENCY"));
+		s.setMaterial(getValue("MATERIAL"));
+		s.setSapCode(getValue("SAP_CODE"));
+		s.setAbCode(getValue("AB_CODE"));
+		s.setMfgLotNo(getValue("MFG_LOT_NO"));
+		s.setQty(getValue("QTY"));
+		s.setPack(getValue("PACK"));
+		s.setUnit(getValue("UNIT"));
+		s.setMfr(getValue("MFR"));
+		s.setSupplier(getValue("SUPPLIER"));
+		s.setProvideCoa(getValue("PROVIDE_COA"));
+		s.setProvideSpec(getValue("PROVIDE_SPEC"));
+		s.setProvideTestMethod(getValue("PROVIDE_TEST_METHOD"));
+		s.setProvideSds(getValue("PROVIDE_SDS"));
+		s.setProvideOthers(getValue("PROVIDE_OTHERS"));
+		s.setNote(getValue("NOTE"));
+		s.setApplicant(getValue("APPLICANT"));
+		s.setAppDate(getValue("APP_DATE"));
+		s.setReceiptUnit(getValue("RECEIPT_UNIT"));
+		s.setProjectCode(getValue("PROJECT_CODE"));
+		s.setProjectLeader(getValue("PROJECT_LEADER"));
+		s.setNotifyNoCheck(getValue("NOTIFY_NO_CHECK"));
+		s.setNotifyNoTrialProd(getValue("NOTIFY_NO_TRIAL_PROD"));
+		s.setQrNo(getValue("QR_NO"));
+		s.setIsCheck(getValue("IS_CHECK"));
+		s.setIsTrialProduction(getValue("IS_TRIAL_PRODUCTION"));
+		s.setLabExe(getValue("LAB_EXE").trim());
+		s.setAssessor(getValue("ASSESSOR").trim());
+		s.setDesignee(getValue("DESIGNEE").trim());
+		s.setPno(getValue("PNO"));
 		return s;
 	}
 

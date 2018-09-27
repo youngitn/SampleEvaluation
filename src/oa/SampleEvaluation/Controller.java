@@ -98,6 +98,10 @@ public class Controller extends hproc {
 			if (getState().trim().equals("受理單位主管分案")) {
 				setEditable("DESIGNEE", true);
 			}
+			if (getState().trim().equals("待處理")) {
+				//相關處理寫在UI的背景區塊ADD_BACKGROUND中
+				//因為這邊的邏輯 在待處理關卡吃不到
+			}
 
 			break;
 		case QUERY_CLICK:
@@ -140,6 +144,7 @@ public class Controller extends hproc {
 		cdo.setQueryFieldValueStartAppDate(getValue("QUERY_REQ_SDATE"));
 		cdo.setQueryFieldValueEndAppDate(getValue("QUERY_REQ_EDATE"));
 		cdo.setQueryFieldValueFlowStatus(getValue("r_status"));
+		cdo.setQueryFieldValueSubFlowStatus(getValue("r_sub_status"));
 		cdo.setFunctionName(getFunctionName());
 		String[][] list = DoQuery.getQueryResult(cdo);
 		if (list.length != 0) {
@@ -155,6 +160,7 @@ public class Controller extends hproc {
 
 			setTableData("QUERY_LIST", getQueryResultAfterProcess(list, flist));
 		} else {
+			setTableData("QUERY_LIST",list);
 			message("查無紀錄");
 		}
 
@@ -276,7 +282,7 @@ public class Controller extends hproc {
 			ret = getTalk().queryFromPool(sql);
 			if (ret.length == 0) {
 				// 如果沒有請驗流程視為請驗已結案
-				return "結案";
+				return "未進行";
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -311,18 +317,21 @@ public class Controller extends hproc {
 		}
 
 		for (int i = 0; i < queryResults.length; i++) {
-
-			if ((queryResults[i][sign_flow_status_index].trim().equals("結案")
-					|| queryResults[i][sign_flow_status_index].trim().equals("歸檔"))
-					&& getCheckFlowStatus(queryResults[i][0]+"CHECK").equals("結案")) {
+			String checkFlowStatus = getCheckFlowStatus(queryResults[i][0] + "CHECK").trim();
+			String mainFlowStatus = queryResults[i][sign_flow_status_index].trim();
+			// 子流程和主流程都結案 在查詢結果表格的簽核狀態才顯示"已生效"
+			if ((mainFlowStatus.equals("結案") || mainFlowStatus.equals("歸檔")) && checkFlowStatus.equals("結案")) {
 				queryResults[i][sign_flow_status_index] = "<font color=blue>(已生效)</font>";
 			} else {
+				// 子或主流程有一方還未結案的顯示邏輯
+
+				// 主流程簽核人取得
 				Vector people = getApprovablePeople(getFunctionName(),
 						"a." + viewFieldOfResultList.get(uuid_index) + "='" + queryResults[i][0] + "'");
 				StringBuffer sb = new StringBuffer();
 				if (people != null) {
 					if (people.size() != 0) {
-						sb.append("(");
+						sb.append("-(");
 						for (int j = 0; j < people.size(); j++) {
 							if (j != 0)
 								sb.append(",");
@@ -333,8 +342,28 @@ public class Controller extends hproc {
 						sb.append(")");
 					}
 				}
-				queryResults[i][sign_flow_status_index] = "<font color=red>簽核中</font>【"
-						+ queryResults[i][sign_flow_status_index].trim() + "-" + sb.toString() + "】";
+				people = null;
+				// 子流程簽核人取得
+				people = getApprovablePeople(getFunctionName() + "_請驗流程",
+						"a." + "OWN_"+viewFieldOfResultList.get(uuid_index) + "='" + queryResults[i][0] + "CHECK'");
+				StringBuffer subsb = new StringBuffer();
+				if (people != null) {
+					if (people.size() != 0) {
+						subsb.append("-(");
+						for (int j = 0; j < people.size(); j++) {
+							if (j != 0)
+								subsb.append(",");
+							String id1 = (String) people.elementAt(j);
+							String name1 = getName(id1);
+							subsb.append(name1 + "-" + id1);
+						}
+						subsb.append(")");
+					}
+				}
+
+				queryResults[i][sign_flow_status_index] = "<font color=red>簽核中</font>【主流程:"
+						+ mainFlowStatus + sb.toString() + "】" + "【請驗流程:"
+						+ checkFlowStatus + subsb.toString() + "】";
 			}
 		}
 
