@@ -12,7 +12,7 @@ import oa.SampleEvaluation.tableObject.SampleEvaluation;
  * @author ¤j¯Tª¯ 2018-09-19
  */
 
-public class SampleEvaluationDaoImpl implements IMainTableDao {
+public class SampleEvaluationDaoImpl implements ITableDao {
 
 	talk t;
 
@@ -24,8 +24,8 @@ public class SampleEvaluationDaoImpl implements IMainTableDao {
 	public String add(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 
 		return t.execFromPool(
-				"insert into sample_evaluation  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
-				new Object[] { sampleEvaluation.getPno(),sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
+				"insert into sample_evaluation  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe=?,assessor=?,designee=? ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
+				new Object[] { sampleEvaluation.getPno(), sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
 						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
 						sampleEvaluation.getMfgLotNo(), sampleEvaluation.getQty(), sampleEvaluation.getPack(),
 						sampleEvaluation.getUnit(), sampleEvaluation.getMfr(), sampleEvaluation.getSupplier(),
@@ -36,13 +36,14 @@ public class SampleEvaluationDaoImpl implements IMainTableDao {
 						sampleEvaluation.getReceiptUnit(), sampleEvaluation.getProjectCode(),
 						sampleEvaluation.getProjectLeader(), sampleEvaluation.getNotifyNoCheck(),
 						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
-						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction() });
+						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
+						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee() });
 	}
 
 	@Override
 	public String update(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 		return t.execFromPool(
-				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?"
+				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?"
 						+ " where pno=?",
 				new Object[] { sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
 						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
@@ -56,6 +57,7 @@ public class SampleEvaluationDaoImpl implements IMainTableDao {
 						sampleEvaluation.getProjectLeader(), sampleEvaluation.getNotifyNoCheck(),
 						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
 						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
+						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
 						sampleEvaluation.getPno() });
 
 	}
@@ -103,12 +105,12 @@ public class SampleEvaluationDaoImpl implements IMainTableDao {
 	}
 
 	@Override
-	public String[][] findAllArray(String params,String selectFields) throws SQLException, Exception {
+	public String[][] findAllArray(String params, String selectFields) throws SQLException, Exception {
 		// TODO Auto-generated method stub
-		//ArrayList<SampleEvaluation> retList = new ArrayList<SampleEvaluation>();
-		String[][] ret = t.queryFromPool("select "+selectFields.toString()+" from sample_evaluation " + params);
+		// ArrayList<SampleEvaluation> retList = new ArrayList<SampleEvaluation>();
+		String[][] ret = t.queryFromPool("select " + selectFields.toString() + " from sample_evaluation " + params);
 		if (ret != null && ret.length > 0) {
-			
+
 			return ret;
 		} else {
 			return null;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import oa.SampleEvaluation.tableObject.SampleEvaluation;
 
-public interface IMainTableDao {
+public interface ITableDao {
 
 	String add(SampleEvaluation sampleEvaluation) throws SQLException, Exception;
 

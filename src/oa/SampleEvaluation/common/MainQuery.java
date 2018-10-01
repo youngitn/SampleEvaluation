@@ -1,24 +1,16 @@
 package oa.SampleEvaluation.common;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Vector;
-import oa.SampleEvaluation.Controller;
 
-public class DoQuery {
+public class MainQuery {
+	CommonDataObj cdo;
 
-	/*
-	 * 取得查詢條件<br> KEY以查詢頁面UI 名稱為準<br>
-	 * 
-	 * @param Controller 繼承自hproc 須先定義好CommonDataObj
-	 * 
-	 * @param 查詢條件
-	 * 
-	 * @return
-	 */
-	public static String getAdvancedCondition(CommonDataObj cdo) {
+	public MainQuery(CommonDataObj cdo) {
+		// TODO Auto-generated constructor stub
+		this.cdo = cdo;
+	}
+
+	public String getAdvancedCondition() {
 
 		String tablePKName = cdo.getTablePKName();
 		String queryId = cdo.getQueryFieldValueBillId().trim();
@@ -48,7 +40,7 @@ public class DoQuery {
 		return advanced_sql.toString();
 	}
 
-	public static String getSqlQueryStr(CommonDataObj cdo) {
+	public String getSqlQueryStr() {
 		StringBuilder strSql = new StringBuilder();
 		String keyName = cdo.getTablePKName();
 		String targetEmpidFieldName = cdo.getTableApplicantFieldName();
@@ -56,7 +48,7 @@ public class DoQuery {
 		strSql.append("select DISTINCT a." + keyName);
 		strSql.append(",");
 		// 員工基本資料 姓名-工號-部門名稱
-		strSql.append(DoQuery.getEmpInfoSqlQueryStr(keyName, targetEmpidFieldName));
+		strSql.append(getEmpInfoSqlQueryStr(keyName, targetEmpidFieldName));
 		strSql.append(",");
 		strSql.append("APP_TYPE");
 		strSql.append(",");
@@ -64,7 +56,7 @@ public class DoQuery {
 		strSql.append(",");
 		strSql.append("APP_DATE");
 		strSql.append(",");
-		strSql.append(DoQuery.getFlowStateSqlQueryStr(keyName, cdo.getTableName()));
+		strSql.append(getFlowStateSqlQueryStr(keyName, cdo.getTableName()));
 		strSql.append(",");
 		strSql.append("'明細','簽核紀錄'");
 
@@ -83,7 +75,7 @@ public class DoQuery {
 	 * @param targetEmpidFieldName
 	 * @return
 	 */
-	public static String getEmpInfoSqlQueryStr(String key, String targetEmpidFieldName) {
+	public String getEmpInfoSqlQueryStr(String key, String targetEmpidFieldName) {
 
 		// 員工基本資料 姓名-工號-部門名稱
 		return "(select (hecname+'-'+empid) from hruser where empid=a." + targetEmpidFieldName + ")+'-'+"
@@ -91,30 +83,14 @@ public class DoQuery {
 				+ targetEmpidFieldName + "))";
 	}
 
-	public static String getFlowStateSqlQueryStr(String key, String tableName) {
+	public String getFlowStateSqlQueryStr(String key, String tableName) {
 		return "(select f_inp_stat from " + tableName + "_flowc where " + key + "=a." + key + ") ";
 	}
 
-	/**
-	 * 值行查詢並回傳結果
-	 * 
-	 * @param c Controller
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-	public static String[][] getQueryResult(CommonDataObj cdo) throws SQLException, Exception {
-		String sql = DoQuery.getAdvancedCondition(cdo);
-		sql = DoQuery.getSqlQueryStr(cdo) + sql;
+	public String[][] getQueryResult() throws SQLException, Exception {
+		String sql = getAdvancedCondition();
+		sql = getSqlQueryStr() + sql;
 		String[][] list = cdo.getTalk().queryFromPool(sql);
-		File saveFile = new File("Data.txt");
-		try {
-			FileWriter fwriter = new FileWriter(saveFile);
-			fwriter.write(sql);
-			fwriter.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return list;
 
 	}

@@ -1,4 +1,4 @@
-package oa.SampleEvaluation; 
+package oa.SampleEvaluation.enums; 
 
 
 

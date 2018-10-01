@@ -41,6 +41,16 @@ public class Rule extends bRule {
 			return id;
 		}
 
+		if (state.equals("²Õªø")) {
+
+			String[] ret = getData("DESIGNEE").trim().split(" ");
+
+			id.addElement("admin");
+			id.addElement(ret[0]);
+
+			return id;
+		}
+
 		return id;
 	}
 

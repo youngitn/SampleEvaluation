@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.sql.SQLException;
 
 import jcx.jform.hproc;
-
+import oa.SampleEvaluation.enums.*;
 import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.common.UIHidderString;
@@ -92,6 +92,7 @@ public class SampleEvaluationPageInitController extends hproc {
 
 				setEditable("ASSESSOR", true);
 				setEditable("LAB_EXE", true);
+				setEditable("QR_NO", true);
 
 			}
 			if (getState().trim().equals("試製單號填寫")) {

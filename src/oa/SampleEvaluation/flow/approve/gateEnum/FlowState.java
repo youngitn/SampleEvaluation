@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.flow.approve;
+package oa.SampleEvaluation.flow.approve.gateEnum;
 /**
  * @
  * @author u52116

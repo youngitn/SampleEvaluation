@@ -17,11 +17,10 @@ import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
-
-
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
 import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
 import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluation.enums.*;
 
 public class Test {
 
@@ -38,7 +37,7 @@ public class Test {
 		flist.add("'Ã±®Öª¬ºA'");
 		flist.add("'©ú²Ó'");
 		flist.add("'Ã±®Ö¬ö¿ý'");
-		
+		System.out.println(AppType.valueOf("A"));
 		System.out.println(Arrays.toString(flist.toArray(new String[0])));
 //		SampleEvaluationCheck s = new SampleEvaluationCheck();
 //		s.setAppType("a");
@@ -78,8 +77,8 @@ public class Test {
 //		SampleEvaluationCheckFlowcDao secfDao = new SampleEvaluationCheckFlowcDao();
 //		secfDao.create(t.getConnectionFromPool(), secf);
 		SampleEvaluationActionController s = new SampleEvaluationActionController();
-		
-		s.cdo = new CommonDataObj("52116",t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+
+		s.cdo = new CommonDataObj("52116", t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
 		s.cdo.setTableApplicantFieldName("APPLICANT");
 		s.cdo.setTableAppDateFieldName("APP_DATE");
 
@@ -94,7 +93,7 @@ public class Test {
 		s.cdo.setQueryFieldValueStartAppDate("20180901");
 		s.cdo.setQueryFieldValueEndAppDate("20180930");
 		s.cdo.setQueryFieldValueFlowStatus("");
-		
+
 		s.cdo.setFunctionName("¼Ë«~µû¦ô¥Ó½Ð§@·~");
 //		s.doQuery();
 	}

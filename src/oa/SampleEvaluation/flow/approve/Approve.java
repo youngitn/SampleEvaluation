@@ -1,17 +1,24 @@
 package oa.SampleEvaluation.flow.approve;
 
 import jcx.jform.bProcFlow;
-
+import oa.SampleEvaluation.flow.approve.gateEnum.*;
 import java.beans.ConstructorProperties;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.*;
 
+import com.ysp.field.Mail;
+import com.ysp.service.BaseService;
+import com.ysp.service.MailService;
 import com.ysp.util.DateTimeUtil;
 
 import jcx.util.*;
+import oa.SampleEvaluation.EmailNotify;
 import oa.SampleEvaluation.common.AddUtil;
+import oa.SampleEvaluation.common.UserData;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.enums.AppType;
+import oa.SampleEvaluation.enums.Urgency;
 import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
@@ -23,21 +30,25 @@ import jcx.db.*;
 
 public class Approve extends bProcFlow {
 
-	String table_name = "MIS_SERVICE";
+	String table_name;
+	String state;
+	talk t;
 
 	public boolean action(String value) throws Throwable {
 		// 回傳值為 true 表示執行接下來的流程處理
 		// 回傳值為 false 表示接下來不執行任何流程處理
 		// 傳入值 value 為 "核准"
 
-		String state = getState();
-		talk t = getTalk();
-
+		state = getState();
+		t = getTalk();
+		SampleEvaluation s = null;
+		SampleEvaluationCheck sc = null;
+		String alertStr = "";
 		switch (FlowState.valueOf(state)) {
 		case 組長:
 
 			// 進行相關判斷並建立送出表單時顯示的提醒文字
-			String alertStr = buildApproveConfirmMsgStr();
+			alertStr = buildApproveConfirmMsgStr();
 
 			if (getValue("IS_CHECK").trim().equals("1") && getValue("LAB_EXE").trim().equals("")) {
 				message("請選擇實驗室經辦人員");
@@ -50,39 +61,28 @@ public class Approve extends bProcFlow {
 				return false;
 			}
 
-			int result = showConfirmDialog(alertStr + "確定送出表單？", "溫馨提醒", 0);
-			if (result == 1) {
-				return false;
-			}
-
 			// 更新主表請驗和試製評估勾選欄位
 			// 更新主表 評估人員和實驗室經辦
-			t.execFromPool(
-					"UPDATE  sample_evaluation  SET IS_CHECK=?,IS_TRIAL_PRODUCTION=?,LAB_EXE=?,ASSESSOR=?,DESIGNEE=?"
-							+ " where pno=?",
-					new Object[] { getValue("IS_CHECK"), getValue("IS_TRIAL_PRODUCTION"), getValue("LAB_EXE"),
-							getValue("ASSESSOR"), getValue("DESIGNEE"), getValue("PNO") });
-			String[] designee = getValue("DESIGNEE").trim().split(" ");
+			s = setAllValue(new SampleEvaluation());
+			new SampleEvaluationDaoImpl(t).update(s);
+
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (getValue("IS_CHECK").trim().equals("1")) {
 
-				SampleEvaluationCheck s = setAllValue(new SampleEvaluationCheck());
+				sc = setAllValue(new SampleEvaluationCheck());
 
 				SampleEvaluationCheckDao checkDao = new SampleEvaluationCheckDao(t);
-				if (checkDao.findById(s.getOwnPno()) != null) {
-					checkDao.update(s);
+				if (checkDao.findById(sc.getOwnPno()) != null) {
+					checkDao.update(sc);
 				} else {
 					// insert一筆子流程主檔
-					new SampleEvaluationCheckDao(t).add(s);
+					new SampleEvaluationCheckDao(t).add(sc);
 
-					SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(s.getOwnPno());
+					SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(sc.getOwnPno());
 					String time = DateTimeUtil.getApproveAddSeconds(0);
 
-					/**
-					 * secf.setF_INP_ID("52116"); <---須改為分案人員
-					 * 
-					 * @author u52116
-					 */
+					// 取得被分案組長empid
+					String[] designee = getValue("DESIGNEE").trim().split(" ");
 					flowc.setF_INP_ID(designee[0]);
 					flowc.setF_INP_STAT("填寫請驗單號");
 					flowc.setF_INP_TIME(time);
@@ -91,18 +91,26 @@ public class Approve extends bProcFlow {
 
 					// 建立子流程FLOWC_HIS 物件 能夠顯示簽核歷史
 					time = DateTimeUtil.getApproveAddSeconds(0);
-					SampleEvaluationCheckFlowcHis his = new SampleEvaluationCheckFlowcHis(s.getOwnPno(),
+					SampleEvaluationCheckFlowcHis his = new SampleEvaluationCheckFlowcHis(sc.getOwnPno(),
 							flowc.getF_INP_STAT(), time);
 
-					/**
-					 * secf.setF_INP_ID("52116"); <---須改為分案人員
-					 * 
-					 * @author u52116
-					 */
 					his.setF_INP_ID(designee[0]);
 					SampleEvaluationCheckFlowcHisDao secfhDao = new SampleEvaluationCheckFlowcHisDao();
 					secfhDao.create(getTalk().getConnectionFromPool(), his);
+
 				}
+				// 有請驗流程 寄出通知信
+				BaseService service = new BaseService(this);
+				MailService mailService = new MailService(service);
+				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
+				// Mail to
+				String[] u = getValue("DESIGNEE").trim().split(" ");
+				String[] usr = { getEmail(u[0]) };
+
+				// 內容
+				String content = buildContent();
+
+				mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
 
 			}
 
@@ -111,12 +119,12 @@ public class Approve extends bProcFlow {
 			// 更新主表試製單號欄位
 			if (!getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
 				// 更新主表試製單號欄位
-				t.execFromPool("UPDATE  sample_evaluation  SET NOTIFY_NO_TRIAL_PROD=?" + " where pno=?",
-						new Object[] { getValue("NOTIFY_NO_TRIAL_PROD"), getValue("PNO") });
+				s = setAllValue(new SampleEvaluation());
+				new SampleEvaluationDaoImpl(t).update(s);
 
 				// 更新子流程主表試製單號欄位
-				t.execFromPool("UPDATE  sample_evaluation_check  SET NOTIFY_NO_TRIAL_PROD=?" + " where own_pno=?",
-						new Object[] { getValue("NOTIFY_NO_TRIAL_PROD"), getValue("PNO") + "CHECK" });
+				sc = setAllValue(new SampleEvaluationCheck());
+				new SampleEvaluationCheckDao(t).update(sc);
 			} else {
 				message("請輸入試製通知單號");
 				return false;
@@ -138,13 +146,14 @@ public class Approve extends bProcFlow {
 			break;
 		case 待處理:
 			// 更新主表分案人欄位
-			SampleEvaluation s = new SampleEvaluation();
+			s = new SampleEvaluation();
 			s = setAllValue(s);
 			new SampleEvaluationDaoImpl(t).update(s);
 			break;
 		default:
 			break;
 		}
+		doReminder(alertStr);
 		message("簽核完成");
 		return true;
 	}
@@ -246,51 +255,10 @@ public class Approve extends bProcFlow {
 	}
 
 	/**
-	 * 判斷畫面是否有夾檔，有夾檔就更新至資料庫<br>
-	 * 傳入:欲存進檔案之table名稱(String)、視為檔案名稱(FILE)、畫面上檔案路徑(String)<br>
-	 * 不回傳<br>
-	 * 
-	 */
-	private void UpdFile(String d_file, File f_file, String file) throws SQLException, Exception {
-		String uuid = getValue("UUID");
-		String sql = "";
-		if (getValue(d_file).startsWith("[CLEAR]")) {
-			sql = "update " + table_name + " set " + d_file + " = ''  where uuid='" + uuid + "' ";
-			getTalk().execFromPool(sql);
-		}
-		if (f_file != null) {
-			file = f_file.getPath();
-		} else {
-			file = "";
-		}
-		if (!"".equals(file)) {
-			sql = "update " + table_name + " set " + d_file + " = '" + file + "'  where uuid='" + uuid + "' ";
-			getTalk().execFromPool(sql);
-		}
-	}
-
-	/**
-	 * 更新欄位<br>
-	 * 傳入:TABLE名稱(String) 各欄位名稱(ArrayList)<br>
-	 * 不回傳<br>
-	 */
-	private void updSQL(ArrayList<String> field) throws SQLException, Exception {
-		String sql = "update " + table_name + " set ";
-		for (int i = 0; i < field.size(); i++) {
-			if (!"".equals(field.get(i))) {
-				sql += field.get(i) + "=N'" + convert.ToSql(getValue(field.get(i) + "")) + "',";
-			}
-		}
-		sql = sql.substring(0, sql.length() - 1);
-		sql += " where uuid = '" + getValue("UUID") + "' ";
-		getTalk().execFromPool(sql);
-	}
-
-	/**
 	 * 溫馨提醒 不傳入 回傳true/false
 	 */
-	private boolean doReminder() throws Exception {
-		int result = showConfirmDialog("確定送出表單？", "溫馨提醒", 0);
+	private boolean doReminder(String addStr) throws Exception {
+		int result = showConfirmDialog(addStr + "確定送出表單？", "溫馨提醒", 0);
 		if (result == 1) {
 			message("已取消送出表單");
 			return false;
@@ -303,17 +271,91 @@ public class Approve extends bProcFlow {
 		return true;
 	}
 
-	private String getNO(String uuid) throws SQLException, Exception {
-		String no = "";
-		String sql = "select max(no) from MIS_DEV where no like '" + uuid + "%' ";
-		String ret[][] = getTalk().queryFromPool(sql);
-		if ("".equals(ret[0][0])) {
-			no = uuid + "_1";
-		} else {
-			long j = Long.parseLong(ret[0][0].replace(uuid + "_", ""));
-			no = uuid + "_" + (j + 1);
+	protected String buildContent() {
+		// TODO Auto-generated method stub
+		// 內容
+		UserData appUser = null;
+		try {
+			// TODO for TEST
+			appUser = new UserData(getValue("APPLICANT"), getTalk());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return no;
+
+		String name = appUser.getHecname();
+		String dep_name = appUser.getDep_name();
+		String content = "";
+		content += "您有一筆 " + getFunctionName() + " 等待簽核；" + Mail.HTML_LINE_BREAK;
+		content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
+		content += Mail.HTML_LINE_BREAK;
+		content += Mail.MAIL_CONTENT_LINE_WORD + Mail.HTML_LINE_BREAK;
+		content += "單號：" + getValue("PNO") + Mail.HTML_LINE_BREAK;
+		content += "申請日期：" + convert.FormatedDate(getValue("APP_DATE"), "/") + Mail.HTML_LINE_BREAK;
+		content += "申請人：" + dep_name + " " + name + "(" + appUser.getEmpid() + ")" + Mail.HTML_LINE_BREAK;
+		content += "申請類型：" + AppType.getAppType(getValue("APP_TYPE")) + Mail.HTML_LINE_BREAK;
+		content += "急迫性：" + Urgency.getUrgency(getValue("URGENCY")) + Mail.HTML_LINE_BREAK;
+		content += "物料名稱：" + getValue("MATERIAL") + Mail.HTML_LINE_BREAK;
+		try {
+			content += "受理單位：" + getDepName(getValue("RECEIPT_UNIT")) + Mail.HTML_LINE_BREAK;
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		content += "計畫代號：" + getValue("PROJECT_CODE") + Mail.HTML_LINE_BREAK;
+		String projectLeaderLine = "";
+		if (!getValue("PROJECT_LEADER").trim().equals("")) {
+			UserData u = null;
+			try {
+				u = new UserData(getValue("PROJECT_LEADER").trim(), getTalk());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			projectLeaderLine = u.getDep_name() + u.getHecname() + "(" + u.getEmpid() + ") ";
+		}
+
+		content += "計畫主持人：" + projectLeaderLine + Mail.HTML_LINE_BREAK;
+		content += "是否進行請驗/試製流程：" + buildApproveConfirmMsgStr() + Mail.HTML_LINE_BREAK;
+		content += "==========================" + Mail.HTML_LINE_BREAK;
+		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + Mail.HTML_LINE_BREAK;
+		content += "意見記錄：" + Mail.HTML_LINE_BREAK;
+		content += "" + getHisOpinion() + Mail.HTML_LINE_BREAK;
+		return content;
+	}
+
+	// 用單位代碼抓→單位名稱
+	protected String getDepName(String dep_no) throws SQLException, Exception {
+		String sql = "select DEP_NAME from DEP_ACTIVE_VIEW where DEP_NO = '" + dep_no + "'";
+		String rec[][] = getTalk().queryFromPool(sql);
+		if (rec.length > 0) {
+			return rec[0][0];
+		} else {
+			return dep_no;
+		}
+	}
+
+	// 意見記錄
+	protected String getHisOpinion() {
+		String[][] his = getFlowHistory();
+		String value = "";
+		for (int i = 1; i < his.length; i++) {
+			if (!"AUTO".equals(his[i][3])) {
+				value += getName(his[i][1]) + "(" + convert.FormatedDate(his[i][2].substring(0, 9), "/") + ":"
+						+ his[i][3] + ");" + Mail.HTML_LINE_BREAK;
+			} else {
+			}
+		}
+		return value;
 	}
 
 }

@@ -1,4 +1,4 @@
-package oa.SampleEvaluationCheck.flow.approve;
+package oa.SampleEvaluationCheck.flow.approve.gateEnum;
 
 public enum FlowState {
 

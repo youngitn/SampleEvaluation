@@ -1,15 +1,26 @@
 package oa.SampleEvaluation;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import oa.SampleEvaluation.enums.*;
+import com.ysp.service.BaseService;
+import com.ysp.service.MailService;
+
 import jcx.jform.hproc;
+import jcx.util.convert;
 import oa.SampleEvaluation.common.AddUtil;
-import oa.SampleEvaluation.common.DoQuery;
+import oa.SampleEvaluation.common.MainQuery;
+import oa.SampleEvaluation.common.UIHidderString;
+import oa.SampleEvaluation.common.UserData;
 import oa.SampleEvaluation.common.CommonDataObj;
+import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import com.ysp.field.Mail;
 
 /**
  * 嘗試可測試寫法
@@ -36,17 +47,20 @@ public class SampleEvaluationActionController extends hproc {
 
 		case QUERY_CLICK:
 			setCommonObiQueryData();
-			String[][] list = DoQuery.getQueryResult(cdo);
+			MainQuery mquery = new MainQuery(cdo);
+			String[][] list = mquery.getQueryResult();
 			if (list.length > 0) {
 				list = getQueryResultAfterProcess(list, cdo.getQueryResultShowTableFieldList());
 			} else {
 				message("查無紀錄");
 			}
 			setTableData("QUERY_LIST", list);
+
 			break;
 
 		case SAVE_CLICK:
 			doSave();
+
 			break;
 
 		case SHOW_DETAIL_CLICK:// 這個動作比較尷尬 屬於載入畫面但卻是按鈕發動
@@ -114,6 +128,8 @@ public class SampleEvaluationActionController extends hproc {
 				setValue(cdo.getTablePKName(), uuid);
 				// confirm = true 控制是否真的送出
 				if (confirm) {
+					// TODO 寄給誰處理一下
+					// sendMail();
 					// 觸發Dmaker內建的新增鈕來送出表單
 					addScript("document.getElementById('em_add_button-box').click();");
 
@@ -123,6 +139,13 @@ public class SampleEvaluationActionController extends hproc {
 		}
 
 	}
+
+	/**
+	 * 目前為免洗方法
+	 * 
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 
 	public void detailPage() throws SQLException, Exception {
 
@@ -135,6 +158,9 @@ public class SampleEvaluationActionController extends hproc {
 			for (int i = 0; i < allColumns.length; i++) {
 				setValue(allColumns[i][0], ret[0][i]);
 			}
+			FormInitUtil init = new FormInitUtil(this);
+			init.doDetailPageProcess();
+			addScript(UIHidderString.hideDmakerAddButton());
 		} else {
 			message("發生錯誤，找不到此表單資料！");
 		}
