@@ -44,6 +44,7 @@ public class Approve extends bProcFlow {
 		SampleEvaluation s = null;
 		SampleEvaluationCheck sc = null;
 		String alertStr = "";
+		BaseService service = new BaseService(this);
 		switch (FlowState.valueOf(state)) {
 		case 組長:
 
@@ -63,20 +64,21 @@ public class Approve extends bProcFlow {
 
 			// 更新主表請驗和試製評估勾選欄位
 			// 更新主表 評估人員和實驗室經辦
-			s = setAllValue(new SampleEvaluation());
+			s = new SampleEvaluation(service);
+			s = s.setAllValue(s);
 			new SampleEvaluationDaoImpl(t).update(s);
 
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (getValue("IS_CHECK").trim().equals("1")) {
 
-				sc = setAllValue(new SampleEvaluationCheck());
-
+				sc = new SampleEvaluationCheck(service);
+				sc = sc.setAllValue(sc);
 				SampleEvaluationCheckDao checkDao = new SampleEvaluationCheckDao(t);
 				if (checkDao.findById(sc.getOwnPno()) != null) {
 					checkDao.update(sc);
 				} else {
 					// insert一筆子流程主檔
-					new SampleEvaluationCheckDao(t).add(sc);
+					checkDao.add(sc);
 
 					SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(sc.getOwnPno());
 					String time = DateTimeUtil.getApproveAddSeconds(0);
@@ -100,7 +102,7 @@ public class Approve extends bProcFlow {
 
 				}
 				// 有請驗流程 寄出通知信
-				BaseService service = new BaseService(this);
+
 				MailService mailService = new MailService(service);
 				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
 				// Mail to
@@ -108,7 +110,9 @@ public class Approve extends bProcFlow {
 				String[] usr = { getEmail(u[0]) };
 
 				// 內容
-				String content = buildContent();
+				EmailNotify en = new EmailNotify();
+				en.setService(service);
+				String content = en.getContent();
 
 				mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
 
@@ -119,11 +123,13 @@ public class Approve extends bProcFlow {
 			// 更新主表試製單號欄位
 			if (!getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
 				// 更新主表試製單號欄位
-				s = setAllValue(new SampleEvaluation());
+				s = new SampleEvaluation(service);
+				s = s.setAllValue(s);
 				new SampleEvaluationDaoImpl(t).update(s);
 
 				// 更新子流程主表試製單號欄位
-				sc = setAllValue(new SampleEvaluationCheck());
+				sc = new SampleEvaluationCheck(service);
+				sc = sc.setAllValue(sc);
 				new SampleEvaluationCheckDao(t).update(sc);
 			} else {
 				message("請輸入試製通知單號");
@@ -146,16 +152,15 @@ public class Approve extends bProcFlow {
 			break;
 		case 待處理:
 			// 更新主表分案人欄位
-			s = new SampleEvaluation();
-			s = setAllValue(s);
+			s = new SampleEvaluation(service);
+			s = s.setAllValue(s);
 			new SampleEvaluationDaoImpl(t).update(s);
 			break;
 		default:
 			break;
 		}
-		doReminder(alertStr);
-		message("簽核完成");
-		return true;
+		return doReminder(alertStr);
+
 	}
 
 	private String buildApproveConfirmMsgStr() {
@@ -180,80 +185,6 @@ public class Approve extends bProcFlow {
 		return alertStr;
 	}
 
-	private SampleEvaluationCheck setAllValue(SampleEvaluationCheck s) {
-		s.setAppType(getValue("APP_TYPE"));
-		s.setUrgency(getValue("URGENCY"));
-		s.setMaterial(getValue("MATERIAL"));
-		s.setSapCode(getValue("SAP_CODE"));
-		s.setAbCode(getValue("AB_CODE"));
-		s.setMfgLotNo(getValue("MFG_LOT_NO"));
-		s.setQty(getValue("QTY"));
-		s.setPack(getValue("PACK"));
-		s.setUnit(getValue("UNIT"));
-		s.setMfr(getValue("MFR"));
-		s.setSupplier(getValue("SUPPLIER"));
-		s.setProvideCoa(getValue("PROVIDE_COA"));
-		s.setProvideSpec(getValue("PROVIDE_SPEC"));
-		s.setProvideTestMethod(getValue("PROVIDE_TEST_METHOD"));
-		s.setProvideSds(getValue("PROVIDE_SDS"));
-		s.setProvideOthers(getValue("PROVIDE_OTHERS"));
-		s.setNote(getValue("NOTE"));
-		s.setApplicant(getValue("APPLICANT"));
-		s.setAppDate(getValue("APP_DATE"));
-		s.setReceiptUnit(getValue("RECEIPT_UNIT"));
-		s.setProjectCode(getValue("PROJECT_CODE"));
-		s.setProjectLeader(getValue("PROJECT_LEADER"));
-		s.setNotifyNoCheck(getValue("NOTIFY_NO_CHECK"));
-		s.setNotifyNoTrialProd(getValue("NOTIFY_NO_TRIAL_PROD"));
-		s.setQrNo(getValue("QR_NO"));
-		s.setIsCheck(getValue("IS_CHECK"));
-		s.setIsTrialProduction(getValue("IS_TRIAL_PRODUCTION"));
-		s.setLabExe(getValue("LAB_EXE").trim());
-		s.setAssessor(getValue("ASSESSOR").trim());
-		s.setDesignee(getValue("DESIGNEE").trim());
-		s.setPno(getValue("PNO"));
-		// 子流程 ID = 表單單號+CHECK
-		String ownPno = getValue("PNO") + "CHECK";
-		// 為子流程主檔填入ID
-		s.setOwnPno(ownPno);
-		return s;
-	}
-
-	private SampleEvaluation setAllValue(SampleEvaluation s) {
-		s.setAppType(getValue("APP_TYPE"));
-		s.setUrgency(getValue("URGENCY"));
-		s.setMaterial(getValue("MATERIAL"));
-		s.setSapCode(getValue("SAP_CODE"));
-		s.setAbCode(getValue("AB_CODE"));
-		s.setMfgLotNo(getValue("MFG_LOT_NO"));
-		s.setQty(getValue("QTY"));
-		s.setPack(getValue("PACK"));
-		s.setUnit(getValue("UNIT"));
-		s.setMfr(getValue("MFR"));
-		s.setSupplier(getValue("SUPPLIER"));
-		s.setProvideCoa(getValue("PROVIDE_COA"));
-		s.setProvideSpec(getValue("PROVIDE_SPEC"));
-		s.setProvideTestMethod(getValue("PROVIDE_TEST_METHOD"));
-		s.setProvideSds(getValue("PROVIDE_SDS"));
-		s.setProvideOthers(getValue("PROVIDE_OTHERS"));
-		s.setNote(getValue("NOTE"));
-		s.setApplicant(getValue("APPLICANT"));
-		s.setAppDate(getValue("APP_DATE"));
-		s.setReceiptUnit(getValue("RECEIPT_UNIT"));
-		s.setProjectCode(getValue("PROJECT_CODE"));
-		s.setProjectLeader(getValue("PROJECT_LEADER"));
-		s.setNotifyNoCheck(getValue("NOTIFY_NO_CHECK"));
-		s.setNotifyNoTrialProd(getValue("NOTIFY_NO_TRIAL_PROD"));
-		s.setQrNo(getValue("QR_NO"));
-		s.setIsCheck(getValue("IS_CHECK"));
-		s.setIsTrialProduction(getValue("IS_TRIAL_PRODUCTION"));
-		s.setLabExe(getValue("LAB_EXE").trim());
-		s.setAssessor(getValue("ASSESSOR").trim());
-		s.setDesignee(getValue("DESIGNEE").trim());
-		s.setPno(getValue("PNO"));
-		return s;
-	}
-
 	/**
 	 * 溫馨提醒 不傳入 回傳true/false
 	 */
@@ -268,94 +199,8 @@ public class Approve extends bProcFlow {
 			space += "&emsp;";
 		}
 		percent(100, space + "表單送出中，請稍候...<font color=white>");
+		message("簽核完成");
 		return true;
-	}
-
-	protected String buildContent() {
-		// TODO Auto-generated method stub
-		// 內容
-		UserData appUser = null;
-		try {
-			// TODO for TEST
-			appUser = new UserData(getValue("APPLICANT"), getTalk());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		String name = appUser.getHecname();
-		String dep_name = appUser.getDep_name();
-		String content = "";
-		content += "您有一筆 " + getFunctionName() + " 等待簽核；" + Mail.HTML_LINE_BREAK;
-		content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
-		content += Mail.HTML_LINE_BREAK;
-		content += Mail.MAIL_CONTENT_LINE_WORD + Mail.HTML_LINE_BREAK;
-		content += "單號：" + getValue("PNO") + Mail.HTML_LINE_BREAK;
-		content += "申請日期：" + convert.FormatedDate(getValue("APP_DATE"), "/") + Mail.HTML_LINE_BREAK;
-		content += "申請人：" + dep_name + " " + name + "(" + appUser.getEmpid() + ")" + Mail.HTML_LINE_BREAK;
-		content += "申請類型：" + AppType.getAppType(getValue("APP_TYPE")) + Mail.HTML_LINE_BREAK;
-		content += "急迫性：" + Urgency.getUrgency(getValue("URGENCY")) + Mail.HTML_LINE_BREAK;
-		content += "物料名稱：" + getValue("MATERIAL") + Mail.HTML_LINE_BREAK;
-		try {
-			content += "受理單位：" + getDepName(getValue("RECEIPT_UNIT")) + Mail.HTML_LINE_BREAK;
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		content += "計畫代號：" + getValue("PROJECT_CODE") + Mail.HTML_LINE_BREAK;
-		String projectLeaderLine = "";
-		if (!getValue("PROJECT_LEADER").trim().equals("")) {
-			UserData u = null;
-			try {
-				u = new UserData(getValue("PROJECT_LEADER").trim(), getTalk());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			projectLeaderLine = u.getDep_name() + u.getHecname() + "(" + u.getEmpid() + ") ";
-		}
-
-		content += "計畫主持人：" + projectLeaderLine + Mail.HTML_LINE_BREAK;
-		content += "是否進行請驗/試製流程：" + buildApproveConfirmMsgStr() + Mail.HTML_LINE_BREAK;
-		content += "==========================" + Mail.HTML_LINE_BREAK;
-		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + Mail.HTML_LINE_BREAK;
-		content += "意見記錄：" + Mail.HTML_LINE_BREAK;
-		content += "" + getHisOpinion() + Mail.HTML_LINE_BREAK;
-		return content;
-	}
-
-	// 用單位代碼抓→單位名稱
-	protected String getDepName(String dep_no) throws SQLException, Exception {
-		String sql = "select DEP_NAME from DEP_ACTIVE_VIEW where DEP_NO = '" + dep_no + "'";
-		String rec[][] = getTalk().queryFromPool(sql);
-		if (rec.length > 0) {
-			return rec[0][0];
-		} else {
-			return dep_no;
-		}
-	}
-
-	// 意見記錄
-	protected String getHisOpinion() {
-		String[][] his = getFlowHistory();
-		String value = "";
-		for (int i = 1; i < his.length; i++) {
-			if (!"AUTO".equals(his[i][3])) {
-				value += getName(his[i][1]) + "(" + convert.FormatedDate(his[i][2].substring(0, 9), "/") + ":"
-						+ his[i][3] + ");" + Mail.HTML_LINE_BREAK;
-			} else {
-			}
-		}
-		return value;
 	}
 
 }

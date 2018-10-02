@@ -3,6 +3,8 @@ package oa.SampleEvaluation.common;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.ysp.service.BaseService;
+
 import jcx.db.talk;
 
 public class CommonDataObj {
@@ -11,7 +13,6 @@ public class CommonDataObj {
 	private String tablePKName;// PK名稱 用來記錄單號
 	private String functionName;// 表單名稱
 	private String[][] tableAllColumn;// 裝資料表所有欄位之陣列
-	private UserData userdata;// 員工基本資料物件
 
 	private String tableApplicantFieldName;// 資料表中申請人欄位名稱
 	private String tableAppDateFieldName;// 資料表申請日期欄位名稱
@@ -30,6 +31,8 @@ public class CommonDataObj {
 	private talk talk;
 	private String queryFieldNameSubFlowStatus;
 	private ArrayList<String> queryResultShowTableFieldList;
+	private BaseService service;
+	private ArrayList<String> qflist;
 
 	public ArrayList<String> getQueryResultShowTableFieldList() {
 		return queryResultShowTableFieldList;
@@ -39,9 +42,8 @@ public class CommonDataObj {
 		this.queryResultShowTableFieldList = queryResultShowTableFieldList;
 	}
 
-	public CommonDataObj(String empid, talk t, String tableName, String tablePKName, String tableApplicantFieldName)
+	public CommonDataObj(talk t, String tableName, String tablePKName, String tableApplicantFieldName)
 			throws SQLException, Exception {
-		// this.userdata = new UserData(empid, t);
 		this.tableName = tableName;
 		this.tablePKName = tablePKName;
 		this.tableAllColumn = t.queryFromPool(
@@ -49,6 +51,26 @@ public class CommonDataObj {
 		this.tableApplicantFieldName = tableApplicantFieldName;
 		this.talk = t;
 
+	}
+
+	public CommonDataObj(BaseService service, String tablePKName, String tableApplicantFieldName)
+			throws SQLException, Exception {
+		this.service = service;
+		this.tableName = service.getTableName();
+		this.tablePKName = tablePKName;
+		this.talk = service.getTalk();
+		this.tableAllColumn = talk.queryFromPool(
+				"select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where table_name= '" + tableName + "'");
+		this.tableApplicantFieldName = tableApplicantFieldName;
+
+	}
+
+	public BaseService getService() {
+		return service;
+	}
+
+	public void setService(BaseService service) {
+		this.service = service;
 	}
 
 	public talk getTalk() {
@@ -101,14 +123,11 @@ public class CommonDataObj {
 		this.tableAllColumn = tableAllColumn;
 	}
 
-	public UserData getUserdata() {
-		return userdata;
-	}
-
-	public void setUserdata(UserData userdata) {
-		this.userdata = userdata;
-	}
-
+	/**
+	 * 申請人欄位名稱
+	 * 
+	 * @return
+	 */
 	public String getTableApplicantFieldName() {
 		return tableApplicantFieldName;
 	}
@@ -197,18 +216,38 @@ public class CommonDataObj {
 		this.queryFieldNameFlowStatus = queryFieldNameFlowStatus;
 	}
 
+	/**
+	 * 取得查詢頁面單號欄位名稱
+	 * 
+	 * @return
+	 */
 	public String getQueryFieldNameBillId() {
 		return queryFieldNameBillId;
 	}
 
+	/**
+	 * 設置得查詢頁面單號欄位名稱
+	 * 
+	 * @return
+	 */
 	public void setQueryFieldNameBillId(String queryFieldNameBillId) {
 		this.queryFieldNameBillId = queryFieldNameBillId;
 	}
 
+	/**
+	 * 取得查詢頁面申請日期欄位名稱
+	 * 
+	 * @return
+	 */
 	public String getTableAppDateFieldName() {
 		return tableAppDateFieldName;
 	}
 
+	/**
+	 * 設置查詢頁面申請日期欄位名稱
+	 * 
+	 * @return
+	 */
 	public void setTableAppDateFieldName(String tableAppDateFieldName) {
 		this.tableAppDateFieldName = tableAppDateFieldName;
 	}
@@ -221,5 +260,15 @@ public class CommonDataObj {
 	public String getQueryFieldValueSubFlowStatus() {
 		// TODO Auto-generated method stub
 		return this.queryFieldNameSubFlowStatus;
+	}
+
+	/**
+	 * 設置查詢欄位列表
+	 * 
+	 * @param qflist
+	 */
+	public void setQueryInputFieldList(ArrayList<String> qflist) {
+		// TODO Auto-generated method stub
+		this.qflist = qflist;
 	}
 }

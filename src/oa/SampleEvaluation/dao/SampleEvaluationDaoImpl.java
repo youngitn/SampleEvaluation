@@ -24,7 +24,7 @@ public class SampleEvaluationDaoImpl implements ITableDao {
 	public String add(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 
 		return t.execFromPool(
-				"insert into sample_evaluation  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe=?,assessor=?,designee=? ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
+				"insert into sample_evaluation  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe=?,assessor=?,designee=?,doc_ctrler=? ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
 				new Object[] { sampleEvaluation.getPno(), sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
 						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
 						sampleEvaluation.getMfgLotNo(), sampleEvaluation.getQty(), sampleEvaluation.getPack(),
@@ -37,13 +37,14 @@ public class SampleEvaluationDaoImpl implements ITableDao {
 						sampleEvaluation.getProjectLeader(), sampleEvaluation.getNotifyNoCheck(),
 						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
 						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
-						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee() });
+						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
+						sampleEvaluation.getDocCtrler() });
 	}
 
 	@Override
 	public String update(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 		return t.execFromPool(
-				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?"
+				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?"
 						+ " where pno=?",
 				new Object[] { sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
 						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
@@ -58,7 +59,7 @@ public class SampleEvaluationDaoImpl implements ITableDao {
 						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
 						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
 						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
-						sampleEvaluation.getPno() });
+						sampleEvaluation.getDocCtrler(), sampleEvaluation.getPno() });
 
 	}
 

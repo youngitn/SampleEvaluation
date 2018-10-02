@@ -78,7 +78,8 @@ public class Test {
 //		secfDao.create(t.getConnectionFromPool(), secf);
 		SampleEvaluationActionController s = new SampleEvaluationActionController();
 
-		s.cdo = new CommonDataObj("52116", t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+		// s.cdo = new CommonDataObj("52116", t, "SAMPLE_EVALUATION", "PNO",
+		// "APPLICANT");
 		s.cdo.setTableApplicantFieldName("APPLICANT");
 		s.cdo.setTableAppDateFieldName("APP_DATE");
 

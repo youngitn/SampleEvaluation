@@ -6,7 +6,8 @@ import jcx.jform.hproc;
 import jcx.util.datetime;
 
 /**
- * 
+ * 可用BaseService代理 
+ * hproc目前未出錯 供開發參考
  * @author u52116
  *
  */

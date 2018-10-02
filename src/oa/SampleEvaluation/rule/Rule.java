@@ -47,7 +47,8 @@ public class Rule extends bRule {
 		}
 
 		if (state.equals("試製單號填寫")) {
-
+			String[] u = getData("DOC_CTRLER").trim().split(" ");
+			id.addElement(u[0]);
 			id.addElement("admin");
 
 			return id;
@@ -67,13 +68,6 @@ public class Rule extends bRule {
 //
 //			return id;
 //		}
-
-		if (state.equals("實驗室經辦")) {
-
-			id.addElement("admin");
-
-			return id;
-		}
 
 		return id;
 	}

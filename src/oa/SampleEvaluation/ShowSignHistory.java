@@ -94,6 +94,9 @@ public class ShowSignHistory extends hproc {
 		sb.append("</tr>");
 		sb.append("</TABLE>");
 		sb.append("</DIV>");
+		
+		
+		
 		// 有子流程才加額外的div
 		String sql = "select a.own_pno from SAMPLE_EVALUATION_CHECK a,SAMPLE_EVALUATION_CHECK_flowc b where a.own_pno ='"
 				+ getValue("QUERY_LIST.PNO") + "CHECK" + "' and a.own_pno=b.own_pno ";

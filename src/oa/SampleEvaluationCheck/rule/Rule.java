@@ -20,6 +20,8 @@ public class Rule extends bRule {
 		if (state.equals("¶ñ¼g½ÐÅç³æ¸¹")) {
 
 			id.addElement("admin");
+			String[] u = getData("DOC_CTRLER").trim().split(" ");
+			id.addElement(u[0]);
 
 			return id;
 		}

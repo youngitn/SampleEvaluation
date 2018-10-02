@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.sql.SQLException;
 
+import com.ysp.service.BaseService;
+
 import jcx.jform.hproc;
 import oa.SampleEvaluation.enums.*;
 import oa.SampleEvaluation.common.FormInitUtil;
@@ -22,6 +24,7 @@ public class SampleEvaluationPageInitController extends hproc {
 
 	public boolean confirm = true;
 	public CommonDataObj cdo;
+	BaseService service;
 
 	@Override
 	public String action(String arg0) throws Throwable {
@@ -29,22 +32,20 @@ public class SampleEvaluationPageInitController extends hproc {
 		// 表單載入後處理
 		// 各頁面載入處理於類別中實作
 		// importJquery();
+		service = new BaseService(this);
 		FormInitUtil init = new FormInitUtil(this);
 		setValue("NOW_INIT", getName());
-		this.cdo = new CommonDataObj(getUser(), getTalk(), "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+		this.cdo = new CommonDataObj(service, "PNO", "APPLICANT");
 
 		String actionObjName = getActionName(getName());
-		 File saveFile=new File("Data.txt");
-		    try
-		    {
-		      FileWriter fwriter=new FileWriter(saveFile);
-		      fwriter.write(actionObjName);
-		      fwriter.close();
-		    }
-		    catch(Exception e)
-		    {
-		      e.printStackTrace();
-		    }
+		File saveFile = new File("Data.txt");
+		try {
+			FileWriter fwriter = new FileWriter(saveFile);
+			fwriter.write(actionObjName);
+			fwriter.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//
 		// 按鈕動作處理進入點
 		switch (PageInitType.valueOf(actionObjName.trim())) {
@@ -93,6 +94,7 @@ public class SampleEvaluationPageInitController extends hproc {
 				setEditable("ASSESSOR", true);
 				setEditable("LAB_EXE", true);
 				setEditable("QR_NO", true);
+				setEditable("DOC_CTRLER", true);
 
 			}
 			if (getState().trim().equals("試製單號填寫")) {
