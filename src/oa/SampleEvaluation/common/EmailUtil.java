@@ -4,10 +4,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Vector;
-
 import com.ysp.field.Mail;
 import com.ysp.service.BaseService;
-
 import jcx.util.convert;
 
 public class EmailUtil {

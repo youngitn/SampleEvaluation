@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jcx.db.talk;
+import oa.SampleEvaluation.dao.AbstractGenericDao;
 import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
 
 /**
@@ -11,7 +12,7 @@ import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
  * 
  */
 
-public class SampleEvaluationCheckDao {
+public class SampleEvaluationCheckDao extends AbstractGenericDao<SampleEvaluationCheck> {
 
 	talk t;
 
@@ -72,6 +73,24 @@ public class SampleEvaluationCheckDao {
 			return null;
 		}
 
+	}
+
+	@Override
+	public String[][] findArrayById(String id) throws SQLException, Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[][] findAllArray(String params, String selectFields) throws SQLException, Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class getClazz() {
+		// TODO Auto-generated method stub
+		return SampleEvaluationCheck.class;
 	}
 
 }

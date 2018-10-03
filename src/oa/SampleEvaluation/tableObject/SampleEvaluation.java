@@ -9,7 +9,7 @@ import com.ysp.service.BaseService;
 /**
  * SampleEvaluation
  * 
- * @author 大狼狗 2018-09-19
+ * 
  */
 public class SampleEvaluation implements Serializable {
 	private static final long serialVersionUID = 42L;
@@ -160,13 +160,7 @@ public class SampleEvaluation implements Serializable {
 
 	private String labExe;
 
-	private BaseService service;
-
 	private String docCtrler;
-
-	public SampleEvaluation(BaseService service) {
-		this.service = service;
-	}
 
 	public SampleEvaluation() {
 
@@ -209,7 +203,15 @@ public class SampleEvaluation implements Serializable {
 		this.docCtrler = strings[31];
 	}
 
-	public SampleEvaluation setAllValue(SampleEvaluation s) {
+	/**
+	 * 取得表單欄位資料,並設置於SampleEvaluation物件中 <br>
+	 * 因只有本方法會使用到service,所以使用時才導入service
+	 * 
+	 * @param s       SampleEvaluation<br>
+	 * @param service BaseService<br>
+	 * @return SampleEvaluation
+	 */
+	public SampleEvaluation setAllValue(SampleEvaluation s, BaseService service) {
 		s.setAppType(service.getValue("APP_TYPE"));
 		s.setUrgency(service.getValue("URGENCY"));
 		s.setMaterial(service.getValue("MATERIAL"));

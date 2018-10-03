@@ -1,11 +1,10 @@
 package oa.SampleEvaluation.common;
 
+import java.io.FileWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.ysp.service.BaseService;
 
@@ -98,6 +97,9 @@ public class AddUtil {
 		String tablePKName = cdo.getTablePKName();
 		String table = cdo.getTableName();
 		String user = service.getValue(cdo.getTableApplicantFieldName());
+//		FileWriter fw = new FileWriter("gg.txt");
+//		fw.write(cdo.getTableApplicantFieldName());
+//		fw.close();
 		String sql = "select max(" + tablePKName + ") from " + table + " where " + tablePKName + " like '" + user
 				+ "%'";
 		String[][] ret = service.getTalk().queryFromPool(sql);
@@ -105,8 +107,8 @@ public class AddUtil {
 		if ("".equals(ret[0][0])) {
 			uuid = user + "00001";
 		} else {
-			String m_uuid = ret[0][0].trim();
-			uuid = user + String.format("%05d", (Long.parseLong(m_uuid.replace(user, "")) + 1));
+			String m_uuid = ret[0][0].trim().replace(user, "");
+			uuid = user + String.format("%05d", (Long.parseLong(m_uuid) + 1));
 		}
 
 		return uuid;

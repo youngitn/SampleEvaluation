@@ -10,3 +10,10 @@
 /MainQuery.class
 /QueryConditionField.class
 /EmailUtil.class
+/ReadAndFillData.class
+/ReadAnd.class
+/QueryCondition.class
+/QueryConditionImpl.class
+/QuerySpec.class
+/SampleEvaluationQuerySpec.class
+/DebugUtil.class

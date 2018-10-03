@@ -9,6 +9,8 @@ import jcx.db.talk;
 
 public class CommonDataObj {
 
+	private String loginUserId;// 目前登入使用者id
+
 	private String tableName;// 資料表名稱
 	private String tablePKName;// PK名稱 用來記錄單號
 	private String functionName;// 表單名稱
@@ -17,22 +19,11 @@ public class CommonDataObj {
 	private String tableApplicantFieldName;// 資料表中申請人欄位名稱
 	private String tableAppDateFieldName;// 資料表申請日期欄位名稱
 
-	private String queryFieldNameEmpid;// 查詢頁面申請人員編欄位名稱
-	private String queryFieldNameStartAppDate;// 查詢頁面申請日期 起日 欄位名稱
-	private String queryFieldNameEndAppDate;// 查詢頁面申請日期 迄日 欄位名稱
-	private String queryFieldNameFlowStatus;// 查詢頁面簽核狀態 欄位名稱
-	private String queryFieldNameBillId;// 查詢頁面單號 欄位名稱
-
-	private String queryFieldValueEmpid;// 查詢頁面申請人員編值
-	private String queryFieldValueStartAppDate;// 查詢頁面申請日期 起日 欄位值
-	private String queryFieldValueEndAppDate;// 查詢頁面申請日期 迄日 欄位值
-	private String queryFieldValueFlowStatus;// 查詢頁面簽核狀態 欄位值
-	private String queryFieldValueBillId;// 查詢頁面單號 欄位值
 	private talk talk;
-	private String queryFieldNameSubFlowStatus;
 	private ArrayList<String> queryResultShowTableFieldList;
 	private BaseService service;
 	private ArrayList<String> qflist;
+	private QuerySpec qs;
 
 	public ArrayList<String> getQueryResultShowTableFieldList() {
 		return queryResultShowTableFieldList;
@@ -144,94 +135,32 @@ public class CommonDataObj {
 		this.functionName = functionName;
 	}
 
-	public String getQueryFieldNameEmpid() {
-		return queryFieldNameEmpid;
+	public String getLoginUserId() {
+		return loginUserId;
 	}
 
-	public void setQueryFieldNameEmpid(String queryFieldNameEmpid) {
-		this.queryFieldNameEmpid = queryFieldNameEmpid;
+	public void setLoginUserId(String loginUserId) {
+		this.loginUserId = loginUserId;
 	}
 
-	public String getQueryFieldNameStartAppDate() {
-		return queryFieldNameStartAppDate;
+	public ArrayList<String> getQflist() {
+		return qflist;
 	}
 
-	public void setQueryFieldNameStartAppDate(String queryFieldName) {
-		this.queryFieldNameStartAppDate = queryFieldName;
+	public void setQflist(ArrayList<String> qflist) {
+		this.qflist = qflist;
 	}
 
-	public String getQueryFieldNameEndAppDate() {
-		return queryFieldNameEndAppDate;
+	public QuerySpec getQs() {
+		return qs;
 	}
 
-	public void setQueryFieldNameEndAppDate(String queryFieldName) {
-		this.queryFieldNameEndAppDate = queryFieldName;
+	public void setQs(QuerySpec qs) {
+		this.qs = qs;
 	}
 
-	public String getQueryFieldNameFlowStatus() {
-		return queryFieldNameFlowStatus;
-	}
-
-	public String getQueryFieldValueEmpid() {
-		return queryFieldValueEmpid;
-	}
-
-	public void setQueryFieldValueEmpid(String queryFieldValueEmpid) {
-		this.queryFieldValueEmpid = queryFieldValueEmpid;
-	}
-
-	public String getQueryFieldValueStartAppDate() {
-		return queryFieldValueStartAppDate;
-	}
-
-	public void setQueryFieldValueStartAppDate(String queryFieldValueStartAppDate) {
-		this.queryFieldValueStartAppDate = queryFieldValueStartAppDate;
-	}
-
-	public String getQueryFieldValueEndAppDate() {
-		return queryFieldValueEndAppDate;
-	}
-
-	public void setQueryFieldValueEndAppDate(String queryFieldValueEndAppDate) {
-		this.queryFieldValueEndAppDate = queryFieldValueEndAppDate;
-	}
-
-	public String getQueryFieldValueFlowStatus() {
-		return queryFieldValueFlowStatus;
-	}
-
-	public void setQueryFieldValueFlowStatus(String queryFieldValueFlowStatus) {
-		this.queryFieldValueFlowStatus = queryFieldValueFlowStatus;
-	}
-
-	public String getQueryFieldValueBillId() {
-		return queryFieldValueBillId;
-	}
-
-	public void setQueryFieldValueBillId(String queryFieldValueBillId) {
-		this.queryFieldValueBillId = queryFieldValueBillId;
-	}
-
-	public void setQueryFieldNameFlowStatus(String queryFieldNameFlowStatus) {
-		this.queryFieldNameFlowStatus = queryFieldNameFlowStatus;
-	}
-
-	/**
-	 * 取得查詢頁面單號欄位名稱
-	 * 
-	 * @return
-	 */
-	public String getQueryFieldNameBillId() {
-		return queryFieldNameBillId;
-	}
-
-	/**
-	 * 設置得查詢頁面單號欄位名稱
-	 * 
-	 * @return
-	 */
-	public void setQueryFieldNameBillId(String queryFieldNameBillId) {
-		this.queryFieldNameBillId = queryFieldNameBillId;
+	public void setTableAllColumn(String[][] tableAllColumn) {
+		this.tableAllColumn = tableAllColumn;
 	}
 
 	/**
@@ -252,23 +181,22 @@ public class CommonDataObj {
 		this.tableAppDateFieldName = tableAppDateFieldName;
 	}
 
-	public void setQueryFieldValueSubFlowStatus(String queryFieldNameSubFlowStatus) {
-		// TODO Auto-generated method stub
-		this.queryFieldNameSubFlowStatus = queryFieldNameSubFlowStatus;
-	}
-
-	public String getQueryFieldValueSubFlowStatus() {
-		// TODO Auto-generated method stub
-		return this.queryFieldNameSubFlowStatus;
-	}
-
 	/**
 	 * 設置查詢欄位列表
 	 * 
 	 * @param qflist
 	 */
 	public void setQueryInputFieldList(ArrayList<String> qflist) {
-		// TODO Auto-generated method stub
 		this.qflist = qflist;
+	}
+
+	public QuerySpec getQuerySpec() {
+		return this.qs;
+	}
+
+	public void setQuerySpec(SampleEvaluationQuerySpec qs) {
+
+		this.qs = qs;
+
 	}
 }

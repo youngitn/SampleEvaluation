@@ -18,8 +18,6 @@ public class SampleEvaluationCheck extends SampleEvaluation implements Serializa
 	 */
 	private String ownPno;
 
-	private BaseService service;
-
 	private String docCtrler;
 
 	public SampleEvaluationCheck(String[] strings) {
@@ -29,10 +27,6 @@ public class SampleEvaluationCheck extends SampleEvaluation implements Serializa
 
 	public SampleEvaluationCheck() {
 
-	}
-
-	public SampleEvaluationCheck(BaseService service) {
-		this.service = service;
 	}
 
 	public String getOwnPno() {
@@ -51,7 +45,7 @@ public class SampleEvaluationCheck extends SampleEvaluation implements Serializa
 		return docCtrler;
 	}
 
-	public SampleEvaluationCheck setAllValue(SampleEvaluationCheck s) {
+	public SampleEvaluationCheck setAllValue(SampleEvaluationCheck s, BaseService service) {
 		s.setAppType(service.getValue("APP_TYPE"));
 		s.setUrgency(service.getValue("URGENCY"));
 		s.setMaterial(service.getValue("MATERIAL"));

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import com.ysp.service.BaseService;
 import com.ysp.util.DateTimeUtil;
 
 import jcx.db.talk;
@@ -76,26 +77,26 @@ public class Test {
 //		secf.setF_INP_TIME(time);
 //		SampleEvaluationCheckFlowcDao secfDao = new SampleEvaluationCheckFlowcDao();
 //		secfDao.create(t.getConnectionFromPool(), secf);
-		SampleEvaluationActionController s = new SampleEvaluationActionController();
 
 		// s.cdo = new CommonDataObj("52116", t, "SAMPLE_EVALUATION", "PNO",
 		// "APPLICANT");
-		s.cdo.setTableApplicantFieldName("APPLICANT");
-		s.cdo.setTableAppDateFieldName("APP_DATE");
+		CommonDataObj cdo = new CommonDataObj(t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+		cdo.setTableApplicantFieldName("APPLICANT");
+		cdo.setTableAppDateFieldName("APP_DATE");
 
-		s.cdo.setQueryFieldNameEmpid("QUERY_EMP_ID");
-		s.cdo.setQueryFieldNameBillId("QUERY_PNO");
-		s.cdo.setQueryFieldNameStartAppDate("QUERY_REQ_SDATE");
-		s.cdo.setQueryFieldNameEndAppDate("QUERY_REQ_EDATE");
-		s.cdo.setQueryFieldNameFlowStatus("r_status");
+//		cdo.setQueryFieldNameEmpid("QUERY_EMP_ID");
+//		cdo.setQueryFieldNameBillId("QUERY_PNO");
+//		cdo.setQueryFieldNameStartAppDate("QUERY_REQ_SDATE");
+//		cdo.setQueryFieldNameEndAppDate("QUERY_REQ_EDATE");
+//		cdo.setQueryFieldNameFlowStatus("r_status");
+//
+//		cdo.setQueryFieldValueEmpid("52116");
+//		cdo.setQueryFieldValueBillId("5211600001");
+//		cdo.setQueryFieldValueStartAppDate("20180901");
+//		cdo.setQueryFieldValueEndAppDate("20180930");
+//		cdo.setQueryFieldValueFlowStatus("");
+		cdo.setFunctionName("樣品評估申請作業");
 
-		s.cdo.setQueryFieldValueEmpid("52116");
-		s.cdo.setQueryFieldValueBillId("5211600001");
-		s.cdo.setQueryFieldValueStartAppDate("20180901");
-		s.cdo.setQueryFieldValueEndAppDate("20180930");
-		s.cdo.setQueryFieldValueFlowStatus("");
-
-		s.cdo.setFunctionName("樣品評估申請作業");
 //		s.doQuery();
 	}
 

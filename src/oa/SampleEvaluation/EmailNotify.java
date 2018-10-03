@@ -2,6 +2,8 @@ package oa.SampleEvaluation;
 
 import oa.SampleEvaluation.enums.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import jcx.util.*;
 import oa.SampleEvaluation.common.EmailUtil;
@@ -85,16 +87,21 @@ public class EmailNotify extends BaseEmailNotify {
 		this.isLastGate = false;
 	}
 
-	protected String buildApproveConfirmMsgStr() {
+	protected String buildApproveConfirmMsgStr() throws IOException {
 		String alertStr = "";
-		if (service.getValue("IS_CHECK").equals("0")) {
+
+		FileWriter fw = new FileWriter("gg.txt", true);
+		fw.write(service.getValue("IS_CHECK"));
+		fw.write(service.getValue("IS_TRIAL_PRODUCTION"));
+		fw.close();
+		if (service.getValue("IS_CHECK").equals("0") || service.getValue("IS_CHECK").equals("")) {
 
 			alertStr += "將不會進行請驗流程;<br>";
 		} else {
 
 			alertStr += "將進行請驗流程;<br>";
 		}
-		if (service.getValue("IS_TRIAL_PRODUCTION").equals("0")) {
+		if (service.getValue("IS_TRIAL_PRODUCTION").equals("0") || service.getValue("IS_CHECK").equals("")) {
 
 			alertStr += "將不會進行試製評估流程;<br>";
 		} else {

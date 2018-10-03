@@ -12,6 +12,7 @@ import jcx.jform.hproc;
 
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.MainQuery;
+import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
 import oa.SampleEvaluation.common.UIHidderString;
 import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.common.FormInitUtil;
@@ -27,8 +28,6 @@ public class SampleEvaluationActionController extends hproc {
 
 	public boolean confirm = true;
 	public CommonDataObj cdo;
-	public String functionName = "樣品評估申請作業";
-	public boolean isTest = false;
 	BaseService service;
 
 	@Override
@@ -39,19 +38,36 @@ public class SampleEvaluationActionController extends hproc {
 
 		service = new BaseService(this);
 
-		this.cdo = new CommonDataObj(service, "PNO", "APPLICANT");
+		// 測試物件 卡在誤將BaseService依賴注入
+		cdo = buildCdo();
 
 		// 按鈕動作處理進入點
 		switch (Actions.valueOf(actionObjName.trim())) {
 		case QUERY_CLICK:
 			// go
-			doQuery();
+			MainQuery mquery = new MainQuery(cdo);
+
+			String[][] list = mquery.getQueryResult();
+			if (list == null || list.length <= 0) {
+				message("查無紀錄");
+			}
+			setTableData("QUERY_LIST", list);
 			break;
 		case SAVE_CLICK:
+			// message(getValue(cdo.getTableApplicantFieldName()));
 			doSave();
 			break;
 		case SHOW_DETAIL_CLICK:// 這個動作比較尷尬 屬於載入畫面但卻是按鈕發動
-			readAndFillData(getValue("QUERY_LIST.PNO"));
+			String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
+			String[][] allColumns = cdo.getTableAllColumn();
+			if (ret != null && ret.length > 0) {
+				fillData(ret, allColumns);
+			} else {
+				message("查無資料");
+			}
+			FormInitUtil init = new FormInitUtil(this);
+			init.doDetailPageProcess();
+			addScript(UIHidderString.hideDmakerAddButton());
 			break;
 		default:
 			break;
@@ -68,6 +84,7 @@ public class SampleEvaluationActionController extends hproc {
 		fieldMap.put("APP_TYPE", "申請類型");
 		fieldMap.put("RECEIPT_UNIT", "受理單位");
 		fieldMap.put("URGENCY", "急迫性");
+		fieldMap.put("MATERIAL", "原物料名稱");
 
 		// 新增不需cdo等額外其他資料
 		AddUtil addUtil = new AddUtil(service);
@@ -94,51 +111,12 @@ public class SampleEvaluationActionController extends hproc {
 
 	}
 
-	public void doQuery() throws Throwable {
-		ArrayList<String> flist = new ArrayList<String>();
-		flist.add("PNO");
-		flist.add("APPLICANT");
-		flist.add("APP_TYPE");
-		flist.add("URGENCY");
-		flist.add("APP_DATE");
-		flist.add("'簽核狀態'");
-		flist.add("'明細'");
-		flist.add("'簽核紀錄'");
-
-		cdo.setQueryResultShowTableFieldList(flist);
-
-		MainQuery mquery = new MainQuery(cdo);
-		String[][] list = mquery.getQueryResult();
-		// TODO 移動到MainQuery中
-		if (list == null || list.length <= 0) {
-			message("查無紀錄");
-		}
-		setTableData("QUERY_LIST", list);
-	}
-
-	/**
-	 * 目前為免洗方法 TODO ,單號 入參數可重用
-	 * 
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-
-	public void readAndFillData(String key) throws SQLException, Exception {
-
-		// 塞入主檔資料
-//		String key = getValue("QUERY_LIST.PNO");
-
-		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(key);
-		String[][] allColumns = cdo.getTableAllColumn();
+	// 將資料填入表單畫面欄位
+	private void fillData(String[][] data, String[][] allColumns) {
 		if (allColumns.length > 0) {
 			for (int i = 0; i < allColumns.length; i++) {
-				setValue(allColumns[i][0], ret[0][i]);
+				setValue(allColumns[i][0], data[0][i]);
 			}
-			FormInitUtil init = new FormInitUtil(this);
-			init.doDetailPageProcess();
-			addScript(UIHidderString.hideDmakerAddButton());
-		} else {
-			message("發生錯誤，找不到此表單資料！");
 		}
 	}
 
@@ -162,5 +140,67 @@ public class SampleEvaluationActionController extends hproc {
 				+ "script.type = 'text/javascript';" + "document.getElementsByTagName('head')[0].appendChild(script);");
 
 	}
+
+	private CommonDataObj buildCdo() throws SQLException, Exception {
+
+		/** init **/
+		CommonDataObj inercdo = new CommonDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
+		SampleEvaluationQuerySpec qs = new SampleEvaluationQuerySpec();
+		// BaseService service = new BaseService(new
+		// SampleEvaluationActionController());
+		// inercdo.setService(service);
+		inercdo.setTableAppDateFieldName("APP_DATE");
+		inercdo.setLoginUserId(getUser());
+		/** query spec **/
+		// set field name
+		qs.setQueryBillIdFieldName("QUERY_PNO");
+		qs.setQueryEmpidFieldName("QUERY_EMP_ID");
+		qs.setQueryReqSDateFieldName("QUERY_REQ_SDATE");
+		qs.setQueryReqEDateFieldName("QUERY_REQ_EDATE");
+		qs.setQueryStatusFieldName("r_status");
+		qs.setQueryStatusCheckFieldName("r_status_check");
+		// set field value
+		qs.setQueryBillId(getValue("QUERY_PNO"));
+		qs.setQueryEmpid(getValue("QUERY_EMP_ID"));
+		qs.setQueryReqSDate(getValue("QUERY_REQ_SDATE"));
+		qs.setQueryReqEDate(getValue("QUERY_REQ_EDATE"));
+		qs.setQueryStatus(getValue("r_status"));
+		qs.setQueryStatusCheck(getValue("r_status_check"));
+		ArrayList<String> flist = new ArrayList<String>();
+		flist.add("PNO");
+		flist.add("APPLICANT");
+		flist.add("APP_TYPE");
+		flist.add("URGENCY");
+		flist.add("APP_DATE");
+		flist.add("'簽核狀態'");
+		flist.add("'明細'");
+		flist.add("'簽核紀錄'");
+
+		qs.setQueryResultView(flist);
+		inercdo.setQuerySpec(qs);
+		return inercdo;
+
+	}
+
+//	public String getUUID(CommonDataObj cdo) throws SQLException, Exception {
+//		// talk t = c.getTalk();
+//
+//		String uuid = "";
+//		String tablePKName = "PNO";
+//		String table = getTableName();
+//		String user = getValue("APPLICANT");
+//		String sql = "select max(" + tablePKName + ") from " + table + " where " + tablePKName + " like '" + user
+//				+ "%'";
+//		String[][] ret = getTalk().queryFromPool(sql);
+//
+//		if ("".equals(ret[0][0])) {
+//			uuid = user + "00001";
+//		} else {
+//			String m_uuid = ret[0][0].trim().replace(user, "");
+//			uuid = user + String.format("%05d", (Long.parseLong(m_uuid) + 1));
+//		}
+//
+//		return uuid;
+//	}
 
 }

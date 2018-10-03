@@ -6,14 +6,46 @@ import java.util.Vector;
 
 import com.ysp.service.BaseService;
 
+import jcx.db.talk;
+import oa.SampleEvaluation.SampleEvaluationActionController;
+
 public class MainQuery {
 	CommonDataObj cdo;
 	BaseService service;
+	String tablePKName;
+	String tableName;
+	String tableApplicantFieldName;
+	String tableAppDateFieldName;
+	talk innerTalk;
 
 	public MainQuery(CommonDataObj cdo) {
 
 		this.cdo = cdo;
-		service = cdo.getService();
+		this.service = new BaseService(new SampleEvaluationActionController());
+		tablePKName = cdo.getTablePKName();
+		tableName = cdo.getTableName();
+		tableApplicantFieldName = cdo.getTableApplicantFieldName();
+		tableAppDateFieldName = cdo.getTableAppDateFieldName();
+		innerTalk = cdo.getTalk();
+	}
+
+	// 取得查詢權限SQL條件
+	private String getQueryRightSql() throws SQLException, Exception {
+		String sql = "";
+		boolean isadmin = isAdmin(cdo.getLoginUserId());
+		// 如果不是系統管理員群組人員，須加入查詢權限
+		if (!isadmin) {
+			sql += " and (";
+			// 申請人為自己部屬
+			sql += "(" + cdo.getTableApplicantFieldName() + " in (select handle_user from hr_condition where empid = '"
+					+ cdo.getLoginUserId() + "')) ";
+			// 自己簽核過的單子
+			sql += "or (a." + tablePKName + " in (select distinct " + tablePKName + " from " + tableName
+					+ "_FLOWC_HIS where F_INP_ID = '" + cdo.getLoginUserId() + "')) ";
+
+			sql += ") ";
+		}
+		return sql;
 	}
 
 	/**
@@ -22,50 +54,63 @@ public class MainQuery {
 	 * @return
 	 */
 	public String getAdvancedCondition() {
-
-		String tablePKName = cdo.getTablePKName();
-		String queryId = service.getValue("QUERY_PNO");
-
-		String empid = service.getValue("QUERY_EMP_ID");
-		String sdate = service.getValue("QUERY_REQ_SDATE");
-		String edate = service.getValue("QUERY_REQ_EDATE");
-		String queryFlowStatus = service.getValue("r_status");
+		// 設置查詢欄位
+		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
+		String queryId = qc.getQueryBillId();
+		String empid = qc.getQueryEmpid();
+		String sdate = qc.getQueryReqSDate();
+		String edate = qc.getQueryReqEDate();
+		String queryFlowStatus = qc.getQueryStatus();
+		String queryFlowStatusCheck = qc.getQueryStatusCheck();
 
 		StringBuilder advanced_sql = new StringBuilder();
 		if (!"".equals(empid))
-			advanced_sql.append("and " + cdo.getTableApplicantFieldName() + " = '" + empid + "' ");
+			advanced_sql.append("and " + tableApplicantFieldName + " = '" + empid + "' ");
 		if (!"".equals(sdate))
-			advanced_sql.append("and APP_DATE >= '" + sdate + "' ");
+			advanced_sql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
 		if (!"".equals(edate))
-			advanced_sql.append("and APP_DATE <= '" + edate + "' ");
+			advanced_sql.append("and " + tableAppDateFieldName + " <= '" + edate + "' ");
+
+		// status
 		if ("已結案".equals(queryFlowStatus))
-			advanced_sql.append("and F_INP_STAT = '結案' ");
+			advanced_sql.append("and b.F_INP_STAT = '結案' ");
 		if ("簽核中".equals(queryFlowStatus))
-			advanced_sql.append("and F_INP_STAT not in ('結案','取消') ");
+			advanced_sql.append("and b.F_INP_STAT not in ('結案','取消') ");
 		if ("待處理".equals(queryFlowStatus))
-			advanced_sql.append("and F_INP_STAT = '待處理' ");
+			advanced_sql.append("and b.F_INP_STAT = '待處理' ");
+		if ("已結案".equals(queryFlowStatusCheck))
+			advanced_sql.append("and c.F_INP_STAT = '結案' ");
+		if ("簽核中".equals(queryFlowStatusCheck))
+			advanced_sql.append("and c.F_INP_STAT not in ('結案','取消') ");
+		if ("待處理".equals(queryFlowStatusCheck))
+			advanced_sql.append("and c.F_INP_STAT = '待處理' ");
 
 		if (!"".equals(queryId))
 			advanced_sql.append("and a." + tablePKName + " like '%" + queryId + "%' ");
 
 		advanced_sql.append(" and a." + tablePKName + " =  b." + tablePKName);
+		if (!"".equals(queryFlowStatusCheck)) {
+			advanced_sql.append(" and a." + tablePKName + "+'CHECK' =  c.OWN_" + tablePKName);
+		}
+
 		return advanced_sql.toString();
 	}
 
-	public String getSqlQueryStr() {
+	public String getSqlQueryStr() throws SQLException, Exception {
 		StringBuilder strSql = new StringBuilder();
-		String keyName = cdo.getTablePKName();
-		String targetEmpidFieldName = cdo.getTableApplicantFieldName().trim();// TODO 待簡化
-		ArrayList<String> resultFieldList = cdo.getQueryResultShowTableFieldList();
+		// String keyName = cdo.getTablePKName();
+		// String targetEmpidFieldName = cdo.getTableApplicantFieldName().trim();// TODO
+		// 待簡化
+		ArrayList<String> resultFieldList = cdo.getQuerySpec().getQueryResultView();
 		// 單號
 
 		strSql.append("select DISTINCT a.");
 		for (String fname : resultFieldList) {
-			if (fname.trim().equalsIgnoreCase(targetEmpidFieldName)) {
-				strSql.append(getEmpInfoSqlQueryStr(keyName, targetEmpidFieldName));
+			if (fname.trim().equalsIgnoreCase(tableApplicantFieldName)) {
+				strSql.append(getEmpInfoSqlQueryStr(tablePKName, tableApplicantFieldName));
 
 			} else if (fname.trim().equalsIgnoreCase("'簽核狀態'")) {
-				strSql.append(getFlowStateSqlQueryStr(keyName, cdo.getTableName()));
+				strSql.append(getFlowStateSqlQueryStr(tablePKName, tableName));
 
 			} else {
 				strSql.append(fname);
@@ -75,11 +120,10 @@ public class MainQuery {
 		}
 		String str = strSql.toString();
 		str = str.substring(0, str.length() - 1);
-		str += " from  " + cdo.getTableName() + " a," + cdo.getTableName() + "_FLOWC b " + "where 1=1";
+		str += " from  " + tableName + " a," + tableName + "_FLOWC b, " + tableName + "_CHECK_FLOWC c " + " where 1=1 ";
 
-		// 主要查詢欄位
-
-		return str;
+		// 主要查詢欄位+查詢條件+權限控制
+		return str + getAdvancedCondition() + getQueryRightSql();
 	}
 
 	/**
@@ -103,13 +147,13 @@ public class MainQuery {
 	}
 
 	public String[][] getQueryResult() throws Throwable {
-		String sql = getAdvancedCondition();
-		sql = getSqlQueryStr() + sql;
+		String sql = "";
+		sql = getSqlQueryStr();
 		String[][] list = cdo.getTalk().queryFromPool(sql);
 		if (list.length > 0) {
-			return getQueryResultAfterProcess(list, cdo.getQueryResultShowTableFieldList());
+			return getQueryResultAfterProcess(list, cdo.getQuerySpec().getQueryResultView());
 		}
-		return null;
+		return list;
 
 	}
 
@@ -122,15 +166,10 @@ public class MainQuery {
 	 * @return
 	 * @throws Throwable
 	 */
-	public String[][] getQueryResultAfterProcess(String[][] queryResults, ArrayList<String> viewFieldOfResultList)
+	private String[][] getQueryResultAfterProcess(String[][] queryResults, ArrayList<String> viewFieldOfResultList)
 			throws Throwable {
 
-		int sign_flow_status_index = -1;// 簽核狀態的Index
-		for (int i = 0; i < viewFieldOfResultList.size(); i++) {
-			if (viewFieldOfResultList.get(i).contains("'簽核狀態'")) {
-				sign_flow_status_index = i;
-			}
-		}
+		int sign_flow_status_index = getStatusIndex(viewFieldOfResultList);// 簽核狀態的Index
 
 		for (int i = 0; i < queryResults.length; i++) {
 			// 取得子流程目前簽核狀態
@@ -140,22 +179,35 @@ public class MainQuery {
 			String mainFlowStatus = queryResults[i][sign_flow_status_index].trim();
 
 			// 如果子流程和主流程都結案 在查詢結果表格的簽核狀態才顯示"已生效"
-			if ((mainFlowStatus.equals("結案") || mainFlowStatus.equals("歸檔"))
-					&& (checkFlowStatus.equals("結案") || checkFlowStatus.equals("無"))) {
-				queryResults[i][sign_flow_status_index] = "<font color=blue>(已生效)</font>【主流程:" + mainFlowStatus + "】"
-						+ "【請驗流程:" + checkFlowStatus + "】";
-			}
-			// 如果子流程和主流程有一方未結案 則進行加工處理
-			else {
-				queryResults[i][sign_flow_status_index] = "<font color=red>簽核中</font>" + "【主流程:" + mainFlowStatus
-						+ getCurrentFlowGateAndApprover(cdo.getTablePKName(), queryResults[i][0]) + "】" + "【請驗流程:"
-						+ checkFlowStatus
-						+ getCurrentFlowGateAndApprover("OWN_" + cdo.getTablePKName(), queryResults[i][0] + "CHECK")
-						+ "】";
-			}
+			queryResults[i][sign_flow_status_index] = getSignFlowStatus(queryResults[i][0], mainFlowStatus,
+					checkFlowStatus);
 		}
 
 		return queryResults;
+	}
+
+	private String getSignFlowStatus(String id, String mainFlowStatus, String checkFlowStatus)
+			throws SQLException, Exception {
+		if ((mainFlowStatus.equals("結案") || mainFlowStatus.equals("歸檔"))
+				&& (checkFlowStatus.equals("結案") || checkFlowStatus.equals("無"))) {
+			return "<font color=blue>(已生效)</font>【主流程:" + mainFlowStatus + "】" + "【請驗流程:" + checkFlowStatus + "】";
+		}
+		// 如果子流程和主流程有一方未結案 則進行加工處理
+		else {
+			return "<font color=red>簽核中</font>" + "【主流程:" + mainFlowStatus
+					+ getCurrentFlowGateAndApprover(cdo.getTablePKName(), id) + "】" + "【請驗流程:" + checkFlowStatus
+					+ getCurrentFlowGateAndApprover("OWN_" + cdo.getTablePKName(), id + "CHECK") + "】";
+		}
+	}
+
+	private int getStatusIndex(ArrayList<String> viewFieldOfResultList) {
+		int sign_flow_status_index = -1;
+		for (int i = 0; i < viewFieldOfResultList.size(); i++) {
+			if (viewFieldOfResultList.get(i).contains("'簽核狀態'")) {
+				sign_flow_status_index = i;
+			}
+		}
+		return sign_flow_status_index;
 	}
 
 	/**
@@ -164,9 +216,11 @@ public class MainQuery {
 	 * @param pkName  資料表pk欄位名稱
 	 * @param pkValue 資料表pk值
 	 * @return
+	 * @throws Exception
+	 * @throws SQLException
 	 */
-	public String getCurrentFlowGateAndApprover(String pkName, String pkValue) {
-		Vector<String> people = service.getApprovablePeople(service.getFunctionName(),
+	private String getCurrentFlowGateAndApprover(String pkName, String pkValue) throws SQLException, Exception {
+		Vector<String> people = service.getApprovablePeople(cdo.getFunctionName(),
 				"a." + pkName + "='" + pkValue + "'");
 		StringBuffer sb = new StringBuffer();
 		if (people != null) {
@@ -176,7 +230,9 @@ public class MainQuery {
 					if (j != 0)
 						sb.append(",");
 					String id1 = (String) people.elementAt(j);
-					String name1 = service.getName(id1);
+					UserData u = new UserData(id1, innerTalk);
+					String name1 = u.getHecname();
+					u = null;
 					sb.append(name1 + "-" + id1);
 				}
 				sb.append(")");
@@ -190,7 +246,7 @@ public class MainQuery {
 		String sql = "SELECT F_INP_STAT FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE OWN_PNO='" + ownPno + "'";
 		String[][] ret = null;
 		try {
-			ret = service.getTalk().queryFromPool(sql);
+			ret = innerTalk.queryFromPool(sql);
 			if (ret.length == 0) {
 				// 如果沒有請驗流程視為請驗已結案
 				return "無";
@@ -203,6 +259,20 @@ public class MainQuery {
 			e.printStackTrace();
 		}
 		return ret[0][0];
+	}
+
+	// 確定查詢權限
+	private boolean isAdmin(String user) throws SQLException, Exception {
+		String sql_hruser_dept = "select id from hruser_dept where dep_no = '1001' or ID='52116'";
+		String[][] ret_hruser_dept = innerTalk.queryFromPool(sql_hruser_dept);
+		if (ret_hruser_dept.length > 0) {
+			for (int i = 0; i < ret_hruser_dept.length; i++) {
+				if (ret_hruser_dept[i][0].equals(user)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

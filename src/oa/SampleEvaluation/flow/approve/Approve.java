@@ -2,23 +2,13 @@ package oa.SampleEvaluation.flow.approve;
 
 import jcx.jform.bProcFlow;
 import oa.SampleEvaluation.flow.approve.gateEnum.*;
-import java.beans.ConstructorProperties;
-import java.io.*;
-import java.sql.SQLException;
-import java.util.*;
-
 import com.ysp.field.Mail;
 import com.ysp.service.BaseService;
 import com.ysp.service.MailService;
 import com.ysp.util.DateTimeUtil;
 
-import jcx.util.*;
 import oa.SampleEvaluation.EmailNotify;
-import oa.SampleEvaluation.common.AddUtil;
-import oa.SampleEvaluation.common.UserData;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
-import oa.SampleEvaluation.enums.AppType;
-import oa.SampleEvaluation.enums.Urgency;
 import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
@@ -62,17 +52,27 @@ public class Approve extends bProcFlow {
 				return false;
 			}
 
+			if ((getValue("IS_TRIAL_PRODUCTION").trim().equals("1") || getValue("IS_CHECK").trim().equals("1"))
+					&& getValue("DOC_CTRLER").trim().equals("")) {
+				message("請選擇文管人員");
+				return false;
+			}
+			if (getValue("QR_NO").trim().equals("")) {
+				message("請填寫QR號碼");
+				return false;
+			}
+
 			// 更新主表請驗和試製評估勾選欄位
 			// 更新主表 評估人員和實驗室經辦
-			s = new SampleEvaluation(service);
-			s = s.setAllValue(s);
+			s = new SampleEvaluation();
+			s = s.setAllValue(s, service);
 			new SampleEvaluationDaoImpl(t).update(s);
 
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (getValue("IS_CHECK").trim().equals("1")) {
 
-				sc = new SampleEvaluationCheck(service);
-				sc = sc.setAllValue(sc);
+				sc = new SampleEvaluationCheck();
+				sc = sc.setAllValue(sc, service);
 				SampleEvaluationCheckDao checkDao = new SampleEvaluationCheckDao(t);
 				if (checkDao.findById(sc.getOwnPno()) != null) {
 					checkDao.update(sc);
@@ -123,13 +123,13 @@ public class Approve extends bProcFlow {
 			// 更新主表試製單號欄位
 			if (!getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
 				// 更新主表試製單號欄位
-				s = new SampleEvaluation(service);
-				s = s.setAllValue(s);
+				s = new SampleEvaluation();
+				s = s.setAllValue(s, service);
 				new SampleEvaluationDaoImpl(t).update(s);
 
 				// 更新子流程主表試製單號欄位
-				sc = new SampleEvaluationCheck(service);
-				sc = sc.setAllValue(sc);
+				sc = new SampleEvaluationCheck();
+				sc = sc.setAllValue(sc, service);
 				new SampleEvaluationCheckDao(t).update(sc);
 			} else {
 				message("請輸入試製通知單號");
@@ -152,8 +152,8 @@ public class Approve extends bProcFlow {
 			break;
 		case 待處理:
 			// 更新主表分案人欄位
-			s = new SampleEvaluation(service);
-			s = s.setAllValue(s);
+			s = new SampleEvaluation();
+			s = s.setAllValue(s, service);
 			new SampleEvaluationDaoImpl(t).update(s);
 			break;
 		default:

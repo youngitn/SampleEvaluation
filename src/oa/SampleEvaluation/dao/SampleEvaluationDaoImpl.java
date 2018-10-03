@@ -12,12 +12,17 @@ import oa.SampleEvaluation.tableObject.SampleEvaluation;
  * @author ¤j¯Tª¯ 2018-09-19
  */
 
-public class SampleEvaluationDaoImpl implements ITableDao {
+public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation> {
 
 	talk t;
 
 	public SampleEvaluationDaoImpl(talk t) {
 		this.t = t;
+	}
+
+	@Override
+	public Class getClazz() {
+		return SampleEvaluation.class;
 	}
 
 	@Override
