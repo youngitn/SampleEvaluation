@@ -1,11 +1,12 @@
 package oa.SampleEvaluation;
 
-import jcx.jform.bNotify;
+import jcx.jform.bNotify; 
 import jcx.jform.bProcFlow;
 
 import oa.SampleEvaluation.common.EmailUtil;
+import oa.SampleEvaluation.common.MailBody;
 
-import java.io.FileWriter;
+import oa.SampleEvaluation.common.MailMan;
 import java.sql.SQLException;
 
 import com.ysp.field.Mail;
@@ -29,39 +30,28 @@ public abstract class BaseEmailNotify extends bNotify {
 		// MailService
 
 		// 大部分表單動作皆委派給service
-		try {
-			service = new BaseService(this);
-			emailUtil = new EmailUtil(service);
 
-			mailService = new MailService(service);
+		service = new BaseService(this);
+		emailUtil = new EmailUtil(service);
+		mailService = new MailService(service);
 
-			setIsLastGate();
+		// 建立內容
+		String content = buildContent();
+		content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
 
-			// 取得信件內容標題
-			String title = emailTitleBuilder();
-
-			// 取得待簽核人
-			usr = mailService.getMailAddresseeByEngagedPeople();
-
-			// 判斷是否結案通知
-			if (isLastGate) {
-				// 取得簽核過的所有人
-				usr = emailUtil.getAllSignedPeopleEmailForLastGateToSend();
-				title = emailTitleBuilderForFinalGate();
-			}
-
-			// 建立內容
-			String content = buildContent();
-			content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
-			mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
-		} catch (NullPointerException e) {
-			// TODO: handle exception
-			FileWriter fw = new FileWriter("test5566.txt");
-			e.printStackTrace();
-			fw.write(e.toString());
-			fw.flush();
-			fw.close();
+		// 取得待簽核人
+		usr = mailService.getMailAddresseeByEngagedPeople();
+		// 判斷是否結案通知
+		String title = emailTitleBuilder();
+		setIsLastGate();
+		if (isLastGate) {
+			// 取得簽核過的所有人
+			usr = emailUtil.getAllSignedPeopleEmailForLastGateToSend();
+			title = emailTitleBuilderForFinalGate();
 		}
+		MailBody mBody = new MailBody(title, content);
+		MailMan m = new MailMan(mailService);
+		m.send(usr, mBody);
 
 	}
 
@@ -72,12 +62,13 @@ public abstract class BaseEmailNotify extends bNotify {
 	protected abstract String buildContent() throws SQLException, Exception;
 
 	protected String emailTitleBuilder() {
-
+		String title = "";
 		if (mailService.isReject()) {
-			return "退簽通知：" + this.getFunctionName() + "( 單號：" + getValue("PNO") + " )";
+			title = "退簽通知：";
 		} else {
-			return "簽核通知：" + this.getFunctionName() + "( 單號：" + getValue("PNO") + " )";
+			title = "簽核通知：";
 		}
+		return title + this.getFunctionName() + "( 單號：" + getValue("PNO") + " )";
 	}
 
 	protected String emailTitleBuilderForFinalGate() {
@@ -86,6 +77,7 @@ public abstract class BaseEmailNotify extends bNotify {
 
 	}
 
+	@Override
 	public String getInformation() {
 		return "---------------\u76f4\u5c6c\u4e3b\u7ba1.Notify()----------------";
 	}

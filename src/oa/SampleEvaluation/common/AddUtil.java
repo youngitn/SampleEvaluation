@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.ysp.service.BaseService;
@@ -38,8 +39,7 @@ public class AddUtil {
 	 * @throws SQLException
 	 * @throws Exception
 	 */
-	public String getUUID(String table, String user, String tablePKName, talk t) throws SQLException, Exception {
-		// talk t = c.getTalk();
+	public String getUUID(String table, String user, String tablePKName, talk t) throws Exception {
 
 		String uuid = "";
 
@@ -62,13 +62,14 @@ public class AddUtil {
 	 * 欄位檢核，只會檢查是否空白，回傳所有空白欄位標題<br>
 	 * 
 	 */
-	public ArrayList<String> emptyCheck(Map<String, String> fieldMap) {
+	public List<String> emptyCheck(Map<String, String> fieldMap) {
 
 		ArrayList<String> ret = new ArrayList<String>();
 
-		for (String dataKey : fieldMap.keySet()) {
-			if (service.getValue(dataKey).trim() != null && service.getValue(dataKey).trim().equals("")) {
-				ret.add(fieldMap.get(dataKey));
+		for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
+			String value = service.getValue(entry.getKey()).trim();
+			if (value != null && value.equals("")) {
+				ret.add(fieldMap.get(entry.getKey()));
 			}
 
 		}
@@ -90,16 +91,12 @@ public class AddUtil {
 		return m;
 	}
 
-	public String getUUID(CommonDataObj cdo) throws SQLException, Exception {
-		// talk t = c.getTalk();
+	public String getUUID(CommonDataObj cdo) throws Exception {
 
 		String uuid = "";
 		String tablePKName = cdo.getTablePKName();
 		String table = cdo.getTableName();
 		String user = service.getValue(cdo.getTableApplicantFieldName());
-//		FileWriter fw = new FileWriter("gg.txt");
-//		fw.write(cdo.getTableApplicantFieldName());
-//		fw.close();
 		String sql = "select max(" + tablePKName + ") from " + table + " where " + tablePKName + " like '" + user
 				+ "%'";
 		String[][] ret = service.getTalk().queryFromPool(sql);

@@ -11,48 +11,22 @@ public class CommonDataObj {
 
 	private String loginUserId;// 目前登入使用者id
 
-	private String tableName;// 資料表名稱
-	private String tablePKName;// PK名稱 用來記錄單號
-	private String functionName;// 表單名稱
-	private String[][] tableAllColumn;// 裝資料表所有欄位之陣列
-
-	private String tableApplicantFieldName;// 資料表中申請人欄位名稱
-	private String tableAppDateFieldName;// 資料表申請日期欄位名稱
-
+	private TableFieldSpec tableFieldSpec = new TableFieldSpec();
 	private talk talk;
 	private ArrayList<String> queryResultShowTableFieldList;
 	private BaseService service;
 	private ArrayList<String> qflist;
 	private QuerySpec qs;
-
-	public ArrayList<String> getQueryResultShowTableFieldList() {
-		return queryResultShowTableFieldList;
-	}
-
-	public void setQueryResultShowTableFieldList(ArrayList<String> queryResultShowTableFieldList) {
-		this.queryResultShowTableFieldList = queryResultShowTableFieldList;
-	}
+	private String functionName;// 表單名稱
 
 	public CommonDataObj(talk t, String tableName, String tablePKName, String tableApplicantFieldName)
-			throws SQLException, Exception {
-		this.tableName = tableName;
-		this.tablePKName = tablePKName;
-		this.tableAllColumn = t.queryFromPool(
+			throws Exception {
+		this.tableFieldSpec.name = tableName;
+		this.tableFieldSpec.pkName = tablePKName;
+		this.tableFieldSpec.allColumn = t.queryFromPool(
 				"select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where table_name= '" + tableName + "'");
-		this.tableApplicantFieldName = tableApplicantFieldName;
+		this.tableFieldSpec.applicantFieldName = tableApplicantFieldName;
 		this.talk = t;
-
-	}
-
-	public CommonDataObj(BaseService service, String tablePKName, String tableApplicantFieldName)
-			throws SQLException, Exception {
-		this.service = service;
-		this.tableName = service.getTableName();
-		this.tablePKName = tablePKName;
-		this.talk = service.getTalk();
-		this.tableAllColumn = talk.queryFromPool(
-				"select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where table_name= '" + tableName + "'");
-		this.tableApplicantFieldName = tableApplicantFieldName;
 
 	}
 
@@ -76,42 +50,42 @@ public class CommonDataObj {
 	 * @return the tablePKName
 	 */
 	public String getTablePKName() {
-		return tablePKName;
+		return tableFieldSpec.pkName;
 	}
 
 	/**
 	 * @param tablePKName the tablePKName to set
 	 */
 	public void setTablePKName(String tablePKName) {
-		this.tablePKName = tablePKName;
+		this.tableFieldSpec.pkName = tablePKName;
 	}
 
 	/**
 	 * @return the tableName
 	 */
 	public String getTableName() {
-		return tableName;
+		return tableFieldSpec.name;
 	}
 
 	/**
 	 * @param tableName the tableName to set
 	 */
 	public void setTableName(String tableName) {
-		this.tableName = tableName;
+		this.tableFieldSpec.name = tableName;
 	}
 
 	/**
 	 * @return the allColumn
 	 */
 	public String[][] getTableAllColumn() {
-		return tableAllColumn;
+		return tableFieldSpec.allColumn;
 	}
 
 	/**
 	 * @param allColumn the allColumn to set
 	 */
 	public void setAllColumn(String[][] tableAllColumn) {
-		this.tableAllColumn = tableAllColumn;
+		this.tableFieldSpec.allColumn = tableAllColumn;
 	}
 
 	/**
@@ -120,11 +94,11 @@ public class CommonDataObj {
 	 * @return
 	 */
 	public String getTableApplicantFieldName() {
-		return tableApplicantFieldName;
+		return tableFieldSpec.applicantFieldName;
 	}
 
 	public void setTableApplicantFieldName(String tableApplicantFieldName) {
-		this.tableApplicantFieldName = tableApplicantFieldName;
+		this.tableFieldSpec.applicantFieldName = tableApplicantFieldName;
 	}
 
 	public String getFunctionName() {
@@ -160,7 +134,7 @@ public class CommonDataObj {
 	}
 
 	public void setTableAllColumn(String[][] tableAllColumn) {
-		this.tableAllColumn = tableAllColumn;
+		this.tableFieldSpec.allColumn = tableAllColumn;
 	}
 
 	/**
@@ -169,7 +143,7 @@ public class CommonDataObj {
 	 * @return
 	 */
 	public String getTableAppDateFieldName() {
-		return tableAppDateFieldName;
+		return tableFieldSpec.appDateFieldName;
 	}
 
 	/**
@@ -178,7 +152,7 @@ public class CommonDataObj {
 	 * @return
 	 */
 	public void setTableAppDateFieldName(String tableAppDateFieldName) {
-		this.tableAppDateFieldName = tableAppDateFieldName;
+		this.tableFieldSpec.appDateFieldName = tableAppDateFieldName;
 	}
 
 	/**
@@ -198,5 +172,21 @@ public class CommonDataObj {
 
 		this.qs = qs;
 
+	}
+
+	public ArrayList<String> getQueryResultShowTableFieldList() {
+		return queryResultShowTableFieldList;
+	}
+
+	public void setQueryResultShowTableFieldList(ArrayList<String> queryResultShowTableFieldList) {
+		this.queryResultShowTableFieldList = queryResultShowTableFieldList;
+	}
+
+	public TableFieldSpec getTableFieldSpec() {
+		return tableFieldSpec;
+	}
+
+	public void setTableFieldSpec(TableFieldSpec tableFieldSpec) {
+		this.tableFieldSpec = tableFieldSpec;
 	}
 }

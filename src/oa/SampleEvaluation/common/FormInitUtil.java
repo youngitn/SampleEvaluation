@@ -6,8 +6,8 @@ import jcx.jform.hproc;
 import jcx.util.datetime;
 
 /**
- * 可用BaseService代理 
- * hproc目前未出錯 供開發參考
+ * 可用BaseService代理 hproc目前未出錯 供開發參考
+ * 
  * @author u52116
  *
  */
@@ -28,8 +28,8 @@ public class FormInitUtil {
 		// 取得user資料類別
 		// 填入query畫面基本欄位資料
 		c.setValue("QUERY_EMP_ID", userdata.getEmpid());
-		c.setValue("QUERY_EMP_NAME", userdata.getHecname());
-		c.setValue("QUERY_EMP_DEP", userdata.getDep_name());
+		c.setValue("QUERY_EMPNAME", userdata.getHecname());
+		c.setValue("QUERY_EMP_DEP", userdata.getDepName());
 		String today = c.getToday("YYYYmmdd");
 		String edate = today;
 		String sdate = datetime.dateAdd(edate, "d", -14);
@@ -45,8 +45,8 @@ public class FormInitUtil {
 		// 新增欄位申請人基本資料填入
 		c.setValue("CPNYID", userdata.getCpnyid());
 		c.setValue("APPLICANT", c.getUser());
-		c.setValue("APPLICANT_NAME", userdata.getHecname());
-		c.setValue("APPLICANT_DEP_NAME", userdata.getDep_name());
+		c.setValue("APPLICANTNAME", userdata.getHecname());
+		c.setValue("APPLICANT_DEPNAME", userdata.getDepName());
 		c.setValue("APP_DATE", c.getToday("YYYYmmdd"));
 		userdata = null;
 	}
@@ -119,14 +119,14 @@ public class FormInitUtil {
 		// 申請人正常必填 其基本資料應該都有
 		userdata = getBillApplicant();
 		c.setValue("CPNYID", userdata.getCpnyid());
-		c.setValue("APPLICANT_NAME", userdata.getHecname());
-		c.setValue("APPLICANT_DEP_NAME", userdata.getDep_name());
+		c.setValue("APPLICANTNAME", userdata.getHecname());
+		c.setValue("APPLICANT_DEPNAME", userdata.getDepName());
 		// 專案主持人資料
 		if (c.getValue("PROJECT_LEADER").equals("")) {
-			c.setValue("PROJECT_LEADER_NAME", "");
+			c.setValue("PROJECT_LEADERNAME", "");
 		} else {
-			c.setValue("PROJECT_LEADER_NAME", getSpecUserData(c.getValue("PROJECT_LEADER")).getHecname() + " "
-					+ getSpecUserData(c.getValue("PROJECT_LEADER")).getDep_name());
+			c.setValue("PROJECT_LEADERNAME", getSpecUserData(c.getValue("PROJECT_LEADER")).getHecname() + " "
+					+ getSpecUserData(c.getValue("PROJECT_LEADER")).getDepName());
 		}
 		userdata = null;
 

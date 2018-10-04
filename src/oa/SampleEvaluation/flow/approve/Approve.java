@@ -20,40 +20,43 @@ import jcx.db.*;
 
 public class Approve extends bProcFlow {
 
-	String table_name;
-	String state;
+	String nowState;
 	talk t;
+	String isCheckValue;
+	String isTrialProdValue;
 
 	public boolean action(String value) throws Throwable {
-		// 回傳值為 true 表示執行接下來的流程處理
-		// 回傳值為 false 表示接下來不執行任何流程處理
-		// 傳入值 value 為 "核准"
-
-		state = getState();
+		nowState = getState();
 		t = getTalk();
 		SampleEvaluation s = null;
 		SampleEvaluationCheck sc = null;
 		String alertStr = "";
 		BaseService service = new BaseService(this);
-		switch (FlowState.valueOf(state)) {
+		String labExe = getValue("LAB_EXE").trim(); 
+		String lassessor = getValue("ASSESSOR").trim();
+		String docCtrler = getValue("DOC_CTRLER").trim();
+		String designee = getValue("DESIGNEE").trim();
+		String designeEmpid = (designee.trim().split(" "))[0];
+		this.isCheckValue = getValue("IS_CHECK").trim();
+		this.isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
+
+		switch (FlowState.valueOf(nowState)) {
 		case 組長:
 
 			// 進行相關判斷並建立送出表單時顯示的提醒文字
 			alertStr = buildApproveConfirmMsgStr();
 
-			if (getValue("IS_CHECK").trim().equals("1") && getValue("LAB_EXE").trim().equals("")) {
+			if (isCheckValue.equals("1") && isCheckValue.equals("")) {
 				message("請選擇實驗室經辦人員");
 				return false;
 			}
 
-			if (getValue("IS_TRIAL_PRODUCTION").trim().equals("1")
-					&& (getValue("LAB_EXE").trim().equals("") || getValue("ASSESSOR").trim().equals(""))) {
+			if (isTrialProdValue.equals("1") && (labExe.equals("") || lassessor.equals(""))) {
 				message("請選擇試製評估人員與實驗室經辦人員");
 				return false;
 			}
 
-			if ((getValue("IS_TRIAL_PRODUCTION").trim().equals("1") || getValue("IS_CHECK").trim().equals("1"))
-					&& getValue("DOC_CTRLER").trim().equals("")) {
+			if ((isTrialProdValue.equals("1") || isCheckValue.equals("1")) && docCtrler.equals("")) {
 				message("請選擇文管人員");
 				return false;
 			}
@@ -69,7 +72,7 @@ public class Approve extends bProcFlow {
 			new SampleEvaluationDaoImpl(t).update(s);
 
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
-			if (getValue("IS_CHECK").trim().equals("1")) {
+			if (isCheckValue.equals("1")) {
 
 				sc = new SampleEvaluationCheck();
 				sc = sc.setAllValue(sc, service);
@@ -83,9 +86,7 @@ public class Approve extends bProcFlow {
 					SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(sc.getOwnPno());
 					String time = DateTimeUtil.getApproveAddSeconds(0);
 
-					// 取得被分案組長empid
-					String[] designee = getValue("DESIGNEE").trim().split(" ");
-					flowc.setF_INP_ID(designee[0]);
+					flowc.setF_INP_ID(designeEmpid);
 					flowc.setF_INP_STAT("填寫請驗單號");
 					flowc.setF_INP_TIME(time);
 					SampleEvaluationCheckFlowcDao secfDao = new SampleEvaluationCheckFlowcDao();
@@ -96,7 +97,7 @@ public class Approve extends bProcFlow {
 					SampleEvaluationCheckFlowcHis his = new SampleEvaluationCheckFlowcHis(sc.getOwnPno(),
 							flowc.getF_INP_STAT(), time);
 
-					his.setF_INP_ID(designee[0]);
+					his.setF_INP_ID(designeEmpid);
 					SampleEvaluationCheckFlowcHisDao secfhDao = new SampleEvaluationCheckFlowcHisDao();
 					secfhDao.create(getTalk().getConnectionFromPool(), his);
 
@@ -106,8 +107,7 @@ public class Approve extends bProcFlow {
 				MailService mailService = new MailService(service);
 				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
 				// Mail to
-				String[] u = getValue("DESIGNEE").trim().split(" ");
-				String[] usr = { getEmail(u[0]) };
+				String[] usr = { getEmail(designeEmpid) };
 
 				// 內容
 				EmailNotify en = new EmailNotify();
@@ -139,11 +139,11 @@ public class Approve extends bProcFlow {
 			break;
 		case 受理單位主管分案:
 			// 更新主表分案人欄位
-			if (!getValue("DESIGNEE").trim().equals("")) {
+			if (!designee.equals("")) {
 				t.execFromPool("UPDATE  sample_evaluation  SET DESIGNEE=?" + " where pno=?",
-						new Object[] { getValue("DESIGNEE"), getValue("PNO") });
+						new Object[] { designee, getValue("PNO") });
 				t.execFromPool("UPDATE  sample_evaluation_check  SET DESIGNEE=?" + " where own_pno=?",
-						new Object[] { getValue("DESIGNEE"), getValue("OWN_PNO") });
+						new Object[] { designee, getValue("OWN_PNO") });
 			} else {
 				message("請選擇 受理單位指派人員 欄位");
 				return false;
@@ -165,21 +165,21 @@ public class Approve extends bProcFlow {
 
 	private String buildApproveConfirmMsgStr() {
 		String alertStr = "";
-		if (getValue("IS_CHECK").equals("0")) {
+		if (isCheckValue.equals("0")) {
 
 			alertStr += "將不會進行請驗流程;<br>";
 		} else {
 
 			alertStr += "將進行請驗流程;<br>";
 		}
-		if (getValue("IS_TRIAL_PRODUCTION").equals("0")) {
+		if (isTrialProdValue.equals("0")) {
 
 			alertStr += "將不會進行試製評估流程;<br>";
 		} else {
 
 			alertStr += "將進行試製評估流程;<br>";
 		}
-		if (getValue("IS_TRIAL_PRODUCTION").equals("0") && getValue("IS_CHECK").equals("0")) {
+		if (isTrialProdValue.equals("0") && isCheckValue.equals("0")) {
 			alertStr = "皆未勾選\"是否進行請驗/試製評估流程\"中的任何項目<br> 送出後將直接結案;<br>";
 		}
 		return alertStr;

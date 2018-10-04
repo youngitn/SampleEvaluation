@@ -19,7 +19,8 @@ import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 /**
- * 嘗試可測試寫法
+ * 希望能切MVC(內外部)<br>
+ * 可測試<br>
  * 
  * @author u52116
  *
@@ -88,7 +89,7 @@ public class SampleEvaluationActionController extends hproc {
 
 		// 新增不需cdo等額外其他資料
 		AddUtil addUtil = new AddUtil(service);
-		ArrayList<String> ret = addUtil.emptyCheck(fieldMap);
+		ArrayList<String> ret = (ArrayList<String>) addUtil.emptyCheck(fieldMap);
 		if (ret != null && ret.size() > 0) {
 			message("以下欄位請做選擇或輸入:" + ret);
 		} else {
@@ -102,6 +103,7 @@ public class SampleEvaluationActionController extends hproc {
 				// confirm = true 控制是否真的送出
 				if (confirm) {
 					// 觸發Dmaker內建的新增鈕來送出表單
+					// 寫在view部分會好點
 					addScript("document.getElementById('em_add_button-box').click();");
 
 				}

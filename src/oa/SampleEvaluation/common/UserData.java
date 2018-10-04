@@ -12,9 +12,9 @@ public class UserData {
 		String[][] ret = t.queryFromPool(sql);
 		setCpnyid(ret[0][0]);
 		setHecname(ret[0][1]);
-		setDep_no(ret[0][2]);
+		setDepNo(ret[0][2]);
 		setExt(ret[0][3]);
-		setDep_name(ret[0][4]);
+		setDepName(ret[0][4]);
 		this.empid = empid;
 	}
 
@@ -64,14 +64,14 @@ public class UserData {
 	/**
 	 * @return the dep_no
 	 */
-	public String getDep_no() {
+	public String getDepNo() {
 		return dep_no;
 	}
 
 	/**
 	 * @param dep_no the dep_no to set
 	 */
-	public void setDep_no(String dep_no) {
+	public void setDepNo(String dep_no) {
 		this.dep_no = dep_no;
 	}
 
@@ -92,14 +92,14 @@ public class UserData {
 	/**
 	 * @return the dep_name
 	 */
-	public String getDep_name() {
+	public String getDepName() {
 		return dep_name;
 	}
 
 	/**
 	 * @param dep_name the dep_name to set
 	 */
-	public void setDep_name(String dep_name) {
+	public void setDepName(String dep_name) {
 		this.dep_name = dep_name;
 	}
 

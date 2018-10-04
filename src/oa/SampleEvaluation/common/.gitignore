@@ -17,3 +17,10 @@
 /QuerySpec.class
 /SampleEvaluationQuerySpec.class
 /DebugUtil.class
+/TableFieldSpec.class
+/Mail.class
+/MailBody.class
+/MailAddress.class
+/MailMessage.class
+/MailMan.class
+/MailDto.class

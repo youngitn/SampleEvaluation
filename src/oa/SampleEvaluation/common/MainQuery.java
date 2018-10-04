@@ -11,22 +11,34 @@ import oa.SampleEvaluation.SampleEvaluationActionController;
 
 public class MainQuery {
 	CommonDataObj cdo;
+	/**
+	 * <h1>service<br>
+	 * 會用到jcx某類別的方法時,可直接new一個實作該類的類別 <br>
+	 * EX:SampleEvaluationActionController extends hproc <-- <br>
+	 * 不使用 getValue()等取得外部資訊的方法 <br>
+	 * 僅使用getFlowHis()等方法 <br>
+	 * getName()等需要系統資訊的也一樣不使用
+	 */
 	BaseService service;
 	String tablePKName;
 	String tableName;
 	String tableApplicantFieldName;
 	String tableAppDateFieldName;
 	talk innerTalk;
+	TableFieldSpec tableFieldSpec;
 
 	public MainQuery(CommonDataObj cdo) {
 
 		this.cdo = cdo;
+
 		this.service = new BaseService(new SampleEvaluationActionController());
-		tablePKName = cdo.getTablePKName();
-		tableName = cdo.getTableName();
-		tableApplicantFieldName = cdo.getTableApplicantFieldName();
-		tableAppDateFieldName = cdo.getTableAppDateFieldName();
+		tableFieldSpec = cdo.getTableFieldSpec();
+		tablePKName = tableFieldSpec.pkName;
+		tableName = tableFieldSpec.name;
+		tableApplicantFieldName = tableFieldSpec.applicantFieldName;
+		tableAppDateFieldName = tableFieldSpec.appDateFieldName;
 		innerTalk = cdo.getTalk();
+
 	}
 
 	// 取得查詢權限SQL條件
@@ -66,7 +78,7 @@ public class MainQuery {
 
 		StringBuilder advanced_sql = new StringBuilder();
 		if (!"".equals(empid))
-			advanced_sql.append("and " + tableApplicantFieldName + " = '" + empid + "' ");
+			advanced_sql.append("and " + tableApplicantFieldName + " = '" + empid + "' "); 
 		if (!"".equals(sdate))
 			advanced_sql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
 		if (!"".equals(edate))

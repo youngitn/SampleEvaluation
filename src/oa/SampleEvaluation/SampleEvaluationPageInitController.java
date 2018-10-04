@@ -12,7 +12,7 @@ import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.common.UIHidderString;
 
-import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl; 
+import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 /**
  * 嘗試可測試寫法sh
@@ -35,7 +35,7 @@ public class SampleEvaluationPageInitController extends hproc {
 		service = new BaseService(this);
 		FormInitUtil init = new FormInitUtil(this);
 		setValue("NOW_INIT", getName());
-		this.cdo = new CommonDataObj(service, "PNO", "APPLICANT");
+		this.cdo = new CommonDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
 
 		String actionObjName = getActionName(getName());
 		File saveFile = new File("Data.txt");
