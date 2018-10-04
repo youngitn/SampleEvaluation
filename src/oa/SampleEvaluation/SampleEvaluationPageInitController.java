@@ -15,7 +15,7 @@ import oa.SampleEvaluation.common.UIHidderString;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 /**
- * 嘗試可測試寫法
+ * 嘗試可測試寫法s
  * 
  * @author u52116
  *
