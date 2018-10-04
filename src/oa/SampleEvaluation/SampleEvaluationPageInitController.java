@@ -74,14 +74,7 @@ public class SampleEvaluationPageInitController extends hproc {
 			if (pno.length() <= 0) {
 				changeForm(getFunctionName());
 			} else {
-				String sql = "select f_inp_info from " + getTableName() + "_flowc where PNO = '" + pno + "'";
-				String[][] ret = getTalk().queryFromPool(sql);
-				if (ret.length > 0) {
-					String memo = ret[0][0];
-					if (memo.startsWith("[退簽]")) {
-						addScript("callRejectWarning();");
-					}
-				}
+				showRejectWarning(pno);
 			}
 			// 如果帶出的資料 試製選項有打勾 就顯示評估人員
 			if (getValue("IS_TRIAL_PRODUCTION").trim().equals("1")) {
@@ -115,6 +108,22 @@ public class SampleEvaluationPageInitController extends hproc {
 		}
 		return null;
 
+	}
+
+	/**
+	 * @param pno
+	 * @throws SQLException
+	 * @throws Exception
+	 */
+	private void showRejectWarning(String pno) throws SQLException, Exception {
+		String sql = "select f_inp_info from " + getTableName() + "_flowc where PNO = '" + pno + "'";
+		String[][] ret = getTalk().queryFromPool(sql);
+		if (ret.length > 0) {
+			String memo = ret[0][0];
+			if (memo.startsWith("[退簽]")) {
+				addScript("callRejectWarning();");
+			}
+		}
 	}
 
 	public void detailPage() throws SQLException, Exception {

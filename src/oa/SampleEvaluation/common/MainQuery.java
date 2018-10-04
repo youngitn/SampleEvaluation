@@ -32,16 +32,17 @@ public class MainQuery {
 	// 取得查詢權限SQL條件
 	private String getQueryRightSql() throws SQLException, Exception {
 		String sql = "";
-		boolean isadmin = isAdmin(cdo.getLoginUserId());
+		String loginUserId = cdo.getLoginUserId();
+		boolean isadmin = isAdmin(loginUserId);
 		// 如果不是系統管理員群組人員，須加入查詢權限
 		if (!isadmin) {
 			sql += " and (";
 			// 申請人為自己部屬
-			sql += "(" + cdo.getTableApplicantFieldName() + " in (select handle_user from hr_condition where empid = '"
-					+ cdo.getLoginUserId() + "')) ";
+			sql += "(" + tableApplicantFieldName + " in (select handle_user from hr_condition where empid = '"
+					+ loginUserId + "')) ";
 			// 自己簽核過的單子
 			sql += "or (a." + tablePKName + " in (select distinct " + tablePKName + " from " + tableName
-					+ "_FLOWC_HIS where F_INP_ID = '" + cdo.getLoginUserId() + "')) ";
+					+ "_FLOWC_HIS where F_INP_ID = '" + loginUserId + "')) ";
 
 			sql += ") ";
 		}
@@ -72,19 +73,8 @@ public class MainQuery {
 			advanced_sql.append("and " + tableAppDateFieldName + " <= '" + edate + "' ");
 
 		// status
-		if ("已結案".equals(queryFlowStatus))
-			advanced_sql.append("and b.F_INP_STAT = '結案' ");
-		if ("簽核中".equals(queryFlowStatus))
-			advanced_sql.append("and b.F_INP_STAT not in ('結案','取消') ");
-		if ("待處理".equals(queryFlowStatus))
-			advanced_sql.append("and b.F_INP_STAT = '待處理' ");
-		if ("已結案".equals(queryFlowStatusCheck))
-			advanced_sql.append("and c.F_INP_STAT = '結案' ");
-		if ("簽核中".equals(queryFlowStatusCheck))
-			advanced_sql.append("and c.F_INP_STAT not in ('結案','取消') ");
-		if ("待處理".equals(queryFlowStatusCheck))
-			advanced_sql.append("and c.F_INP_STAT = '待處理' ");
-
+		advanced_sql.append(statusCheck(queryFlowStatus));
+		advanced_sql.append(statusCheck(queryFlowStatusCheck));
 		if (!"".equals(queryId))
 			advanced_sql.append("and a." + tablePKName + " like '%" + queryId + "%' ");
 
@@ -92,6 +82,22 @@ public class MainQuery {
 		if (!"".equals(queryFlowStatusCheck)) {
 			advanced_sql.append(" and a." + tablePKName + "+'CHECK' =  c.OWN_" + tablePKName);
 		}
+
+		return advanced_sql.toString();
+	}
+
+	/**
+	 * @param queryFlowStatus
+	 * @param advanced_sql
+	 */
+	private String statusCheck(String queryFlowStatus) {
+		StringBuilder advanced_sql = new StringBuilder("");
+		if ("已結案".equals(queryFlowStatus))
+			advanced_sql.append("and b.F_INP_STAT = '結案' ");
+		if ("簽核中".equals(queryFlowStatus))
+			advanced_sql.append("and b.F_INP_STAT not in ('結案','取消') ");
+		if ("待處理".equals(queryFlowStatus))
+			advanced_sql.append("and b.F_INP_STAT = '待處理' ");
 
 		return advanced_sql.toString();
 	}
