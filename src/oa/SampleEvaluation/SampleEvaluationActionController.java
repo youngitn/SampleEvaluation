@@ -27,48 +27,26 @@ import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
  */
 public class SampleEvaluationActionController extends hproc {
 
-	public boolean confirm = true;
-	public CommonDataObj cdo;
-	BaseService service;
+	private boolean confirm = true;
+	private CommonDataObj cdo;
+	private BaseService service;
+	String actionObjName;
 
 	@Override
 	public String action(String arg0) throws Throwable {
-
-		// for enum switch
-		String actionObjName = getActionName(getName());
-
-		service = new BaseService(this);
-
-		// 測試物件 卡在誤將BaseService依賴注入
-		cdo = buildCdo();
+		// 類別屬性初始化設定
+		SetProperty();
 
 		// 按鈕動作處理進入點
 		switch (Actions.valueOf(actionObjName.trim())) {
 		case QUERY_CLICK:
-			// go
-			MainQuery mquery = new MainQuery(cdo);
-
-			String[][] list = mquery.getQueryResult();
-			if (list == null || list.length <= 0) {
-				message("查無紀錄");
-			}
-			setTableData("QUERY_LIST", list);
+			doQuery();
 			break;
 		case SAVE_CLICK:
-			// message(getValue(cdo.getTableApplicantFieldName()));
 			doSave();
 			break;
-		case SHOW_DETAIL_CLICK:// 這個動作比較尷尬 屬於載入畫面但卻是按鈕發動
-			String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
-			String[][] allColumns = cdo.getTableAllColumn();
-			if (ret != null && ret.length > 0) {
-				fillData(ret, allColumns);
-			} else {
-				message("查無資料");
-			}
-			FormInitUtil init = new FormInitUtil(this);
-			init.doDetailPageProcess();
-			addScript(UIHidderString.hideDmakerAddButton());
+		case SHOW_DETAIL_CLICK:
+			showDetail();
 			break;
 		default:
 			break;
@@ -77,7 +55,46 @@ public class SampleEvaluationActionController extends hproc {
 
 	}
 
-	public void doSave() throws Throwable {
+	private void SetProperty() throws SQLException, Exception {
+		// for enum switch
+		actionObjName = getActionName(getName());
+
+		service = new BaseService(this);
+
+		// 測試物件 卡在誤將BaseService依賴注入
+		cdo = buildCdo();
+
+	}
+
+	private void showDetail() throws SQLException, Exception {
+		setValue("QUERY_LIST_PNO", getValue("QUERY_LIST.PNO"));
+//		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
+//		String[][] allColumns = cdo.getTableAllColumn();
+//		if (ret != null && ret.length > 0) {
+//			fillData(ret, allColumns);
+//		} else {
+//			message("查無資料");
+//		}
+//		FormInitUtil init = new FormInitUtil(this);
+//		
+//		init.doDetailPageProcess();
+//
+//		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
+
+	}
+
+	private void doQuery() throws Throwable {
+		// go
+		MainQuery mquery = new MainQuery(cdo);
+
+		String[][] list = mquery.getQueryResult();
+		if (list == null || list.length <= 0) {
+			message("查無紀錄");
+		}
+		setTableData("QUERY_LIST", list);
+	}
+
+	private void doSave() throws Throwable {
 
 		// 必填欄位資料 (欄位名,欄位標題)
 		Map<String, String> fieldMap = new HashMap<String, String>();
@@ -122,7 +139,7 @@ public class SampleEvaluationActionController extends hproc {
 		}
 	}
 
-	public String getActionName(String Name) {
+	private String getActionName(String Name) {
 
 		Name = Name.toUpperCase();
 		if (Name.contains(".")) {
@@ -132,25 +149,12 @@ public class SampleEvaluationActionController extends hproc {
 
 	}
 
-	/**
-	 * 載入有時間差問題 無法直接用addScript使用Jquery 直覺用法 在UI拉字符將引用標籤貼上後, 方法寫在按鈕內,如有onLoad事件,
-	 * 一樣寫在字符讓表單讀取到就自動執行.
-	 */
-	public void importJquery() {
-		addScript("var script = document.createElement('script');"
-				+ "script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js';"
-				+ "script.type = 'text/javascript';" + "document.getElementsByTagName('head')[0].appendChild(script);");
-
-	}
-
 	private CommonDataObj buildCdo() throws SQLException, Exception {
 
 		/** init **/
 		CommonDataObj inercdo = new CommonDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
 		SampleEvaluationQuerySpec qs = new SampleEvaluationQuerySpec();
-		// BaseService service = new BaseService(new
-		// SampleEvaluationActionController());
-		// inercdo.setService(service);
+
 		inercdo.setTableAppDateFieldName("APP_DATE");
 		inercdo.setLoginUserId(getUser());
 		/** query spec **/

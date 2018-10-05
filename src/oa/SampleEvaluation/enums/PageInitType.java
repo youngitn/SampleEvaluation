@@ -1,6 +1,4 @@
-package oa.SampleEvaluation.enums; 
-
-
+package oa.SampleEvaluation.enums;
 
 public enum PageInitType {
 	// ----------頁面載入(名稱參考getActionName())---------

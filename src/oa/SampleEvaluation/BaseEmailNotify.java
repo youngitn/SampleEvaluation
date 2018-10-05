@@ -42,6 +42,7 @@ public abstract class BaseEmailNotify extends bNotify {
 		// 取得待簽核人
 		usr = mailService.getMailAddresseeByEngagedPeople();
 		// 判斷是否結案通知
+		setIsLastGate();
 		String title = emailTitleBuilder();
 		setIsLastGate();
 		if (isLastGate) {
