@@ -1,4 +1,4 @@
-package oa.SampleEvaluation;
+package oa.SampleEvaluation.notify;
 
 public class EmailNotifyForCaseFinish extends EmailNotify {
 

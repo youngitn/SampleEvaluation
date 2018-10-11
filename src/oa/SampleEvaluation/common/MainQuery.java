@@ -3,11 +3,10 @@ package oa.SampleEvaluation.common;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import com.ysp.service.BaseService;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.SampleEvaluationActionController;
+import oa.SampleEvaluation.controller.*;
 
 public class MainQuery {
 	CommonDataObj cdo;
@@ -31,7 +30,7 @@ public class MainQuery {
 
 		this.cdo = cdo;
 
-		this.service = new BaseService(new SampleEvaluationActionController());
+		this.service = new BaseService(new Controller());
 		tableFieldSpec = cdo.getTableFieldSpec();
 		tablePKName = tableFieldSpec.pkName;
 		tableName = tableFieldSpec.name;
@@ -78,7 +77,7 @@ public class MainQuery {
 
 		StringBuilder advanced_sql = new StringBuilder();
 		if (!"".equals(empid))
-			advanced_sql.append("and " + tableApplicantFieldName + " = '" + empid + "' "); 
+			advanced_sql.append("and " + tableApplicantFieldName + " = '" + empid + "' ");
 		if (!"".equals(sdate))
 			advanced_sql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
 		if (!"".equals(edate))
@@ -270,10 +269,10 @@ public class MainQuery {
 				return "µL";
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		return ret[0][0];

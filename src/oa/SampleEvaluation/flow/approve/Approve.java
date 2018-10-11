@@ -7,7 +7,7 @@ import com.ysp.service.BaseService;
 import com.ysp.service.MailService;
 import com.ysp.util.DateTimeUtil;
 
-import oa.SampleEvaluation.EmailNotify;
+import oa.SampleEvaluation.notify.*;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDao;
@@ -32,7 +32,7 @@ public class Approve extends bProcFlow {
 		SampleEvaluationCheck sc = null;
 		String alertStr = "";
 		BaseService service = new BaseService(this);
-		String labExe = getValue("LAB_EXE").trim(); 
+		String labExe = getValue("LAB_EXE").trim();
 		String lassessor = getValue("ASSESSOR").trim();
 		String docCtrler = getValue("DOC_CTRLER").trim();
 		String designee = getValue("DESIGNEE").trim();

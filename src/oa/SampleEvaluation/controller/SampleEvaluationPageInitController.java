@@ -1,18 +1,16 @@
-package oa.SampleEvaluation;
+package oa.SampleEvaluation.controller;
 
 import java.sql.SQLException;
 
 import com.ysp.service.BaseService;
 
 import oa.SampleEvaluation.enums.*;
-import oa.SampleEvaluation.jview.DetailPage;
-import oa.SampleEvaluation.jview.QueryPage;
 import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.common.UIHidderString;
 
 /**
- * 嘗試可測試寫法sh
+ * 判斷頁面名稱並於載入後執行
  * 
  * @author u52116
  *
@@ -34,12 +32,10 @@ public class SampleEvaluationPageInitController extends Controller {
 
 		String actionObjName = getActionName(getName()).trim();
 
-		//
-		// 按鈕動作處理進入點
 		switch (PageInitType.valueOf(actionObjName)) {
-		case QUERY_PAGE_INIT:// 進入查詢畫面
-			setNewView("QueryPage");
-			new QueryPage().action(arg0);
+		case QUERY_PAGE_INIT:
+			addScript(UIHidderString.hideDmakerAddButton());
+			init.doQueryPageProcess();
 			break;
 
 		case ADD_PAGE_INIT:// 進入新增畫面
@@ -53,7 +49,7 @@ public class SampleEvaluationPageInitController extends Controller {
 			break;
 
 		case DETAIL_PAGE_INIT:// 進入明細畫面
-
+			init.doDetailPageProcess();
 			break;
 		case FLOW_PAGE_INIT:// 進入流程簽核畫面
 			init.doPendingPageProcess();

@@ -1,4 +1,4 @@
-package oa.SampleEvaluation;
+package oa.SampleEvaluation.notify;
 
 import jcx.jform.bNotify; 
 import jcx.jform.bProcFlow;

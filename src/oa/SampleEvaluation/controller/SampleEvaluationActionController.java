@@ -1,4 +1,4 @@
-package oa.SampleEvaluation;
+package oa.SampleEvaluation.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
  * @author u52116
  *
  */
-public class SampleEvaluationActionController extends hproc {
+public class SampleEvaluationActionController extends Controller {
 
 	private boolean confirm = true;
 	private CommonDataObj cdo;
@@ -61,25 +61,25 @@ public class SampleEvaluationActionController extends hproc {
 
 		service = new BaseService(this);
 
-		// 測試物件 卡在誤將BaseService依賴注入
+		// 測試物件
 		cdo = buildCdo();
 
 	}
 
 	private void showDetail() throws SQLException, Exception {
 		setValue("QUERY_LIST_PNO", getValue("QUERY_LIST.PNO"));
-//		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
-//		String[][] allColumns = cdo.getTableAllColumn();
-//		if (ret != null && ret.length > 0) {
-//			fillData(ret, allColumns);
-//		} else {
-//			message("查無資料");
-//		}
-//		FormInitUtil init = new FormInitUtil(this);
-//		
-//		init.doDetailPageProcess();
-//
-//		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
+		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
+		String[][] allColumns = cdo.getTableAllColumn();
+		if (ret != null && ret.length > 0) {
+			fillData(ret, allColumns);
+		} else {
+			message("查無資料");
+		}
+		FormInitUtil init = new FormInitUtil(this);
+
+		init.doDetailPageProcess();
+
+		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
 
 	}
 
@@ -187,26 +187,5 @@ public class SampleEvaluationActionController extends hproc {
 		return inercdo;
 
 	}
-
-//	public String getUUID(CommonDataObj cdo) throws SQLException, Exception {
-//		// talk t = c.getTalk();
-//
-//		String uuid = "";
-//		String tablePKName = "PNO";
-//		String table = getTableName();
-//		String user = getValue("APPLICANT");
-//		String sql = "select max(" + tablePKName + ") from " + table + " where " + tablePKName + " like '" + user
-//				+ "%'";
-//		String[][] ret = getTalk().queryFromPool(sql);
-//
-//		if ("".equals(ret[0][0])) {
-//			uuid = user + "00001";
-//		} else {
-//			String m_uuid = ret[0][0].trim().replace(user, "");
-//			uuid = user + String.format("%05d", (Long.parseLong(m_uuid) + 1));
-//		}
-//
-//		return uuid;
-//	}
 
 }

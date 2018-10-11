@@ -1,4 +1,4 @@
-package oa.SampleEvaluation;
+package oa.SampleEvaluation.notify;
 
 import oa.SampleEvaluation.enums.*;
 
@@ -45,8 +45,12 @@ public class EmailNotify extends BaseEmailNotify {
 		appConfMsg = buildApproveConfirmMsgStr();
 
 		content += "計畫代號：" + service.getValue("PROJECT_CODE") + Mail.HTML_LINE_BREAK;
-		String projectLeaderLine = projectLeaderUserDate.getDepName() + " " + projectLeaderUserDate.getHecname() + " ("
-				+ projectLeaderUserDate.getEmpid() + ") ";
+
+		String projectLeaderLine = "";
+		if (projectLeaderUserDate != null) {
+			projectLeaderLine = projectLeaderUserDate.getDepName() + " " + projectLeaderUserDate.getHecname() + " ("
+					+ projectLeaderUserDate.getEmpid() + ") ";
+		}
 
 		content += "計畫主持人：" + projectLeaderLine + Mail.HTML_LINE_BREAK;
 

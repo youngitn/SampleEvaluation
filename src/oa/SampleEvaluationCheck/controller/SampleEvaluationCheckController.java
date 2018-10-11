@@ -1,4 +1,4 @@
-package oa.SampleEvaluationCheck;
+package oa.SampleEvaluationCheck.controller;
 
 import jcx.jform.hproc;
 
