@@ -29,7 +29,8 @@ public class FormInitUtil {
 		// 填入query畫面基本欄位資料
 		c.setValue("QUERY_EMP_ID", userdata.getEmpid());
 		c.setValue("QUERY_EMP_NAME", userdata.getHecname());
-		c.setValue("QUERY_EMP_DEP", userdata.getDepName());
+		c.setValue("QUERY_EMP_DEP", userdata.getDepNo());
+		c.setValue("QUERY_EMP_DEP_NAME", userdata.getDepName());
 		String today = c.getToday("YYYYmmdd");
 		String edate = today;
 		String sdate = datetime.dateAdd(edate, "d", -14);
