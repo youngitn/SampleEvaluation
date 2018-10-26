@@ -9,11 +9,13 @@ public abstract class QuerySpec {
 	String queryReqSDate;
 	String queryReqEDate;
 	String queryStatus;
+	String queryDepNo;
 	String queryBillIdFieldName;
 	String queryEmpidFieldName;
 	String queryReqSDateFieldName;
 	String queryReqEDateFieldName;
 	String queryStatusFieldName;
+	String queryDepNoFieldName;
 	ArrayList<String> QueryResultView;
 
 	public ArrayList<String> getQueryResultView() {
@@ -106,6 +108,22 @@ public abstract class QuerySpec {
 
 	public void setQueryStatusFieldName(String queryStatusFieldName) {
 		this.queryStatusFieldName = queryStatusFieldName;
+	}
+
+	public String getQueryDepNoFieldName() {
+		return queryDepNoFieldName;
+	}
+
+	public void setQueryDepNoFieldName(String queryDepNoFieldName) {
+		this.queryDepNoFieldName = queryDepNoFieldName;
+	}
+
+	public String getQueryDepNo() {
+		return queryDepNo;
+	}
+
+	public void setQueryDepNo(String queryDepNo) {
+		this.queryDepNo = queryDepNo;
 	}
 
 }
