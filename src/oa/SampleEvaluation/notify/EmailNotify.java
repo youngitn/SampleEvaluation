@@ -1,18 +1,23 @@
 package oa.SampleEvaluation.notify;
 
 import oa.SampleEvaluation.enums.*;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
+import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import jcx.util.*;
+import oa.SampleEvaluation.common.DebugUtil;
 import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.UserData;
+import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 import com.ysp.field.Mail;
 import com.ysp.service.BaseService;
 
 public class EmailNotify extends BaseEmailNotify {
 
+	SampleEvaluation sc;
 	public void setService(BaseService service) {
 		this.service = service;
 		this.emailUtil = new EmailUtil(service);
@@ -21,10 +26,14 @@ public class EmailNotify extends BaseEmailNotify {
 	@Override
 	protected String buildContent() throws SQLException, Exception {
 		// 內容
-		UserData appUser = new UserData(service.getValue("APPLICANT"), service.getTalk());
+		if (sc == null) {
+			sc = new SampleEvaluationDaoImpl(getTalk()).findById(getValue("PNO"));
+			DebugUtil.out("UUUUU.txt", getValue("PNO")+"<<<<<");
+		}
+		UserData appUser = new UserData(sc.getApplicant(), service.getTalk());
 		UserData projectLeaderUserDate = null;
-		if (!service.getValue("PROJECT_LEADER").trim().equals("")) {
-			projectLeaderUserDate = new UserData(service.getValue("PROJECT_LEADER").trim(), service.getTalk());
+		if (!sc.getProjectLeader().equals("")) {
+			projectLeaderUserDate = new UserData(sc.getProjectLeader(), service.getTalk());
 		}
 		String name = appUser.getHecname();
 		String depName = appUser.getDepName();
@@ -33,18 +42,18 @@ public class EmailNotify extends BaseEmailNotify {
 		content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
 		content += Mail.HTML_LINE_BREAK;
 		content += Mail.MAIL_CONTENT_LINE_WORD + Mail.HTML_LINE_BREAK;
-		content += "單號：" + service.getValue("PNO") + Mail.HTML_LINE_BREAK;
-		content += "申請日期：" + convert.FormatedDate(service.getValue("APP_DATE"), "/") + Mail.HTML_LINE_BREAK;
+		content += "單號：" + sc.getPno()+ Mail.HTML_LINE_BREAK;
+		content += "申請日期：" + convert.FormatedDate(sc.getAppDate(), "/") + Mail.HTML_LINE_BREAK;
 		content += "申請人：" + depName + " " + name + "(" + appUser.getEmpid() + ")" + Mail.HTML_LINE_BREAK;
-		content += "申請類型：" + AppType.getAppType(service.getValue("APP_TYPE")) + Mail.HTML_LINE_BREAK;
-		content += "急迫性：" + Urgency.getUrgency(service.getValue("URGENCY")) + Mail.HTML_LINE_BREAK;
-		content += "物料名稱：" + service.getValue("MATERIAL") + Mail.HTML_LINE_BREAK;
+		content += "申請類型：" + AppType.getAppType(sc.getAppType()) + Mail.HTML_LINE_BREAK;
+		content += "急迫性：" + Urgency.getUrgency(sc.getUrgency()) + Mail.HTML_LINE_BREAK;
+		content += "物料名稱：" + sc.getMaterial() + Mail.HTML_LINE_BREAK;
 		String appConfMsg = "";
 
-		content += "受理單位：" + emailUtil.getDepName(service.getValue("RECEIPT_UNIT")) + Mail.HTML_LINE_BREAK;
+		content += "受理單位：" + emailUtil.getDepName(sc.getReceiptUnit()) + Mail.HTML_LINE_BREAK;
 		appConfMsg = buildApproveConfirmMsgStr();
 
-		content += "計畫代號：" + service.getValue("PROJECT_CODE") + Mail.HTML_LINE_BREAK;
+		content += "計畫代號：" + sc.getProjectCode() + Mail.HTML_LINE_BREAK;
 
 		String projectLeaderLine = "";
 		if (projectLeaderUserDate != null) {
@@ -74,8 +83,8 @@ public class EmailNotify extends BaseEmailNotify {
 
 	protected String buildApproveConfirmMsgStr() throws IOException {
 		String alertStr = "";
-		String isCheckStr = getValue("IS_CHECK").trim();
-		String isTrialPrdStr = getValue("IS_TRIAL_PRODUCTION").trim();
+		String isCheckStr = sc.getIsCheck();
+		String isTrialPrdStr = sc.getIsTrialProduction();
 		if (isCheckStr.equals("0") || isCheckStr.equals("")) {
 
 			alertStr += "將不會進行請驗流程;<br>";
@@ -93,5 +102,12 @@ public class EmailNotify extends BaseEmailNotify {
 
 		return alertStr;
 	}
+
+
+	public void setTableObj(SampleEvaluationCheck sc) {
+		this.sc = sc;
+	}
+
+
 
 }
