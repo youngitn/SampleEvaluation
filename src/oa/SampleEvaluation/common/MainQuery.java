@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import com.ysp.service.BaseService;
+import com.ysp.util.LogUtil;
 
 import jcx.db.talk;
 import oa.SampleEvaluation.controller.*;
@@ -25,6 +26,7 @@ public class MainQuery {
 	String tableAppDateFieldName;
 	talk innerTalk;
 	TableFieldSpec tableFieldSpec;
+	UserData userData;
 
 	public MainQuery(CommonDataObj cdo) {
 
@@ -37,6 +39,13 @@ public class MainQuery {
 		tableApplicantFieldName = tableFieldSpec.applicantFieldName;
 		tableAppDateFieldName = tableFieldSpec.appDateFieldName;
 		innerTalk = cdo.getTalk();
+		try {
+			userData = new UserData(cdo.getLoginUserId(), innerTalk);
+		} catch (SQLException e) {
+			LogUtil.getLog(getClass()).error(e);
+		} catch (Exception e) {
+			LogUtil.getLog(getClass()).error(e);
+		}
 
 	}
 
@@ -44,9 +53,25 @@ public class MainQuery {
 	private String getQueryRightSql() throws SQLException, Exception {
 		String sql = "";
 		String loginUserId = cdo.getLoginUserId();
-		boolean isadmin = isAdmin(loginUserId);
-		// 如果不是系統管理員群組人員，須加入查詢權限
-		if (!isadmin) {
+		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
+
+		boolean isAdmin = isAdmin();
+		String queryEmpDepNo = "";
+		boolean isSameDepNoInPurch = false;
+
+		// 判斷登入用戶與所要查詢的起單人是否同單位
+		// 目的是讓採購一課or二課 同課間可互查紀錄
+		if (qc.getQueryEmpid() != null && !qc.getQueryEmpid().equals("")) {
+			UserData queryUser = new UserData(qc.getQueryEmpid(), innerTalk);
+			queryEmpDepNo = queryUser.getDepNo();
+			isSameDepNoInPurch = isSameDepNoInPurch(queryEmpDepNo);
+		}else if (!qc.getQueryDepNo().equals("")) {
+			isSameDepNoInPurch = true;
+		}
+
+		// 如果不是系統管理員群組人員或要查詢得起單人非同課單位，須加入查詢權限
+		if (!isAdmin  && !isSameDepNoInPurch) {
+			
 			sql += " and (";
 			// 申請人為自己部屬
 			sql += "(" + tableApplicantFieldName + " in (select handle_user from hr_condition where empid = '"
@@ -56,8 +81,13 @@ public class MainQuery {
 					+ "_FLOWC_HIS where F_INP_ID = '" + loginUserId + "')) ";
 
 			sql += ") ";
+			
 		}
 		return sql;
+	}
+
+	private boolean isSameDepNoInPurch(String queryEmpDepNo) {
+		return userData.getDepNo().equals(queryEmpDepNo);
 	}
 
 	/**
@@ -74,6 +104,7 @@ public class MainQuery {
 		String edate = qc.getQueryReqEDate();
 		String queryFlowStatus = qc.getQueryStatus();
 		String queryFlowStatusCheck = qc.getQueryStatusCheck();
+		String queryDepNo = qc.getQueryDepNo();
 
 		StringBuilder advanced_sql = new StringBuilder();
 		if (!"".equals(empid))
@@ -82,7 +113,8 @@ public class MainQuery {
 			advanced_sql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
 		if (!"".equals(edate))
 			advanced_sql.append("and " + tableAppDateFieldName + " <= '" + edate + "' ");
-
+	
+	
 		// status
 		advanced_sql.append(statusCheck(queryFlowStatus, false));
 		advanced_sql.append(statusCheck(queryFlowStatusCheck, true));
@@ -93,7 +125,9 @@ public class MainQuery {
 		if (!"".equals(queryFlowStatusCheck)) {
 			advanced_sql.append(" and a." + tablePKName + "+'CHECK' =  c.OWN_" + tablePKName);
 		}
-
+		if (!"".equals(queryDepNo)) {
+			advanced_sql.append(" and (APPLICANT in (select empid from hruser where dept_no = '"+queryDepNo+"'))");
+		}
 		return advanced_sql.toString();
 	}
 
@@ -140,7 +174,7 @@ public class MainQuery {
 			strSql.append(",");
 		}
 		String str = strSql.toString();
-		String subFlowcTableNameInSqlStr = ","+tableName + "_CHECK_FLOWC c ";
+		String subFlowcTableNameInSqlStr = "," + tableName + "_CHECK_FLOWC c ";
 		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
 		if (qc.queryStatusCheck.equals("")) {
 			subFlowcTableNameInSqlStr = "";
@@ -237,7 +271,7 @@ public class MainQuery {
 	}
 
 	/**
-	 * 取得目前簽核關卡名稱與簽核人員資料字串 EX:"-(關卡名稱-簽核人1,簽核人2..)" TODO 移動至mainQuery
+	 * 取得目前簽核關卡名稱與簽核人員資料字串 EX:"-(關卡名稱-簽核人1,簽核人2..)"
 	 * 
 	 * @param pkName  資料表pk欄位名稱
 	 * @param pkValue 資料表pk值
@@ -288,17 +322,10 @@ public class MainQuery {
 	}
 
 	// 確定查詢權限
-	private boolean isAdmin(String user) throws SQLException, Exception {
-		String sql_hruser_dept = "select id from hruser_dept where dep_no = '1001' or ID='52116'";
-		String[][] ret_hruser_dept = innerTalk.queryFromPool(sql_hruser_dept);
-		if (ret_hruser_dept.length > 0) {
-			for (int i = 0; i < ret_hruser_dept.length; i++) {
-				if (ret_hruser_dept[i][0].equals(user)) {
-					return true;
-				}
-			}
-		}
-		return false;
+	private boolean isAdmin() {
+		return (userData.getDepNo().equals("1001") || userData.getEmpid().equals("52116")
+				|| userData.getEmpid().equals("21"));
+
 	}
 
 }
