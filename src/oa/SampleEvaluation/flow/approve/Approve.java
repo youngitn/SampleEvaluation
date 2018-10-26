@@ -37,6 +37,7 @@ public class Approve extends bProcFlow {
 		String docCtrler = getValue("DOC_CTRLER").trim();
 		String designee = getValue("DESIGNEE").trim();
 		String designeEmpid = (designee.trim().split(" "))[0];
+		String pno = getValue("PNO");
 		this.isCheckValue = getValue("IS_CHECK").trim();
 		this.isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
 
@@ -112,6 +113,7 @@ public class Approve extends bProcFlow {
 				// ¤º®e
 				EmailNotify en = new EmailNotify();
 				en.setService(service);
+				en.setTableObj(sc);
 				String content = en.getContent();
 
 				mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
