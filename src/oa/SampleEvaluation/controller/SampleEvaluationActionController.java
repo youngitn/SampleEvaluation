@@ -86,8 +86,9 @@ public class SampleEvaluationActionController extends Controller {
 	private void doQuery() throws Throwable {
 		// go
 		MainQuery mquery = new MainQuery(cdo);
-		message(mquery.getSqlQueryStr());
+
 		String[][] list = mquery.getQueryResult();
+		message(mquery.getSqlQueryStr());
 		if (list == null || list.length <= 0) {
 			//message("¬dµL¬ö¿ý");
 		}
@@ -165,6 +166,7 @@ public class SampleEvaluationActionController extends Controller {
 		qs.setQueryReqEDateFieldName("QUERY_REQ_EDATE");
 		qs.setQueryStatusFieldName("r_status");
 		qs.setQueryStatusCheckFieldName("r_status_check");
+		qs.setQueryDepNoFieldName("QUERY_EMP_DEP");
 		// set field value
 		qs.setQueryBillId(getValue("QUERY_PNO"));
 		qs.setQueryEmpid(getValue("QUERY_EMP_ID"));
@@ -172,6 +174,7 @@ public class SampleEvaluationActionController extends Controller {
 		qs.setQueryReqEDate(getValue("QUERY_REQ_EDATE"));
 		qs.setQueryStatus(getValue("r_status"));
 		qs.setQueryStatusCheck(getValue("r_status_check"));
+		qs.setQueryDepNo(getValue("QUERY_EMP_DEP"));
 		ArrayList<String> flist = new ArrayList<String>();
 		flist.add("PNO");
 		flist.add("APPLICANT");
@@ -181,7 +184,6 @@ public class SampleEvaluationActionController extends Controller {
 		flist.add("'Ã±®Öª¬ºA'");
 		flist.add("'©ú²Ó'");
 		flist.add("'Ã±®Ö¬ö¿ý'");
-
 		qs.setQueryResultView(flist);
 		inercdo.setQuerySpec(qs);
 		return inercdo;
