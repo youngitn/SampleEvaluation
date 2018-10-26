@@ -7,6 +7,8 @@ import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.MailBody;
 
 import oa.SampleEvaluation.common.MailMan;
+import oa.SampleEvaluation.tableObject.SampleEvaluation;
+
 import java.sql.SQLException;
 
 import com.ysp.field.Mail;
@@ -23,6 +25,7 @@ public abstract class BaseEmailNotify extends bNotify {
 	protected EmailUtil emailUtil;
 	protected BaseService service;
 
+	
 	public void actionPerformed(String value) throws Throwable {
 		// 當表單進入流程狀態直屬主管時,會執行本段程式
 		// 可用以寄發Email通知等等與資料庫無關的做業
@@ -34,7 +37,6 @@ public abstract class BaseEmailNotify extends bNotify {
 		service = new BaseService(this);
 		emailUtil = new EmailUtil(service);
 		mailService = new MailService(service);
-
 		// 建立內容
 		String content = buildContent();
 		content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
