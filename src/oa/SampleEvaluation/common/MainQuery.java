@@ -84,8 +84,8 @@ public class MainQuery {
 			advanced_sql.append("and " + tableAppDateFieldName + " <= '" + edate + "' ");
 
 		// status
-		advanced_sql.append(statusCheck(queryFlowStatus));
-		advanced_sql.append(statusCheck(queryFlowStatusCheck));
+		advanced_sql.append(statusCheck(queryFlowStatus, false));
+		advanced_sql.append(statusCheck(queryFlowStatusCheck, true));
 		if (!"".equals(queryId))
 			advanced_sql.append("and a." + tablePKName + " like '%" + queryId + "%' ");
 
@@ -101,14 +101,18 @@ public class MainQuery {
 	 * @param queryFlowStatus
 	 * @param advanced_sql
 	 */
-	private String statusCheck(String queryFlowStatus) {
+	private String statusCheck(String queryFlowStatus, boolean isSubFlow) {
 		StringBuilder advanced_sql = new StringBuilder("");
+		String tableCode = "b";
+		if (isSubFlow) {
+			tableCode = "c";
+		}
 		if ("已結案".equals(queryFlowStatus))
-			advanced_sql.append("and b.F_INP_STAT = '結案' ");
+			advanced_sql.append("and " + tableCode + ".F_INP_STAT = '結案' ");
 		if ("簽核中".equals(queryFlowStatus))
-			advanced_sql.append("and b.F_INP_STAT not in ('結案','取消') ");
+			advanced_sql.append("and " + tableCode + ".F_INP_STAT not in ('結案','取消') ");
 		if ("待處理".equals(queryFlowStatus))
-			advanced_sql.append("and b.F_INP_STAT = '待處理' ");
+			advanced_sql.append("and " + tableCode + ".F_INP_STAT = '待處理' ");
 
 		return advanced_sql.toString();
 	}
@@ -136,8 +140,13 @@ public class MainQuery {
 			strSql.append(",");
 		}
 		String str = strSql.toString();
+		String subFlowcTableNameInSqlStr = ","+tableName + "_CHECK_FLOWC c ";
+		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
+		if (qc.queryStatusCheck.equals("")) {
+			subFlowcTableNameInSqlStr = "";
+		}
 		str = str.substring(0, str.length() - 1);
-		str += " from  " + tableName + " a," + tableName + "_FLOWC b, " + tableName + "_CHECK_FLOWC c " + " where 1=1 ";
+		str += " from  " + tableName + " a," + tableName + "_FLOWC b " + subFlowcTableNameInSqlStr + " where 1=1 ";
 
 		// 主要查詢欄位+查詢條件+權限控制
 		return str + getAdvancedCondition() + getQueryRightSql();

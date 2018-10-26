@@ -2,14 +2,18 @@ package oa.SampleEvaluation;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
 import com.ysp.service.BaseService;
 import com.ysp.util.DateTimeUtil;
+import com.yungshingroup.utils.Fmt;
 
 import jcx.db.talk;
 import jcx.jform.hproc;
@@ -80,7 +84,7 @@ public class Test {
 
 		// s.cdo = new CommonDataObj("52116", t, "SAMPLE_EVALUATION", "PNO",
 		// "APPLICANT");
-		CommonDataObj cdo = new CommonDataObj(t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+		CommonDataObj cdo = new CommonDataObj(t, "SAMPLE_EVALUATION", "PNO", "APPLICANT"); 
 		cdo.setTableApplicantFieldName("APPLICANT");
 		cdo.setTableAppDateFieldName("APP_DATE");
 
@@ -96,8 +100,27 @@ public class Test {
 //		cdo.setQueryFieldValueEndAppDate("20180930");
 //		cdo.setQueryFieldValueFlowStatus("");
 		cdo.setFunctionName("樣品評估申請作業");
+		
+		
 
 //		s.doQuery();
+		
+		 System.out.println(Fmt.nowDate(1).substring(0, 6));
+		 
+		 String str="2010-5-27";
+		 SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+
+		 Date date =(Date) sdf.parse(str);
+
+		 Calendar calendar = Calendar.getInstance();
+
+		 calendar.setTime(date);
+		 
+		
+		 calendar.set(Calendar.DAY_OF_MONTH, 0);
+	        String lastDay = sdf.format(calendar.getTime());
+	        System.out.println(lastDay);
+	
 	}
 
 }

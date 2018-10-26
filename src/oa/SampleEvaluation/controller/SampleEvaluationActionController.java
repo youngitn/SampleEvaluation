@@ -19,7 +19,7 @@ import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 /**
- * 希望能切MVC(內外部)<br>
+ * 
  * 可測試<br>
  * 
  * @author u52116
@@ -86,10 +86,10 @@ public class SampleEvaluationActionController extends Controller {
 	private void doQuery() throws Throwable {
 		// go
 		MainQuery mquery = new MainQuery(cdo);
-
+		message(mquery.getSqlQueryStr());
 		String[][] list = mquery.getQueryResult();
 		if (list == null || list.length <= 0) {
-			message("查無紀錄");
+			//message("查無紀錄");
 		}
 		setTableData("QUERY_LIST", list);
 	}
