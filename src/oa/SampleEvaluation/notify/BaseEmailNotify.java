@@ -1,13 +1,12 @@
 package oa.SampleEvaluation.notify;
 
-import jcx.jform.bNotify; 
+import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 
 import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.MailBody;
 
 import oa.SampleEvaluation.common.MailMan;
-import oa.SampleEvaluation.tableObject.SampleEvaluation;
 
 import java.sql.SQLException;
 
@@ -25,7 +24,6 @@ public abstract class BaseEmailNotify extends bNotify {
 	protected EmailUtil emailUtil;
 	protected BaseService service;
 
-	
 	public void actionPerformed(String value) throws Throwable {
 		// 當表單進入流程狀態直屬主管時,會執行本段程式
 		// 可用以寄發Email通知等等與資料庫無關的做業

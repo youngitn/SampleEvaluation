@@ -18,6 +18,7 @@ import com.ysp.service.BaseService;
 public class EmailNotify extends BaseEmailNotify {
 
 	SampleEvaluation sc;
+
 	public void setService(BaseService service) {
 		this.service = service;
 		this.emailUtil = new EmailUtil(service);
@@ -26,10 +27,6 @@ public class EmailNotify extends BaseEmailNotify {
 	@Override
 	protected String buildContent() throws SQLException, Exception {
 		// 內容
-		if (sc == null) {
-			sc = new SampleEvaluationDaoImpl(getTalk()).findById(getValue("PNO"));
-			DebugUtil.out("UUUUU.txt", getValue("PNO")+"<<<<<");
-		}
 		UserData appUser = new UserData(sc.getApplicant(), service.getTalk());
 		UserData projectLeaderUserDate = null;
 		if (!sc.getProjectLeader().equals("")) {
@@ -42,7 +39,7 @@ public class EmailNotify extends BaseEmailNotify {
 		content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
 		content += Mail.HTML_LINE_BREAK;
 		content += Mail.MAIL_CONTENT_LINE_WORD + Mail.HTML_LINE_BREAK;
-		content += "單號：" + sc.getPno()+ Mail.HTML_LINE_BREAK;
+		content += "單號：" + sc.getPno() + Mail.HTML_LINE_BREAK;
 		content += "申請日期：" + convert.FormatedDate(sc.getAppDate(), "/") + Mail.HTML_LINE_BREAK;
 		content += "申請人：" + depName + " " + name + "(" + appUser.getEmpid() + ")" + Mail.HTML_LINE_BREAK;
 		content += "申請類型：" + AppType.getAppType(sc.getAppType()) + Mail.HTML_LINE_BREAK;
@@ -103,11 +100,8 @@ public class EmailNotify extends BaseEmailNotify {
 		return alertStr;
 	}
 
-
 	public void setTableObj(SampleEvaluationCheck sc) {
 		this.sc = sc;
 	}
-
-
 
 }
