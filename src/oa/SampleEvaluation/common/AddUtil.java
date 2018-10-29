@@ -1,6 +1,5 @@
 package oa.SampleEvaluation.common;
 
-import java.io.FileWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
