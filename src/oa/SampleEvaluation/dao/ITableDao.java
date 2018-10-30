@@ -3,8 +3,6 @@ package oa.SampleEvaluation.dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import oa.SampleEvaluation.tableObject.SampleEvaluation;
-
 public interface ITableDao<E> {
 
 	String add(E sampleEvaluation) throws SQLException, Exception;
@@ -13,7 +11,7 @@ public interface ITableDao<E> {
 
 	String delete(String id) throws SQLException, Exception;
 
-	SampleEvaluation findById(String id) throws SQLException, Exception;
+	E findById(String id) throws SQLException, Exception;
 
 	ArrayList<E> findAllList(String params) throws SQLException, Exception;
 

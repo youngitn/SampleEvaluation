@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.tableObject;
+package oa.SampleEvaluation.dto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -161,6 +161,9 @@ public class SampleEvaluation implements Serializable {
 	private String labExe;
 
 	private String docCtrler;
+	
+	private String evaluationResult;
+	
 
 	public SampleEvaluation() {
 
@@ -201,6 +204,7 @@ public class SampleEvaluation implements Serializable {
 		this.assessor = strings[29];
 		this.designee = strings[30];
 		this.docCtrler = strings[31];
+		this.evaluationResult = strings[32];
 	}
 
 	/**
@@ -243,6 +247,7 @@ public class SampleEvaluation implements Serializable {
 		s.setAssessor(service.getValue("ASSESSOR").trim());
 		s.setDesignee(service.getValue("DESIGNEE").trim());
 		s.setDocCtrler(service.getValue("DOC_CTRLER"));
+		s.setEvaluationResult(service.getValue("TRIAL_PRODUCTION"));
 		s.setPno(service.getValue("PNO"));
 
 		return s;
@@ -504,5 +509,13 @@ public class SampleEvaluation implements Serializable {
 
 	public void setLabExe(String labExe) {
 		this.labExe = labExe;
+	}
+
+	public String getEvaluationResult() {
+		return evaluationResult;
+	}
+
+	public void setEvaluationResult(String evaluationResult) {
+		this.evaluationResult = evaluationResult;
 	}
 }

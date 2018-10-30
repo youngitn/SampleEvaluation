@@ -20,12 +20,11 @@ import jcx.jform.bBase;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.CommonDataObj;
-import oa.SampleEvaluation.tableObject.SampleEvaluation;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
-
+import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 import oa.SampleEvaluation.enums.*;
 
 public class Test {

@@ -1,12 +1,13 @@
 package oa.SampleEvaluationCheck.flow.approve;
 
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDao;
+import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDaoImpl;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDao;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
 import oa.SampleEvaluationCheck.flow.approve.gateEnum.*;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheckFlowcHis;
 import jcx.jform.bProcFlow;
 
 import com.ysp.service.BaseService;
@@ -47,14 +48,13 @@ public class Approve extends bProcFlow {
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (getValue("IS_CHECK").trim().equals("1")) {
 				BaseService service = new BaseService(this);
-				SampleEvaluationCheck sc = new SampleEvaluationCheck();
-				sc = sc.setAllValue(sc, service);
-				SampleEvaluationCheckDao checkDao = new SampleEvaluationCheckDao(t);
+				SampleEvaluationSubBaseDto sc = new SampleEvaluationCheck(service);
+				SampleEvaluationCheckDaoImpl checkDao = new SampleEvaluationCheckDaoImpl(t);
 				if (checkDao.findById(sc.getOwnPno()) != null) {
-					checkDao.update(sc);
+					checkDao.update((SampleEvaluationCheck) sc);
 				} else {
 					// insert一筆子流程主檔
-					checkDao.add(sc);
+					checkDao.add((SampleEvaluationCheck) sc);
 
 					SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(sc.getOwnPno());
 					String time = DateTimeUtil.getApproveAddSeconds(0);

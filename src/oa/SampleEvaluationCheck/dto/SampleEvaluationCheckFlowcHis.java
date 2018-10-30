@@ -1,30 +1,30 @@
-package oa.SampleEvaluationCheck.tableObject;
+package oa.SampleEvaluationCheck.dto;
+
 import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.math.*;
 
-public class SampleEvaluationCheckFlowc implements Cloneable, Serializable {
+public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String ownPno;
 	private String F_INP_STAT;
-	private String F_INP_ID;
 	private String F_INP_TIME;
+	private String F_INP_ID;
 	private String F_INP_INFO;
 
-	
-	public SampleEvaluationCheckFlowc() {
+	public SampleEvaluationCheckFlowcHis() {
 
 	}
 
-	public SampleEvaluationCheckFlowc(String ownPnoIn) {
+	public SampleEvaluationCheckFlowcHis(String ownPnoIn, String F_INP_STATIn, String F_INP_TIMEIn) {
 
 		this.ownPno = ownPnoIn;
+		this.F_INP_STAT = F_INP_STATIn;
+		this.F_INP_TIME = F_INP_TIMEIn;
 
 	}
-
-	
 
 	public String getOwnPno() {
 		return this.ownPno;
@@ -42,20 +42,20 @@ public class SampleEvaluationCheckFlowc implements Cloneable, Serializable {
 		this.F_INP_STAT = F_INP_STATIn;
 	}
 
-	public String getF_INP_ID() {
-		return this.F_INP_ID;
-	}
-
-	public void setF_INP_ID(String F_INP_IDIn) {
-		this.F_INP_ID = F_INP_IDIn;
-	}
-
 	public String getF_INP_TIME() {
 		return this.F_INP_TIME;
 	}
 
 	public void setF_INP_TIME(String F_INP_TIMEIn) {
 		this.F_INP_TIME = F_INP_TIMEIn;
+	}
+
+	public String getF_INP_ID() {
+		return this.F_INP_ID;
+	}
+
+	public void setF_INP_ID(String F_INP_IDIn) {
+		this.F_INP_ID = F_INP_IDIn;
 	}
 
 	public String getF_INP_INFO() {
@@ -66,19 +66,21 @@ public class SampleEvaluationCheckFlowc implements Cloneable, Serializable {
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
-
-	public void setAll(String ownPnoIn, String F_INP_STATIn, String F_INP_IDIn, String F_INP_TIMEIn, String F_INP_INFOIn) {
+	public void setAll(String ownPnoIn, String F_INP_STATIn, String F_INP_TIMEIn, String F_INP_IDIn,
+			String F_INP_INFOIn) {
 		this.ownPno = ownPnoIn;
 		this.F_INP_STAT = F_INP_STATIn;
-		this.F_INP_ID = F_INP_IDIn;
 		this.F_INP_TIME = F_INP_TIMEIn;
+		this.F_INP_ID = F_INP_IDIn;
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
-	
-	public boolean hasEqualMapping(SampleEvaluationCheckFlowc valueObject) {
+	public boolean hasEqualMapping(SampleEvaluationCheckFlowcHis valueObject) {
 
-		if (valueObject.getOwnPno() != this.ownPno) {
+		if (this.ownPno == null) {
+			if (valueObject.getOwnPno() != null)
+				return (false);
+		} else if (!this.ownPno.equals(valueObject.getOwnPno())) {
 			return (false);
 		}
 		if (this.F_INP_STAT == null) {
@@ -87,16 +89,16 @@ public class SampleEvaluationCheckFlowc implements Cloneable, Serializable {
 		} else if (!this.F_INP_STAT.equals(valueObject.getF_INP_STAT())) {
 			return (false);
 		}
-		if (this.F_INP_ID == null) {
-			if (valueObject.getF_INP_ID() != null)
-				return (false);
-		} else if (!this.F_INP_ID.equals(valueObject.getF_INP_ID())) {
-			return (false);
-		}
 		if (this.F_INP_TIME == null) {
 			if (valueObject.getF_INP_TIME() != null)
 				return (false);
 		} else if (!this.F_INP_TIME.equals(valueObject.getF_INP_TIME())) {
+			return (false);
+		}
+		if (this.F_INP_ID == null) {
+			if (valueObject.getF_INP_ID() != null)
+				return (false);
+		} else if (!this.F_INP_ID.equals(valueObject.getF_INP_ID())) {
 			return (false);
 		}
 		if (this.F_INP_INFO == null) {
@@ -109,35 +111,33 @@ public class SampleEvaluationCheckFlowc implements Cloneable, Serializable {
 		return true;
 	}
 
-
 	public String toString() {
 		StringBuffer out = new StringBuffer(this.getDaogenVersion());
-		out.append("\nclass SampleEvaluationCheckFlowc, mapping to table SAMPLE_EVALUATION_CHECK_FLOWC\n");
+		out.append("\nclass SampleEvaluationCheckFlowcHis, mapping to table SAMPLE_EVALUATION_CHECK_FLOWC_HIS\n");
 		out.append("Persistent attributes: \n");
 		out.append("ownPno = " + this.ownPno + "\n");
 		out.append("F_INP_STAT = " + this.F_INP_STAT + "\n");
-		out.append("F_INP_ID = " + this.F_INP_ID + "\n");
 		out.append("F_INP_TIME = " + this.F_INP_TIME + "\n");
+		out.append("F_INP_ID = " + this.F_INP_ID + "\n");
 		out.append("F_INP_INFO = " + this.F_INP_INFO + "\n");
 		return out.toString();
 	}
 
-	
 	public Object clone() {
-		SampleEvaluationCheckFlowc cloned = new SampleEvaluationCheckFlowc();
+		SampleEvaluationCheckFlowcHis cloned = new SampleEvaluationCheckFlowcHis();
 
-		cloned.setOwnPno(this.ownPno);
+		if (this.ownPno != null)
+			cloned.setOwnPno(new String(this.ownPno));
 		if (this.F_INP_STAT != null)
 			cloned.setF_INP_STAT(new String(this.F_INP_STAT));
-		if (this.F_INP_ID != null)
-			cloned.setF_INP_ID(new String(this.F_INP_ID));
 		if (this.F_INP_TIME != null)
 			cloned.setF_INP_TIME(new String(this.F_INP_TIME));
+		if (this.F_INP_ID != null)
+			cloned.setF_INP_ID(new String(this.F_INP_ID));
 		if (this.F_INP_INFO != null)
 			cloned.setF_INP_INFO(new String(this.F_INP_INFO));
 		return cloned;
 	}
-
 
 	public String getDaogenVersion() {
 		return "DaoGen version 2.4.1";

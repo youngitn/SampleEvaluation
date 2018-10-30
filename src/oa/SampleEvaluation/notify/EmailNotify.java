@@ -1,8 +1,7 @@
 package oa.SampleEvaluation.notify;
 
 import oa.SampleEvaluation.enums.*;
-import oa.SampleEvaluation.tableObject.SampleEvaluation;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,6 +10,8 @@ import oa.SampleEvaluation.common.DebugUtil;
 import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.UserData;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
 
 import com.ysp.field.Mail;
 import com.ysp.service.BaseService;
@@ -100,7 +101,7 @@ public class EmailNotify extends BaseEmailNotify {
 		return alertStr;
 	}
 
-	public void setTableObj(SampleEvaluationCheck sc) {
+	public void setTableObj(SampleEvaluationSubBaseDto sc) {
 		this.sc = sc;
 	}
 

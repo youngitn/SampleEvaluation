@@ -5,18 +5,18 @@ import java.util.ArrayList;
 
 import jcx.db.talk;
 import oa.SampleEvaluation.dao.AbstractGenericDao;
-import oa.SampleEvaluationCheck.tableObject.SampleEvaluationCheck;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 
 /**
  * SampleEvaluation
  * 
  */
 
-public class SampleEvaluationCheckDao extends AbstractGenericDao<SampleEvaluationCheck> {
+public class SampleEvaluationCheckDaoImpl extends AbstractGenericDao<SampleEvaluationCheck> {
 
 	talk t;
 
-	public SampleEvaluationCheckDao(talk t) {
+	public SampleEvaluationCheckDaoImpl(talk t) {
 		this.t = t;
 	}
 

@@ -1,8 +1,9 @@
-package oa.SampleEvaluationCheck.tableObject;
+package oa.SampleEvaluationTp.dto;
+
 
 import java.io.*;
 
-public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
+public class SampleEvaluationTpFlowcHis implements Cloneable, Serializable {
 
 	/**
 	 * 
@@ -14,11 +15,11 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 	private String F_INP_ID;
 	private String F_INP_INFO;
 
-	public SampleEvaluationCheckFlowcHis() {
+	public SampleEvaluationTpFlowcHis() {
 
 	}
 
-	public SampleEvaluationCheckFlowcHis(String ownPnoIn, String F_INP_STATIn, String F_INP_TIMEIn) {
+	public SampleEvaluationTpFlowcHis(String ownPnoIn, String F_INP_STATIn, String F_INP_TIMEIn) {
 
 		this.ownPno = ownPnoIn;
 		this.F_INP_STAT = F_INP_STATIn;
@@ -75,7 +76,7 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
-	public boolean hasEqualMapping(SampleEvaluationCheckFlowcHis valueObject) {
+	public boolean hasEqualMapping(SampleEvaluationTpFlowcHis valueObject) {
 
 		if (this.ownPno == null) {
 			if (valueObject.getOwnPno() != null)
@@ -113,7 +114,7 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 
 	public String toString() {
 		StringBuffer out = new StringBuffer(this.getDaogenVersion());
-		out.append("\nclass SampleEvaluationCheckFlowcHis, mapping to table SAMPLE_EVALUATION_CHECK_FLOWC_HIS\n");
+		out.append("\nclass SampleEvaluationTpFlowcHis, mapping to table SAMPLE_EVALUATION_TP_FLOWC_HIS\n");
 		out.append("Persistent attributes: \n");
 		out.append("ownPno = " + this.ownPno + "\n");
 		out.append("F_INP_STAT = " + this.F_INP_STAT + "\n");
@@ -124,7 +125,7 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 	}
 
 	public Object clone() {
-		SampleEvaluationCheckFlowcHis cloned = new SampleEvaluationCheckFlowcHis();
+		SampleEvaluationTpFlowcHis cloned = new SampleEvaluationTpFlowcHis();
 
 		if (this.ownPno != null)
 			cloned.setOwnPno(new String(this.ownPno));
