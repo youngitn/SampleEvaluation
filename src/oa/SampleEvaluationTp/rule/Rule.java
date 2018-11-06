@@ -1,7 +1,6 @@
-package oa.SampleEvaluationCheck.rule;
+package oa.SampleEvaluationTp.rule;
 
 import jcx.jform.bRule;
-import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
 
 import java.util.*;
 
@@ -12,34 +11,42 @@ public class Rule extends bRule {
 		String state = getState();
 
 		Vector id = new Vector();
-		String[] u = null;
+
 		// 受理單位主管所分派之人員
-		switch (FlowState.valueOf(state)) {
-		case 填寫請驗單號:
-			id.addElement("admin");
-			u = getData("DOC_CTRLER").trim().split(" ");
-			id.addElement(u[0]);
-			break;
-		case 實驗室經辦:
-			id.addElement("admin");
-			u = getData("LAB_EXE").trim().split(" ");
-			id.addElement(u[0]);
-
-			break;
-		case 請驗作業跟催:
-			u = getData("DESIGNEE").trim().split(" ");
-			id.addElement("admin");
-			id.addElement(u[0]);
-			break;
-		case 組長:
-			u = getData("DESIGNEE").trim().split(" ");
+		if (state.equals("填寫試製單號")) {
 
 			id.addElement("admin");
+			String[] u = getData("DOC_CTRLER").trim().split(" ");
 			id.addElement(u[0]);
-			break;
 
-		default:
-			break;
+			return id;
+		}
+		if (state.equals("實驗室經辦")) {
+
+			id.addElement("admin");
+			String[] u = getData("LAB_EXE").trim().split(" ");
+			id.addElement(u[0]);
+			return id;
+		}
+
+		if (state.equals("試製作業跟催")) {
+
+			String[] ret = getData("DESIGNEE").trim().split(" ");
+
+			id.addElement("admin");
+			id.addElement(ret[0]);
+
+			return id;
+		}
+
+		if (state.equals("組長")) {
+
+			String[] ret = getData("DESIGNEE").trim().split(" ");
+
+			id.addElement("admin");
+			id.addElement(ret[0]);
+
+			return id;
 		}
 
 		return id;

@@ -1,4 +1,4 @@
-package oa.SampleEvaluationCheck.dao;
+package oa.SampleEvaluation.exception;
 
 public class NotFoundException extends Exception {
 

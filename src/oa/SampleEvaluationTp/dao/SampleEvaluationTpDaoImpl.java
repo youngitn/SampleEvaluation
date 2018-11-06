@@ -21,57 +21,48 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 	}
 
 	@Override
-	public String add(SampleEvaluationTp sampleEvaluation) throws SQLException, Exception {
+	public String add(SampleEvaluationTp s) throws SQLException, Exception {
 
 		return t.execFromPool(
-				"insert into sample_evaluation_tp  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,EVALUATION_RESULT=? ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
-				new Object[] { sampleEvaluation.getPno(), sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
-						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
-						sampleEvaluation.getMfgLotNo(), sampleEvaluation.getQty(), sampleEvaluation.getPack(),
-						sampleEvaluation.getUnit(), sampleEvaluation.getMfr(), sampleEvaluation.getSupplier(),
-						sampleEvaluation.getProvideCoa(), sampleEvaluation.getProvideSpec(),
-						sampleEvaluation.getProvideTestMethod(), sampleEvaluation.getProvideSds(),
-						sampleEvaluation.getProvideOthers(), sampleEvaluation.getNote(),
-						sampleEvaluation.getApplicant(), sampleEvaluation.getAppDate(),
-						sampleEvaluation.getReceiptUnit(), sampleEvaluation.getProjectCode(),
-						sampleEvaluation.getProjectLeader(), sampleEvaluation.getNotifyNoCheck(),
-						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
-						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
-						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
-						sampleEvaluation.getDocCtrler(), sampleEvaluation.getEvaluationResult() });
+				"insert into sample_evaluation_tp  ( OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee,doc_ctrler ,evaluation_result,FILE_SPEC ,FILE_COA,FILE_TEST_METHOD,FILE_OTHERS,FILE_SDS,FILE_1,FILE_2,FILE_3,FILE_4,FILE_5,FILE_6,FILE_7,FILE_8,FILE_9,FILE_10) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
+				new Object[] { s.getOwnPno(), s.getPno(), s.getAppType(), s.getUrgency(), s.getMaterial(),
+						s.getSapCode(), s.getAbCode(), s.getMfgLotNo(), s.getQty(), s.getPack(), s.getUnit(),
+						s.getMfr(), s.getSupplier(), s.getProvideCoa(), s.getProvideSpec(), s.getProvideTestMethod(),
+						s.getProvideSds(), s.getProvideOthers(), s.getNote(), s.getApplicant(), s.getAppDate(),
+						s.getReceiptUnit(), s.getProjectCode(), s.getProjectLeader(), s.getNotifyNoCheck(),
+						s.getNotifyNoTrialProd(), s.getQrNo(), s.getIsCheck(), s.getIsTrialProduction(), s.getLabExe(),
+						s.getAssessor(), s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(),
+						s.getFileCoa(), s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(),
+						s.getFile2(), s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(),
+						s.getFile8(), s.getFile9(), s.getFile10() });
 	}
 
 	@Override
-	public String update(SampleEvaluationTp sampleEvaluation) throws SQLException, Exception {
+	public String update(SampleEvaluationTp s) throws SQLException, Exception {
 		return t.execFromPool(
-				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,EVALUATION_RESULT=?"
-						+ " where pno=?",
-				new Object[] { sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
-						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
-						sampleEvaluation.getMfgLotNo(), sampleEvaluation.getQty(), sampleEvaluation.getPack(),
-						sampleEvaluation.getUnit(), sampleEvaluation.getMfr(), sampleEvaluation.getSupplier(),
-						sampleEvaluation.getProvideCoa(), sampleEvaluation.getProvideSpec(),
-						sampleEvaluation.getProvideTestMethod(), sampleEvaluation.getProvideSds(),
-						sampleEvaluation.getProvideOthers(), sampleEvaluation.getNote(),
-						sampleEvaluation.getApplicant(), sampleEvaluation.getAppDate(),
-						sampleEvaluation.getReceiptUnit(), sampleEvaluation.getProjectCode(),
-						sampleEvaluation.getProjectLeader(), sampleEvaluation.getNotifyNoCheck(),
-						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
-						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
-						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
-						sampleEvaluation.getDocCtrler(), sampleEvaluation.getEvaluationResult(),
-						sampleEvaluation.getPno() });
+				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,evaluation_result=?,FILE_SPEC=? ,FILE_COA=?,FILE_TEST_METHOD=?,FILE_OTHERS=?,FILE_SDS=?,FILE_1=?,FILE_2=?,FILE_3=?,FILE_4=?,FILE_5=?,FILE_6=?,FILE_7=?,FILE_8=?,FILE_9=?,FILE_10=?"
+						+ " where own_pno=?",
+				new Object[] { s.getAppType(), s.getUrgency(), s.getMaterial(), s.getSapCode(), s.getAbCode(),
+						s.getMfgLotNo(), s.getQty(), s.getPack(), s.getUnit(), s.getMfr(), s.getSupplier(),
+						s.getProvideCoa(), s.getProvideSpec(), s.getProvideTestMethod(), s.getProvideSds(),
+						s.getProvideOthers(), s.getNote(), s.getApplicant(), s.getAppDate(), s.getReceiptUnit(),
+						s.getProjectCode(), s.getProjectLeader(), s.getNotifyNoCheck(), s.getNotifyNoTrialProd(),
+						s.getQrNo(), s.getIsCheck(), s.getIsTrialProduction(), s.getLabExe(), s.getAssessor(),
+						s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(), s.getFileCoa(),
+						s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(), s.getFile2(),
+						s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(), s.getFile8(),
+						s.getFile9(), s.getFile10(), s.getOwnPno() });
 
 	}
 
 	@Override
 	public String delete(String id) throws SQLException, Exception {
-		return t.execFromPool("DELETE from sample_evaluation where pno=?", new Object[] { id });
+		return t.execFromPool("DELETE from sample_evaluation_tp where pno=?", new Object[] { id });
 	}
 
 	@Override
 	public SampleEvaluationTp findById(String id) throws SQLException, Exception {
-		String[][] ret = t.queryFromPool("select * from sample_evaluation where pno='" + id + "'");
+		String[][] ret = t.queryFromPool("select * from sample_evaluation_Tp where own_pno='" + id + "'");
 		if (ret != null && ret.length > 0) {
 			SampleEvaluationTp sampleEvaluationTp = new SampleEvaluationTp(ret[0]);
 			return sampleEvaluationTp;
@@ -83,7 +74,7 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 	@Override
 	public ArrayList<SampleEvaluationTp> findAllList(String params) throws SQLException, Exception {
 		ArrayList<SampleEvaluationTp> retList = new ArrayList<SampleEvaluationTp>();
-		String[][] ret = t.queryFromPool("select * from sample_evaluation_tp " + params);
+		String[][] ret = t.queryFromPool("select * from sample_evaluation_Tp " + params);
 		if (ret != null && ret.length > 0) {
 			for (int i = 0; i < ret.length; i++) {
 				retList.add(new SampleEvaluationTp(ret[0]));

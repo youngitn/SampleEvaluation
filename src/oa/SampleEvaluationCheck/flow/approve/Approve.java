@@ -1,9 +1,10 @@
 package oa.SampleEvaluationCheck.flow.approve;
 
+import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDaoImpl;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDao;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDaoImpl;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDaoImpl;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
@@ -64,7 +65,7 @@ public class Approve extends bProcFlow {
 					flowc.setF_INP_ID(designee[0]);
 					flowc.setF_INP_STAT("填寫請驗單號");
 					flowc.setF_INP_TIME(time);
-					SampleEvaluationCheckFlowcDao secfDao = new SampleEvaluationCheckFlowcDao();
+					AbstractGenericFlowcDao secfDao = new SampleEvaluationCheckFlowcDaoImpl();
 					secfDao.create(getTalk().getConnectionFromPool(), flowc);
 
 					// 建立子流程FLOWC_HIS 物件 能夠顯示簽核歷史
@@ -73,7 +74,7 @@ public class Approve extends bProcFlow {
 							flowc.getF_INP_STAT(), time);
 
 					his.setF_INP_ID(designee[0]);
-					SampleEvaluationCheckFlowcHisDao secfhDao = new SampleEvaluationCheckFlowcHisDao();
+					SampleEvaluationCheckFlowcHisDaoImpl secfhDao = new SampleEvaluationCheckFlowcHisDaoImpl();
 					secfhDao.create(getTalk().getConnectionFromPool(), his);
 
 				}

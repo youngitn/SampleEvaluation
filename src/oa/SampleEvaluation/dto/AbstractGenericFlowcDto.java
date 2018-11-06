@@ -1,6 +1,6 @@
-package oa.SampleEvaluation.dao;
+package oa.SampleEvaluation.dto;
 
-public abstract class AbstractGenericFlowcHisDao<E> implements ISampleEvaluationSubFlowcHisDao<E> {
+public abstract class AbstractGenericFlowcDto<E> implements ISampleEvaluationFlowcDto<E> {
 
 	public abstract Class getClazz();
 

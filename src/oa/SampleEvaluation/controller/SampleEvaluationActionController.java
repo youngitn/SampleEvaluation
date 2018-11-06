@@ -90,7 +90,7 @@ public class SampleEvaluationActionController extends Controller {
 		String[][] list = mquery.getQueryResult();
 		message(mquery.getSqlQueryStr());
 		if (list == null || list.length <= 0) {
-			//message("查無紀錄");
+			// message("查無紀錄");
 		}
 		setTableData("QUERY_LIST", list);
 	}
@@ -118,6 +118,7 @@ public class SampleEvaluationActionController extends Controller {
 
 				// DMAKER 內建ADD功能 需將資料塞進去表單欄位才吃的到
 				setValue(cdo.getTablePKName(), uuid);
+				FileItemSetChecker();
 				// confirm = true 控制是否真的送出
 				if (confirm) {
 					// 觸發Dmaker內建的新增鈕來送出表單
@@ -129,6 +130,25 @@ public class SampleEvaluationActionController extends Controller {
 
 		}
 
+	}
+
+	private void FileItemSetChecker() {
+		// TODO Auto-generated method stub
+		if (!getValue("FILE_SPEC").equals("")) {
+			setValue("PROVIDE_SPEC", "1");
+		}
+		if (!getValue("FILE_COA").equals("")) {
+			setValue("PROVIDE_COA", "1");
+		}
+		if (!getValue("FILE_SDS").equals("")) {
+			setValue("PROVIDE_SDS", "1");
+		}
+		if (!getValue("FILE_OTHERS").equals("")) {
+			setValue("PROVIDE_OTHERS", "1");
+		}
+		if (!getValue("FILE_TEST_METHOD").equals("")) {
+			setValue("PROVIDE_TEST_METHOD", "1");
+		}
 	}
 
 	// 將資料填入表單畫面欄位

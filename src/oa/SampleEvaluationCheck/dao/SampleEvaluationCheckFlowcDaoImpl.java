@@ -3,14 +3,19 @@ package oa.SampleEvaluationCheck.dao;
 import java.sql.*;
 import java.util.*;
 
+import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
+
+import oa.SampleEvaluation.exception.NotFoundException;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 
-public class SampleEvaluationCheckFlowcDao {
+public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<SampleEvaluationCheckFlowc> {
 
+	@Override
 	public SampleEvaluationCheckFlowc createValueObject() {
 		return new SampleEvaluationCheckFlowc();
 	}
 
+	@Override
 	public SampleEvaluationCheckFlowc getObject(Connection conn, String ownPno) throws NotFoundException, SQLException {
 
 		SampleEvaluationCheckFlowc valueObject = createValueObject();
@@ -19,6 +24,7 @@ public class SampleEvaluationCheckFlowcDao {
 		return valueObject;
 	}
 
+	@Override
 	public void load(Connection conn, SampleEvaluationCheckFlowc valueObject) throws NotFoundException, SQLException {
 
 		String sql = "SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE (OWN_PNO = ? ) ";
@@ -36,6 +42,8 @@ public class SampleEvaluationCheckFlowcDao {
 		}
 	}
 
+	
+	@Override
 	public List loadAll(Connection conn) throws SQLException {
 
 		String sql = "SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC ORDER BY OWN_PNO ASC ";
@@ -44,6 +52,8 @@ public class SampleEvaluationCheckFlowcDao {
 		return searchResults;
 	}
 
+
+	@Override
 	public synchronized void create(Connection conn, SampleEvaluationCheckFlowc valueObject) throws SQLException {
 
 		String sql = "";
@@ -74,6 +84,13 @@ public class SampleEvaluationCheckFlowcDao {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationCheck.dao.ISampleEvaluationSubFlowcDao#save(java.sql.
+	 * Connection, oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc)
+	 */
+	@Override
 	public void save(Connection conn, SampleEvaluationCheckFlowc valueObject) throws NotFoundException, SQLException {
 
 		String sql = "UPDATE SAMPLE_EVALUATION_CHECK_FLOWC SET F_INP_STAT = ?, F_INP_ID = ?, F_INP_TIME = ?, "
@@ -105,6 +122,14 @@ public class SampleEvaluationCheckFlowcDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationCheck.dao.ISampleEvaluationSubFlowcDao#delete(java.sql.
+	 * Connection, oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc)
+	 */
+	@Override
 	public void delete(Connection conn, SampleEvaluationCheckFlowc valueObject) throws NotFoundException, SQLException {
 
 		String sql = "DELETE FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE (OWN_PNO = ? ) ";
@@ -130,6 +155,14 @@ public class SampleEvaluationCheckFlowcDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationCheck.dao.ISampleEvaluationSubFlowcDao#deleteAll(java.sql.
+	 * Connection)
+	 */
+	@Override
 	public void deleteAll(Connection conn) throws SQLException {
 
 		String sql = "DELETE FROM SAMPLE_EVALUATION_CHECK_FLOWC";
@@ -144,6 +177,14 @@ public class SampleEvaluationCheckFlowcDao {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationCheck.dao.ISampleEvaluationSubFlowcDao#countAll(java.sql.
+	 * Connection)
+	 */
+	@Override
 	public int countAll(Connection conn) throws SQLException {
 
 		String sql = "SELECT count(*) FROM SAMPLE_EVALUATION_CHECK_FLOWC";
@@ -166,6 +207,14 @@ public class SampleEvaluationCheckFlowcDao {
 		return allRows;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationCheck.dao.ISampleEvaluationSubFlowcDao#searchMatching(java
+	 * .sql.Connection, oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc)
+	 */
+	@Override
 	public List searchMatching(Connection conn, SampleEvaluationCheckFlowc valueObject) throws SQLException {
 
 		List searchResults;
@@ -218,10 +267,6 @@ public class SampleEvaluationCheckFlowcDao {
 			searchResults = listQuery(conn, conn.prepareStatement(sql.toString()));
 
 		return searchResults;
-	}
-
-	public String getDaogenVersion() {
-		return "DaoGen version 2.4.1";
 	}
 
 	protected int databaseUpdate(Connection conn, PreparedStatement stmt) throws SQLException {
@@ -287,6 +332,11 @@ public class SampleEvaluationCheckFlowcDao {
 		}
 
 		return (List) searchResults;
+	}
+
+	@Override
+	public Class<SampleEvaluationCheckFlowc> getClazz() {
+		return SampleEvaluationCheckFlowc.class;
 	}
 
 }

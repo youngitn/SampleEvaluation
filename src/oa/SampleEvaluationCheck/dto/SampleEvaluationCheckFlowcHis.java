@@ -2,7 +2,10 @@ package oa.SampleEvaluationCheck.dto;
 
 import java.io.*;
 
-public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
+import oa.SampleEvaluation.dto.AbstractGenericFlowcHisDto;
+
+public class SampleEvaluationCheckFlowcHis extends AbstractGenericFlowcHisDto<SampleEvaluationCheckFlowcHis>
+		implements Cloneable, Serializable {
 
 	/**
 	 * 
@@ -26,46 +29,57 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 
 	}
 
+	@Override
 	public String getOwnPno() {
 		return this.ownPno;
 	}
 
+	@Override
 	public void setOwnPno(String ownPnoIn) {
 		this.ownPno = ownPnoIn;
 	}
 
+	@Override
 	public String getF_INP_STAT() {
 		return this.F_INP_STAT;
 	}
 
+	@Override
 	public void setF_INP_STAT(String F_INP_STATIn) {
 		this.F_INP_STAT = F_INP_STATIn;
 	}
 
+	@Override
 	public String getF_INP_TIME() {
 		return this.F_INP_TIME;
 	}
 
+	@Override
 	public void setF_INP_TIME(String F_INP_TIMEIn) {
 		this.F_INP_TIME = F_INP_TIMEIn;
 	}
 
+	@Override
 	public String getF_INP_ID() {
 		return this.F_INP_ID;
 	}
 
+	@Override
 	public void setF_INP_ID(String F_INP_IDIn) {
 		this.F_INP_ID = F_INP_IDIn;
 	}
 
+	@Override
 	public String getF_INP_INFO() {
 		return this.F_INP_INFO;
 	}
 
+	@Override
 	public void setF_INP_INFO(String F_INP_INFOIn) {
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
+	@Override
 	public void setAll(String ownPnoIn, String F_INP_STATIn, String F_INP_TIMEIn, String F_INP_IDIn,
 			String F_INP_INFOIn) {
 		this.ownPno = ownPnoIn;
@@ -75,6 +89,7 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
+	@Override
 	public boolean hasEqualMapping(SampleEvaluationCheckFlowcHis valueObject) {
 
 		if (this.ownPno == null) {
@@ -111,36 +126,10 @@ public class SampleEvaluationCheckFlowcHis implements Cloneable, Serializable {
 		return true;
 	}
 
-	public String toString() {
-		StringBuffer out = new StringBuffer(this.getDaogenVersion());
-		out.append("\nclass SampleEvaluationCheckFlowcHis, mapping to table SAMPLE_EVALUATION_CHECK_FLOWC_HIS\n");
-		out.append("Persistent attributes: \n");
-		out.append("ownPno = " + this.ownPno + "\n");
-		out.append("F_INP_STAT = " + this.F_INP_STAT + "\n");
-		out.append("F_INP_TIME = " + this.F_INP_TIME + "\n");
-		out.append("F_INP_ID = " + this.F_INP_ID + "\n");
-		out.append("F_INP_INFO = " + this.F_INP_INFO + "\n");
-		return out.toString();
-	}
-
-	public Object clone() {
-		SampleEvaluationCheckFlowcHis cloned = new SampleEvaluationCheckFlowcHis();
-
-		if (this.ownPno != null)
-			cloned.setOwnPno(new String(this.ownPno));
-		if (this.F_INP_STAT != null)
-			cloned.setF_INP_STAT(new String(this.F_INP_STAT));
-		if (this.F_INP_TIME != null)
-			cloned.setF_INP_TIME(new String(this.F_INP_TIME));
-		if (this.F_INP_ID != null)
-			cloned.setF_INP_ID(new String(this.F_INP_ID));
-		if (this.F_INP_INFO != null)
-			cloned.setF_INP_INFO(new String(this.F_INP_INFO));
-		return cloned;
-	}
-
-	public String getDaogenVersion() {
-		return "DaoGen version 2.4.1";
+	@Override
+	public Class getClazz() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

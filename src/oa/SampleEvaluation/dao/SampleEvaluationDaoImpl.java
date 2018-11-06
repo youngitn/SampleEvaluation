@@ -28,7 +28,7 @@ public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation
 	public String add(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 
 		return t.execFromPool(
-				"insert into sample_evaluation  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe=?,assessor=?,designee=?,doc_ctrler=? ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
+				"insert into sample_evaluation  (PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee,doc_ctrler ,evaluation_result,FILE_SPEC ,FILE_COA,FILE_TEST_METHOD,FILE_OTHERS,FILE_SDS,FILE_1,FILE_2,FILE_3,FILE_4,FILE_5,FILE_6,FILE_7,FILE_8,FILE_9,FILE_10) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
 				new Object[] { sampleEvaluation.getPno(), sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
 						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
 						sampleEvaluation.getMfgLotNo(), sampleEvaluation.getQty(), sampleEvaluation.getPack(),
@@ -42,13 +42,19 @@ public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation
 						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
 						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
 						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
-						sampleEvaluation.getDocCtrler() });
+						sampleEvaluation.getDocCtrler(), sampleEvaluation.getEvaluationResult(),
+						sampleEvaluation.getFileSpec(), sampleEvaluation.getFileCoa(),
+						sampleEvaluation.getFileTestMethod(), sampleEvaluation.getFileOthers(),
+						sampleEvaluation.getFileSds(), sampleEvaluation.getFile1(), sampleEvaluation.getFile2(),
+						sampleEvaluation.getFile3(), sampleEvaluation.getFile4(), sampleEvaluation.getFile5(),
+						sampleEvaluation.getFile6(), sampleEvaluation.getFile7(), sampleEvaluation.getFile8(),
+						sampleEvaluation.getFile9(), sampleEvaluation.getFile10() });
 	}
 
 	@Override
 	public String update(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 		return t.execFromPool(
-				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?"
+				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,evaluation_result=?,FILE_SPEC=? ,FILE_COA=?,FILE_TEST_METHOD=?,FILE_OTHERS=?,FILE_SDS=?,FILE_1=?,FILE_2=?,FILE_3=?,FILE_4=?,FILE_5=?,FILE_6=?,FILE_7=?,FILE_8=?,FILE_9=?,FILE_10=?"
 						+ " where pno=?",
 				new Object[] { sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),
 						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),
@@ -63,7 +69,13 @@ public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation
 						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),
 						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),
 						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),
-						sampleEvaluation.getDocCtrler(), sampleEvaluation.getPno() });
+						sampleEvaluation.getDocCtrler(), sampleEvaluation.getEvaluationResult(),
+						sampleEvaluation.getFileSpec(), sampleEvaluation.getFileCoa(),
+						sampleEvaluation.getFileTestMethod(), sampleEvaluation.getFileOthers(),
+						sampleEvaluation.getFileSds(), sampleEvaluation.getFile1(), sampleEvaluation.getFile2(),
+						sampleEvaluation.getFile3(), sampleEvaluation.getFile4(), sampleEvaluation.getFile5(),
+						sampleEvaluation.getFile6(), sampleEvaluation.getFile7(), sampleEvaluation.getFile8(),
+						sampleEvaluation.getFile9(), sampleEvaluation.getFile10(), sampleEvaluation.getPno() });
 
 	}
 

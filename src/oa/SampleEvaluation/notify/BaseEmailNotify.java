@@ -1,5 +1,6 @@
 package oa.SampleEvaluation.notify;
 
+import jcx.db.talk;
 import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 
@@ -7,6 +8,7 @@ import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.MailBody;
 
 import oa.SampleEvaluation.common.MailMan;
+import oa.SampleEvaluation.dto.SampleEvaluation;
 
 import java.sql.SQLException;
 
@@ -23,6 +25,7 @@ public abstract class BaseEmailNotify extends bNotify {
 	protected bProcFlow bpf = null;
 	protected EmailUtil emailUtil;
 	protected BaseService service;
+	protected talk t;
 
 	public void actionPerformed(String value) throws Throwable {
 		// 當表單進入流程狀態直屬主管時,會執行本段程式
@@ -35,8 +38,14 @@ public abstract class BaseEmailNotify extends bNotify {
 		service = new BaseService(this);
 		emailUtil = new EmailUtil(service);
 		mailService = new MailService(service);
+		SampleEvaluation se = new SampleEvaluation();
+		se.setAllValue(service);
+		this.t = service.getTalk();
+		if(this.t == null) {
+			this.t = getTalk();
+		}
 		// 建立內容
-		String content = buildContent();
+		String content = buildContent(se);
 		content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
 
 		// 取得待簽核人
@@ -56,11 +65,34 @@ public abstract class BaseEmailNotify extends bNotify {
 
 	}
 
+	public void setService(BaseService service) {
+		this.service = service;
+		this.emailUtil = new EmailUtil(service);
+		this.t = service.getTalk();
+	}
+
+	public void setBaseService(BaseService service) {
+		this.service = service;
+		this.t = service.getTalk();
+
+	}
+
+	public void setEmailUtil(EmailUtil eu) {
+		this.emailUtil = eu;
+
+	}
+
+	public void setTalk(talk t) {
+		this.t = t;
+
+	}
+	
+
 	protected void setIsLastGate() {
 		isLastGate = false;
 	}
 
-	protected abstract String buildContent() throws SQLException, Exception;
+	public abstract String buildContent(SampleEvaluation se) throws SQLException, Exception;
 
 	protected String emailTitleBuilder() {
 		String title = "";

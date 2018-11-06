@@ -1,9 +1,11 @@
 package oa.SampleEvaluationTp.dto;
 
-
 import java.io.*;
 
-public class SampleEvaluationTpFlowcHis implements Cloneable, Serializable {
+import oa.SampleEvaluation.dto.AbstractGenericFlowcHisDto;
+
+public class SampleEvaluationTpFlowcHis extends AbstractGenericFlowcHisDto<SampleEvaluationTpFlowcHis>
+		implements Cloneable, Serializable {
 
 	/**
 	 * 
@@ -27,46 +29,124 @@ public class SampleEvaluationTpFlowcHis implements Cloneable, Serializable {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#getOwnPno()
+	 */
+	@Override
 	public String getOwnPno() {
 		return this.ownPno;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#setOwnPno(java.lang.
+	 * String)
+	 */
+	@Override
 	public void setOwnPno(String ownPnoIn) {
 		this.ownPno = ownPnoIn;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#getF_INP_STAT()
+	 */
+	@Override
 	public String getF_INP_STAT() {
 		return this.F_INP_STAT;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#setF_INP_STAT(java.
+	 * lang.String)
+	 */
+	@Override
 	public void setF_INP_STAT(String F_INP_STATIn) {
 		this.F_INP_STAT = F_INP_STATIn;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#getF_INP_TIME()
+	 */
+	@Override
 	public String getF_INP_TIME() {
 		return this.F_INP_TIME;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#setF_INP_TIME(java.
+	 * lang.String)
+	 */
+	@Override
 	public void setF_INP_TIME(String F_INP_TIMEIn) {
 		this.F_INP_TIME = F_INP_TIMEIn;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#getF_INP_ID()
+	 */
+	@Override
 	public String getF_INP_ID() {
 		return this.F_INP_ID;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#setF_INP_ID(java.lang.
+	 * String)
+	 */
+	@Override
 	public void setF_INP_ID(String F_INP_IDIn) {
 		this.F_INP_ID = F_INP_IDIn;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#getF_INP_INFO()
+	 */
+	@Override
 	public String getF_INP_INFO() {
 		return this.F_INP_INFO;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#setF_INP_INFO(java.
+	 * lang.String)
+	 */
+	@Override
 	public void setF_INP_INFO(String F_INP_INFOIn) {
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see oa.SampleEvaluationTp.dto.ISampleEvaluationFlowcHisDto#setAll(java.lang.
+	 * String, java.lang.String, java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
 	public void setAll(String ownPnoIn, String F_INP_STATIn, String F_INP_TIMEIn, String F_INP_IDIn,
 			String F_INP_INFOIn) {
 		this.ownPno = ownPnoIn;
@@ -76,6 +156,7 @@ public class SampleEvaluationTpFlowcHis implements Cloneable, Serializable {
 		this.F_INP_INFO = F_INP_INFOIn;
 	}
 
+	@Override
 	public boolean hasEqualMapping(SampleEvaluationTpFlowcHis valueObject) {
 
 		if (this.ownPno == null) {
@@ -112,36 +193,10 @@ public class SampleEvaluationTpFlowcHis implements Cloneable, Serializable {
 		return true;
 	}
 
-	public String toString() {
-		StringBuffer out = new StringBuffer(this.getDaogenVersion());
-		out.append("\nclass SampleEvaluationTpFlowcHis, mapping to table SAMPLE_EVALUATION_TP_FLOWC_HIS\n");
-		out.append("Persistent attributes: \n");
-		out.append("ownPno = " + this.ownPno + "\n");
-		out.append("F_INP_STAT = " + this.F_INP_STAT + "\n");
-		out.append("F_INP_TIME = " + this.F_INP_TIME + "\n");
-		out.append("F_INP_ID = " + this.F_INP_ID + "\n");
-		out.append("F_INP_INFO = " + this.F_INP_INFO + "\n");
-		return out.toString();
-	}
-
-	public Object clone() {
-		SampleEvaluationTpFlowcHis cloned = new SampleEvaluationTpFlowcHis();
-
-		if (this.ownPno != null)
-			cloned.setOwnPno(new String(this.ownPno));
-		if (this.F_INP_STAT != null)
-			cloned.setF_INP_STAT(new String(this.F_INP_STAT));
-		if (this.F_INP_TIME != null)
-			cloned.setF_INP_TIME(new String(this.F_INP_TIME));
-		if (this.F_INP_ID != null)
-			cloned.setF_INP_ID(new String(this.F_INP_ID));
-		if (this.F_INP_INFO != null)
-			cloned.setF_INP_INFO(new String(this.F_INP_INFO));
-		return cloned;
-	}
-
-	public String getDaogenVersion() {
-		return "DaoGen version 2.4.1";
+	@Override
+	public Class getClazz() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

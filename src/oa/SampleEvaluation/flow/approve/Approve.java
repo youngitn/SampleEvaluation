@@ -3,6 +3,7 @@ package oa.SampleEvaluation.flow.approve;
 import jcx.jform.bProcFlow;
 import oa.SampleEvaluation.flow.approve.gateEnum.*;
 
+import java.lang.reflect.Constructor;
 import java.sql.SQLException;
 
 import com.ysp.field.Mail;
@@ -12,16 +13,14 @@ import com.ysp.util.DateTimeUtil;
 
 import oa.SampleEvaluation.notify.*;
 import oa.SampleEvaluation.dao.AbstractGenericDao;
+import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
+import oa.SampleEvaluation.dao.AbstractGenericFlowcHisDao;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.dto.AbstractGenericFlowcDto;
+import oa.SampleEvaluation.dto.AbstractGenericFlowcHisDto;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDaoImpl;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDao;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDao;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpDaoImpl;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 import jcx.db.*;
 
@@ -36,23 +35,19 @@ public class Approve extends bProcFlow {
 		nowState = getState();
 		t = getTalk();
 		SampleEvaluation s = null;
-		SampleEvaluationSubBaseDto sc = null;
 		String alertStr = "";
 		BaseService service = new BaseService(this);
 		String labExe = getValue("LAB_EXE").trim();
 		String lassessor = getValue("ASSESSOR").trim();
 		String docCtrler = getValue("DOC_CTRLER").trim();
 		String designee = getValue("DESIGNEE").trim();
-		String designeEmpid = (designee.trim().split(" "))[0];
-		String pno = getValue("PNO");
+		designee.trim().split(" ");
+		getValue("PNO");
 		this.isCheckValue = getValue("IS_CHECK").trim();
 		this.isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
 
 		switch (FlowState.valueOf(nowState)) {
 		case 組長:
-
-			// 進行相關判斷並建立送出表單時顯示的提醒文字
-			alertStr = buildApproveConfirmMsgStr();
 
 			if (isCheckValue.equals("1") && isCheckValue.equals("")) {
 				message("請選擇實驗室經辦人員");
@@ -76,71 +71,31 @@ public class Approve extends bProcFlow {
 			// 更新主表請驗和試製評估勾選欄位
 			// 更新主表 評估人員和實驗室經辦
 			s = new SampleEvaluation();
-			s = s.setAllValue(s, service);
+			s.setAllValue(service);
 			new SampleEvaluationDaoImpl(t).update(s);
 
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (isCheckValue.equals("1")) {
 
-				sc = new SampleEvaluationCheck(service);
-				AbstractGenericDao checkDao = new SampleEvaluationCheckDaoImpl(t);
-				goSubFlow(checkDao, sc, designeEmpid);
-				// 有請驗流程 寄出通知信
-
-				MailService mailService = new MailService(service);
+				SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
+				secDto.setAllValue(service);
+				goSubFlow("Check", secDto);
 				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
-				// Mail to
-				String[] usr = { getEmail(designeEmpid) };
-
-				// 內容
-				EmailNotify en = new EmailNotify();
-				en.setService(service);
-				en.setTableObj(sc);
-				String content = en.getContent();
-
-				mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
+				// 有請驗流程 寄出通知信
+				sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
 
 			}
 			if (isTrialProdValue.equals("1")) {
 
-				sc = new SampleEvaluationTp(service);
-				AbstractGenericDao checkDao = new SampleEvaluationTpDaoImpl(t);
-				goSubFlow(checkDao, sc, designeEmpid);
-				// 有請驗流程 寄出通知信
-
-				MailService mailService = new MailService(service);
+				SampleEvaluationSubBaseDto setDto = new SampleEvaluationTp();
+				setDto.setAllValue(service);
+				goSubFlow("Tp", setDto);
 				String title = "簽核通知：" + this.getFunctionName() + "_試製流程" + "( 單號：" + getValue("PNO") + " )";
-				// Mail to
-				String[] usr = { getEmail(designeEmpid) };
-
-				// 內容
-				EmailNotify en = new EmailNotify();
-				en.setService(service);
-				en.setTableObj(sc);
-				String content = en.getContent();
-
-				mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
-
+				// 有試製流程 寄出通知信
+				sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
 			}
+
 			break;
-//		case 試製單號填寫:
-//			// 更新主表試製單號欄位
-//			if (!getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
-//				// 更新主表試製單號欄位
-//				s = new SampleEvaluation();
-//				s = s.setAllValue(s, service);
-//				new SampleEvaluationDaoImpl(t).update(s);
-//
-//				// 更新子流程主表試製單號欄位
-//				sc = new SampleEvaluationCheck();
-//				sc = sc.setAllValue(sc, service);
-//				new SampleEvaluationCheckDao(t).update(sc);
-//			} else {
-//				message("請輸入試製通知單號");
-//				return false;
-//			}
-//
-//			break;
 		case 受理單位主管分案:
 			// 更新主表分案人欄位
 			if (!designee.equals("")) {
@@ -157,7 +112,7 @@ public class Approve extends bProcFlow {
 		case 待處理:
 			// 更新主表分案人欄位
 			s = new SampleEvaluation();
-			s = s.setAllValue(s, service);
+			s.setAllValue(service);
 			new SampleEvaluationDaoImpl(t).update(s);
 			break;
 		default:
@@ -167,26 +122,19 @@ public class Approve extends bProcFlow {
 
 	}
 
-	private String buildApproveConfirmMsgStr() {
-		String alertStr = "";
-		if (isCheckValue.equals("0")) {
+	private void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationSubBaseDto dto, String title)
+			throws Exception {
+		MailService mailService = new MailService(service);
+		// Mail to
+		String[] ret = mailTo.trim().split(" ");
+		String[] usr = { getEmail(ret[0]) };
 
-			alertStr += "將不會進行請驗流程;<br>";
-		} else {
+		// 內容
+		EmailNotify en = new EmailNotify();
+		en.setService(service);
+		String content = en.getContent(dto);
 
-			alertStr += "將進行請驗流程;<br>";
-		}
-		if (isTrialProdValue.equals("0")) {
-
-			alertStr += "將不會進行試製評估流程;<br>";
-		} else {
-
-			alertStr += "將進行試製評估流程;<br>";
-		}
-		if (isTrialProdValue.equals("0") && isCheckValue.equals("0")) {
-			alertStr = "皆未勾選\"是否進行請驗/試製評估流程\"中的任何項目<br> 送出後將直接結案;<br>";
-		}
-		return alertStr;
+		mailService.sendMailbccUTF8(usr, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
 	}
 
 	/**
@@ -207,8 +155,13 @@ public class Approve extends bProcFlow {
 		return true;
 	}
 
-	private void goSubFlow(AbstractGenericDao Dao, SampleEvaluationSubBaseDto s, String designeEmpid)
+	private void goSubFlow(String type, SampleEvaluationSubBaseDto s)
 			throws ClassNotFoundException, SQLException, Exception {
+
+		Class<?> subMainDao = Class.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "DaoImpl");
+		Constructor<?> DaoCon = subMainDao.getConstructor(talk.class);
+		AbstractGenericDao<SampleEvaluationSubBaseDto> Dao = (AbstractGenericDao<SampleEvaluationSubBaseDto>) DaoCon
+				.newInstance(t);
 
 		if (Dao.findById(s.getOwnPno()) != null) {
 			Dao.update(s);
@@ -216,26 +169,43 @@ public class Approve extends bProcFlow {
 			// insert一筆子流程主檔
 			Dao.add(s);
 
-			SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(s.getOwnPno());
+			AbstractGenericFlowcDto<?> Dto = (AbstractGenericFlowcDto<?>) Class
+					.forName("oa.SampleEvaluation" + type + ".dto.SampleEvaluation" + type + "Flowc").newInstance();
+
+			Dto.setOwnPno(s.getOwnPno());
 			String time = DateTimeUtil.getApproveAddSeconds(0);
 
-			flowc.setF_INP_ID(designeEmpid);
-			flowc.setF_INP_STAT("填寫請驗單號");
-			flowc.setF_INP_TIME(time);
-			SampleEvaluationCheckFlowcDao secfDao = new SampleEvaluationCheckFlowcDao();
-			secfDao.create(getTalk().getConnectionFromPool(), flowc);
+			Dto.setF_INP_ID(s.getApplicant());
+			String gateName = "填寫請驗單號";
+			if (type.equals("Tp")) {
+				gateName = "評估人員";
+			}
+			Dto.setF_INP_STAT(gateName);
+			Dto.setF_INP_TIME(time);
+
+			AbstractGenericFlowcDao<AbstractGenericFlowcDto<?>> secfDao = (AbstractGenericFlowcDao<AbstractGenericFlowcDto<?>>) Class
+					.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcDaoImpl")
+					.newInstance();
+
+			secfDao.create(t.getConnectionFromPool(), Dto);
 
 			// 建立子流程FLOWC_HIS 物件 能夠顯示簽核歷史
 			time = DateTimeUtil.getApproveAddSeconds(0);
-			SampleEvaluationCheckFlowcHis his = new SampleEvaluationCheckFlowcHis(s.getOwnPno(), flowc.getF_INP_STAT(),
-					time);
 
-			his.setF_INP_ID(designeEmpid);
-			SampleEvaluationCheckFlowcHisDao secfhDao = new SampleEvaluationCheckFlowcHisDao();
-			secfhDao.create(getTalk().getConnectionFromPool(), his);
+			AbstractGenericFlowcHisDto<?> his = (AbstractGenericFlowcHisDto<?>) Class
+					.forName("oa.SampleEvaluation" + type + ".dto.SampleEvaluation" + type + "FlowcHis").newInstance();
+
+			his.setF_INP_STAT(Dto.getF_INP_STAT());
+			his.setOwnPno(s.getOwnPno());
+			his.setF_INP_TIME(time);
+			his.setF_INP_ID(s.getApplicant());
+			AbstractGenericFlowcHisDao<AbstractGenericFlowcHisDto<?>> secfhDao = (AbstractGenericFlowcHisDao<AbstractGenericFlowcHisDto<?>>) Class
+					.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcHisDaoImpl")
+					.newInstance();
+
+			secfhDao.create(t.getConnectionFromPool(), his);
 
 		}
-		// 有請驗流程 寄出通知信
 
 	}
 

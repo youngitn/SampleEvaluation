@@ -25,14 +25,14 @@ public class SampleEvaluationTpController extends hproc {
 			setEditable("NOTIFY_NO_TRIAL_PROD", true);
 
 		}
-
+		
 		// 申請人基本資料
 		UserData u = new UserData(getValue("APPLICANT").trim(), getTalk());
-		setValue("APPLICANTNAME", u.getHecname());
+		setValue("APPLICANT_NAME", u.getHecname());
 		setValue("CPNYID", u.getCpnyid());
-		setValue("APPLICANT_DEPNAME", u.getDepName());
+		setValue("APPLICANT_DEP_NAME", u.getDepName());
 		u = new UserData(getValue("PROJECT_LEADER").trim(), getTalk());
-		setValue("PROJECT_LEADERNAME", u.getHecname() + " " + u.getDepName());
+		setValue("PROJECT_LEADER_NAME", u.getHecname() + " " + u.getDepName());
 		// message(u.getDepName());
 		String ownPno = getValue("OWN_PNO").trim();
 		if (ownPno.length() <= 0) {

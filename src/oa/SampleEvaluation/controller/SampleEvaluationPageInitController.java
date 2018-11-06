@@ -41,6 +41,7 @@ public class SampleEvaluationPageInitController extends Controller {
 		case ADD_PAGE_INIT:// 進入新增畫面
 			addScript(UIHidderString.hideDmakerAddButton());
 			init.doAddPageProcess();
+			
 			break;
 
 		case PENING_PAGE_INIT:// 進入待處理畫面

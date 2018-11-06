@@ -1,24 +1,18 @@
 package oa.SampleEvaluation.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
 import oa.SampleEvaluation.exception.NotFoundException;
-/**
- * 重覆蠻多ISampleEvaluationSubFlowcDao的code.
- * TODO 要讓flow和flowHis整合
- * @author u52116
- *
- * @param <E>
- */
-public interface ISampleEvaluationSubFlowcHisDao<E> {
+
+
+
+public interface ISampleEvaluationSubFlowcDao<E> {
 
 	E createValueObject();
 
-	E getObject(Connection conn, String ownPno, String F_INP_STAT, String F_INP_TIME)
-			throws NotFoundException, SQLException;
+	E getObject(Connection conn, String ownPno) throws NotFoundException, SQLException;
 
 	void load(Connection conn, E valueObject) throws NotFoundException, SQLException;
 
@@ -35,9 +29,5 @@ public interface ISampleEvaluationSubFlowcHisDao<E> {
 	int countAll(Connection conn) throws SQLException;
 
 	List searchMatching(Connection conn, E valueObject) throws SQLException;
-
-	List listQuery(Connection conn, PreparedStatement stmt) throws SQLException;
-
-	void singleQuery(Connection conn, PreparedStatement stmt, E valueObject) throws NotFoundException, SQLException;
 
 }

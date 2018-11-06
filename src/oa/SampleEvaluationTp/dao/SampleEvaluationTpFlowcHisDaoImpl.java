@@ -3,30 +3,17 @@ package oa.SampleEvaluationTp.dao;
 import java.sql.*;
 import java.util.*;
 
-import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
-import oa.SampleEvaluationCheck.dao.NotFoundException;
+import oa.SampleEvaluation.dao.AbstractGenericFlowcHisDao;
+import oa.SampleEvaluation.exception.NotFoundException;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
-public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<SampleEvaluationTpFlowcHis> {
+public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDao<SampleEvaluationTpFlowcHis> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#
-	 * createValueObject()
-	 */
 	@Override
 	public SampleEvaluationTpFlowcHis createValueObject() {
 		return new SampleEvaluationTpFlowcHis();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#getObject(java.
-	 * sql.Connection, java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public SampleEvaluationTpFlowcHis getObject(Connection conn, String ownPno, String F_INP_STAT, String F_INP_TIME)
 			throws NotFoundException, SQLException {
@@ -39,13 +26,6 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		return valueObject;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#load(java.sql.
-	 * Connection, oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis)
-	 */
 	@Override
 	public void load(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws NotFoundException, SQLException {
 
@@ -64,7 +44,7 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
 
-		String sql = "SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC_HIS WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
+		String sql = "SELECT * FROM SAMPLE_EVALUATION_TP_FLOWC_HIS WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
 		PreparedStatement stmt = null;
 
 		try {
@@ -81,29 +61,15 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#loadAll(java.
-	 * sql.Connection)
-	 */
 	@Override
 	public List loadAll(Connection conn) throws SQLException {
 
-		String sql = "SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC_HIS ORDER BY F_INP_TIME ASC ";
+		String sql = "SELECT * FROM SAMPLE_EVALUATION_TP_FLOWC_HIS ORDER BY F_INP_TIME ASC ";
 		List searchResults = listQuery(conn, conn.prepareStatement(sql));
 
 		return searchResults;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#create(java.sql
-	 * .Connection, oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis)
-	 */
 	@Override
 	public synchronized void create(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws SQLException {
 
@@ -112,7 +78,7 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		ResultSet result = null;
 
 		try {
-			sql = "INSERT INTO SAMPLE_EVALUATION_CHECK_FLOWC_HIS ( OWN_PNO, F_INP_STAT, F_INP_TIME, "
+			sql = "INSERT INTO SAMPLE_EVALUATION_TP_FLOWC_HIS ( OWN_PNO, F_INP_STAT, F_INP_TIME, "
 					+ "F_INP_ID, F_INP_INFO) VALUES (?, ?, ?, ?, ?) ";
 			stmt = conn.prepareStatement(sql);
 
@@ -135,17 +101,10 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#save(java.sql.
-	 * Connection, oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis)
-	 */
 	@Override
 	public void save(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws NotFoundException, SQLException {
 
-		String sql = "UPDATE SAMPLE_EVALUATION_CHECK_FLOWC_HIS SET F_INP_ID = ?, F_INP_INFO = ? WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
+		String sql = "UPDATE SAMPLE_EVALUATION_TP_FLOWC_HIS SET F_INP_ID = ?, F_INP_INFO = ? WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
 		PreparedStatement stmt = null;
 
 		try {
@@ -173,13 +132,6 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#delete(java.sql
-	 * .Connection, oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis)
-	 */
 	@Override
 	public void delete(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws NotFoundException, SQLException {
 
@@ -198,7 +150,7 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 			throw new NotFoundException("Can not delete without Primary-Key!");
 		}
 
-		String sql = "DELETE FROM SAMPLE_EVALUATION_CHECK_FLOWC_HIS WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
+		String sql = "DELETE FROM SAMPLE_EVALUATION_TP_FLOWC_HIS WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
 		PreparedStatement stmt = null;
 
 		try {
@@ -223,17 +175,10 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#deleteAll(java.
-	 * sql.Connection)
-	 */
 	@Override
 	public void deleteAll(Connection conn) throws SQLException {
 
-		String sql = "DELETE FROM SAMPLE_EVALUATION_CHECK_FLOWC_HIS";
+		String sql = "DELETE FROM SAMPLE_EVALUATION_TP_FLOWC_HIS";
 		PreparedStatement stmt = null;
 
 		try {
@@ -245,17 +190,10 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#countAll(java.
-	 * sql.Connection)
-	 */
 	@Override
 	public int countAll(Connection conn) throws SQLException {
 
-		String sql = "SELECT count(*) FROM SAMPLE_EVALUATION_CHECK_FLOWC_HIS";
+		String sql = "SELECT count(*) FROM SAMPLE_EVALUATION_TP_FLOWC_HIS";
 		PreparedStatement stmt = null;
 		ResultSet result = null;
 		int allRows = 0;
@@ -275,20 +213,13 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 		return allRows;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * oa.SampleEvaluationTp.dao.ISampleEvaluationSubFlowcHisBaseDao#searchMatching(
-	 * java.sql.Connection, oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis)
-	 */
 	@Override
 	public List searchMatching(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws SQLException {
 
 		List searchResults;
 
 		boolean first = true;
-		StringBuffer sql = new StringBuffer("SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC_HIS WHERE 1=1 ");
+		StringBuffer sql = new StringBuffer("SELECT * FROM SAMPLE_EVALUATION_TP_FLOWC_HIS WHERE 1=1 ");
 
 		if (valueObject.getOwnPno() != null) {
 			if (first) {
@@ -405,8 +336,8 @@ public class SampleEvaluationTpFlowcHisDao extends AbstractGenericFlowcDao<Sampl
 	}
 
 	@Override
-	public Class<SampleEvaluationTpFlowcHisDao> getClazz() {
-		return SampleEvaluationTpFlowcHisDao.class;
+	public Class<SampleEvaluationTpFlowcHisDaoImpl> getClazz() {
+		return SampleEvaluationTpFlowcHisDaoImpl.class;
 	}
 
 }

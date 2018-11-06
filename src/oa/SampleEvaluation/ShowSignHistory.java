@@ -42,7 +42,6 @@ public class ShowSignHistory extends hproc {
 		}
 		// 簽核流程紀錄
 		talk t = getTalk();
-		String APPLYEMPNAME;
 		StringBuffer sb = getMainFlowHistory(id, rec);
 
 		// 有子流程才加額外的div
@@ -67,10 +66,14 @@ public class ShowSignHistory extends hproc {
 	private StringBuffer getMainFlowHistory(String id, String[][] rec) {
 		StringBuffer sb = new StringBuffer();
 		String APPLYEMPNAME = "";
+		String fName = getFunctionName();
+		if (id.contains("OWN")) {
+			fName = fName+"_請驗流程";
+		}
 		sb.append("<div  style=\"float:left;\"><TABLE>");
 		sb.append("<tr>"); // 1列開始
 		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>"); // 1-1儲存格(內容不換行 右寬150 邊框)
-		sb.append("<p align='center'><font size='2'>新增-" + getFunctionName() + "</font></p></td>"); // 內容置中 字體大小2
+		sb.append("<p align='center'><font size='2'>新增-" + fName + "</font></p></td>"); // 內容置中 字體大小2
 		sb.append("<td align='center' width='400'></td>"); // 1-2儲存格
 		sb.append("</tr>"); // 1列結束
 		for (int i = 0; i < rec.length; i++) {
@@ -111,7 +114,7 @@ public class ShowSignHistory extends hproc {
 							+ rec[i][0] + "</font></td>");
 		}
 		StringBuffer sb1 = new StringBuffer();
-		Vector people = getApprovablePeople(getFunctionID(), id);
+		Vector people = getApprovablePeople(fName, id);
 		if (people != null) {
 			if (people.size() != 0) {
 				for (int j = 0; j < people.size(); j++) {

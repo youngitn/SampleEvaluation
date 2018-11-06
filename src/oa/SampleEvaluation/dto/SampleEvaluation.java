@@ -1,8 +1,6 @@
 package oa.SampleEvaluation.dto;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 
 import com.ysp.service.BaseService;
 
@@ -13,157 +11,56 @@ import com.ysp.service.BaseService;
  */
 public class SampleEvaluation implements Serializable {
 	private static final long serialVersionUID = 42L;
-
-	/**
-	 * pno
-	 */
 	private String pno;
-
-	/**
-	 * app_type
-	 */
 	private String appType;
-
-	/**
-	 * urgency
-	 */
 	private String urgency;
-
-	/**
-	 * material
-	 */
 	private String material;
-
-	/**
-	 * sap_code
-	 */
 	private String sapCode;
-
-	/**
-	 * ab_code
-	 */
 	private String abCode;
-
-	/**
-	 * mfg_lot_no
-	 */
 	private String mfgLotNo;
-
-	/**
-	 * qty
-	 */
 	private String qty;
-
-	/**
-	 * pack
-	 */
 	private String pack;
-
-	/**
-	 * unit
-	 */
 	private String unit;
-
-	/**
-	 * mfr
-	 */
 	private String mfr;
-
-	/**
-	 * supplier
-	 */
 	private String supplier;
-
-	/**
-	 * provide_coa
-	 */
 	private String provideCoa;
-
-	/**
-	 * provide_spec
-	 */
 	private String provideSpec;
-
-	/**
-	 * provide_test_method
-	 */
 	private String provideTestMethod;
-
-	/**
-	 * provide_sds
-	 */
 	private String provideSds;
-
-	/**
-	 * provide_others
-	 */
 	private String provideOthers;
-
-	/**
-	 * note
-	 */
 	private String note;
-
-	/**
-	 * applicant
-	 */
 	private String applicant;
-
-	/**
-	 * app_date
-	 */
 	private String appDate;
-
-	/**
-	 * receipt_unit
-	 */
 	private String receiptUnit;
-
-	/**
-	 * project_code
-	 */
 	private String projectCode;
-
-	/**
-	 * project_leader
-	 */
 	private String projectLeader;
-
-	/**
-	 * notify_no_check
-	 */
 	private String notifyNoCheck;
-
-	/**
-	 * notify_no_trial_prod
-	 */
 	private String notifyNoTrialProd;
-
-	/**
-	 * qr_no
-	 */
 	private String qrNo;
-
-	/**
-	 * is_check
-	 */
 	private String isCheck;
-
-	/**
-	 * is_trial_production
-	 */
 	private String isTrialProduction;
-
 	private String assessor;
-
 	private String designee;
-
 	private String labExe;
-
 	private String docCtrler;
-	
 	private String evaluationResult;
-	
+	private String fileSpec;
+	private String fileCoa;
+	private String fileTestMethod;
+	private String fileOthers;
+	private String fileSds;
+	private String file1;
+	private String file2;
+	private String file3;
+	private String file4;
+	private String file5;
+	private String file6;
+	private String file7;
+	private String file8;
+	private String file9;
+	private String file10;
+	// "file_spec=?
+	// ,file_coa=?,file_test_method=?,file_others=?,file_sds=?,file_1=?,file_2=?,file_3=?,file_4=?,file_5=?,file_6=?,file_7=?,file_8=?,file_9=?,file_10=?"
 
 	public SampleEvaluation() {
 
@@ -205,6 +102,21 @@ public class SampleEvaluation implements Serializable {
 		this.designee = strings[30];
 		this.docCtrler = strings[31];
 		this.evaluationResult = strings[32];
+		this.fileSpec = strings[33];
+		this.fileCoa = strings[34];
+		this.fileTestMethod = strings[35];
+		this.fileOthers = strings[36];
+		this.fileSds = strings[37];
+		this.file1 = strings[38];
+		this.file2 = strings[39];
+		this.file3 = strings[40];
+		this.file4 = strings[41];
+		this.file5 = strings[42];
+		this.file6 = strings[43];
+		this.file7 = strings[44];
+		this.file8 = strings[45];
+		this.file9 = strings[46];
+		this.file10 = strings[47];
 	}
 
 	/**
@@ -215,51 +127,63 @@ public class SampleEvaluation implements Serializable {
 	 * @param service BaseService<br>
 	 * @return SampleEvaluation
 	 */
-	public SampleEvaluation setAllValue(SampleEvaluation s, BaseService service) {
-		s.setAppType(service.getValue("APP_TYPE"));
-		s.setUrgency(service.getValue("URGENCY"));
-		s.setMaterial(service.getValue("MATERIAL"));
-		s.setSapCode(service.getValue("SAP_CODE"));
-		s.setAbCode(service.getValue("AB_CODE"));
-		s.setMfgLotNo(service.getValue("MFG_LOT_NO"));
-		s.setQty(service.getValue("QTY"));
-		s.setPack(service.getValue("PACK"));
-		s.setUnit(service.getValue("UNIT"));
-		s.setMfr(service.getValue("MFR"));
-		s.setSupplier(service.getValue("SUPPLIER"));
-		s.setProvideCoa(service.getValue("PROVIDE_COA"));
-		s.setProvideSpec(service.getValue("PROVIDE_SPEC"));
-		s.setProvideTestMethod(service.getValue("PROVIDE_TEST_METHOD"));
-		s.setProvideSds(service.getValue("PROVIDE_SDS"));
-		s.setProvideOthers(service.getValue("PROVIDE_OTHERS"));
-		s.setNote(service.getValue("NOTE"));
-		s.setApplicant(service.getValue("APPLICANT"));
-		s.setAppDate(service.getValue("APP_DATE"));
-		s.setReceiptUnit(service.getValue("RECEIPT_UNIT"));
-		s.setProjectCode(service.getValue("PROJECT_CODE"));
-		s.setProjectLeader(service.getValue("PROJECT_LEADER"));
-		s.setNotifyNoCheck(service.getValue("NOTIFY_NO_CHECK"));
-		s.setNotifyNoTrialProd(service.getValue("NOTIFY_NO_TRIAL_PROD"));
-		s.setQrNo(service.getValue("QR_NO"));
-		s.setIsCheck(service.getValue("IS_CHECK"));
-		s.setIsTrialProduction(service.getValue("IS_TRIAL_PRODUCTION"));
-		s.setLabExe(service.getValue("LAB_EXE").trim());
-		s.setAssessor(service.getValue("ASSESSOR").trim());
-		s.setDesignee(service.getValue("DESIGNEE").trim());
-		s.setDocCtrler(service.getValue("DOC_CTRLER"));
-		s.setEvaluationResult(service.getValue("TRIAL_PRODUCTION"));
-		s.setPno(service.getValue("PNO"));
+	public void setAllValue(BaseService service) {
+		this.setAppType(service.getValue("APP_TYPE"));
+		this.setUrgency(service.getValue("URGENCY"));
+		this.setMaterial(service.getValue("MATERIAL"));
+		this.setSapCode(service.getValue("SAP_CODE"));
+		this.setAbCode(service.getValue("AB_CODE"));
+		this.setMfgLotNo(service.getValue("MFG_LOT_NO"));
+		this.setQty(service.getValue("QTY"));
+		this.setPack(service.getValue("PACK"));
+		this.setUnit(service.getValue("UNIT"));
+		this.setMfr(service.getValue("MFR"));
+		this.setSupplier(service.getValue("SUPPLIER"));
+		this.setProvideCoa(service.getValue("PROVIDE_COA"));
+		this.setProvideSpec(service.getValue("PROVIDE_SPEC"));
+		this.setProvideTestMethod(service.getValue("PROVIDE_TEST_METHOD"));
+		this.setProvideSds(service.getValue("PROVIDE_SDS"));
+		this.setProvideOthers(service.getValue("PROVIDE_OTHERS"));
+		this.setNote(service.getValue("NOTE"));
+		this.setApplicant(service.getValue("APPLICANT"));
+		this.setAppDate(service.getValue("APP_DATE"));
+		this.setReceiptUnit(service.getValue("RECEIPT_UNIT"));
+		this.setProjectCode(service.getValue("PROJECT_CODE"));
+		this.setProjectLeader(service.getValue("PROJECT_LEADER"));
+		this.setNotifyNoCheck(service.getValue("NOTIFY_NO_CHECK"));
+		this.setNotifyNoTrialProd(service.getValue("NOTIFY_NO_TRIAL_PROD"));
+		this.setQrNo(service.getValue("QR_NO"));
+		this.setIsCheck(service.getValue("IS_CHECK"));
+		this.setIsTrialProduction(service.getValue("IS_TRIAL_PRODUCTION"));
+		this.setLabExe(service.getValue("LAB_EXE").trim());
+		this.setAssessor(service.getValue("ASSESSOR").trim());
+		this.setDesignee(service.getValue("DESIGNEE").trim());
+		this.setDocCtrler(service.getValue("DOC_CTRLER"));
+		this.setEvaluationResult(service.getValue("TRIAL_PRODUCTION"));
+		this.setPno(service.getValue("PNO"));
+		this.setFileSpec(service.getValue("FILE_SPEC"));
+		this.setFileCoa(service.getValue("FILE_COA"));
+		this.setFileTestMethod(service.getValue("FILE_TEST_METHOD"));
+		this.setFileOthers(service.getValue("FILE_OTHERS"));
+		this.setFileSds(service.getValue("FILE_SDS"));
+		this.setFile1(service.getValue("FILE_1"));
+		this.setFile2(service.getValue("FILE_2"));
+		this.setFile3(service.getValue("FILE_3"));
+		this.setFile4(service.getValue("FILE_4"));
+		this.setFile5(service.getValue("FILE_5"));
+		this.setFile6(service.getValue("FILE_6"));
+		this.setFile7(service.getValue("FILE_7"));
+		this.setFile8(service.getValue("FILE_8"));
+		this.setFile9(service.getValue("FILE_9"));
+		this.setFile10(service.getValue("FILE_10"));
 
-		return s;
 	}
 
 	public void setDocCtrler(String value) {
-		// TODO Auto-generated method stub
 		this.docCtrler = value;
 	}
 
 	public String getDocCtrler() {
-		// TODO Auto-generated method stub
 		return docCtrler;
 	}
 
@@ -517,5 +441,125 @@ public class SampleEvaluation implements Serializable {
 
 	public void setEvaluationResult(String evaluationResult) {
 		this.evaluationResult = evaluationResult;
+	}
+
+	public String getFileSpec() {
+		return fileSpec;
+	}
+
+	public void setFileSpec(String fileSpec) {
+		this.fileSpec = fileSpec;
+	}
+
+	public String getFileCoa() {
+		return fileCoa;
+	}
+
+	public void setFileCoa(String fileCoa) {
+		this.fileCoa = fileCoa;
+	}
+
+	public String getFileTestMethod() {
+		return fileTestMethod;
+	}
+
+	public void setFileTestMethod(String fileTestMethod) {
+		this.fileTestMethod = fileTestMethod;
+	}
+
+	public String getFileOthers() {
+		return fileOthers;
+	}
+
+	public void setFileOthers(String fileOthers) {
+		this.fileOthers = fileOthers;
+	}
+
+	public String getFileSds() {
+		return fileSds;
+	}
+
+	public void setFileSds(String fileSds) {
+		this.fileSds = fileSds;
+	}
+
+	public String getFile1() {
+		return file1;
+	}
+
+	public void setFile1(String file1) {
+		this.file1 = file1;
+	}
+
+	public String getFile2() {
+		return file2;
+	}
+
+	public void setFile2(String file2) {
+		this.file2 = file2;
+	}
+
+	public String getFile3() {
+		return file3;
+	}
+
+	public void setFile3(String file3) {
+		this.file3 = file3;
+	}
+
+	public String getFile4() {
+		return file4;
+	}
+
+	public void setFile4(String file4) {
+		this.file4 = file4;
+	}
+
+	public String getFile5() {
+		return file5;
+	}
+
+	public void setFile5(String file5) {
+		this.file5 = file5;
+	}
+
+	public String getFile6() {
+		return file6;
+	}
+
+	public void setFile6(String file6) {
+		this.file6 = file6;
+	}
+
+	public String getFile7() {
+		return file7;
+	}
+
+	public void setFile7(String file7) {
+		this.file7 = file7;
+	}
+
+	public String getFile8() {
+		return file8;
+	}
+
+	public void setFile8(String file8) {
+		this.file8 = file8;
+	}
+
+	public String getFile9() {
+		return file9;
+	}
+
+	public void setFile9(String file9) {
+		this.file9 = file9;
+	}
+
+	public String getFile10() {
+		return file10;
+	}
+
+	public void setFile10(String file10) {
+		this.file10 = file10;
 	}
 }
