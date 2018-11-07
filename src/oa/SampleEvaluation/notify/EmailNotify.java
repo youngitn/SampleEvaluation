@@ -3,20 +3,12 @@ package oa.SampleEvaluation.notify;
 import oa.SampleEvaluation.enums.*;
 import java.io.IOException;
 import java.sql.SQLException;
-
-import org.junit.internal.Throwables;
-
-import jcx.db.talk;
 import jcx.util.*;
-import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.UserData;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import com.ysp.field.Mail;
-import com.ysp.service.BaseService;
 
 public class EmailNotify extends BaseEmailNotify {
-
-	
 
 	@Override
 	public String buildContent(SampleEvaluation se) throws SQLException, Exception {

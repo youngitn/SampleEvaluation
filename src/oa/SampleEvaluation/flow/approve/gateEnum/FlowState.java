@@ -5,5 +5,5 @@ package oa.SampleEvaluation.flow.approve.gateEnum;
  *
  */
 public enum FlowState {
-	待處理, 受理單位主管分案, 組長,試製單號填寫
+	待處理, 受理單位主管分案, 組長,試製單號填寫, 採購經辦, 採購經辦確認
 }

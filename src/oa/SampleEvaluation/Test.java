@@ -136,44 +136,34 @@ public class Test {
 //	        Class cl = Class.forName(className);
 //	        Constructor con = cl.getConstructor(Param1Type.class, Param2Type.class);
 //	        Object xyz = con.newInstance(param1, param2);
-		String a = "PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,EVALUATION_RESULT=?";
-		String b = " sampleEvaluation.getPno(), sampleEvaluation.getAppType(), sampleEvaluation.getUrgency(),\r\n" + 
-				"						sampleEvaluation.getMaterial(), sampleEvaluation.getSapCode(), sampleEvaluation.getAbCode(),\r\n" + 
-				"						sampleEvaluation.getMfgLotNo(), sampleEvaluation.getQty(), sampleEvaluation.getPack(),\r\n" + 
-				"						sampleEvaluation.getUnit(), sampleEvaluation.getMfr(), sampleEvaluation.getSupplier(),\r\n" + 
-				"						sampleEvaluation.getProvideCoa(), sampleEvaluation.getProvideSpec(),\r\n" + 
-				"						sampleEvaluation.getProvideTestMethod(), sampleEvaluation.getProvideSds(),\r\n" + 
-				"						sampleEvaluation.getProvideOthers(), sampleEvaluation.getNote(),\r\n" + 
-				"						sampleEvaluation.getApplicant(), sampleEvaluation.getAppDate(),\r\n" + 
-				"						sampleEvaluation.getReceiptUnit(), sampleEvaluation.getProjectCode(),\r\n" + 
-				"						sampleEvaluation.getProjectLeader(), sampleEvaluation.getNotifyNoCheck(),\r\n" + 
-				"						sampleEvaluation.getNotifyNoTrialProd(), sampleEvaluation.getQrNo(),\r\n" + 
-				"						sampleEvaluation.getIsCheck(), sampleEvaluation.getIsTrialProduction(),\r\n" + 
-				"						sampleEvaluation.getLabExe(), sampleEvaluation.getAssessor(), sampleEvaluation.getDesignee(),\r\n" + 
-				"						sampleEvaluation.getDocCtrler(), sampleEvaluation.getEvaluationResult()";
+		String a = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+		String b = "OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee,doc_ctrler ,evaluation_result,FILE_SPEC ,FILE_COA,FILE_TEST_METHOD,FILE_OTHERS,FILE_SDS,FILE_1,FILE_2,FILE_3,FILE_4,FILE_5,FILE_6,FILE_7,FILE_8,FILE_9,FILE_10";
 
 		int count = a.length() - a.replace(",", "").length();
 		int count1 = b.length() - b.replace(",", "").length();
 		System.out.println(count + "  " + count1);
-		 SampleEvaluationSubBaseDto s = new SampleEvaluationCheck();
+
+		SampleEvaluationSubBaseDto s = new SampleEvaluationCheck();
 		SampleEvaluationSubBaseDto s2 = new SampleEvaluationTp();
 		s.setPno("521169999");
+		s.setIsCheck("1");
+		s2.setIsCheck("1");
 		s2.setPno("521169999");
 		s.setOwnPno("52116CHECK");
 		s2.setOwnPno("52116TP");
-		goSubFlow("Check", s, "52116");
-		goSubFlow("Tp", s2, "52116");
+		goSubFlow("Check", s);
+		goSubFlow("Tp", s2);
 	}
 
-	private static void goSubFlow(String type, SampleEvaluationSubBaseDto s, String designeEmpid)
+	private static void goSubFlow(String type, SampleEvaluationSubBaseDto s)
 			throws ClassNotFoundException, SQLException, Exception {
 		/*******************************************************************************/
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 		/*******************************************************************************/
-
 		Class<?> subMainDao = Class.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "DaoImpl");
-		Constructor<?>  DaoCon = subMainDao.getConstructor(talk.class);
-		AbstractGenericDao Dao = (AbstractGenericDao) DaoCon.newInstance(t);
+		Constructor<?> DaoCon = subMainDao.getConstructor(talk.class);
+		AbstractGenericDao<SampleEvaluationSubBaseDto> Dao = (AbstractGenericDao<SampleEvaluationSubBaseDto>) DaoCon
+				.newInstance(t);
 
 		if (Dao.findById(s.getOwnPno()) != null) {
 			Dao.update(s);
@@ -181,43 +171,43 @@ public class Test {
 			// insert一筆子流程主檔
 			Dao.add(s);
 
-			AbstractGenericFlowcDto Dto = (AbstractGenericFlowcDto) Class
+			AbstractGenericFlowcDto<?> Dto = (AbstractGenericFlowcDto<?>) Class
 					.forName("oa.SampleEvaluation" + type + ".dto.SampleEvaluation" + type + "Flowc").newInstance();
-			// AbstractGenericFlowcDto flowc = new
-			// SampleEvaluationCheckFlowc(s.getOwnPno());
+
 			Dto.setOwnPno(s.getOwnPno());
 			String time = DateTimeUtil.getApproveAddSeconds(0);
 
-			Dto.setF_INP_ID(designeEmpid);
-			Dto.setF_INP_STAT("填寫請驗單號");
+			Dto.setF_INP_ID(s.getApplicant());
+			String gateName = "填寫請驗單號";
+			if (type.equals("Tp")) {
+				gateName = "評估人員";
+			}
+			Dto.setF_INP_STAT(gateName);
 			Dto.setF_INP_TIME(time);
 
-			AbstractGenericFlowcDao secfDao = (AbstractGenericFlowcDao) Class
+			AbstractGenericFlowcDao<AbstractGenericFlowcDto<?>> secfDao = (AbstractGenericFlowcDao<AbstractGenericFlowcDto<?>>) Class
 					.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcDaoImpl")
 					.newInstance();
-			// AbstractGenericFlowcDao secfDao = new SampleEvaluationCheckFlowcDaoImpl();
+
 			secfDao.create(t.getConnectionFromPool(), Dto);
 
 			// 建立子流程FLOWC_HIS 物件 能夠顯示簽核歷史
 			time = DateTimeUtil.getApproveAddSeconds(0);
 
-			AbstractGenericFlowcHisDto his = (AbstractGenericFlowcHisDto) Class
+			AbstractGenericFlowcHisDto<?> his = (AbstractGenericFlowcHisDto<?>) Class
 					.forName("oa.SampleEvaluation" + type + ".dto.SampleEvaluation" + type + "FlowcHis").newInstance();
-//			SampleEvaluationCheckFlowcHis his = new SampleEvaluationCheckFlowcHis(s.getOwnPno(), flowc.getF_INP_STAT(),
-//					time);
+
 			his.setF_INP_STAT(Dto.getF_INP_STAT());
 			his.setOwnPno(s.getOwnPno());
 			his.setF_INP_TIME(time);
-			his.setF_INP_ID(designeEmpid);
-			AbstractGenericFlowcHisDao secfhDao = (AbstractGenericFlowcHisDao) Class
+			his.setF_INP_ID(s.getApplicant());
+			AbstractGenericFlowcHisDao<AbstractGenericFlowcHisDto<?>> secfhDao = (AbstractGenericFlowcHisDao<AbstractGenericFlowcHisDto<?>>) Class
 					.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcHisDaoImpl")
 					.newInstance();
-			// AbstractGenericFlowcHisDao secfhDao = new
-			// SampleEvaluationCheckFlowcHisDaoImpl();
+
 			secfhDao.create(t.getConnectionFromPool(), his);
 
 		}
-		// 有請驗流程 寄出通知信
 
 	}
 

@@ -2,11 +2,8 @@ package oa.SampleEvaluation.controller;
 
 import java.sql.SQLException;
 
-import com.ysp.service.BaseService;
-
 import oa.SampleEvaluation.enums.*;
 import oa.SampleEvaluation.common.FormInitUtil;
-import oa.SampleEvaluation.common.CommonDataObj;
 import oa.SampleEvaluation.common.UIHidderString;
 
 /**
@@ -17,18 +14,12 @@ import oa.SampleEvaluation.common.UIHidderString;
  */
 public class SampleEvaluationPageInitController extends Controller {
 
-	private CommonDataObj cdo;
-	BaseService service;
-
 	@Override
 	public String action(String arg0) throws Throwable {
 		// 表單載入後處理
 		// 各頁面載入處理於類別中實作
 
-		service = new BaseService(this);
 		FormInitUtil init = new FormInitUtil(this);
-		setValue("receiveNowPage", getName());
-		this.cdo = new CommonDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
 
 		String actionObjName = getActionName(getName()).trim();
 
@@ -41,7 +32,7 @@ public class SampleEvaluationPageInitController extends Controller {
 		case ADD_PAGE_INIT:// 進入新增畫面
 			addScript(UIHidderString.hideDmakerAddButton());
 			init.doAddPageProcess();
-			
+
 			break;
 
 		case PENING_PAGE_INIT:// 進入待處理畫面
@@ -81,7 +72,7 @@ public class SampleEvaluationPageInitController extends Controller {
 			if (getState().trim().equals("受理單位主管分案")) {
 				setEditable("DESIGNEE", true);
 			}
-			if (getState().trim().equals("待處理")) {
+			if (getState().trim().equals("待處理") || getState().trim().equals("採購經辦確認")) {
 				// 相關處理寫在UI的背景區塊ADD_BACKGROUND中
 				// 因為這邊的邏輯 在待處理關卡吃不到
 			}

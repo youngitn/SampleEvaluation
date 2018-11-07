@@ -59,6 +59,7 @@ public class SampleEvaluation implements Serializable {
 	private String file8;
 	private String file9;
 	private String file10;
+	private String fileEvaluationResult;
 	// "file_spec=?
 	// ,file_coa=?,file_test_method=?,file_others=?,file_sds=?,file_1=?,file_2=?,file_3=?,file_4=?,file_5=?,file_6=?,file_7=?,file_8=?,file_9=?,file_10=?"
 
@@ -117,6 +118,7 @@ public class SampleEvaluation implements Serializable {
 		this.file8 = strings[45];
 		this.file9 = strings[46];
 		this.file10 = strings[47];
+		this.fileEvaluationResult = strings[48];
 	}
 
 	/**
@@ -159,7 +161,7 @@ public class SampleEvaluation implements Serializable {
 		this.setAssessor(service.getValue("ASSESSOR").trim());
 		this.setDesignee(service.getValue("DESIGNEE").trim());
 		this.setDocCtrler(service.getValue("DOC_CTRLER"));
-		this.setEvaluationResult(service.getValue("TRIAL_PRODUCTION"));
+		this.setEvaluationResult(service.getValue("EVALUATION_RESULT"));
 		this.setPno(service.getValue("PNO"));
 		this.setFileSpec(service.getValue("FILE_SPEC"));
 		this.setFileCoa(service.getValue("FILE_COA"));
@@ -176,6 +178,7 @@ public class SampleEvaluation implements Serializable {
 		this.setFile8(service.getValue("FILE_8"));
 		this.setFile9(service.getValue("FILE_9"));
 		this.setFile10(service.getValue("FILE_10"));
+		this.setFileEvaluationResult(service.getValue("FILE_EVALUATION_RESULT"));
 
 	}
 
@@ -561,5 +564,13 @@ public class SampleEvaluation implements Serializable {
 
 	public void setFile10(String file10) {
 		this.file10 = file10;
+	}
+
+	public String getFileEvaluationResult() {
+		return fileEvaluationResult;
+	}
+
+	public void setFileEvaluationResult(String fileEvaluationResult) {
+		this.fileEvaluationResult = fileEvaluationResult;
 	}
 }

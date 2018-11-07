@@ -65,13 +65,13 @@ public class MainQuery {
 			UserData queryUser = new UserData(qc.getQueryEmpid(), innerTalk);
 			queryEmpDepNo = queryUser.getDepNo();
 			isSameDepNoInPurch = isSameDepNoInPurch(queryEmpDepNo);
-		}else if (!qc.getQueryDepNo().equals("")) {
+		} else if (!qc.getQueryDepNo().equals("")) {
 			isSameDepNoInPurch = true;
 		}
 
 		// 如果不是系統管理員群組人員或要查詢得起單人非同課單位，須加入查詢權限
-		if (!isAdmin  && !isSameDepNoInPurch) {
-			
+		if (!isAdmin && !isSameDepNoInPurch) {
+
 			sql += " and (";
 			// 申請人為自己部屬
 			sql += "(" + tableApplicantFieldName + " in (select handle_user from hr_condition where empid = '"
@@ -81,7 +81,7 @@ public class MainQuery {
 					+ "_FLOWC_HIS where F_INP_ID = '" + loginUserId + "')) ";
 
 			sql += ") ";
-			
+
 		}
 		return sql;
 	}
@@ -104,6 +104,7 @@ public class MainQuery {
 		String edate = qc.getQueryReqEDate();
 		String queryFlowStatus = qc.getQueryStatus();
 		String queryFlowStatusCheck = qc.getQueryStatusCheck();
+		String queryFlowStatusTp = qc.getQueryStatusTp();
 		String queryDepNo = qc.getQueryDepNo();
 
 		StringBuilder advanced_sql = new StringBuilder();
@@ -113,11 +114,11 @@ public class MainQuery {
 			advanced_sql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
 		if (!"".equals(edate))
 			advanced_sql.append("and " + tableAppDateFieldName + " <= '" + edate + "' ");
-	
-	
+
 		// status
-		advanced_sql.append(statusCheck(queryFlowStatus, false));
-		advanced_sql.append(statusCheck(queryFlowStatusCheck, true));
+		advanced_sql.append(statusCheck(queryFlowStatus, "b"));
+		advanced_sql.append(statusCheck(queryFlowStatusCheck, "c"));
+		advanced_sql.append(statusCheck(queryFlowStatusTp, "d"));
 		if (!"".equals(queryId))
 			advanced_sql.append("and a." + tablePKName + " like '%" + queryId + "%' ");
 
@@ -125,8 +126,11 @@ public class MainQuery {
 		if (!"".equals(queryFlowStatusCheck)) {
 			advanced_sql.append(" and a." + tablePKName + "+'CHECK' =  c.OWN_" + tablePKName);
 		}
+		if (!"".equals(queryFlowStatusTp)) {
+			advanced_sql.append(" and a." + tablePKName + "+'TP' =  d.OWN_" + tablePKName);
+		}
 		if (!"".equals(queryDepNo)) {
-			advanced_sql.append(" and (APPLICANT in (select empid from hruser where dept_no = '"+queryDepNo+"'))");
+			advanced_sql.append(" and (APPLICANT in (select empid from hruser where dept_no = '" + queryDepNo + "'))");
 		}
 		return advanced_sql.toString();
 	}
@@ -135,12 +139,9 @@ public class MainQuery {
 	 * @param queryFlowStatus
 	 * @param advanced_sql
 	 */
-	private String statusCheck(String queryFlowStatus, boolean isSubFlow) {
+	private String statusCheck(String queryFlowStatus, String tableCode) {
 		StringBuilder advanced_sql = new StringBuilder("");
-		String tableCode = "b";
-		if (isSubFlow) {
-			tableCode = "c";
-		}
+
 		if ("已結案".equals(queryFlowStatus))
 			advanced_sql.append("and " + tableCode + ".F_INP_STAT = '結案' ");
 		if ("簽核中".equals(queryFlowStatus))
@@ -153,9 +154,6 @@ public class MainQuery {
 
 	public String getSqlQueryStr() throws SQLException, Exception {
 		StringBuilder strSql = new StringBuilder();
-		// String keyName = cdo.getTablePKName();
-		// String targetEmpidFieldName = cdo.getTableApplicantFieldName().trim();// TODO
-		// 待簡化
 		ArrayList<String> resultFieldList = cdo.getQuerySpec().getQueryResultView();
 		// 單號
 
@@ -174,7 +172,7 @@ public class MainQuery {
 			strSql.append(",");
 		}
 		String str = strSql.toString();
-		String subFlowcTableNameInSqlStr = "," + tableName + "_CHECK_FLOWC c ";
+		String subFlowcTableNameInSqlStr = "," + tableName + "_CHECK_FLOWC c ," + tableName + "_TP_FLOWC d ";
 		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
 		if (qc.queryStatusCheck.equals("")) {
 			subFlowcTableNameInSqlStr = "";
@@ -234,29 +232,34 @@ public class MainQuery {
 		for (int i = 0; i < queryResults.length; i++) {
 			// 取得子流程目前簽核狀態
 			String checkFlowStatus = getCheckFlowStatus(queryResults[i][0] + "CHECK").trim();
+			// 取得子流程目前簽核狀態
+			String tpFlowStatus = getCheckFlowStatus(queryResults[i][0] + "TP").trim();
 
 			// 取得主流程目前簽核狀態
 			String mainFlowStatus = queryResults[i][sign_flow_status_index].trim();
 
 			// 如果子流程和主流程都結案 在查詢結果表格的簽核狀態才顯示"已生效"
 			queryResults[i][sign_flow_status_index] = getSignFlowStatus(queryResults[i][0], mainFlowStatus,
-					checkFlowStatus);
+					checkFlowStatus, tpFlowStatus);
 		}
 
 		return queryResults;
 	}
 
-	private String getSignFlowStatus(String id, String mainFlowStatus, String checkFlowStatus)
+	private String getSignFlowStatus(String id, String mainFlowStatus, String checkFlowStatus, String tpFlowStatus)
 			throws SQLException, Exception {
 		if ((mainFlowStatus.equals("結案") || mainFlowStatus.equals("歸檔"))
-				&& (checkFlowStatus.equals("結案") || checkFlowStatus.equals("無"))) {
-			return "<font color=blue>(已生效)</font>【主流程:" + mainFlowStatus + "】" + "【請驗流程:" + checkFlowStatus + "】";
+				&& (checkFlowStatus.equals("結案") || checkFlowStatus.equals("無"))
+				&& (tpFlowStatus.equals("結案") || tpFlowStatus.equals("無"))) {
+			return "<font color=blue>(已生效)</font>【主流程:" + mainFlowStatus + "】" + "【請驗流程:" + checkFlowStatus + "】"
+					+ "【請驗流程:" + tpFlowStatus + "】";
 		}
 		// 如果子流程和主流程有一方未結案 則進行加工處理
 		else {
 			return "<font color=red>簽核中</font>" + "【主流程:" + mainFlowStatus
 					+ getCurrentFlowGateAndApprover(cdo.getTablePKName(), id) + "】" + "【請驗流程:" + checkFlowStatus
-					+ getCurrentFlowGateAndApprover("OWN_" + cdo.getTablePKName(), id + "CHECK") + "】";
+					+ getCurrentFlowGateAndApprover("OWN_" + cdo.getTablePKName(), id + "CHECK") + "】" + "【試製流程:"
+					+ tpFlowStatus + getCurrentFlowGateAndApprover("OWN_" + cdo.getTablePKName(), id + "TP") + "】";
 		}
 	}
 
@@ -303,7 +306,11 @@ public class MainQuery {
 	}
 
 	public String getCheckFlowStatus(String ownPno) {
-		String sql = "SELECT F_INP_STAT FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE OWN_PNO='" + ownPno + "'";
+		String type = "TP";
+		if (ownPno.contains("CHECK")) {
+			type = "CHECK";
+		}
+		String sql = "SELECT F_INP_STAT FROM SAMPLE_EVALUATION_" + type + "_FLOWC WHERE OWN_PNO='" + ownPno + "'";
 		String[][] ret = null;
 		try {
 			ret = innerTalk.queryFromPool(sql);

@@ -52,8 +52,15 @@ public class ShowSignHistory extends hproc {
 			sb1 = getMainFlowHistory(subid, subRec);
 		}
 
+		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'"; // 單號欄位
+		String subRecTp[][] = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
+		StringBuffer sbTp = new StringBuffer("");
+		if (subRec == null || subRec.length != 0) {
+			sbTp = getMainFlowHistory(subidTp, subRecTp);
+		}
+
 		setValue("text3", "<table ><tr><td valign=\"top\">" + sb.toString() + "</td><td valign=\"top\">"
-				+ sb1.toString() + "<td></tr></table>");
+				+ sb1.toString() + "</td><td valign=\"top\">" + sbTp.toString() + "</td></tr></table>");
 
 		return value;
 	}
@@ -67,8 +74,11 @@ public class ShowSignHistory extends hproc {
 		StringBuffer sb = new StringBuffer();
 		String APPLYEMPNAME = "";
 		String fName = getFunctionName();
-		if (id.contains("OWN")) {
-			fName = fName+"_請驗流程";
+		if (id.contains("CHECK")) {
+			fName = fName + "_請驗流程";
+		}
+		if (id.contains("TP")) {
+			fName = fName + "_試製流程";
 		}
 		sb.append("<div  style=\"float:left;\"><TABLE>");
 		sb.append("<tr>"); // 1列開始

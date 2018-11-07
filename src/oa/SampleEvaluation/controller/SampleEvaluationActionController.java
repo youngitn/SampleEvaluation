@@ -133,7 +133,7 @@ public class SampleEvaluationActionController extends Controller {
 	}
 
 	private void FileItemSetChecker() {
-		// TODO Auto-generated method stub
+
 		if (!getValue("FILE_SPEC").equals("")) {
 			setValue("PROVIDE_SPEC", "1");
 		}
@@ -186,6 +186,7 @@ public class SampleEvaluationActionController extends Controller {
 		qs.setQueryReqEDateFieldName("QUERY_REQ_EDATE");
 		qs.setQueryStatusFieldName("r_status");
 		qs.setQueryStatusCheckFieldName("r_status_check");
+		qs.setQueryStatusTpFieldName("r_status_tp");
 		qs.setQueryDepNoFieldName("QUERY_EMP_DEP");
 		// set field value
 		qs.setQueryBillId(getValue("QUERY_PNO"));
@@ -194,6 +195,7 @@ public class SampleEvaluationActionController extends Controller {
 		qs.setQueryReqEDate(getValue("QUERY_REQ_EDATE"));
 		qs.setQueryStatus(getValue("r_status"));
 		qs.setQueryStatusCheck(getValue("r_status_check"));
+		qs.setQueryStatusTp(getValue("r_status_tp"));
 		qs.setQueryDepNo(getValue("QUERY_EMP_DEP"));
 		ArrayList<String> flist = new ArrayList<String>();
 		flist.add("PNO");

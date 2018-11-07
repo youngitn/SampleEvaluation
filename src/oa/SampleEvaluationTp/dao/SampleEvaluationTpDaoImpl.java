@@ -24,7 +24,7 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 	public String add(SampleEvaluationTp s) throws SQLException, Exception {
 
 		return t.execFromPool(
-				"insert into sample_evaluation_tp  ( OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee,doc_ctrler ,evaluation_result,FILE_SPEC ,FILE_COA,FILE_TEST_METHOD,FILE_OTHERS,FILE_SDS,FILE_1,FILE_2,FILE_3,FILE_4,FILE_5,FILE_6,FILE_7,FILE_8,FILE_9,FILE_10) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
+				"insert into sample_evaluation_tp  ( OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee,doc_ctrler ,evaluation_result,FILE_SPEC ,FILE_COA,FILE_TEST_METHOD,FILE_OTHERS,FILE_SDS,FILE_1,FILE_2,FILE_3,FILE_4,FILE_5,FILE_6,FILE_7,FILE_8,FILE_9,FILE_10,FILE_EVALUATION_RESULT) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )",
 				new Object[] { s.getOwnPno(), s.getPno(), s.getAppType(), s.getUrgency(), s.getMaterial(),
 						s.getSapCode(), s.getAbCode(), s.getMfgLotNo(), s.getQty(), s.getPack(), s.getUnit(),
 						s.getMfr(), s.getSupplier(), s.getProvideCoa(), s.getProvideSpec(), s.getProvideTestMethod(),
@@ -34,13 +34,13 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 						s.getAssessor(), s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(),
 						s.getFileCoa(), s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(),
 						s.getFile2(), s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(),
-						s.getFile8(), s.getFile9(), s.getFile10() });
+						s.getFile8(), s.getFile9(), s.getFile10(), s.getFileEvaluationResult() });
 	}
 
 	@Override
 	public String update(SampleEvaluationTp s) throws SQLException, Exception {
 		return t.execFromPool(
-				"UPDATE  sample_evaluation  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,evaluation_result=?,FILE_SPEC=? ,FILE_COA=?,FILE_TEST_METHOD=?,FILE_OTHERS=?,FILE_SDS=?,FILE_1=?,FILE_2=?,FILE_3=?,FILE_4=?,FILE_5=?,FILE_6=?,FILE_7=?,FILE_8=?,FILE_9=?,FILE_10=?"
+				"UPDATE  sample_evaluation_tp  SET app_type=?,urgency=?,material=?,sap_code=?,ab_code=?,mfg_lot_no=?,qty=?,pack=?,unit=?,mfr=?,supplier=?,provide_coa=?,provide_spec=?,provide_test_method=?,provide_sds=?,provide_others=?,note=?,applicant=?,app_date=?,receipt_unit=?,project_code=?,project_leader=?,notify_no_check=?,notify_no_trial_prod=?,qr_no=?,is_check=?,is_trial_production=?,lab_exe=?,assessor=?,designee=?,doc_ctrler=?,evaluation_result=?,FILE_SPEC=? ,FILE_COA=?,FILE_TEST_METHOD=?,FILE_OTHERS=?,FILE_SDS=?,FILE_1=?,FILE_2=?,FILE_3=?,FILE_4=?,FILE_5=?,FILE_6=?,FILE_7=?,FILE_8=?,FILE_9=?,FILE_10=?,FILE_EVALUATION_RESULT=?"
 						+ " where own_pno=?",
 				new Object[] { s.getAppType(), s.getUrgency(), s.getMaterial(), s.getSapCode(), s.getAbCode(),
 						s.getMfgLotNo(), s.getQty(), s.getPack(), s.getUnit(), s.getMfr(), s.getSupplier(),
@@ -51,7 +51,7 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 						s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(), s.getFileCoa(),
 						s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(), s.getFile2(),
 						s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(), s.getFile8(),
-						s.getFile9(), s.getFile10(), s.getOwnPno() });
+						s.getFile9(), s.getFile10(), s.getOwnPno(), s.getFileEvaluationResult() });
 
 	}
 
