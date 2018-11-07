@@ -49,13 +49,13 @@ public class Approve extends bProcFlow {
 		switch (FlowState.valueOf(nowState)) {
 		case 組長:
 
-			if (isCheckValue.equals("1") && isCheckValue.equals("")) {
+			if ((isCheckValue.equals("1") || isTrialProdValue.equals("1")) && labExe.equals("")) {
 				message("請選擇實驗室經辦人員");
 				return false;
 			}
 
-			if (isTrialProdValue.equals("1") && (labExe.equals("") || lassessor.equals(""))) {
-				message("請選擇試製評估人員與實驗室經辦人員");
+			if (isTrialProdValue.equals("1") && lassessor.equals("")) {
+				message("請選擇試製評估人員");
 				return false;
 			}
 
@@ -67,34 +67,34 @@ public class Approve extends bProcFlow {
 				message("請填寫QR號碼");
 				return false;
 			}
+			if (doReminder("")) {
+				// 更新主表請驗和試製評估勾選欄位
+				// 更新主表 評估人員和實驗室經辦
+				s = new SampleEvaluation();
+				s.setAllValue(service);
+				new SampleEvaluationDaoImpl(t).update(s);
 
-			// 更新主表請驗和試製評估勾選欄位
-			// 更新主表 評估人員和實驗室經辦
-			s = new SampleEvaluation();
-			s.setAllValue(service);
-			new SampleEvaluationDaoImpl(t).update(s);
+				// 建立子流程FLOWC物件 使其出現在待簽核表單列表
+				if (isCheckValue.equals("1")) {
 
-			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
-			if (isCheckValue.equals("1")) {
+					SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
+					secDto.setAllValue(service);
+					goSubFlow("Check", secDto);
+					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
+					// 有請驗流程 寄出通知信
+					sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
 
-				SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
-				secDto.setAllValue(service);
-				goSubFlow("Check", secDto);
-				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
-				// 有請驗流程 寄出通知信
-				sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
+				}
+				if (isTrialProdValue.equals("1")) {
 
+					SampleEvaluationSubBaseDto setDto = new SampleEvaluationTp();
+					setDto.setAllValue(service);
+					goSubFlow("Tp", setDto);
+					String title = "簽核通知：" + this.getFunctionName() + "_試製流程" + "( 單號：" + getValue("PNO") + " )";
+					// 有試製流程 寄出通知信
+					sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
+				}
 			}
-			if (isTrialProdValue.equals("1")) {
-
-				SampleEvaluationSubBaseDto setDto = new SampleEvaluationTp();
-				setDto.setAllValue(service);
-				goSubFlow("Tp", setDto);
-				String title = "簽核通知：" + this.getFunctionName() + "_試製流程" + "( 單號：" + getValue("PNO") + " )";
-				// 有試製流程 寄出通知信
-				sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
-			}
-
 			break;
 		case 受理單位主管分案:
 			// 更新主表分案人欄位
@@ -108,18 +108,30 @@ public class Approve extends bProcFlow {
 				return false;
 			}
 
-			break;
+			return doReminder(alertStr);
 		case 待處理:
+		case 採購經辦確認:
 			// 更新主表分案人欄位
 			s = new SampleEvaluation();
 			s.setAllValue(service);
 			new SampleEvaluationDaoImpl(t).update(s);
-			break;
+			return doReminder(alertStr);
+
+		case 採購經辦:
+			if (getValue("EVALUATION_RESULT").trim().equals("")
+					|| getValue("FILE_EVALUATION_RESULT").trim().equals("")) {
+				message("評估結果與其夾檔不得為空");
+				return false;
+			} else if (doReminder(alertStr)) {
+				s = new SampleEvaluation();
+				s.setAllValue(service);
+				new SampleEvaluationDaoImpl(t).update(s);
+				return true;
+			}
 		default:
 			break;
 		}
-		return doReminder(alertStr);
-
+		return true;
 	}
 
 	private void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationSubBaseDto dto, String title)
