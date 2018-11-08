@@ -2,8 +2,8 @@ package oa.SampleEvaluationCheck.controller;
 
 import jcx.jform.hproc;
 
-import oa.SampleEvaluation.common.CommonDataObj;
-import oa.SampleEvaluation.common.UserData;
+import oa.SampleEvaluation.common.SampleEvaluationDataObj;
+import oa.SampleEvaluation.common.global.UserData;
 
 /**
  * 嘗試可測試寫法
@@ -14,7 +14,7 @@ import oa.SampleEvaluation.common.UserData;
 public class SampleEvaluationCheckController extends hproc {
 
 	public boolean confirm;
-	public CommonDataObj cdo;
+	public SampleEvaluationDataObj cdo;
 
 	@Override
 	public String action(String arg0) throws Throwable {
@@ -23,6 +23,7 @@ public class SampleEvaluationCheckController extends hproc {
 		// 關卡判斷與處理
 		if (getState().trim().equals("填寫請驗單號")) {
 			setEditable("NOTIFYNO_CHECK", true);
+			setEditable("NOTIFY_NO_TRIAL_PROD", true);
 
 		}
 

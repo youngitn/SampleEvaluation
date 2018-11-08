@@ -15,7 +15,6 @@ public class SampleEvaluationCheck extends SampleEvaluationSubBaseDto implements
 
 	public SampleEvaluationCheck(String[] strings) {
 		super(strings);
-		this.ownPno = strings[28];
 	}
 
 	public SampleEvaluationCheck() {

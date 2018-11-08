@@ -1,14 +1,11 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.common.global;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.ysp.service.BaseService;
-
-import jcx.db.talk;
 
 /**
  * 不依賴hproc
@@ -30,34 +27,6 @@ public class AddUtil {
 
 	/**
 	 * 
-	 * @param table       資料表名稱
-	 * @param user        員工編號
-	 * @param tablePKName 資料表pk名稱
-	 * @param t           hproc的talk
-	 * @return 單號=empid+流水號
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-	public String getUUID(String table, String user, String tablePKName, talk t) throws Exception {
-
-		String uuid = "";
-
-		String sql = "select max(" + tablePKName + ") from " + table + " where " + tablePKName + " like '" + user
-				+ "%'";
-		String[][] ret = t.queryFromPool(sql);
-
-		if ("".equals(ret[0][0])) {
-			uuid = user + "00001";
-		} else {
-			String m_uuid = ret[0][0].trim();
-			uuid = user + String.format("%05d", (Long.parseLong(m_uuid.replace(user, "")) + 1));
-		}
-
-		return uuid;
-	}
-
-	/**
-	 * 
 	 * 欄位檢核，只會檢查是否空白，回傳所有空白欄位標題<br>
 	 * 
 	 */
@@ -73,21 +42,6 @@ public class AddUtil {
 
 		}
 		return ret;
-	}
-
-	/**
-	 * 回傳帶有欄位值(key="value")和欄位標題(key="title")的MAP
-	 * 
-	 * @param value
-	 * @param title
-	 * @return
-	 */
-	public static Map<String, String> addValidateField(String value, String title) {
-		Map<String, String> m = new HashMap<String, String>();
-		m.put("value", value.trim());
-		m.put("title", title.trim());
-
-		return m;
 	}
 
 	public String getUUID(CommonDataObj cdo) throws Exception {

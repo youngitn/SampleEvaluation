@@ -1,10 +1,21 @@
 package oa.SampleEvaluation.common;
 
+import oa.SampleEvaluation.common.global.QuerySpec;
+import oa.SampleEvaluation.controller.HprocImpl;
+
 public class SampleEvaluationQuerySpec extends QuerySpec {
-	String queryStatusTpFieldName;
-	String queryStatusCheckFieldName;
+
+	String queryStatusTpFieldName = "Q_STATUS_TP";
+	String queryStatusCheckFieldName = "Q_STATUS_CHECK";;
 	String queryStatusCheck;
 	String queryStatusTp;
+
+	public SampleEvaluationQuerySpec(HprocImpl h) {
+		super(h);
+		this.setQueryStatusCheck(h.getValue(queryStatusCheckFieldName));
+		this.setQueryStatusTp(h.getValue(queryStatusTpFieldName));
+
+	}
 
 	public String getQueryStatusCheck() {
 		return queryStatusCheck;

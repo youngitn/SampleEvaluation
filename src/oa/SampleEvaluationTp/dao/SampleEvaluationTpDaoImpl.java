@@ -51,7 +51,7 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 						s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(), s.getFileCoa(),
 						s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(), s.getFile2(),
 						s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(), s.getFile8(),
-						s.getFile9(), s.getFile10(), s.getOwnPno(), s.getFileEvaluationResult() });
+						s.getFile9(), s.getFile10(), s.getFileEvaluationResult(), s.getOwnPno() });
 
 	}
 

@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.common.global;
 
 import java.sql.SQLException;
 
@@ -8,14 +8,24 @@ public class UserData {
 	private String cpnyid, hecname, dep_no, ext, dep_name, empid;
 
 	public UserData(String empid, talk t) throws SQLException, Exception {
-		String sql = "select cpnyid, hecname, dep_no, ext, dep_name from user_info_view where empid = '" + empid + "' ";
-		String[][] ret = t.queryFromPool(sql);
-		setCpnyid(ret[0][0]);
-		setHecname(ret[0][1]);
-		setDepNo(ret[0][2]);
-		setExt(ret[0][3]);
-		setDepName(ret[0][4]);
-		this.empid = empid;
+		if (empid == null || empid.equals("")) {
+			setCpnyid("촥킠┨짩");
+			setHecname("촥킠┨짩");
+			setDepNo("촥킠┨짩");
+			setExt("촥킠┨짩");
+			setDepName("촥킠┨짩");
+			this.empid = "촥킠┨짩";
+		} else {
+			String sql = "select cpnyid, hecname, dep_no, ext, dep_name from user_info_view where empid = '" + empid
+					+ "' ";
+			String[][] ret = t.queryFromPool(sql);
+			setCpnyid(ret[0][0]);
+			setHecname(ret[0][1]);
+			setDepNo(ret[0][2]);
+			setExt(ret[0][3]);
+			setDepName(ret[0][4]);
+			this.empid = empid;
+		}
 	}
 
 	public String getEmpid() {

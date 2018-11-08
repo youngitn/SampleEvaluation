@@ -1,10 +1,9 @@
 package oa.SampleEvaluation.controller;
 
 import java.sql.SQLException;
-
 import oa.SampleEvaluation.enums.*;
-import oa.SampleEvaluation.common.FormInitUtil;
-import oa.SampleEvaluation.common.UIHidderString;
+import oa.SampleEvaluation.common.global.FormInitUtil;
+import oa.SampleEvaluation.common.global.UIHidderString;
 
 /**
  * 判斷頁面名稱並於載入後執行
@@ -12,7 +11,7 @@ import oa.SampleEvaluation.common.UIHidderString;
  * @author u52116
  *
  */
-public class SampleEvaluationPageInitController extends Controller {
+public class SampleEvaluationPageInitController extends HprocImpl {
 
 	@Override
 	public String action(String arg0) throws Throwable {

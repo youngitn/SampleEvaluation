@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.common.global;
 
 public class UIHidderString {
 	

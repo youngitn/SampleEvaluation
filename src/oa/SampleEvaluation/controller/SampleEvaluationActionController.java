@@ -8,14 +8,13 @@ import java.util.Map;
 import oa.SampleEvaluation.enums.*;
 import com.ysp.service.BaseService;
 
-import jcx.jform.hproc;
-
-import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.MainQuery;
+import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
-import oa.SampleEvaluation.common.UIHidderString;
-import oa.SampleEvaluation.common.CommonDataObj;
-import oa.SampleEvaluation.common.FormInitUtil;
+import oa.SampleEvaluation.common.global.AddUtil;
+import oa.SampleEvaluation.common.global.CommonDataObj;
+import oa.SampleEvaluation.common.global.FormInitUtil;
+import oa.SampleEvaluation.common.global.UIHidderString;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 
 /**
@@ -25,10 +24,10 @@ import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
  * @author u52116
  *
  */
-public class SampleEvaluationActionController extends Controller {
+public class SampleEvaluationActionController extends HprocImpl {
 
 	private boolean confirm = true;
-	private CommonDataObj cdo;
+	private SampleEvaluationDataObj cdo;
 	private BaseService service;
 	String actionObjName;
 
@@ -78,6 +77,9 @@ public class SampleEvaluationActionController extends Controller {
 		FormInitUtil init = new FormInitUtil(this);
 
 		init.doDetailPageProcess();
+		if (getValue("IS_TRIAL_PRODUCTION").equals("1")) {
+			setVisible("ASSESSOR", true);
+		}
 
 		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
 
@@ -170,33 +172,14 @@ public class SampleEvaluationActionController extends Controller {
 
 	}
 
-	private CommonDataObj buildCdo() throws SQLException, Exception {
+	private SampleEvaluationDataObj buildCdo() throws SQLException, Exception {
 
 		/** init **/
-		CommonDataObj inercdo = new CommonDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
-		SampleEvaluationQuerySpec qs = new SampleEvaluationQuerySpec();
+		SampleEvaluationDataObj inercdo = new SampleEvaluationDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
+		SampleEvaluationQuerySpec qs = new SampleEvaluationQuerySpec(this);
 
 		inercdo.setTableAppDateFieldName("APP_DATE");
 		inercdo.setLoginUserId(getUser());
-		/** query spec **/
-		// set field name
-		qs.setQueryBillIdFieldName("QUERY_PNO");
-		qs.setQueryEmpidFieldName("QUERY_EMP_ID");
-		qs.setQueryReqSDateFieldName("QUERY_REQ_SDATE");
-		qs.setQueryReqEDateFieldName("QUERY_REQ_EDATE");
-		qs.setQueryStatusFieldName("r_status");
-		qs.setQueryStatusCheckFieldName("r_status_check");
-		qs.setQueryStatusTpFieldName("r_status_tp");
-		qs.setQueryDepNoFieldName("QUERY_EMP_DEP");
-		// set field value
-		qs.setQueryBillId(getValue("QUERY_PNO"));
-		qs.setQueryEmpid(getValue("QUERY_EMP_ID"));
-		qs.setQueryReqSDate(getValue("QUERY_REQ_SDATE"));
-		qs.setQueryReqEDate(getValue("QUERY_REQ_EDATE"));
-		qs.setQueryStatus(getValue("r_status"));
-		qs.setQueryStatusCheck(getValue("r_status_check"));
-		qs.setQueryStatusTp(getValue("r_status_tp"));
-		qs.setQueryDepNo(getValue("QUERY_EMP_DEP"));
 		ArrayList<String> flist = new ArrayList<String>();
 		flist.add("PNO");
 		flist.add("APPLICANT");

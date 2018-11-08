@@ -1,20 +1,16 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.common.global;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.ysp.service.BaseService;
-
 import jcx.db.talk;
 
-public class CommonDataObj {
+public abstract class CommonDataObj {
 
 	private String loginUserId;// 目前登入使用者id
 
 	private TableFieldSpec tableFieldSpec = new TableFieldSpec();
 	private talk talk;
 	private ArrayList<String> queryResultShowTableFieldList;
-	private BaseService service;
+
 	private ArrayList<String> qflist;
 	private QuerySpec qs;
 	private String functionName;// 表單名稱
@@ -28,14 +24,6 @@ public class CommonDataObj {
 		this.tableFieldSpec.applicantFieldName = tableApplicantFieldName;
 		this.talk = t;
 
-	}
-
-	public BaseService getService() {
-		return service;
-	}
-
-	public void setService(BaseService service) {
-		this.service = service;
 	}
 
 	public talk getTalk() {
@@ -168,7 +156,7 @@ public class CommonDataObj {
 		return this.qs;
 	}
 
-	public void setQuerySpec(SampleEvaluationQuerySpec qs) {
+	public void setQuerySpec(QuerySpec qs) {
 
 		this.qs = qs;
 

@@ -79,7 +79,7 @@ public class Approve extends bProcFlow {
 
 					SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
 					secDto.setAllValue(service);
-					goSubFlow("Check", secDto);
+					Approve.goSubFlow("Check", secDto, t);
 					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
 					// 有請驗流程 寄出通知信
 					sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
@@ -89,7 +89,7 @@ public class Approve extends bProcFlow {
 
 					SampleEvaluationSubBaseDto setDto = new SampleEvaluationTp();
 					setDto.setAllValue(service);
-					goSubFlow("Tp", setDto);
+					Approve.goSubFlow("Tp", setDto, t);
 					String title = "簽核通知：" + this.getFunctionName() + "_試製流程" + "( 單號：" + getValue("PNO") + " )";
 					// 有試製流程 寄出通知信
 					sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
@@ -134,12 +134,12 @@ public class Approve extends bProcFlow {
 		return true;
 	}
 
-	private void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationSubBaseDto dto, String title)
+	public static void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationSubBaseDto dto, String title)
 			throws Exception {
 		MailService mailService = new MailService(service);
 		// Mail to
 		String[] ret = mailTo.trim().split(" ");
-		String[] usr = { getEmail(ret[0]) };
+		String[] usr = { service.getEmail(ret[0]) };
 
 		// 內容
 		EmailNotify en = new EmailNotify();
@@ -167,7 +167,7 @@ public class Approve extends bProcFlow {
 		return true;
 	}
 
-	private void goSubFlow(String type, SampleEvaluationSubBaseDto s)
+	public static void goSubFlow(String type, SampleEvaluationSubBaseDto s, talk t)
 			throws ClassNotFoundException, SQLException, Exception {
 
 		Class<?> subMainDao = Class.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "DaoImpl");

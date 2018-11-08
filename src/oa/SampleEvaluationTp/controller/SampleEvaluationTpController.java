@@ -2,8 +2,9 @@ package oa.SampleEvaluationTp.controller;
 
 import jcx.jform.hproc;
 
-import oa.SampleEvaluation.common.CommonDataObj;
-import oa.SampleEvaluation.common.UserData;
+import oa.SampleEvaluation.common.SampleEvaluationDataObj;
+import oa.SampleEvaluation.common.global.UserData;
+import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
 /**
  * 嘗試可測試寫法
@@ -14,26 +15,21 @@ import oa.SampleEvaluation.common.UserData;
 public class SampleEvaluationTpController extends hproc {
 
 	public boolean confirm;
-	public CommonDataObj cdo;
+	public SampleEvaluationDataObj cdo;
 
 	@Override
 	public String action(String arg0) throws Throwable {
 		// message(getState().trim());
-		setVisible("ASSESSOR", true);
-		// 關卡判斷與處理
-		if (getState().trim().equals("填寫試製單號")) {
-			setEditable("NOTIFY_NO_TRIAL_PROD", true);
-
-		}
-		
 		// 申請人基本資料
 		UserData u = new UserData(getValue("APPLICANT").trim(), getTalk());
 		setValue("APPLICANT_NAME", u.getHecname());
 		setValue("CPNYID", u.getCpnyid());
 		setValue("APPLICANT_DEP_NAME", u.getDepName());
-		u = new UserData(getValue("PROJECT_LEADER").trim(), getTalk());
-		setValue("PROJECT_LEADER_NAME", u.getHecname() + " " + u.getDepName());
-		// message(u.getDepName());
+		String pl = getValue("PROJECT_LEADER").trim();
+		if (!pl.equals("")) {
+			u = new UserData(getValue("PROJECT_LEADER").trim(), getTalk());
+			setValue("PROJECT_LEADER_NAME", u.getHecname() + " " + u.getDepName());
+		}
 		String ownPno = getValue("OWN_PNO").trim();
 		if (ownPno.length() <= 0) {
 			changeForm(getFunctionName());
@@ -47,7 +43,16 @@ public class SampleEvaluationTpController extends hproc {
 				}
 			}
 		}
+		// 就算是default 名稱也要存在FlowState
+		// switch條件才會生效
+		switch (FlowState.valueOf(getState())) {
 
+		default:
+			for (int i = 1; i <= 10; i++) {
+				setEditable("FILE_" + i, true);
+			}
+			break;
+		}
 		return arg0;
 
 	}

@@ -21,8 +21,8 @@ import com.yungshingroup.utils.Fmt;
 import jcx.db.talk;
 import jcx.jform.bBase;
 import jcx.jform.hproc;
-import oa.SampleEvaluation.common.AddUtil;
-import oa.SampleEvaluation.common.CommonDataObj;
+import oa.SampleEvaluation.common.SampleEvaluationDataObj;
+import oa.SampleEvaluation.common.global.AddUtil;
 import oa.SampleEvaluation.dao.AbstractGenericDao;
 import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
 import oa.SampleEvaluation.dao.AbstractGenericFlowcHisDao;
@@ -96,7 +96,7 @@ public class Test {
 
 		// s.cdo = new CommonDataObj("52116", t, "SAMPLE_EVALUATION", "PNO",
 		// "APPLICANT");
-		CommonDataObj cdo = new CommonDataObj(t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
+		SampleEvaluationDataObj cdo = new SampleEvaluationDataObj(t, "SAMPLE_EVALUATION", "PNO", "APPLICANT");
 		cdo.setTableApplicantFieldName("APPLICANT");
 		cdo.setTableAppDateFieldName("APP_DATE");
 

@@ -3,11 +3,10 @@ package oa.SampleEvaluation.notify;
 import jcx.db.talk;
 import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
-
-import oa.SampleEvaluation.common.EmailUtil;
 import oa.SampleEvaluation.common.MailBody;
 
 import oa.SampleEvaluation.common.MailMan;
+import oa.SampleEvaluation.common.global.EmailUtil;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 
 import java.sql.SQLException;

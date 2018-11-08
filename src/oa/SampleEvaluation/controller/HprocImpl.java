@@ -2,7 +2,7 @@ package oa.SampleEvaluation.controller;
 
 import jcx.jform.hproc;
 
-public class Controller extends hproc {
+public class HprocImpl extends hproc {
 
 	@Override
 	public String action(String arg0) throws Throwable {

@@ -4,7 +4,7 @@ import oa.SampleEvaluation.enums.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import jcx.util.*;
-import oa.SampleEvaluation.common.UserData;
+import oa.SampleEvaluation.common.global.UserData;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import com.ysp.field.Mail;
 
@@ -38,10 +38,8 @@ public class EmailNotify extends BaseEmailNotify {
 		content += "申請類型：" + AppType.getAppType(se.getAppType()) + Mail.HTML_LINE_BREAK;
 		content += "急迫性：" + Urgency.getUrgency(se.getUrgency()) + Mail.HTML_LINE_BREAK;
 		content += "物料名稱：" + se.getMaterial() + Mail.HTML_LINE_BREAK;
-		String appConfMsg = "";
 
 		content += "受理單位：" + emailUtil.getDepName(se.getReceiptUnit()) + Mail.HTML_LINE_BREAK;
-		appConfMsg = buildApproveConfirmMsgStr(se);
 
 		content += "計畫代號：" + se.getProjectCode() + Mail.HTML_LINE_BREAK;
 
@@ -53,7 +51,7 @@ public class EmailNotify extends BaseEmailNotify {
 
 		content += "計畫主持人：" + projectLeaderLine + Mail.HTML_LINE_BREAK;
 
-		content += "是否進行請驗/試製流程：<br>" + appConfMsg + Mail.HTML_LINE_BREAK;
+		content += "是否進行請驗/試製流程：<br>" + buildApproveConfirmMsgStr(se) + Mail.HTML_LINE_BREAK;
 		content += "==========================" + Mail.HTML_LINE_BREAK;
 		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + Mail.HTML_LINE_BREAK;
 		content += "意見記錄：" + Mail.HTML_LINE_BREAK;

@@ -29,7 +29,7 @@ public class Rule extends bRule {
 			return id;
 		}
 
-		if (state.equals("試製作業跟催")) {
+		if (state.equals("試製作業跟崔")) {
 
 			String[] ret = getData("DESIGNEE").trim().split(" ");
 
@@ -39,7 +39,7 @@ public class Rule extends bRule {
 			return id;
 		}
 
-		if (state.equals("組長")) {
+		if (state.equals("組長") || state.equals("組長確認是否請驗")) {
 
 			String[] ret = getData("DESIGNEE").trim().split(" ");
 

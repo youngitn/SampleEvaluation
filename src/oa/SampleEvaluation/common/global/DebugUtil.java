@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.common.global;
 
 import java.io.FileWriter;
 import java.io.IOException;
