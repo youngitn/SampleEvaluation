@@ -12,7 +12,6 @@ import oa.SampleEvaluation.common.MainQuery;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
 import oa.SampleEvaluation.common.global.AddUtil;
-import oa.SampleEvaluation.common.global.CommonDataObj;
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
@@ -34,32 +33,37 @@ public class SampleEvaluationActionController extends HprocImpl {
 	@Override
 	public String action(String arg0) throws Throwable {
 		// 類別屬性初始化設定
-		SetProperty();
-
-		// 按鈕動作處理進入點
-		switch (Actions.valueOf(actionObjName.trim())) {
-		case QUERY_CLICK:
-			doQuery();
-			break;
-		case SAVE_CLICK:
-			doSave();
-			break;
-		case SHOW_DETAIL_CLICK:
-			showDetail();
-			break;
-		default:
-			break;
+		setProperty();
+		try {
+			// 按鈕動作處理進入點
+			switch (Actions.valueOf(actionObjName.trim())) {
+			case QUERY_CLICK:
+				doQuery();
+				break;
+			case SAVE_CLICK:
+				doSave();
+				break;
+			case SHOW_DETAIL_CLICK:
+				showDetail();
+				break;
+			default:
+				break;
+			}
+		} catch (EnumConstantNotPresentException e) {
+			message("enum:Actions.clss 發生無法辨識的意外");
 		}
 		return null;
 
 	}
 
-	private void SetProperty() throws SQLException, Exception {
+	private void setProperty() throws Exception {
 		// for enum switch
 		actionObjName = getActionName(getName());
-
+		
 		service = new BaseService(this);
-
+		if (service == null || service.getFunctionName().equals("")) {
+			throw new Exception("new BaseService(this) is null......");
+		}
 		// 測試物件
 		cdo = buildCdo();
 

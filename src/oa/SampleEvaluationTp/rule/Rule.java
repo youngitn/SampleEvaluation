@@ -1,52 +1,38 @@
 package oa.SampleEvaluationTp.rule;
 
 import jcx.jform.bRule;
+import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
 import java.util.*;
 
 public class Rule extends bRule {
-	public Vector getIDs(String value) throws Throwable {
+	public Vector<String> getIDs(String value) throws Throwable {
 		// 回傳值為 Vector contails 符合這條規格的帳號
 		// value 為 "不動產、廠房及設備異動申請單_取得"
 		String state = getState();
-
-		Vector id = new Vector();
-
-		// 受理單位主管所分派之人員
-		if (state.equals("填寫試製單號")) {
-
-			id.addElement("admin");
-			String[] u = getData("DOC_CTRLER").trim().split(" ");
-			id.addElement(u[0]);
-
-			return id;
-		}
-		if (state.equals("實驗室經辦")) {
-
-			id.addElement("admin");
-			String[] u = getData("LAB_EXE").trim().split(" ");
-			id.addElement(u[0]);
-			return id;
-		}
-
-		if (state.equals("試製作業跟崔")) {
-
-			String[] ret = getData("DESIGNEE").trim().split(" ");
-
+		Vector<String> id = new Vector<String>();
+		String[] ret = null;
+		switch (FlowState.valueOf(state)) {
+		case 組長:
+		case 組長確認是否請驗:
+		case 試製作業跟崔:
+			ret = getData("DESIGNEE").trim().split(" ");
 			id.addElement("admin");
 			id.addElement(ret[0]);
 
-			return id;
-		}
-
-		if (state.equals("組長") || state.equals("組長確認是否請驗")) {
-
-			String[] ret = getData("DESIGNEE").trim().split(" ");
-
+			break;
+		case 實驗室經辦:
 			id.addElement("admin");
+			ret = getData("LAB_EXE").trim().split(" ");
 			id.addElement(ret[0]);
-
-			return id;
+			break;
+		case 評估人員:
+			id.addElement("admin");
+			ret = getData("ASSESSOR").trim().split(" ");
+			id.addElement(ret[0]);
+			break;
+		default:
+			break;
 		}
 
 		return id;

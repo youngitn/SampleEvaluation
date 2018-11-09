@@ -1,15 +1,12 @@
 package oa.SampleEvaluation.common.global;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import com.ysp.service.BaseService;
 import com.ysp.util.LogUtil;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.common.global.CommonDataObj;
-import oa.SampleEvaluation.common.global.TableFieldSpec;
-import oa.SampleEvaluation.common.global.UserData;
 import oa.SampleEvaluation.controller.*;
 
 public abstract class BaseMainQuery {
@@ -120,7 +117,7 @@ public abstract class BaseMainQuery {
 	 * @throws Throwable
 	 */
 	protected abstract String[][] getQueryResultAfterProcess(String[][] queryResults,
-			ArrayList<String> viewFieldOfResultList) throws Throwable;
+			List<String> viewFieldOfResultList) throws Throwable;
 
 	/**
 	 * 取得目前簽核關卡名稱與簽核人員資料字串 EX:"-(關卡名稱-簽核人1,簽核人2..)"
@@ -132,23 +129,20 @@ public abstract class BaseMainQuery {
 	 * @throws SQLException
 	 */
 	protected String getCurrentFlowGateAndApprover(String pkName, String pkValue) throws SQLException, Exception {
-		Vector<String> people = service.getApprovablePeople(cdo.getFunctionName(),
-				"a." + pkName + "='" + pkValue + "'");
+		List<String> people = service.getApprovablePeople(cdo.getFunctionName(), "a." + pkName + "='" + pkValue + "'");
 		StringBuffer sb = new StringBuffer();
-		if (people != null) {
-			if (people.size() != 0) {
-				sb.append("-(");
-				for (int j = 0; j < people.size(); j++) {
-					if (j != 0)
-						sb.append(",");
-					String id1 = (String) people.elementAt(j);
-					UserData u = new UserData(id1, innerTalk);
-					String name1 = u.getHecname();
-					u = null;
-					sb.append(name1 + "-" + id1);
-				}
-				sb.append(")");
+
+		if (!people.isEmpty()) {
+			sb.append("-(");
+			for (int j = 0; j < people.size(); j++) {
+				if (j != 0)
+					sb.append(",");
+				String id1 = (String) people.get(j);
+				UserData u = new UserData(id1, innerTalk);
+				String name1 = u.getHecname();
+				sb.append(name1 + "-" + id1);
 			}
+			sb.append(")");
 		}
 
 		return sb.toString();

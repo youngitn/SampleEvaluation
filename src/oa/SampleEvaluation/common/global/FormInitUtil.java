@@ -16,9 +16,17 @@ public class FormInitUtil {
 	UserData userdata;
 	hproc c;
 
-	public FormInitUtil(hproc c) throws Exception {
-		this.c = c;
-		userdata = new UserData(c.getUser(), c.getTalk());
+	public FormInitUtil(hproc c) throws NullPointerException {
+
+		try {
+			this.c = c;
+			userdata = new UserData(c.getUser(), c.getTalk());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	public void doQueryPageProcess() throws Exception {
@@ -26,15 +34,15 @@ public class FormInitUtil {
 		userdata = getNowApplicant();
 		// 取得user資料類別
 		// 填入query畫面基本欄位資料
-		c.setValue(FinalString.queryEmpidFieldName, userdata.getEmpid());
-		c.setValue(FinalString.queryEmpNameFieldName, userdata.getHecname());
-		c.setValue(FinalString.queryDepNoFieldName, userdata.getDepNo());
-		c.setValue(FinalString.queryDepNameFieldName, userdata.getDepName());
+		c.setValue(FinalString.QUERY_EMPID_FIELD_NAME, userdata.getEmpid());
+		c.setValue(FinalString.QUERY_EMP_NAME_FIELD_NAME, userdata.getHecname());
+		c.setValue(FinalString.QUERY_DEP_NO_FIELD_NAME, userdata.getDepNo());
+		c.setValue(FinalString.QUERY_DEP_NAME_FIELD_NAME, userdata.getDepName());
 		String today = c.getToday("YYYYmmdd");
 		String edate = today;
 		String sdate = datetime.dateAdd(edate, "d", -14);
-		c.setValue(FinalString.queryReqSDateFieldName, sdate);
-		c.setValue(FinalString.queryReqEDateFieldName, edate);
+		c.setValue(FinalString.QUERY_REQ_SDATE_FIELD_NAME, sdate);
+		c.setValue(FinalString.QUERY_REQ_EDATE_FIELD_NAME, edate);
 		userdata = null;
 		c.setNewView("QueryPage");
 	}

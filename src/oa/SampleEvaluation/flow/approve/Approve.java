@@ -112,6 +112,7 @@ public class Approve extends bProcFlow {
 		case 待處理:
 		case 採購經辦確認:
 			// 更新主表分案人欄位
+			FileItemSetChecked();
 			s = new SampleEvaluation();
 			s.setAllValue(service);
 			new SampleEvaluationDaoImpl(t).update(s);
@@ -123,6 +124,7 @@ public class Approve extends bProcFlow {
 				message("評估結果與其夾檔不得為空");
 				return false;
 			} else if (doReminder(alertStr)) {
+				FileItemSetChecked();
 				s = new SampleEvaluation();
 				s.setAllValue(service);
 				new SampleEvaluationDaoImpl(t).update(s);
@@ -132,6 +134,25 @@ public class Approve extends bProcFlow {
 			break;
 		}
 		return true;
+	}
+
+	private void FileItemSetChecked() {
+
+		if (!getValue("FILE_SPEC").equals("")) {
+			setValue("PROVIDE_SPEC", "1");
+		}
+		if (!getValue("FILE_COA").equals("")) {
+			setValue("PROVIDE_COA", "1");
+		}
+		if (!getValue("FILE_SDS").equals("")) {
+			setValue("PROVIDE_SDS", "1");
+		}
+		if (!getValue("FILE_OTHERS").equals("")) {
+			setValue("PROVIDE_OTHERS", "1");
+		}
+		if (!getValue("FILE_TEST_METHOD").equals("")) {
+			setValue("PROVIDE_TEST_METHOD", "1");
+		}
 	}
 
 	public static void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationSubBaseDto dto, String title)

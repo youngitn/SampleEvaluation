@@ -2,6 +2,7 @@ package oa.SampleEvaluation.common;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ysp.util.LogUtil;
 
@@ -75,7 +76,8 @@ public class MainQuery extends BaseMainQuery {
 		String queryDepNo = qc.getQueryDepNo();
 
 		StringBuilder advancedSql = new StringBuilder();
-		if (!"".equals(empid))
+
+		if (!"".equals(empid) && !"admin".equals(empid))
 			advancedSql.append("and " + tableApplicantFieldName + " = '" + empid + "' ");
 		if (!"".equals(sdate))
 			advancedSql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
@@ -104,7 +106,7 @@ public class MainQuery extends BaseMainQuery {
 
 	public String getSqlQueryStr() throws SQLException, Exception {
 		StringBuilder strSql = new StringBuilder();
-		ArrayList<String> resultFieldList = cdo.getQuerySpec().getQueryResultView();
+		List<String> resultFieldList = cdo.getQuerySpec().getQueryResultView();
 		// ³æ¸¹
 
 		strSql.append("select DISTINCT a.");
@@ -124,9 +126,12 @@ public class MainQuery extends BaseMainQuery {
 		String str = strSql.toString();
 		String subFlowcTableNameInSqlStr = "," + tableName + "_CHECK_FLOWC c ," + tableName + "_TP_FLOWC d ";
 		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
-		if (qc.queryStatusCheck.equals("")) {
-			subFlowcTableNameInSqlStr = "";
-		}
+//		if (qc.queryStatusCheck.equals("")) {
+//			subFlowcTableNameInSqlStr = "";
+//		}
+//		if (qc.queryStatusCheck.equals("")) {
+//			subFlowcTableNameInSqlStr = "";
+//		}
 		str = str.substring(0, str.length() - 1);
 		str += " from  " + tableName + " a," + tableName + "_FLOWC b " + subFlowcTableNameInSqlStr + " where 1=1 ";
 
@@ -143,7 +148,8 @@ public class MainQuery extends BaseMainQuery {
 	 * @return
 	 * @throws Throwable
 	 */
-	protected String[][] getQueryResultAfterProcess(String[][] queryResults, ArrayList<String> viewFieldOfResultList)
+	@Override
+	protected String[][] getQueryResultAfterProcess(String[][] queryResults, List<String> viewFieldOfResultList)
 			throws Throwable {
 
 		int index = getStatusIndex(viewFieldOfResultList);// Ã±®Öª¬ºAªºIndex
@@ -187,7 +193,7 @@ public class MainQuery extends BaseMainQuery {
 				+ "¡j";
 	}
 
-	private int getStatusIndex(ArrayList<String> viewFieldOfResultList) {
+	private int getStatusIndex(List<String> viewFieldOfResultList) {
 		int index = -1;
 		for (int i = 0; i < viewFieldOfResultList.size(); i++) {
 			if (viewFieldOfResultList.get(i).contains("'Ã±®Öª¬ºA'")) {

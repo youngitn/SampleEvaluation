@@ -1,6 +1,6 @@
 package oa.SampleEvaluation.common.global;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import oa.SampleEvaluation.controller.HprocImpl;
 
@@ -13,14 +13,14 @@ public abstract class QuerySpec {
 	String queryStatus;// 查詢簽核狀態value
 	String queryDepNo;// 查詢單位號碼value
 	// 以下變數可自設,但以QueryFieldNameFinalString為主
-	String queryBillIdFieldName = FinalString.queryBillIdFieldName;// 查詢單號欄位名稱
-	String queryEmpidFieldName = FinalString.queryEmpidFieldName;// 查詢申請人欄位名稱
-	String queryReqSDateFieldName = FinalString.queryReqSDateFieldName;// 查詢起日欄位名稱
-	String queryReqEDateFieldName = FinalString.queryReqEDateFieldName;// 查詢迄日欄位名稱
-	String queryStatusFieldName = FinalString.queryStatusFieldName;// 查詢簽核狀態欄位名稱
-	String queryDepNoFieldName = FinalString.queryDepNoFieldName;// 查詢單位號碼欄位名稱
+	String queryBillIdFieldName = FinalString.QUERY_BILL_ID_FIELD_NAME;// 查詢單號欄位名稱
+	String queryEmpidFieldName = FinalString.QUERY_EMPID_FIELD_NAME;// 查詢申請人欄位名稱
+	String queryReqSDateFieldName = FinalString.QUERY_REQ_SDATE_FIELD_NAME;// 查詢起日欄位名稱
+	String queryReqEDateFieldName = FinalString.QUERY_REQ_EDATE_FIELD_NAME;// 查詢迄日欄位名稱
+	String queryStatusFieldName = FinalString.QUERY_STATUS_FIELD_NAME;// 查詢簽核狀態欄位名稱
+	String queryDepNoFieldName = FinalString.QUERY_DEP_NO_FIELD_NAME;// 查詢單位號碼欄位名稱
 
-	ArrayList<String> QueryResultView;// Dmaker表格顯示欄位名稱arraylist,名稱為執行SQL查詢的DB欄位名稱
+	List<String> queryResultView;// Dmaker表格顯示欄位名稱arraylist,名稱為執行SQL查詢的DB欄位名稱
 
 	public QuerySpec(HprocImpl h) {
 
@@ -32,12 +32,12 @@ public abstract class QuerySpec {
 		this.setQueryDepNo(h.getValue(queryDepNoFieldName));
 	}
 
-	public ArrayList<String> getQueryResultView() {
-		return QueryResultView;
+	public List<String> getQueryResultView() {
+		return queryResultView;
 	}
 
-	public void setQueryResultView(ArrayList<String> queryResultView) {
-		QueryResultView = queryResultView;
+	public void setQueryResultView(List<String> queryResultView) {
+		this.queryResultView = queryResultView;
 	}
 
 	public String getQueryBillId() {

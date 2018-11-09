@@ -1,6 +1,8 @@
 package oa.SampleEvaluationCheck.flow.approve;
 
 import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
+import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDaoImpl;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDaoImpl;
@@ -9,6 +11,8 @@ import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
 import oa.SampleEvaluationCheck.flow.approve.gateEnum.*;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpDaoImpl;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 import jcx.jform.bProcFlow;
 
 import com.ysp.service.BaseService;
@@ -28,25 +32,41 @@ public class Approve extends bProcFlow {
 
 		String state = getState();
 		talk t = getTalk();
-
+		boolean ret = doReminder("");
 		switch (FlowState.valueOf(state)) {
 		case 填寫請驗單號:
+		case 實驗室經辦:
 
 			if (getValue("NOTIFY_NO_CHECK").trim().equals("") && getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
 				message("請填寫原料或試製品請驗單號");
-				return false;
+				ret = false;
 			}
-			// 更新主表請驗單號欄位
-			t.execFromPool("UPDATE  sample_evaluation  SET notify_no_check=?, NOTIFY_NO_TRIAL_PROD=?" + " where pno=?",
-					new Object[] { getValue("NOTIFY_NO_CHECK"), getValue("NOTIFY_NO_TRIAL_PROD"), getValue("PNO") });
+			if (ret) {
+				// 三表同步
+				BaseService service = new BaseService(this);
 
-			// 更新子流程主表請驗單號欄位
-			t.execFromPool("UPDATE  sample_evaluation_check  SET notify_no_check=?, NOTIFY_NO_TRIAL_PROD=?" + " where own_pno=?",
-					new Object[] { getValue("NOTIFY_NO_CHECK"), getValue("NOTIFY_NO_TRIAL_PROD"),  getValue("OWN_PNO") });
-			message("簽核完成！");
-			break;
+				SampleEvaluationTpDaoImpl tpDao = new SampleEvaluationTpDaoImpl(getTalk());
+				SampleEvaluationTp tp = new SampleEvaluationTp();
+				tp.setAllValue(service);
+				tpDao.update(tp);
+				// message(service.getValue("FIELD9") + " " + tp.getFile9());
+				// message(tp.getFile1());
+
+				SampleEvaluationCheckDaoImpl ckDao = new SampleEvaluationCheckDaoImpl(getTalk());
+				SampleEvaluationCheck ck = new SampleEvaluationCheck();
+				ck.setAllValue(service);
+				ckDao.update(ck);
+
+				SampleEvaluationDaoImpl seDao = new SampleEvaluationDaoImpl(getTalk());
+				SampleEvaluation se = new SampleEvaluation();
+				se.setAllValue(service);
+				seDao.update(se);
+				// message("簽核完成！");
+			}
+			return ret;
+
 		case 組長:
-
+			// 能退?要退去哪?
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (getValue("IS_CHECK").trim().equals("1")) {
 				BaseService service = new BaseService(this);
@@ -85,8 +105,26 @@ public class Approve extends bProcFlow {
 
 			break;
 		}
-		return true;
+		return ret;
 
+	}
+
+	/**
+	 * 溫馨提醒 不傳入 回傳true/false
+	 */
+	private boolean doReminder(String addStr) throws Exception {
+		int result = showConfirmDialog(addStr + "確定送出表單？", "溫馨提醒", 0);
+		if (result == 1) {
+			message("已取消送出表單");
+			return false;
+		}
+		String space = "";
+		for (int i = 0; i < 16; i++) {
+			space += "&emsp;";
+		}
+		percent(100, space + "表單送出中，請稍候...<font color=white>");
+		message("簽核完成");
+		return true;
 	}
 
 }
