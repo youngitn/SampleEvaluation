@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.dao.AbstractGenericDao;
+import oa.SampleEvaluation.daointerface.ITableDao;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 
 /**
@@ -12,7 +12,7 @@ import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
  * 
  */
 
-public class SampleEvaluationCheckDaoImpl extends AbstractGenericDao<SampleEvaluationCheck> {
+public class SampleEvaluationCheckDaoImpl implements ITableDao<SampleEvaluationCheck> {
 
 	talk t;
 
@@ -33,7 +33,7 @@ public class SampleEvaluationCheckDaoImpl extends AbstractGenericDao<SampleEvalu
 						s.getAssessor(), s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(),
 						s.getFileCoa(), s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(),
 						s.getFile2(), s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(),
-						s.getFile8(), s.getFile9(), s.getFile10(),s.getFileEvaluationResult() });
+						s.getFile8(), s.getFile9(), s.getFile10(), s.getFileEvaluationResult() });
 	}
 
 	public String update(SampleEvaluationCheck s) throws SQLException, Exception {
@@ -49,7 +49,7 @@ public class SampleEvaluationCheckDaoImpl extends AbstractGenericDao<SampleEvalu
 						s.getDesignee(), s.getDocCtrler(), s.getEvaluationResult(), s.getFileSpec(), s.getFileCoa(),
 						s.getFileTestMethod(), s.getFileOthers(), s.getFileSds(), s.getFile1(), s.getFile2(),
 						s.getFile3(), s.getFile4(), s.getFile5(), s.getFile6(), s.getFile7(), s.getFile8(),
-						s.getFile9(), s.getFile10(), s.getFileEvaluationResult(),s.getOwnPno() });
+						s.getFile9(), s.getFile10(), s.getFileEvaluationResult(), s.getOwnPno() });
 
 	}
 
@@ -91,12 +91,6 @@ public class SampleEvaluationCheckDaoImpl extends AbstractGenericDao<SampleEvalu
 	public String[][] findAllArray(String params, String selectFields) throws SQLException, Exception {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Class getClazz() {
-		// TODO Auto-generated method stub
-		return SampleEvaluationCheck.class;
 	}
 
 }

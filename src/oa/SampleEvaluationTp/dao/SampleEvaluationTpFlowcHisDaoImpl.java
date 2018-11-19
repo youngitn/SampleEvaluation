@@ -3,23 +3,23 @@ package oa.SampleEvaluationTp.dao;
 import java.sql.*;
 import java.util.*;
 
-import oa.SampleEvaluation.dao.AbstractGenericFlowcHisDao;
+import oa.SampleEvaluation.daointerface.IFlowcHisDao;
+import oa.SampleEvaluation.dto.FlowcHisDto;
 import oa.SampleEvaluation.exception.NotFoundException;
-import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
-public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDao<SampleEvaluationTpFlowcHis> {
+public class SampleEvaluationTpFlowcHisDaoImpl implements IFlowcHisDao<FlowcHisDto> {
 
 	@Override
-	public SampleEvaluationTpFlowcHis createValueObject() {
-		return new SampleEvaluationTpFlowcHis();
+	public FlowcHisDto createValueObject() {
+		return new FlowcHisDto();
 	}
 
 	@Override
-	public SampleEvaluationTpFlowcHis getObject(Connection conn, String ownPno, String F_INP_STAT, String F_INP_TIME)
+	public FlowcHisDto getObject(Connection conn, String ownPno, String F_INP_STAT, String F_INP_TIME)
 			throws NotFoundException, SQLException {
 
-		SampleEvaluationTpFlowcHis valueObject = createValueObject();
-		valueObject.setOwnPno(ownPno);
+		FlowcHisDto valueObject = createValueObject();
+		valueObject.setId(ownPno);
 		valueObject.setF_INP_STAT(F_INP_STAT);
 		valueObject.setF_INP_TIME(F_INP_TIME);
 		load(conn, valueObject);
@@ -27,9 +27,9 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 	}
 
 	@Override
-	public void load(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws NotFoundException, SQLException {
+	public void load(Connection conn, FlowcHisDto valueObject) throws NotFoundException, SQLException {
 
-		if (valueObject.getOwnPno() == null) {
+		if (valueObject.getId() == null) {
 			// System.out.println("Can not select without Primary-Key!");
 			throw new NotFoundException("Can not select without Primary-Key!");
 		}
@@ -49,7 +49,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, valueObject.getOwnPno());
+			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getF_INP_STAT());
 			stmt.setString(3, valueObject.getF_INP_TIME());
 
@@ -71,7 +71,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 	}
 
 	@Override
-	public synchronized void create(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws SQLException {
+	public synchronized void create(Connection conn, FlowcHisDto valueObject) throws SQLException {
 
 		String sql = "";
 		PreparedStatement stmt = null;
@@ -82,7 +82,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 					+ "F_INP_ID, F_INP_INFO) VALUES (?, ?, ?, ?, ?) ";
 			stmt = conn.prepareStatement(sql);
 
-			stmt.setString(1, valueObject.getOwnPno());
+			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getF_INP_STAT());
 			stmt.setString(3, valueObject.getF_INP_TIME());
 			stmt.setString(4, valueObject.getF_INP_ID());
@@ -102,7 +102,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 	}
 
 	@Override
-	public void save(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws NotFoundException, SQLException {
+	public void save(Connection conn, FlowcHisDto valueObject) throws NotFoundException, SQLException {
 
 		String sql = "UPDATE SAMPLE_EVALUATION_TP_FLOWC_HIS SET F_INP_ID = ?, F_INP_INFO = ? WHERE (OWN_PNO = ? AND F_INP_STAT = ? AND F_INP_TIME = ? ) ";
 		PreparedStatement stmt = null;
@@ -112,7 +112,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 			stmt.setString(1, valueObject.getF_INP_ID());
 			stmt.setString(2, valueObject.getF_INP_INFO());
 
-			stmt.setString(3, valueObject.getOwnPno());
+			stmt.setString(3, valueObject.getId());
 			stmt.setString(4, valueObject.getF_INP_STAT());
 			stmt.setString(5, valueObject.getF_INP_TIME());
 
@@ -133,9 +133,9 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 	}
 
 	@Override
-	public void delete(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws NotFoundException, SQLException {
+	public void delete(Connection conn, FlowcHisDto valueObject) throws NotFoundException, SQLException {
 
-		if (valueObject.getOwnPno() == null) {
+		if (valueObject.getId() == null) {
 			// System.out.println("Can not delete without Primary-Key!");
 			throw new NotFoundException("Can not delete without Primary-Key!");
 		}
@@ -155,7 +155,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, valueObject.getOwnPno());
+			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getF_INP_STAT());
 			stmt.setString(3, valueObject.getF_INP_TIME());
 
@@ -214,18 +214,18 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 	}
 
 	@Override
-	public List searchMatching(Connection conn, SampleEvaluationTpFlowcHis valueObject) throws SQLException {
+	public List searchMatching(Connection conn, FlowcHisDto valueObject) throws SQLException {
 
 		List searchResults;
 
 		boolean first = true;
 		StringBuffer sql = new StringBuffer("SELECT * FROM SAMPLE_EVALUATION_TP_FLOWC_HIS WHERE 1=1 ");
 
-		if (valueObject.getOwnPno() != null) {
+		if (valueObject.getId() != null) {
 			if (first) {
 				first = false;
 			}
-			sql.append("AND OWN_PNO LIKE '").append(valueObject.getOwnPno()).append("%' ");
+			sql.append("AND OWN_PNO LIKE '").append(valueObject.getId()).append("%' ");
 		}
 
 		if (valueObject.getF_INP_STAT() != null) {
@@ -276,7 +276,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 	}
 
 	@Override
-	public void singleQuery(Connection conn, PreparedStatement stmt, SampleEvaluationTpFlowcHis valueObject)
+	public void singleQuery(Connection conn, PreparedStatement stmt, FlowcHisDto valueObject)
 			throws NotFoundException, SQLException {
 
 		ResultSet result = null;
@@ -286,7 +286,7 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 
 			if (result.next()) {
 
-				valueObject.setOwnPno(result.getString("OWN_PNO"));
+				valueObject.setId(result.getString("OWN_PNO"));
 				valueObject.setF_INP_STAT(result.getString("F_INP_STAT"));
 				valueObject.setF_INP_TIME(result.getString("F_INP_TIME"));
 				valueObject.setF_INP_ID(result.getString("F_INP_ID"));
@@ -314,9 +314,9 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 			result = stmt.executeQuery();
 
 			while (result.next()) {
-				SampleEvaluationTpFlowcHis temp = createValueObject();
+				FlowcHisDto temp = createValueObject();
 
-				temp.setOwnPno(result.getString("OWN_PNO"));
+				temp.setId(result.getString("OWN_PNO"));
 				temp.setF_INP_STAT(result.getString("F_INP_STAT"));
 				temp.setF_INP_TIME(result.getString("F_INP_TIME"));
 				temp.setF_INP_ID(result.getString("F_INP_ID"));
@@ -333,11 +333,6 @@ public class SampleEvaluationTpFlowcHisDaoImpl extends AbstractGenericFlowcHisDa
 		}
 
 		return (List) searchResults;
-	}
-
-	@Override
-	public Class<SampleEvaluationTpFlowcHisDaoImpl> getClazz() {
-		return SampleEvaluationTpFlowcHisDaoImpl.class;
 	}
 
 }

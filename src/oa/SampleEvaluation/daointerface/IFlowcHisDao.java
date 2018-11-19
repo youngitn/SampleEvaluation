@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.dao;
+package oa.SampleEvaluation.daointerface;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ import oa.SampleEvaluation.exception.NotFoundException;
  *
  * @param <E>
  */
-public interface ISampleEvaluationSubFlowcHisDao<E> {
+public interface IFlowcHisDao<E> {
 
 	E createValueObject();
 

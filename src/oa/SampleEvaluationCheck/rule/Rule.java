@@ -6,12 +6,12 @@ import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
 import java.util.*;
 
 public class Rule extends bRule {
-	public Vector getIDs(String value) throws Throwable {
+	public Vector<String> getIDs(String value) throws Throwable {
 		// 回傳值為 Vector contails 符合這條規格的帳號
 		// value 為 "不動產、廠房及設備異動申請單_取得"
 		String state = getState();
 
-		Vector id = new Vector();
+		Vector<String> id = new Vector<String>();
 		String[] u = null;
 		// 受理單位主管所分派之人員
 		switch (FlowState.valueOf(state)) {

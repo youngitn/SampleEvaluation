@@ -15,7 +15,6 @@ public class SampleEvaluationTp extends SampleEvaluationSubBaseDto implements Se
 
 	public SampleEvaluationTp(String[] strings) {
 		super(strings);
-		this.ownPno = strings[28];
 	}
 
 	public SampleEvaluationTp() {

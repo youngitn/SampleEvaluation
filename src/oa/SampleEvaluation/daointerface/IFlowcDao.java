@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.dao;
+package oa.SampleEvaluation.daointerface;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import oa.SampleEvaluation.exception.NotFoundException;
 
 
 
-public interface ISampleEvaluationSubFlowcDao<E> {
+public interface IFlowcDao<E> {
 
 	E createValueObject();
 

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jcx.db.talk;
+import oa.SampleEvaluation.daointerface.ITableDao;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 
 /**
@@ -11,17 +12,12 @@ import oa.SampleEvaluation.dto.SampleEvaluation;
  * 
  */
 
-public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation> {
+public class SampleEvaluationDaoImpl implements ITableDao<SampleEvaluation> {
 
 	talk t;
 
 	public SampleEvaluationDaoImpl(talk t) {
 		this.t = t;
-	}
-
-	@Override
-	public Class<SampleEvaluation> getClazz() {
-		return SampleEvaluation.class;
 	}
 
 	@Override
@@ -114,7 +110,6 @@ public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation
 
 	@Override
 	public String[][] findArrayById(String id) throws SQLException, Exception {
-		// TODO Auto-generated method stub
 		String[][] ret = t.queryFromPool("select * from sample_evaluation where pno='" + id + "'");
 		if (ret != null && ret.length > 0) {
 			return ret;
@@ -125,7 +120,6 @@ public class SampleEvaluationDaoImpl extends AbstractGenericDao<SampleEvaluation
 
 	@Override
 	public String[][] findAllArray(String params, String selectFields) throws SQLException, Exception {
-		// TODO Auto-generated method stub
 		// ArrayList<SampleEvaluation> retList = new ArrayList<SampleEvaluation>();
 		String[][] ret = t.queryFromPool("select " + selectFields.toString() + " from sample_evaluation " + params);
 		if (ret != null && ret.length > 0) {

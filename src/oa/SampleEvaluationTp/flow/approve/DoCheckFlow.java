@@ -1,5 +1,7 @@
 package oa.SampleEvaluationTp.flow.approve;
 
+import oa.SampleEvaluation.common.MailToolInApprove;
+import oa.SampleEvaluation.common.global.FlowcUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
@@ -29,11 +31,11 @@ public class DoCheckFlow extends bProcFlow {
 				BaseService service = new BaseService(this);
 				SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
 				secDto.setAllValue(service);
-				Approve.goSubFlow("Check", secDto, getTalk());
+				FlowcUtil.goSubFlow("Check", secDto, getTalk(), "填寫請驗單號");
 
-				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程" + "( 單號：" + getValue("PNO") + " )";
+				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
 				// 有請驗流程 寄出通知信
-				Approve.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
+				MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
 
 				SampleEvaluationTpDaoImpl tpDao = new SampleEvaluationTpDaoImpl(getTalk());
 				SampleEvaluationTp tp = new SampleEvaluationTp();
@@ -46,7 +48,7 @@ public class DoCheckFlow extends bProcFlow {
 				seDao.update(se);
 				ret = true;
 			} else if (getValue("IS_CHECK").equals("1")) {
-				message("該試製品已經請驗過了");
+				message("已進行過請驗流程");
 				ret = false;
 			}
 		}

@@ -3,13 +3,13 @@ package oa.SampleEvaluation;
 
 
 public enum ButtonActionByName {
-	// ----------«ö¶s°Ê§@(»P¦WºÙ¤@­P)---------
-	QUERY_CLICK, // «ö¤U¬d¸ß«ö¶s
-	SAVE_CLICK, // «ö¤U·s¼W«ö¶s 
-	SHOW_DETAIL_CLICK, // «ö¤U©ú²Ó«ö¶s
-	// ----------­¶­±¸ü¤J(¦WºÙ°Ñ¦ÒgetActionName())---------
-	QUERY_PAGE_INIT, // ¸ü¤J¬d¸ß­¶
-	ADD_PAGE_INIT, // ¸ü¤J·s¼W­¶
-	PENING_PAGE_INIT, // ¸ü¤J«Ý³B²z­¶
+	// ----------ï¿½ï¿½ï¿½sï¿½Ê§@(ï¿½Pï¿½Wï¿½Ù¤@ï¿½P)---------
+	QUERY_CLICK, // ï¿½ï¿½ï¿½Uï¿½dï¿½ß«ï¿½ï¿½s
+	SAVE_CLICK, // ï¿½ï¿½ï¿½Uï¿½sï¿½Wï¿½ï¿½ï¿½s 
+	SHOW_DETAIL_CLICK, // ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½Ó«ï¿½ï¿½s
+	// ----------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½J(ï¿½Wï¿½Ù°Ñ¦ï¿½getActionName())---------
+	QUERY_PAGE_INIT, // ï¿½ï¿½ï¿½Jï¿½d
+	ADD_PAGE_INIT, // ï¿½ï¿½ï¿½Jï¿½sï¿½Wï¿½ï¿½
+	PENING_PAGE_INIT, // ï¿½ï¿½ï¿½Jï¿½Ý³Bï¿½zï¿½ï¿½
 	FLOW_PAGE_INIT, DETAIL_PAGE_INIT, SIGN_FLOW_HISTORY_PAGE_INIT
 }

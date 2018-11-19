@@ -15,7 +15,7 @@ public class EmailUtil {
 		this.service = service;
 	}
 
-	public String[] getAllSignedPeopleEmailForLastGateToSend() {
+	public ArrayList<String> getAllSignedPeopleEmailForLastGateToSend() {
 		String[][] vid = service.getFlowHistory();
 		String[] ausr = new String[vid.length];
 		for (int i = 0; i < vid.length; i++) {
@@ -31,7 +31,7 @@ public class EmailUtil {
 			v.add(service.getEmail(usr[i]));
 		}
 
-		return v.toArray(new String[0]);
+		return v;
 	}
 
 	// ·N¨£°O¿ý

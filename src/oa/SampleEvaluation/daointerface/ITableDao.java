@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.dao;
+package oa.SampleEvaluation.daointerface;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

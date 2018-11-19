@@ -1,12 +1,9 @@
 package oa.SampleEvaluation.controller;
 
-import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-
-import oa.SampleEvaluation.enums.*;
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
+import oa.SampleEvaluation.enums.FlowState;
+import oa.SampleEvaluation.enums.PageInitType;
 
 /**
  * 判斷頁面名稱並於載入後執行
@@ -86,8 +83,8 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			setAllFieldUneditable();
 			setEditable("IS_CHECK", true);
 			setEditable("IS_TRIAL_PRODUCTION", true);
-
 			setEditable("ASSESSOR", true);
+			setEditable("NOTE", true);
 			setEditable("LAB_EXE", true);
 			setEditable("QR_NO", true);
 			setEditable("DOC_CTRLER", true);

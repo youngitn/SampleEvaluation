@@ -1,15 +1,15 @@
 package oa.SampleEvaluationCheck.flow.approve;
 
-import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.daointerface.IFlowcDao;
+import oa.SampleEvaluation.dto.FlowcDto;
+import oa.SampleEvaluation.dto.FlowcHisDto;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckDaoImpl;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDaoImpl;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDaoImpl;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
 import oa.SampleEvaluationCheck.flow.approve.gateEnum.*;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpDaoImpl;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
@@ -36,9 +36,13 @@ public class Approve extends bProcFlow {
 		switch (FlowState.valueOf(state)) {
 		case 填寫請驗單號:
 		case 實驗室經辦:
-
-			if (getValue("NOTIFY_NO_CHECK").trim().equals("") && getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
-				message("請填寫原料或試製品請驗單號");
+			/*
+			 * 判斷請驗單號欄位是否空值會在填寫請驗單號舊處理完畢
+			 *到實驗室經辦時 只會同步更新三表 
+			 * */
+			
+			if (getValue("NOTIFY_NO_CHECK").trim().equals("") || getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
+				message("請填寫原料或試製品請驗單號,如果未進行請驗請直接在欄位中填寫原因.");
 				ret = false;
 			}
 			if (ret) {
@@ -65,7 +69,7 @@ public class Approve extends bProcFlow {
 			}
 			return ret;
 
-		case 組長:
+		case 組長:// 目前未開放這個關卡
 			// 能退?要退去哪?
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 			if (getValue("IS_CHECK").trim().equals("1")) {
@@ -78,7 +82,7 @@ public class Approve extends bProcFlow {
 					// insert一筆子流程主檔
 					checkDao.add((SampleEvaluationCheck) sc);
 
-					SampleEvaluationCheckFlowc flowc = new SampleEvaluationCheckFlowc(sc.getOwnPno());
+					FlowcDto flowc = new FlowcDto(sc.getOwnPno());
 					String time = DateTimeUtil.getApproveAddSeconds(0);
 
 					// 取得被分案組長empid
@@ -86,13 +90,12 @@ public class Approve extends bProcFlow {
 					flowc.setF_INP_ID(designee[0]);
 					flowc.setF_INP_STAT("填寫請驗單號");
 					flowc.setF_INP_TIME(time);
-					AbstractGenericFlowcDao secfDao = new SampleEvaluationCheckFlowcDaoImpl();
+					IFlowcDao secfDao = new SampleEvaluationCheckFlowcDaoImpl();
 					secfDao.create(getTalk().getConnectionFromPool(), flowc);
 
 					// 建立子流程FLOWC_HIS 物件 能夠顯示簽核歷史
 					time = DateTimeUtil.getApproveAddSeconds(0);
-					SampleEvaluationCheckFlowcHis his = new SampleEvaluationCheckFlowcHis(sc.getOwnPno(),
-							flowc.getF_INP_STAT(), time);
+					FlowcHisDto his = new FlowcHisDto(sc.getOwnPno(), flowc.getF_INP_STAT(), time);
 
 					his.setF_INP_ID(designee[0]);
 					SampleEvaluationCheckFlowcHisDaoImpl secfhDao = new SampleEvaluationCheckFlowcHisDaoImpl();

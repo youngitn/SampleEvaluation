@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.dao.AbstractGenericDao;
+import oa.SampleEvaluation.daointerface.ITableDao;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
 /**
@@ -12,7 +12,7 @@ import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
  * 
  */
 
-public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluationTp> {
+public class SampleEvaluationTpDaoImpl implements ITableDao<SampleEvaluationTp> {
 
 	talk t;
 
@@ -107,11 +107,6 @@ public class SampleEvaluationTpDaoImpl extends AbstractGenericDao<SampleEvaluati
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public Class getClazz() {
-		return SampleEvaluationTp.class;
 	}
 
 }

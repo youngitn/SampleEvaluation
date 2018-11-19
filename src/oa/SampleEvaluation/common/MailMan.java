@@ -15,7 +15,6 @@ public class MailMan extends bNotify {
 	@Override
 	public void actionPerformed(String arg0) throws Throwable {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void send(String[] mailTo, MailBody mbody) throws Exception {

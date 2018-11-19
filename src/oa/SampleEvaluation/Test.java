@@ -1,41 +1,24 @@
 package oa.SampleEvaluation;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.ysp.service.BaseService;
 import com.ysp.util.DateTimeUtil;
 import com.yungshingroup.utils.Fmt;
-
 import jcx.db.talk;
-import jcx.jform.bBase;
-import jcx.jform.hproc;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
-import oa.SampleEvaluation.common.global.AddUtil;
-import oa.SampleEvaluation.dao.AbstractGenericDao;
-import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
-import oa.SampleEvaluation.dao.AbstractGenericFlowcHisDao;
-import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
-import oa.SampleEvaluation.dto.AbstractGenericFlowcDto;
-import oa.SampleEvaluation.dto.AbstractGenericFlowcHisDto;
-import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.common.global.FlowcUtil;
+import oa.SampleEvaluation.daointerface.IFlowcDao;
+import oa.SampleEvaluation.daointerface.IFlowcHisDao;
+import oa.SampleEvaluation.daointerface.ITableDao;
+import oa.SampleEvaluation.dto.FlowcDto;
+import oa.SampleEvaluation.dto.FlowcHisDto;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcDaoImpl;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisDaoImpl;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 import oa.SampleEvaluation.enums.*;
 
@@ -137,7 +120,9 @@ public class Test {
 //	        Constructor con = cl.getConstructor(Param1Type.class, Param2Type.class);
 //	        Object xyz = con.newInstance(param1, param2);
 		String a = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
-		String b = "OWN_PNO,PNO,app_type,urgency,material,sap_code,ab_code,mfg_lot_no,qty,pack,unit,mfr,supplier,provide_coa,provide_spec,provide_test_method,provide_sds,provide_others,note,applicant,app_date,receipt_unit,project_code,project_leader,notify_no_check,notify_no_trial_prod,qr_no,is_check,is_trial_production,lab_exe,assessor,designee,doc_ctrler ,evaluation_result,FILE_SPEC ,FILE_COA,FILE_TEST_METHOD,FILE_OTHERS,FILE_SDS,FILE_1,FILE_2,FILE_3,FILE_4,FILE_5,FILE_6,FILE_7,FILE_8,FILE_9,FILE_10";
+		String b =  "PNO, REQ_DATE, REGIO, CUSTNO, CUSTNAME, SP1_PROCESS_CHK, D373_PNO, SP1_PROCESS_NOTE1, "+
+				"SP1_DATE, SP1_PROCESS_NOTE2, SP1_FILE, SP2_PROCESS_CHK, SP2_PROCESS_NOTE1, DEP10_NOTE1, D373_CHK, "+
+				"D373_NOTE1, BUDAT, XBLNR, ZUONR, INVAMT, BALAMT, DISAMT, ANAMT, ZTERM, UOVER_DAYS, ECTIME, AR_DAY,CUSTOM_PAYMNT_ADJUST";
 
 		int count = a.length() - a.replace(",", "").length();
 		int count1 = b.length() - b.replace(",", "").length();
@@ -145,70 +130,12 @@ public class Test {
 
 		SampleEvaluationSubBaseDto s = new SampleEvaluationCheck();
 		SampleEvaluationSubBaseDto s2 = new SampleEvaluationTp();
-		s.setPno("521169999");
+		s.setPno("521169988");
 		s.setIsCheck("1");
 		s2.setIsCheck("1");
-		s2.setPno("521169999");
-		s.setOwnPno("52116CHECK");
-		s2.setOwnPno("52116TP");
-		goSubFlow("Check", s);
-		goSubFlow("Tp", s2);
-	}
 
-	private static void goSubFlow(String type, SampleEvaluationSubBaseDto s)
-			throws ClassNotFoundException, SQLException, Exception {
-		/*******************************************************************************/
-		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
-		/*******************************************************************************/
-		Class<?> subMainDao = Class.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "DaoImpl");
-		Constructor<?> DaoCon = subMainDao.getConstructor(talk.class);
-		AbstractGenericDao<SampleEvaluationSubBaseDto> Dao = (AbstractGenericDao<SampleEvaluationSubBaseDto>) DaoCon
-				.newInstance(t);
-
-		if (Dao.findById(s.getOwnPno()) != null) {
-			Dao.update(s);
-		} else {
-			// insert一筆子流程主檔
-			Dao.add(s);
-
-			AbstractGenericFlowcDto<?> Dto = (AbstractGenericFlowcDto<?>) Class
-					.forName("oa.SampleEvaluation" + type + ".dto.SampleEvaluation" + type + "Flowc").newInstance();
-
-			Dto.setOwnPno(s.getOwnPno());
-			String time = DateTimeUtil.getApproveAddSeconds(0);
-
-			Dto.setF_INP_ID(s.getApplicant());
-			String gateName = "填寫請驗單號";
-			if (type.equals("Tp")) {
-				gateName = "評估人員";
-			}
-			Dto.setF_INP_STAT(gateName);
-			Dto.setF_INP_TIME(time);
-
-			AbstractGenericFlowcDao<AbstractGenericFlowcDto<?>> secfDao = (AbstractGenericFlowcDao<AbstractGenericFlowcDto<?>>) Class
-					.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcDaoImpl")
-					.newInstance();
-
-			secfDao.create(t.getConnectionFromPool(), Dto);
-
-			// 建立子流程FLOWC_HIS 物件 能夠顯示簽核歷史
-			time = DateTimeUtil.getApproveAddSeconds(0);
-
-			AbstractGenericFlowcHisDto<?> his = (AbstractGenericFlowcHisDto<?>) Class
-					.forName("oa.SampleEvaluation" + type + ".dto.SampleEvaluation" + type + "FlowcHis").newInstance();
-
-			his.setF_INP_STAT(Dto.getF_INP_STAT());
-			his.setOwnPno(s.getOwnPno());
-			his.setF_INP_TIME(time);
-			his.setF_INP_ID(s.getApplicant());
-			AbstractGenericFlowcHisDao<AbstractGenericFlowcHisDto<?>> secfhDao = (AbstractGenericFlowcHisDao<AbstractGenericFlowcHisDto<?>>) Class
-					.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcHisDaoImpl")
-					.newInstance();
-
-			secfhDao.create(t.getConnectionFromPool(), his);
-
-		}
-
+		FlowcUtil.goSubFlow("Check", s, t, "填寫請驗單號");
+		FlowcUtil.goSubFlow("Tp", s2, t, "評估人員");
 	}
 
 }

@@ -10,7 +10,7 @@ import com.ysp.util.DateFormatUtil;
 
 public class ShowSignHistory extends hproc {
 
-	// private Log log = LogUtil.getLog(this.getClass());
+	// private Log log = LogUtil.getLog(this.getClass());11
 
 	public String action(String value) throws Throwable {
 
@@ -31,29 +31,29 @@ public class ShowSignHistory extends hproc {
 	 * @throws Exception
 	 */
 	private String getHtml(String value) throws SQLException, Exception {
-		// ¨ú±o¥Ø«e©Ò¦³¬yµ{¸`ÂI
-		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'"; // ³æ¸¹Äæ¦ì
-		String rec[][] = getFlowHistory(getFunctionName(), id); // getFlowHistory(String¥\¯à¦WºÙ, StringÄæ¦ì«e¥[¤W a. ¦p
+		// ï¿½ï¿½ï¿½oï¿½Ø«eï¿½Ò¦ï¿½ï¿½yï¿½{ï¿½`ï¿½I
+		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'"; // ï¿½æ¸¹ï¿½ï¿½ï¿½
+		String rec[][] = getFlowHistory(getFunctionName(), id); // getFlowHistory(Stringï¿½\ï¿½ï¿½Wï¿½ï¿½, Stringï¿½ï¿½ï¿½eï¿½[ï¿½W a. ï¿½p
 																// a.PNO='A12345678' )
-		// ­YµLÃ±®Ö¬yµ{¬ö¿ý®É°õ¦æ
+		// ï¿½Yï¿½LÃ±ï¿½Ö¬yï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½É°ï¿½ï¿½ï¿½
 		if (rec.length == 0 || rec == null) {
-			setValue("text3", "<center><font size=\"4\" color=red>µLÃ±®Ö¬yµ{¬ö¿ý</font></center>");
+			setValue("text3", "<center><font size=\"4\" color=red>ï¿½LÃ±ï¿½Ö¬yï¿½{ï¿½ï¿½ï¿½ï¿½</font></center>");
 			return value;
 		}
-		// Ã±®Ö¬yµ{¬ö¿ý
+		// Ã±ï¿½Ö¬yï¿½{ï¿½ï¿½ï¿½ï¿½
 		talk t = getTalk();
 		StringBuffer sb = getMainFlowHistory(id, rec);
 
-		// ¦³¤l¬yµ{¤~¥[ÃB¥~ªºdiv
-		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'"; // ³æ¸¹Äæ¦ì
-		String subRec[][] = getFlowHistory(getFunctionName() + "_½ÐÅç¬yµ{", subid);
+		// ï¿½ï¿½ï¿½lï¿½yï¿½{ï¿½~ï¿½[ï¿½Bï¿½~ï¿½ï¿½div
+		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'"; // ï¿½æ¸¹ï¿½ï¿½ï¿½
+		String subRec[][] = getFlowHistory(getFunctionName() + "_ï¿½ï¿½ï¿½ï¿½yï¿½{", subid);
 		StringBuffer sb1 = new StringBuffer("");
 		if (subRec == null || subRec.length != 0) {
 			sb1 = getMainFlowHistory(subid, subRec);
 		}
 
-		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'"; // ³æ¸¹Äæ¦ì
-		String subRecTp[][] = getFlowHistory(getFunctionName() + "_¸Õ»s¬yµ{", subidTp);
+		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'"; // ï¿½æ¸¹ï¿½ï¿½ï¿½
+		String subRecTp[][] = getFlowHistory(getFunctionName() + "_ï¿½Õ»sï¿½yï¿½{", subidTp);
 		StringBuffer sbTp = new StringBuffer("");
 		if (subRec == null || subRec.length != 0) {
 			sbTp = getMainFlowHistory(subidTp, subRecTp);
@@ -75,24 +75,24 @@ public class ShowSignHistory extends hproc {
 		String APPLYEMPNAME = "";
 		String fName = getFunctionName();
 		if (id.contains("CHECK")) {
-			fName = fName + "_½ÐÅç¬yµ{";
+			fName = fName + "_ï¿½ï¿½ï¿½ï¿½yï¿½{";
 		}
 		if (id.contains("TP")) {
-			fName = fName + "_¸Õ»s¬yµ{";
+			fName = fName + "_ï¿½Õ»sï¿½yï¿½{";
 		}
 		sb.append("<div  style=\"float:left;\"><TABLE>");
-		sb.append("<tr>"); // 1¦C¶}©l
-		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>"); // 1-1Àx¦s®æ(¤º®e¤£´«¦æ ¥k¼e150 Ãä®Ø)
-		sb.append("<p align='center'><font size='2'>·s¼W-" + fName + "</font></p></td>"); // ¤º®e¸m¤¤ ¦rÅé¤j¤p2
-		sb.append("<td align='center' width='400'></td>"); // 1-2Àx¦s®æ
-		sb.append("</tr>"); // 1¦Cµ²§ô
+		sb.append("<tr>"); // 1ï¿½Cï¿½}ï¿½l
+		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>"); // 1-1ï¿½xï¿½sï¿½ï¿½(ï¿½ï¿½ï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½kï¿½e150 ï¿½ï¿½ï¿½)
+		sb.append("<p align='center'><font size='2'>ï¿½sï¿½W-" + fName + "</font></p></td>"); // ï¿½ï¿½ï¿½eï¿½mï¿½ï¿½ ï¿½rï¿½ï¿½jï¿½p2
+		sb.append("<td align='center' width='400'></td>"); // 1-2ï¿½xï¿½sï¿½ï¿½
+		sb.append("</tr>"); // 1ï¿½Cï¿½ï¿½ï¿½ï¿½
 		for (int i = 0; i < rec.length; i++) {
-			sb.append("<tr>"); // 2¦C¶}©l
+			sb.append("<tr>"); // 2ï¿½Cï¿½}ï¿½l
 			sb.append(
-					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>"); // 2-1Àx¦s®æ
+					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>"); // 2-1ï¿½xï¿½sï¿½ï¿½
 			// sb.append("<td align='center'><font size='5' >&#8595;</font></td>");
-			// //2-1Àx¦s®æ(Â²³æªº½bÀY)
-			// ¹ï©óAUTOªº³B¸m(AUTO¬°¨t²Î¤º³¡ªº)
+			// //2-1ï¿½xï¿½sï¿½ï¿½(Â²ï¿½æªºï¿½bï¿½Y)
+			// ï¿½ï¿½ï¿½AUTOï¿½ï¿½ï¿½Bï¿½m(AUTOï¿½ï¿½ï¿½tï¿½Î¤ï¿½ï¿½ï¿½ï¿½ï¿½)
 			if ("AUTO".equals(rec[i][1])) {
 				APPLYEMPNAME = "AUTO";
 			} else {
@@ -100,13 +100,13 @@ public class ShowSignHistory extends hproc {
 			}
 
 			// rec[i][0] rec[i][1] rec[i][2] rec[i][3]
-			// ¸`ÂI¦WºÙ¡B§å®Ö¤H­û¡B§å®Ö®É¶¡¡B§å®Ö·N¨£
+			// ï¿½`ï¿½Iï¿½Wï¿½Ù¡Bï¿½ï¿½Ö¤Hï¿½ï¿½ï¿½Bï¿½ï¿½Ö®É¶ï¿½ï¿½Bï¿½ï¿½Ö·Nï¿½ï¿½
 			sb.append("<TD align='center' width='400' >");
 			sb.append("<TABLE width='100%' height='100%' border='1'");
 			sb.append("<TR>");
-			sb.append("<TD width='20%' align='center'>Ã±®Ö¤H­û</TD>");
-			sb.append("<TD width='33%' align='center'>Ã±®Ö®É¶¡</TD>");
-			sb.append("<TD width='47%' align='center'>Ã±®Ö·N¨£</TD>");
+			sb.append("<TD width='20%' align='center'>Ã±ï¿½Ö¤Hï¿½ï¿½</TD>");
+			sb.append("<TD width='33%' align='center'>Ã±ï¿½Ö®É¶ï¿½</TD>");
+			sb.append("<TD width='47%' align='center'>Ã±ï¿½Ö·Nï¿½ï¿½</TD>");
 			sb.append("</TR>");
 			sb.append("<TR>");
 			sb.append("<TD align='center'><font size='2' color='#003333'>" + APPLYEMPNAME + "(" + rec[i][1]

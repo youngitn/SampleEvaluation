@@ -2,37 +2,35 @@ package oa.SampleEvaluationCheck.dao;
 
 import java.sql.*;
 import java.util.*;
-
-import oa.SampleEvaluation.dao.AbstractGenericFlowcDao;
-
+import oa.SampleEvaluation.daointerface.IFlowcDao;
+import oa.SampleEvaluation.dto.FlowcDto;
 import oa.SampleEvaluation.exception.NotFoundException;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 
-public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<SampleEvaluationCheckFlowc> {
+public class SampleEvaluationCheckFlowcDaoImpl implements IFlowcDao<FlowcDto> {
 
 	@Override
-	public SampleEvaluationCheckFlowc createValueObject() {
-		return new SampleEvaluationCheckFlowc();
+	public FlowcDto createValueObject() {
+		return new FlowcDto();
 	}
 
 	@Override
-	public SampleEvaluationCheckFlowc getObject(Connection conn, String ownPno) throws NotFoundException, SQLException {
+	public FlowcDto getObject(Connection conn, String ownPno) throws NotFoundException, SQLException {
 
-		SampleEvaluationCheckFlowc valueObject = createValueObject();
-		valueObject.setOwnPno(ownPno);
+		FlowcDto valueObject = createValueObject();
+		valueObject.setId(ownPno);
 		load(conn, valueObject);
 		return valueObject;
 	}
 
 	@Override
-	public void load(Connection conn, SampleEvaluationCheckFlowc valueObject) throws NotFoundException, SQLException {
+	public void load(Connection conn, FlowcDto valueObject) throws NotFoundException, SQLException {
 
 		String sql = "SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE (OWN_PNO = ? ) ";
 		PreparedStatement stmt = null;
 
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, valueObject.getOwnPno());
+			stmt.setString(1, valueObject.getId());
 
 			singleQuery(conn, stmt, valueObject);
 
@@ -42,7 +40,6 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 		}
 	}
 
-	
 	@Override
 	public List loadAll(Connection conn) throws SQLException {
 
@@ -52,9 +49,8 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 		return searchResults;
 	}
 
-
 	@Override
-	public synchronized void create(Connection conn, SampleEvaluationCheckFlowc valueObject) throws SQLException {
+	public synchronized void create(Connection conn, FlowcDto valueObject) throws SQLException {
 
 		String sql = "";
 		PreparedStatement stmt = null;
@@ -65,7 +61,7 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 					+ "F_INP_TIME, F_INP_INFO) VALUES (?, ?, ?, ?, ?) ";
 			stmt = conn.prepareStatement(sql);
 
-			stmt.setString(1, valueObject.getOwnPno());
+			stmt.setString(1, valueObject.getId());
 			stmt.setString(2, valueObject.getF_INP_STAT());
 			stmt.setString(3, valueObject.getF_INP_ID());
 			stmt.setString(4, valueObject.getF_INP_TIME());
@@ -91,7 +87,7 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 	 * Connection, oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc)
 	 */
 	@Override
-	public void save(Connection conn, SampleEvaluationCheckFlowc valueObject) throws NotFoundException, SQLException {
+	public void save(Connection conn, FlowcDto valueObject) throws NotFoundException, SQLException {
 
 		String sql = "UPDATE SAMPLE_EVALUATION_CHECK_FLOWC SET F_INP_STAT = ?, F_INP_ID = ?, F_INP_TIME = ?, "
 				+ "F_INP_INFO = ? WHERE (OWN_PNO = ? ) ";
@@ -104,7 +100,7 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 			stmt.setString(3, valueObject.getF_INP_TIME());
 			stmt.setString(4, valueObject.getF_INP_INFO());
 
-			stmt.setString(5, valueObject.getOwnPno());
+			stmt.setString(5, valueObject.getId());
 
 			int rowcount = databaseUpdate(conn, stmt);
 			if (rowcount == 0) {
@@ -130,14 +126,14 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 	 * Connection, oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc)
 	 */
 	@Override
-	public void delete(Connection conn, SampleEvaluationCheckFlowc valueObject) throws NotFoundException, SQLException {
+	public void delete(Connection conn, FlowcDto valueObject) throws NotFoundException, SQLException {
 
 		String sql = "DELETE FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE (OWN_PNO = ? ) ";
 		PreparedStatement stmt = null;
 
 		try {
 			stmt = conn.prepareStatement(sql);
-			stmt.setString(1, valueObject.getOwnPno());
+			stmt.setString(1, valueObject.getId());
 
 			int rowcount = databaseUpdate(conn, stmt);
 			if (rowcount == 0) {
@@ -215,18 +211,18 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 	 * .sql.Connection, oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc)
 	 */
 	@Override
-	public List searchMatching(Connection conn, SampleEvaluationCheckFlowc valueObject) throws SQLException {
+	public List searchMatching(Connection conn, FlowcDto valueObject) throws SQLException {
 
 		List searchResults;
 
 		boolean first = true;
 		StringBuffer sql = new StringBuffer("SELECT * FROM SAMPLE_EVALUATION_CHECK_FLOWC WHERE 1=1 ");
 
-		if (valueObject.getOwnPno() != null) {
+		if (valueObject.getId() != null) {
 			if (first) {
 				first = false;
 			}
-			sql.append("AND OWN_PNO = ").append(valueObject.getOwnPno()).append(" ");
+			sql.append("AND OWN_PNO = ").append(valueObject.getId()).append(" ");
 		}
 
 		if (valueObject.getF_INP_STAT() != null) {
@@ -276,7 +272,7 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 		return result;
 	}
 
-	protected void singleQuery(Connection conn, PreparedStatement stmt, SampleEvaluationCheckFlowc valueObject)
+	protected void singleQuery(Connection conn, PreparedStatement stmt, FlowcDto valueObject)
 			throws NotFoundException, SQLException {
 
 		ResultSet result = null;
@@ -286,7 +282,7 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 
 			if (result.next()) {
 
-				valueObject.setOwnPno(result.getString("OWN_PNO"));
+				valueObject.setId(result.getString("OWN_PNO"));
 				valueObject.setF_INP_STAT(result.getString("F_INP_STAT"));
 				valueObject.setF_INP_ID(result.getString("F_INP_ID"));
 				valueObject.setF_INP_TIME(result.getString("F_INP_TIME"));
@@ -313,9 +309,9 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 			result = stmt.executeQuery();
 
 			while (result.next()) {
-				SampleEvaluationCheckFlowc temp = createValueObject();
+				FlowcDto temp = createValueObject();
 
-				temp.setOwnPno(result.getString("OWN_PNO"));
+				temp.setId(result.getString("OWN_PNO"));
 				temp.setF_INP_STAT(result.getString("F_INP_STAT"));
 				temp.setF_INP_ID(result.getString("F_INP_ID"));
 				temp.setF_INP_TIME(result.getString("F_INP_TIME"));
@@ -332,11 +328,6 @@ public class SampleEvaluationCheckFlowcDaoImpl extends AbstractGenericFlowcDao<S
 		}
 
 		return (List) searchResults;
-	}
-
-	@Override
-	public Class<SampleEvaluationCheckFlowc> getClazz() {
-		return SampleEvaluationCheckFlowc.class;
 	}
 
 }

@@ -10,4 +10,11 @@ public class EmailNotifyForCaseFinish extends EmailNotify {
 	protected void setIsLastGate() {
 		this.isLastGate = true;
 	}
+
+	@Override
+	protected void changeMailToUsr() {
+
+		usr.add(getEmail(getDeptBoss("21")));
+	}
+
 }

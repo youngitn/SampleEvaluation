@@ -51,7 +51,7 @@ public class EmailNotify extends BaseEmailNotify {
 
 		content += "計畫主持人：" + projectLeaderLine + Mail.HTML_LINE_BREAK;
 
-		content += "是否進行請驗/試製流程：<br>" + buildApproveConfirmMsgStr(se) + Mail.HTML_LINE_BREAK;
+		content += "<br>" + buildApproveConfirmMsgStr(se) + Mail.HTML_LINE_BREAK;
 		content += "==========================" + Mail.HTML_LINE_BREAK;
 		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + Mail.HTML_LINE_BREAK;
 		content += "意見記錄：" + Mail.HTML_LINE_BREAK;
@@ -70,14 +70,14 @@ public class EmailNotify extends BaseEmailNotify {
 		String isTrialPrdStr = se.getIsTrialProduction();
 		if (isCheckStr.equals("0") || isCheckStr.equals("")) {
 
-			alertStr += "將不會進行請驗流程;<br>";
+			alertStr += "未進行請驗流程;<br>";
 		} else {
 
 			alertStr += "將進行請驗流程;<br>";
 		}
 		if (isTrialPrdStr.equals("0") || isTrialPrdStr.equals("")) {
 
-			alertStr += "將不會進行試製評估流程;<br>";
+			alertStr += "未進行試製評估流程;<br>";
 		} else {
 
 			alertStr += "將進行試製評估流程;<br>";
@@ -89,6 +89,12 @@ public class EmailNotify extends BaseEmailNotify {
 	public String getContent(SampleEvaluation dto) throws SQLException, Exception {
 
 		return buildContent(dto);
+	}
+
+	@Override
+	protected void changeMailToUsr() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
