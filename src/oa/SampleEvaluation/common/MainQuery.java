@@ -1,10 +1,7 @@
 package oa.SampleEvaluation.common;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.ysp.util.LogUtil;
 
 import oa.SampleEvaluation.common.global.BaseMainQuery;
 import oa.SampleEvaluation.common.global.CommonDataObj;
@@ -74,6 +71,10 @@ public class MainQuery extends BaseMainQuery {
 		String queryFlowStatusCheck = qc.getQueryStatusCheck();
 		String queryFlowStatusTp = qc.getQueryStatusTp();
 		String queryDepNo = qc.getQueryDepNo();
+		String queryUrgency = qc.getQueryUrgency();
+		String querySapCode = qc.getQuerySapCode();
+		String queryMaterial = qc.getQueryMaterial();
+		String queryMfr = qc.getQueryMfr();
 
 		StringBuilder advancedSql = new StringBuilder();
 
@@ -83,6 +84,15 @@ public class MainQuery extends BaseMainQuery {
 			advancedSql.append("and " + tableAppDateFieldName + " >= '" + sdate + "' ");
 		if (!"".equals(edate))
 			advancedSql.append("and " + tableAppDateFieldName + " <= '" + edate + "' ");
+
+		if (!"".equals(queryUrgency))
+			advancedSql.append("and Urgency = '" + queryUrgency + "' ");
+		if (!"".equals(querySapCode))
+			advancedSql.append("and Sap_Code like '%" + querySapCode + "%' ");
+		if (!"".equals(queryMaterial))
+			advancedSql.append("and Material like '%" + queryMaterial + "%' ");
+		if (!"".equals(queryMfr))
+			advancedSql.append("and Mfr like '%" + queryMfr + "%' ");
 
 		// status
 		advancedSql.append(statusCheck(queryFlowStatus, "b"));
@@ -124,7 +134,10 @@ public class MainQuery extends BaseMainQuery {
 			strSql.append(",");
 		}
 		String str = strSql.toString();
-		String subFlowcTableNameInSqlStr = "," + tableName + "_CHECK_FLOWC c ," + tableName + "_TP_FLOWC d ";
+		String subFlowcTableNameInSqlStr = "";
+
+		// subFlowcTableNameInSqlStr = "," + tableName + "_CHECK_FLOWC c ," + tableName
+		// + "_TP_FLOWC d ";
 		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
 //		if (qc.queryStatusCheck.equals("")) {
 //			subFlowcTableNameInSqlStr = "";

@@ -31,31 +31,29 @@ public class ShowSignHistory extends hproc {
 	 * @throws Exception
 	 */
 	private String getHtml(String value) throws SQLException, Exception {
-		// ���o�ثe�Ҧ��y�{�`�I
-		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'"; // �渹���
-		String rec[][] = getFlowHistory(getFunctionName(), id); // getFlowHistory(String�\��W��, String���e�[�W a. �p
-																// a.PNO='A12345678' )
-		// �Y�Lñ�֬y�{�����ɰ���
+
+		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'";
+		String rec[][] = getFlowHistory(getFunctionName(), id);
+
 		if (rec.length == 0 || rec == null) {
-			setValue("text3", "<center><font size=\"4\" color=red>�Lñ�֬y�{����</font></center>");
+			setValue("text3", "<center><font size=\"4\" color=red></font></center>");
 			return value;
 		}
-		// ñ�֬y�{����
+
 		talk t = getTalk();
 		StringBuffer sb = getMainFlowHistory(id, rec);
 
-		// ���l�y�{�~�[�B�~��div
-		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'"; // �渹���
-		String subRec[][] = getFlowHistory(getFunctionName() + "_����y�{", subid);
+		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'";
+		String subRec[][] = getFlowHistory(getFunctionName() + "_請驗流程", subid);
 		StringBuffer sb1 = new StringBuffer("");
 		if (subRec == null || subRec.length != 0) {
 			sb1 = getMainFlowHistory(subid, subRec);
 		}
 
-		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'"; // �渹���
-		String subRecTp[][] = getFlowHistory(getFunctionName() + "_�ջs�y�{", subidTp);
+		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'";
+		String subRecTp[][] = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
 		StringBuffer sbTp = new StringBuffer("");
-		if (subRec == null || subRec.length != 0) {
+		if (subRecTp == null || subRecTp.length != 0) {
 			sbTp = getMainFlowHistory(subidTp, subRecTp);
 		}
 
@@ -75,38 +73,35 @@ public class ShowSignHistory extends hproc {
 		String APPLYEMPNAME = "";
 		String fName = getFunctionName();
 		if (id.contains("CHECK")) {
-			fName = fName + "_����y�{";
+			fName = fName + "_請驗流程";
 		}
 		if (id.contains("TP")) {
-			fName = fName + "_�ջs�y�{";
+			fName = fName + "_試製流程";
 		}
 		sb.append("<div  style=\"float:left;\"><TABLE>");
-		sb.append("<tr>"); // 1�C�}�l
-		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>"); // 1-1�x�s��(���e������ �k�e150 ���)
-		sb.append("<p align='center'><font size='2'>�s�W-" + fName + "</font></p></td>"); // ���e�m�� �r��j�p2
-		sb.append("<td align='center' width='400'></td>"); // 1-2�x�s��
-		sb.append("</tr>"); // 1�C����
+		sb.append("<tr>");
+		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>");
+
+		sb.append("<p align='center'><font size='2'>" + fName + "</font></p></td>");
+		sb.append("<td align='center' width='400'></td>");
+		sb.append("</tr>");
 		for (int i = 0; i < rec.length; i++) {
-			sb.append("<tr>"); // 2�C�}�l
+			sb.append("<tr>");
 			sb.append(
-					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>"); // 2-1�x�s��
-			// sb.append("<td align='center'><font size='5' >&#8595;</font></td>");
-			// //2-1�x�s��(²�檺�b�Y)
-			// ���AUTO���B�m(AUTO���t�Τ�����)
+					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>"); // 2-1嚙踝蕭謕蕭豯歹蕭謕�蕭嚙踐�蕭豲
+
 			if ("AUTO".equals(rec[i][1])) {
 				APPLYEMPNAME = "AUTO";
 			} else {
 				APPLYEMPNAME = getName(rec[i][1]);
 			}
 
-			// rec[i][0] rec[i][1] rec[i][2] rec[i][3]
-			// �`�I�W�١B��֤H���B��֮ɶ��B��ַN��
 			sb.append("<TD align='center' width='400' >");
 			sb.append("<TABLE width='100%' height='100%' border='1'");
 			sb.append("<TR>");
-			sb.append("<TD width='20%' align='center'>ñ�֤H��</TD>");
-			sb.append("<TD width='33%' align='center'>ñ�֮ɶ�</TD>");
-			sb.append("<TD width='47%' align='center'>ñ�ַN��</TD>");
+			sb.append("<TD width='20%' align='center'>簽核人</TD>");
+			sb.append("<TD width='33%' align='center'>簽核時間</TD>");
+			sb.append("<TD width='47%' align='center'>備註</TD>");
 			sb.append("</TR>");
 			sb.append("<TR>");
 			sb.append("<TD align='center'><font size='2' color='#003333'>" + APPLYEMPNAME + "(" + rec[i][1]

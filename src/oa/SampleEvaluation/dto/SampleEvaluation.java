@@ -60,6 +60,7 @@ public class SampleEvaluation implements Serializable {
 	private String file9;
 	private String file10;
 	private String fileEvaluationResult;
+	private String appReason;
 	// "file_spec=?
 	// ,file_coa=?,file_test_method=?,file_others=?,file_sds=?,file_1=?,file_2=?,file_3=?,file_4=?,file_5=?,file_6=?,file_7=?,file_8=?,file_9=?,file_10=?"
 
@@ -119,6 +120,7 @@ public class SampleEvaluation implements Serializable {
 		this.file9 = strings[46];
 		this.file10 = strings[47];
 		this.fileEvaluationResult = strings[48];
+		this.appReason = strings[49];
 	}
 
 	/**
@@ -179,6 +181,7 @@ public class SampleEvaluation implements Serializable {
 		this.setFile9(service.getValue("FILE_9"));
 		this.setFile10(service.getValue("FILE_10"));
 		this.setFileEvaluationResult(service.getValue("FILE_EVALUATION_RESULT"));
+		this.setAppReason(service.getValue("APP_REASON"));
 
 	}
 
@@ -572,5 +575,13 @@ public class SampleEvaluation implements Serializable {
 
 	public void setFileEvaluationResult(String fileEvaluationResult) {
 		this.fileEvaluationResult = fileEvaluationResult;
+	}
+
+	public String getAppReason() {
+		return appReason;
+	}
+
+	public void setAppReason(String appReason) {
+		this.appReason = appReason;
 	}
 }

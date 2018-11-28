@@ -1,7 +1,6 @@
 package oa.SampleEvaluation.common.global;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,16 +48,13 @@ public class AddUtil {
 		String uuid = "";
 		String tablePKName = cdo.getTablePKName();
 		String table = cdo.getTableName();
-		String user = service.getValue(cdo.getTableApplicantFieldName());
-		String sql = "select max(" + tablePKName + ") from " + table + " where " + tablePKName + " like '" + user
-				+ "%'";
+		String sql = "select max(" + tablePKName + ") from " + table;
 		String[][] ret = service.getTalk().queryFromPool(sql);
-
+		String appdate = service.getValue("APP_DATE").trim().substring(0, 4);
 		if ("".equals(ret[0][0])) {
-			uuid = user + "00001";
+			uuid = appdate + "0001";
 		} else {
-			String m_uuid = ret[0][0].trim().replace(user, "");
-			uuid = user + String.format("%05d", (Long.parseLong(m_uuid) + 1));
+			uuid = String.valueOf(Long.parseLong(ret[0][0].trim()) + 1);
 		}
 
 		return uuid;

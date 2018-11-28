@@ -1,5 +1,9 @@
 package oa.SampleEvaluation.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
 import oa.SampleEvaluation.enums.FlowState;
@@ -37,13 +41,16 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			case PENING_PAGE_INIT:// 進入待處理畫面
 
 				init.doPendingPageProcess();
+				setDeadLine();
 				break;
 
 			case DETAIL_PAGE_INIT:// 進入明細畫面
 				init.doDetailPageProcess();
+				setDeadLine();
 				break;
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();
+				setDeadLine();
 				// 簽核完後跳至主頁面
 				String pno = getValue("PNO").trim();
 				if (pno.length() <= 0) {
@@ -124,6 +131,27 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		}
 		return name.toUpperCase();
 
+	}
+
+	private void setDeadLine() {
+		Calendar c = Calendar.getInstance();
+		int addDaysNum = 0;
+		String value = getValue("URGENCY");
+		if (!value.isEmpty()) {
+			if (value.equals("A")) {
+				addDaysNum = 100;
+			} else if (value.equals("B")) {
+				addDaysNum = 110;
+			} else if (value.equals("C")) {
+				addDaysNum = 130;
+			}
+			c.add(Calendar.DATE, addDaysNum);
+			Date d = c.getTime();
+			SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMdd");
+			String dldate = sdFormat.format(d);
+
+			setValue("DL", dldate);
+		}
 	}
 
 }
