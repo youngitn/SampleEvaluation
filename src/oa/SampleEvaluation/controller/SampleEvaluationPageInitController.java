@@ -51,6 +51,10 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();
 				setDeadLine();
+				// 所有欄位不可編輯
+				setAllFieldUneditable();
+				// 夾檔欄位可編輯
+				setAllFileUploadFieldEditable();
 				// 簽核完後跳至主頁面
 				String pno = getValue("PNO").trim();
 				if (pno.length() <= 0) {
@@ -58,7 +62,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				} else {
 					showRejectWarning(pno);
 				}
-				switchByState(FlowState.valueOf(getState().trim()));
+				switchByStateForFlowInit(FlowState.valueOf(getState().trim()));
 				// 如果帶出的資料 試製選項有打勾 就顯示評估人員
 				if (getValue("IS_TRIAL_PRODUCTION").trim().equals("1")) {
 					setVisible("ASSESSOR", true);
@@ -75,19 +79,11 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 
 	}
 
-	private void switchByState(FlowState en) {
+	private void switchByStateForFlowInit(FlowState en) {
+
 		switch (en) {
-		case 待處理:
-		case 採購經辦確認:
-//			Hashtable h = getAllcLabels();
-//			for (Enumeration e = h.keys(); e.hasMoreElements();) {
-//				String s = e.nextElement().toString();
-//				setEditable(s, true);
-//
-//			}
-			break;
 		case 組長:
-			setAllFieldUneditable();
+
 			setEditable("IS_CHECK", true);
 			setEditable("IS_TRIAL_PRODUCTION", true);
 			setEditable("ASSESSOR", true);
@@ -97,7 +93,6 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			setEditable("DOC_CTRLER", true);
 			break;
 		case 受理單位主管分案:
-			setAllFieldUneditable();
 			setEditable("DESIGNEE", true);
 			break;
 		default:

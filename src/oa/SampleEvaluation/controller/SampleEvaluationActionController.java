@@ -1,5 +1,7 @@
 package oa.SampleEvaluation.controller;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +13,13 @@ import oa.SampleEvaluation.common.MainQuery;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
 import oa.SampleEvaluation.common.global.AddUtil;
+import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
+import oa.SampleEvaluation.common.global.xmaker;
 import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.daointerface.ITableDao;
+import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.enums.Actions;
 
 /**
@@ -39,6 +45,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 			switch (Actions.valueOf(actionObjName.trim())) {
 			case QUERY_CLICK:
 				doQuery();
+
 				break;
 			case SAVE_CLICK:
 				doSave();
@@ -59,7 +66,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 	private void setProperty() throws Exception {
 		// for enum switch
 		actionObjName = getActionName(getName());
-		
+
 		service = new BaseService(this);
 		if (service == null || service.getFunctionName().equals("")) {
 			throw new Exception("new BaseService(this) is null......");
@@ -130,6 +137,12 @@ public class SampleEvaluationActionController extends HprocImpl {
 					// 觸發Dmaker內建的新增鈕來送出表單
 					// 寫在view部分會好點
 					addScript("document.getElementById('em_add_button-box').click();");
+//					SampleEvaluation s = new SampleEvaluation();
+//					ITableDao sdao = new SampleEvaluationDaoImpl(getTalk());
+//					s = (SampleEvaluation) DtoUtil.setFormDataToDto(s, this);
+//					// s = (SampleEvaluation) setFormDataToDto(s);
+//					sdao.add(s);
+//					message(s.getPno());
 
 				}
 			}
@@ -198,5 +211,28 @@ public class SampleEvaluationActionController extends HprocImpl {
 		return inercdo;
 
 	}
+
+//	public Object setFormDataToDto(final Object o) {
+//		try {
+//			// SampleEvaluationX s = new SampleEvaluationX();
+//			Field[] fld = o.getClass().getDeclaredFields();
+//			for (Field field : fld) {
+//				field.setAccessible(true);
+//				Annotation[] annotations = field.getAnnotations();
+//				for (Annotation annotation : annotations) {
+//					if (annotation instanceof xmaker) {
+//						xmaker myAnnotation = (xmaker) annotation;
+//						System.out.println("name: " + myAnnotation.name());
+//						field.set(o, getValue(myAnnotation.name()));
+//					}
+//				}
+//
+//			}
+//
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		return o;
+//	}
 
 }

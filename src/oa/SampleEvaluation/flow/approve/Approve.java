@@ -67,7 +67,7 @@ public class Approve extends bProcFlow {
 
 					SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
 					secDto.setAllValue(service);
-					FlowcUtil.goSubFlow("Check", secDto, t, "");
+					FlowcUtil.goSubFlow("Check", secDto, t, "填寫請驗單號");//記得設起始關卡
 					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
 					// 有請驗流程 寄出通知信
 					MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
@@ -77,7 +77,7 @@ public class Approve extends bProcFlow {
 
 					SampleEvaluationSubBaseDto setDto = new SampleEvaluationTp();
 					setDto.setAllValue(service);
-					FlowcUtil.goSubFlow("Tp", setDto, t, "");
+					FlowcUtil.goSubFlow("Tp", setDto, t, "評估人員");
 					String title = "簽核通知：" + this.getFunctionName() + "_試製流程";
 					// 有試製流程 寄出通知信
 					MailToolInApprove.sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);

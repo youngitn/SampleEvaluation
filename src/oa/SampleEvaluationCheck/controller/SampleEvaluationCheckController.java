@@ -14,9 +14,9 @@ public class SampleEvaluationCheckController extends HprocImpl {
 	@Override
 	public String action(String arg0) throws Throwable {
 		setFormEMPBaseInfo();
-		for (int i = 1; i <= 10; i++) {
-			setEditable("FILE_" + i, true);
-		}
+		setAllFieldUneditable();
+		setAllFileUploadFieldEditable();
+
 		// 申請人基本資料
 
 		String ownPno = getValue("OWN_PNO").trim();
@@ -25,7 +25,6 @@ public class SampleEvaluationCheckController extends HprocImpl {
 		} else {
 			showRejectWarning(ownPno, "OWN_PNO");
 		}
-		setVisible("ASSESSOR", true);
 		try {
 			switch (FlowState.valueOf(getState().trim())) {
 			case 填寫請驗單號:
@@ -36,8 +35,15 @@ public class SampleEvaluationCheckController extends HprocImpl {
 				setEditable("EVALUATION_RESULT", true);
 				setEditable("FILE_EVALUATION_RESULT", true);
 				break;
+			case 組長:
+				break;
+			case 結案:
+				break;
+			case 請驗作業跟催:
+				break;
 			default:
 				break;
+
 			}
 		} catch (EnumConstantNotPresentException e) {
 			message("enum:PageInitType.clss 發生無法辨識的意外");

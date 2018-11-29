@@ -1,15 +1,11 @@
 package oa.SampleEvaluationTp.controller;
 
-import org.apache.commons.collections.map.CaseInsensitiveMap;
-
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
-import oa.SampleEvaluation.common.global.UserData;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
 /**
- * 嘗試可測試寫法
- * 
+ *
  * @author u52116
  *
  */
@@ -30,18 +26,25 @@ public class SampleEvaluationTpController extends HprocImpl {
 
 			showRejectWarning(ownPno, "OWN_PNO");
 		}
+		setAllFieldUneditable();
+		setAllFileUploadFieldEditable();
 		// 就算是default 名稱也要存在FlowState
 		// switch條件才會生效
 		switch (FlowState.valueOf(getState())) {
-
-		default:
-			for (int i = 1; i <= 10; i++) {
-				setEditable("FILE_" + i, true);
-			}
-			break;
 		case 實驗室經辦:
 			setEditable("EVALUATION_RESULT", true);
-			setEditable("FILE_EVALUATION_RESULT", true);
+			break;
+		case 組長:
+			break;
+		case 組長確認是否請驗:
+			break;
+		case 結案:
+			break;
+		case 評估人員:
+			break;
+		case 試製作業跟崔:
+			break;
+		default:
 			break;
 		}
 		return arg0;

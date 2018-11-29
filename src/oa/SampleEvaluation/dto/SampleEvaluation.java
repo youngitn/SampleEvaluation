@@ -4,63 +4,122 @@ import java.io.Serializable;
 
 import com.ysp.service.BaseService;
 
+import oa.SampleEvaluation.common.global.dbTableName;
+import oa.SampleEvaluation.common.global.xmaker;
+
 /**
  * SampleEvaluation
  * 
  * 
  */
+@dbTableName(name = "SampleEvaluation")
 public class SampleEvaluation implements Serializable {
+	// declare a new annotation
+
 	private static final long serialVersionUID = 42L;
+
+	@xmaker(name = "PNO")
 	private String pno;
+	@xmaker(name = "APP_TYPE")
 	private String appType;
+	@xmaker(name = "URGENCY")
 	private String urgency;
+	@xmaker(name = "MATERIAL")
 	private String material;
+	@xmaker(name = "SAP_CODE")
 	private String sapCode;
+	@xmaker(name = "AB_CODE")
 	private String abCode;
+	@xmaker(name = "MFG_LOT_NO")
 	private String mfgLotNo;
+	@xmaker(name = "QTY")
 	private String qty;
+	@xmaker(name = "PACK")
 	private String pack;
+	@xmaker(name = "UNIT")
 	private String unit;
+	@xmaker(name = "MFR")
 	private String mfr;
+	@xmaker(name = "SUPPLIER")
 	private String supplier;
+	@xmaker(name = "PROVIDE_COA")
 	private String provideCoa;
+	@xmaker(name = "PROVIDE_SPEC")
 	private String provideSpec;
+	@xmaker(name = "PROVIDE_TEST_METHOD")
 	private String provideTestMethod;
+	@xmaker(name = "PROVIDE_SDS")
 	private String provideSds;
+	@xmaker(name = "PROVIDE_OTHERS")
 	private String provideOthers;
+	@xmaker(name = "NOTE")
 	private String note;
+	@xmaker(name = "APPLICANT")
 	private String applicant;
+	@xmaker(name = "APP_DATE")
 	private String appDate;
+	@xmaker(name = "RECEIPT_UNIT")
 	private String receiptUnit;
+	@xmaker(name = "PROJECT_CODE")
 	private String projectCode;
+	@xmaker(name = "PROJECT_LEADER")
 	private String projectLeader;
+	@xmaker(name = "NOTIFY_NO_CHECK")
 	private String notifyNoCheck;
+	@xmaker(name = "NOTIFY_NO_TRIAL_PROD")
 	private String notifyNoTrialProd;
+	@xmaker(name = "QR_NO")
 	private String qrNo;
+	@xmaker(name = "IS_CHECK")
 	private String isCheck;
+	@xmaker(name = "IS_TRIAL_PRODUCTION")
 	private String isTrialProduction;
+	@xmaker(name = "ASSESSOR")
 	private String assessor;
+	@xmaker(name = "DESIGNEE")
 	private String designee;
+	@xmaker(name = "LAB_EXE")
 	private String labExe;
+	@xmaker(name = "DOC_CTRLER")
 	private String docCtrler;
+	@xmaker(name = "EVALUATION_RESULT")
 	private String evaluationResult;
+	@xmaker(name = "FILE_SPEC")
 	private String fileSpec;
+	@xmaker(name = "FILE_COA")
 	private String fileCoa;
+	@xmaker(name = "FILE_TEST_METHOD")
 	private String fileTestMethod;
+	@xmaker(name = "FILE_OTHERS")
 	private String fileOthers;
+	@xmaker(name = "FILE_SDS")
 	private String fileSds;
+	@xmaker(name = "FILE_1")
 	private String file1;
+	@xmaker(name = "FILE_2")
 	private String file2;
+	@xmaker(name = "FILE_3")
 	private String file3;
+	@xmaker(name = "FILE_4")
 	private String file4;
+	@xmaker(name = "FILE_5")
 	private String file5;
+	@xmaker(name = "FILE_6")
 	private String file6;
+	@xmaker(name = "FILE_7")
 	private String file7;
+	@xmaker(name = "FILE_8")
 	private String file8;
+	@xmaker(name = "FILE_9")
 	private String file9;
+	@xmaker(name = "FILE_10")
 	private String file10;
+	@xmaker(name = "FILE_8")
 	private String fileEvaluationResult;
+
+	@xmaker(name = "APP_REASON")
 	private String appReason;
+
 	// "file_spec=?
 	// ,file_coa=?,file_test_method=?,file_others=?,file_sds=?,file_1=?,file_2=?,file_3=?,file_4=?,file_5=?,file_6=?,file_7=?,file_8=?,file_9=?,file_10=?"
 
@@ -584,4 +643,5 @@ public class SampleEvaluation implements Serializable {
 	public void setAppReason(String appReason) {
 		this.appReason = appReason;
 	}
+
 }

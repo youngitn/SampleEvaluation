@@ -29,5 +29,4 @@ public class SampleEvaluationX { // 不会强制要求继承某个类
 		this.sap_Code = sapCode;
 	}
 
-	
 }

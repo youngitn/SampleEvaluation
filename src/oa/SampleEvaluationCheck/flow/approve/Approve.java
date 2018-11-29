@@ -15,6 +15,8 @@ import oa.SampleEvaluationTp.dao.SampleEvaluationTpDaoImpl;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 import jcx.jform.bProcFlow;
 
+import java.lang.reflect.Field;
+
 import com.ysp.service.BaseService;
 import com.ysp.util.DateTimeUtil;
 
@@ -37,10 +39,9 @@ public class Approve extends bProcFlow {
 		case 填寫請驗單號:
 		case 實驗室經辦:
 			/*
-			 * 判斷請驗單號欄位是否空值會在填寫請驗單號舊處理完畢
-			 *到實驗室經辦時 只會同步更新三表 
-			 * */
-			
+			 * 判斷請驗單號欄位是否空值會在填寫請驗單號舊處理完畢 到實驗室經辦時 只會同步更新三表
+			 */
+
 			if (getValue("NOTIFY_NO_CHECK").trim().equals("") || getValue("NOTIFY_NO_TRIAL_PROD").trim().equals("")) {
 				message("請填寫原料或試製品請驗單號,如果未進行請驗請直接在欄位中填寫原因.");
 				ret = false;
@@ -128,6 +129,22 @@ public class Approve extends bProcFlow {
 		percent(100, space + "表單送出中，請稍候...<font color=white>");
 		message("簽核完成");
 		return true;
+	}
+
+	public Object setFormDataToDto(final Object o) {
+		try {
+			// SampleEvaluationX s = new SampleEvaluationX();
+
+			Field[] fld = o.getClass().getDeclaredFields();
+			for (Field field : fld) {
+				field.setAccessible(true);
+				field.set(o, getValue(field.getName().trim().toUpperCase()));
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return o;
 	}
 
 }

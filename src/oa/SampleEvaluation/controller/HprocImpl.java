@@ -27,6 +27,17 @@ public class HprocImpl extends hproc {
 		}
 	}
 
+	protected void setAllFileUploadFieldEditable() {
+		Hashtable h = getAllcLabels();
+		for (Enumeration e = h.keys(); e.hasMoreElements();) {
+			String s = e.nextElement().toString();
+			if (s.startsWith("FILE_")) {
+				setEditable(s, true);
+			}
+
+		}
+	}
+
 	protected void setFormEMPBaseInfo() throws SQLException, Exception {
 		UserData u = new UserData(getValue("APPLICANT").trim(), getTalk());
 		setValue("APPLICANT_NAME", u.getHecname());
