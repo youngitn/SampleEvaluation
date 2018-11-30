@@ -27,6 +27,7 @@ public class SampleEvaluationDaoImpl implements ITableDao<SampleEvaluation> {
 	@Override
 	public String add(SampleEvaluation sampleEvaluation) throws SQLException, Exception {
 		System.out.println(sampleEvaluation.getPno());
+		
 		return t.execFromPool(
 				"insert into sample_evaluation  (" + FinalString.TABLE_FIELD_FOR_TALK + ") values ("
 						+ FinalString.TABLE_FIELD_MAP_VLUE_FOR_TALK + " )",

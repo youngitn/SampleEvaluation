@@ -1,10 +1,16 @@
 package oa.SampleEvaluation;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 import org.nutz.dao.Dao;
 import org.nutz.dao.impl.NutDao;
@@ -15,9 +21,55 @@ import com.yungshingroup.utils.Fmt;
 import jcx.db.talk;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
+import oa.SampleEvaluation.common.global.DtoUtil;
+import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.enums.AppType;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
 public class Test extends hproc {
+	public static void main(String[] arg) throws Throwable {
+		Test tes = new Test();
+		// tes.test1();
+//		tes.test2();
+//		tes.test3();
+//		tes.test4();
+//		DtoUtil.getDeclaredXmakerFields(new SampleEvaluationTp());
+		HashMap<String, String> m = DtoUtil.getZZZZZ(new SampleEvaluationTp());
+		System.out.println(m.get("insertFields"));
+		System.out.println(m.get("insertValues"));
+		System.out.println(m.get("updateFieldsWithValues"));
+	}
+
+	public void test4() throws Throwable {
+		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
+
+		ArrayList<SampleEvaluationTp> ss = (ArrayList<SampleEvaluationTp>) DtoUtil
+				.getDbDataToDtoList(new SampleEvaluationTp(), t);
+		for (SampleEvaluationTp s : ss) {
+			System.out.println("44444");
+			System.out.println(s.getAppDate());
+			System.out.println(s.getOwnPno());
+		}
+//
+	}
+
+	public void test3() throws Throwable {
+		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
+
+		ArrayList<SampleEvaluation> ss = (ArrayList<SampleEvaluation>) DtoUtil
+				.getDbDataToDtoList(new SampleEvaluation(), t);
+		for (SampleEvaluation s : ss) {
+			System.out.println(s.getAppDate());
+			System.out.println(s.getPno());
+		}
+//
+	}
+
+	public void test2() throws Throwable {
+		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
+		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDbDataToDtoByPno(new SampleEvaluation(), t, "20180003");
+		DtoUtil.setDtoDataToForm(s, this);
+	}
 
 	public void test1() throws Throwable {
 		// TODO Auto-generated method stub
@@ -194,7 +246,8 @@ public class Test extends hproc {
 	@Override
 	public String action(String arg0) throws Throwable {
 		// TODO Auto-generated method stub
-		test1();
+		// test1();
+		test2();
 		return null;
 	}
 

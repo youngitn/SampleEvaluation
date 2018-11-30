@@ -78,13 +78,17 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	private void showDetail() throws SQLException, Exception {
 		setValue("QUERY_LIST_PNO", getValue("QUERY_LIST.PNO"));
-		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
-		String[][] allColumns = cdo.getTableAllColumn();
-		if (ret != null && ret.length > 0) {
-			fillData(ret, allColumns);
-		} else {
-			message("查無資料");
-		}
+		// **************可行***************
+		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDbDataToDtoByPno(new SampleEvaluation(), getTalk(),
+				getValue("QUERY_LIST.PNO"));
+		DtoUtil.setDtoDataToForm(s, this);
+//		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
+//		String[][] allColumns = cdo.getTableAllColumn();
+//		if (ret != null && ret.length > 0) {
+//			fillData(ret, allColumns);
+//		} else {
+//			message("查無資料");
+//		}
 		FormInitUtil init = new FormInitUtil(this);
 
 		init.doDetailPageProcess();

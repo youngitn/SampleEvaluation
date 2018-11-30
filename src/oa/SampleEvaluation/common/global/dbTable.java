@@ -15,6 +15,8 @@ import java.lang.annotation.Target;
  * @author u52116
  *
  */
-public @interface dbTableName {
+public @interface dbTable {
 	public String name();
+
+	public String pkName();
 }

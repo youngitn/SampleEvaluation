@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.ysp.service.BaseService;
 
-import oa.SampleEvaluation.common.global.dbTableName;
+import oa.SampleEvaluation.common.global.dbTable;
 import oa.SampleEvaluation.common.global.xmaker;
 
 /**
@@ -12,12 +12,11 @@ import oa.SampleEvaluation.common.global.xmaker;
  * 
  * 
  */
-@dbTableName(name = "SampleEvaluation")
+@dbTable(name = "SAMPLE_EVALUATION", pkName = "PNO")
 public class SampleEvaluation implements Serializable {
 	// declare a new annotation
 
 	private static final long serialVersionUID = 42L;
-
 	@xmaker(name = "PNO")
 	private String pno;
 	@xmaker(name = "APP_TYPE")
@@ -114,7 +113,7 @@ public class SampleEvaluation implements Serializable {
 	private String file9;
 	@xmaker(name = "FILE_10")
 	private String file10;
-	@xmaker(name = "FILE_8")
+	@xmaker(name = "FILE_EVALUATION_RESULT")
 	private String fileEvaluationResult;
 
 	@xmaker(name = "APP_REASON")

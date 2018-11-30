@@ -18,5 +18,7 @@ public interface ITableDao<E> {
 	String[][] findArrayById(String id) throws SQLException, Exception;
 
 	String[][] findAllArray(String params, String selectFields) throws SQLException, Exception;
+	
+	
 
 }
