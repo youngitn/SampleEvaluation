@@ -20,3 +20,6 @@
 /id.class
 /BaseDao.class
 /dbTable.class
+/DbCreateAndUpdateType.class
+/DbProcessType.class
+/TableFieldSpecs.class

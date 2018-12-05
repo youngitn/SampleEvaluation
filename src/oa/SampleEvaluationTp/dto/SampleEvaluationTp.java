@@ -9,7 +9,7 @@ import oa.SampleEvaluation.common.global.xmaker;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
 
 /**
- * SampleEvaluation
+ * 同SampleEvaluation 只多增加了 OWN_PNO 一張資料表應該就能處理, 這邊多建了兩張表 多很多麻煩.
  * 
  */
 @dbTable(name = "SAMPLE_EVALUATION_TP", pkName = "OWN_PNO")
@@ -35,7 +35,7 @@ public class SampleEvaluationTp extends SampleEvaluationSubBaseDto implements Se
 	@xmaker(name = "MFG_LOT_NO")
 	private String mfgLotNo;
 	@xmaker(name = "QTY")
-	private String qty;
+	private String qty = "0";
 	@xmaker(name = "PACK")
 	private String pack;
 	@xmaker(name = "UNIT")
@@ -130,9 +130,6 @@ public class SampleEvaluationTp extends SampleEvaluationSubBaseDto implements Se
 
 	}
 
-	public SampleEvaluationTp(BaseService service) {
-		super(service);
-	}
 
 	@Override
 	protected String buildOwnPno(String pno) {
@@ -148,15 +145,6 @@ public class SampleEvaluationTp extends SampleEvaluationSubBaseDto implements Se
 		this.ownPno = ownPno;
 	}
 
-	public void setAllValue(BaseService service) {
-		// 用父類別方法塞共同欄位資料
-		super.setAllValue(service);
-		// 子流程多一個ownPno欄位 ID = 表單單號+TP
-		String ownPno = buildOwnPno(service.getValue("PNO"));
-		// 為子流程主檔填入ID
-		this.setOwnPno(ownPno);
-
-	}
 
 	public String getPno() {
 		return pno;

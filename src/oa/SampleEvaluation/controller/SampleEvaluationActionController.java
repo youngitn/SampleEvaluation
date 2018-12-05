@@ -1,7 +1,5 @@
 package oa.SampleEvaluation.controller;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,12 +11,11 @@ import oa.SampleEvaluation.common.MainQuery;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
 import oa.SampleEvaluation.common.global.AddUtil;
+import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
-import oa.SampleEvaluation.common.global.xmaker;
-import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
-import oa.SampleEvaluation.daointerface.ITableDao;
+import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.enums.Actions;
 
@@ -78,17 +75,9 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	private void showDetail() throws SQLException, Exception {
 		setValue("QUERY_LIST_PNO", getValue("QUERY_LIST.PNO"));
-		// **************可行***************
-		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDbDataToDtoByPno(new SampleEvaluation(), getTalk(),
-				getValue("QUERY_LIST.PNO"));
+		BaseDao bao = new SampleEvaluationService(getTalk());
+		SampleEvaluation s = (SampleEvaluation) bao.findById(getValue("QUERY_LIST.PNO"));
 		DtoUtil.setDtoDataToForm(s, this);
-//		String[][] ret = new SampleEvaluationDaoImpl(getTalk()).findArrayById(getValue("QUERY_LIST.PNO"));
-//		String[][] allColumns = cdo.getTableAllColumn();
-//		if (ret != null && ret.length > 0) {
-//			fillData(ret, allColumns);
-//		} else {
-//			message("查無資料");
-//		}
 		FormInitUtil init = new FormInitUtil(this);
 
 		init.doDetailPageProcess();
@@ -141,12 +130,6 @@ public class SampleEvaluationActionController extends HprocImpl {
 					// 觸發Dmaker內建的新增鈕來送出表單
 					// 寫在view部分會好點
 					addScript("document.getElementById('em_add_button-box').click();");
-//					SampleEvaluation s = new SampleEvaluation();
-//					ITableDao sdao = new SampleEvaluationDaoImpl(getTalk());
-//					s = (SampleEvaluation) DtoUtil.setFormDataToDto(s, this);
-//					// s = (SampleEvaluation) setFormDataToDto(s);
-//					sdao.add(s);
-//					message(s.getPno());
 
 				}
 			}
@@ -171,15 +154,6 @@ public class SampleEvaluationActionController extends HprocImpl {
 		}
 		if (!getValue("FILE_TEST_METHOD").equals("")) {
 			setValue("PROVIDE_TEST_METHOD", "1");
-		}
-	}
-
-	// 將資料填入表單畫面欄位
-	private void fillData(String[][] data, String[][] allColumns) {
-		if (allColumns.length > 0) {
-			for (int i = 0; i < allColumns.length; i++) {
-				setValue(allColumns[i][0], data[0][i]);
-			}
 		}
 	}
 

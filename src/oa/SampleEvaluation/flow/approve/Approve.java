@@ -1,17 +1,23 @@
 package oa.SampleEvaluation.flow.approve;
 
-import jcx.jform.bProcFlow;
-import oa.SampleEvaluation.flow.approve.gateEnum.*;
-
 import com.ysp.service.BaseService;
+import com.ysp.util.DateTimeUtil;
+
+import jcx.db.talk;
+import jcx.jform.bProcFlow;
 import oa.SampleEvaluation.common.MailToolInApprove;
+import oa.SampleEvaluation.common.global.BaseDao;
+import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.FlowcUtil;
-import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
+import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
+import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
-import jcx.db.*;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
 public class Approve extends bProcFlow {
 
@@ -24,6 +30,7 @@ public class Approve extends bProcFlow {
 		nowState = getState();
 		t = getTalk();
 		SampleEvaluation s = null;
+		BaseDao bdService = new SampleEvaluationService(t);
 		BaseService service = new BaseService(this);
 		String labExe = getValue("LAB_EXE").trim();
 		String lassessor = getValue("ASSESSOR").trim();
@@ -59,25 +66,26 @@ public class Approve extends bProcFlow {
 				// 更新主表請驗和試製評估勾選欄位
 				// 更新主表 評估人員和實驗室經辦
 				s = new SampleEvaluation();
-				s.setAllValue(service);
-				new SampleEvaluationDaoImpl(t).update(s);
+				s = (SampleEvaluation) DtoUtil.setFormDataToDto(s, this);
+				bdService.update(s);
 
 				// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 				if (isCheckValue.equals("1")) {
+					SampleEvaluationCheck secDto = (SampleEvaluationCheck) DtoUtil
+							.setFormDataToDto(new SampleEvaluationCheck(), this);
 
-					SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
-					secDto.setAllValue(service);
-					FlowcUtil.goSubFlow("Check", secDto, t, "填寫請驗單號");//記得設起始關卡
+					String ownPno = secDto.getPno() + "CHECK";
+					FlowcUtil.goCheckSubFlow(ownPno, getValue("APPLICANT"), "填寫請驗單號", t);
 					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
 					// 有請驗流程 寄出通知信
 					MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
 
 				}
 				if (isTrialProdValue.equals("1")) {
-
-					SampleEvaluationSubBaseDto setDto = new SampleEvaluationTp();
-					setDto.setAllValue(service);
-					FlowcUtil.goSubFlow("Tp", setDto, t, "評估人員");
+					SampleEvaluationTp setDto = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(),
+							this);
+					String ownPno = setDto.getPno() + "TP";
+					FlowcUtil.goCheckSubFlow(ownPno, getValue("APPLICANT"), "評估人員", t);
 					String title = "簽核通知：" + this.getFunctionName() + "_試製流程";
 					// 有試製流程 寄出通知信
 					MailToolInApprove.sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
@@ -102,8 +110,8 @@ public class Approve extends bProcFlow {
 			if (ret) {
 				FileItemSetChecked();
 				s = new SampleEvaluation();
-				s.setAllValue(service);
-				new SampleEvaluationDaoImpl(t).update(s);
+				s = (SampleEvaluation) DtoUtil.setFormDataToDto(s, this);
+				bdService.update(s);
 			}
 			break;
 		case 採購經辦:
@@ -116,9 +124,8 @@ public class Approve extends bProcFlow {
 				ret = false;
 			} else if (ret) {
 				FileItemSetChecked();
-				s = new SampleEvaluation();
-				s.setAllValue(service);
-				new SampleEvaluationDaoImpl(t).update(s);
+				s = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+				bdService.update(s);
 				ret = true;
 			}
 			break;

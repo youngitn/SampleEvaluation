@@ -2,12 +2,12 @@ package oa.SampleEvaluation.common.global;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Vector;
+
 import com.ysp.service.BaseService;
 import com.ysp.util.LogUtil;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.controller.*;
+import oa.SampleEvaluation.controller.HprocImpl;
 
 public abstract class BaseMainQuery {
 	protected CommonDataObj cdo;

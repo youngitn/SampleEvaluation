@@ -32,7 +32,7 @@ public class SampleEvaluation implements Serializable {
 	@xmaker(name = "MFG_LOT_NO")
 	private String mfgLotNo;
 	@xmaker(name = "QTY")
-	private String qty;
+	private String qty = "0";
 	@xmaker(name = "PACK")
 	private String pack;
 	@xmaker(name = "UNIT")
@@ -181,67 +181,6 @@ public class SampleEvaluation implements Serializable {
 		this.appReason = strings[49];
 	}
 
-	/**
-	 * 取得表單欄位資料,並設置於SampleEvaluation物件中 <br>
-	 * 因只有本方法會使用到service,所以使用時才導入service
-	 * 
-	 * @param s       SampleEvaluation<br>
-	 * @param service BaseService<br>
-	 * @return SampleEvaluation
-	 */
-	public void setAllValue(BaseService service) {
-		this.setAppType(service.getValue("APP_TYPE"));
-		this.setUrgency(service.getValue("URGENCY"));
-		this.setMaterial(service.getValue("MATERIAL"));
-		this.setSapCode(service.getValue("SAP_CODE"));
-		this.setAbCode(service.getValue("AB_CODE"));
-		this.setMfgLotNo(service.getValue("MFG_LOT_NO"));
-		this.setQty(service.getValue("QTY"));
-		this.setPack(service.getValue("PACK"));
-		this.setUnit(service.getValue("UNIT"));
-		this.setMfr(service.getValue("MFR"));
-		this.setSupplier(service.getValue("SUPPLIER"));
-		this.setProvideCoa(service.getValue("PROVIDE_COA"));
-		this.setProvideSpec(service.getValue("PROVIDE_SPEC"));
-		this.setProvideTestMethod(service.getValue("PROVIDE_TEST_METHOD"));
-		this.setProvideSds(service.getValue("PROVIDE_SDS"));
-		this.setProvideOthers(service.getValue("PROVIDE_OTHERS"));
-		this.setNote(service.getValue("NOTE"));
-		this.setApplicant(service.getValue("APPLICANT"));
-		this.setAppDate(service.getValue("APP_DATE"));
-		this.setReceiptUnit(service.getValue("RECEIPT_UNIT"));
-		this.setProjectCode(service.getValue("PROJECT_CODE"));
-		this.setProjectLeader(service.getValue("PROJECT_LEADER"));
-		this.setNotifyNoCheck(service.getValue("NOTIFY_NO_CHECK"));
-		this.setNotifyNoTrialProd(service.getValue("NOTIFY_NO_TRIAL_PROD"));
-		this.setQrNo(service.getValue("QR_NO"));
-		this.setIsCheck(service.getValue("IS_CHECK"));
-		this.setIsTrialProduction(service.getValue("IS_TRIAL_PRODUCTION"));
-		this.setLabExe(service.getValue("LAB_EXE").trim());
-		this.setAssessor(service.getValue("ASSESSOR").trim());
-		this.setDesignee(service.getValue("DESIGNEE").trim());
-		this.setDocCtrler(service.getValue("DOC_CTRLER"));
-		this.setEvaluationResult(service.getValue("EVALUATION_RESULT"));
-		this.setPno(service.getValue("PNO"));
-		this.setFileSpec(service.getValue("FILE_SPEC"));
-		this.setFileCoa(service.getValue("FILE_COA"));
-		this.setFileTestMethod(service.getValue("FILE_TEST_METHOD"));
-		this.setFileOthers(service.getValue("FILE_OTHERS"));
-		this.setFileSds(service.getValue("FILE_SDS"));
-		this.setFile1(service.getValue("FILE_1"));
-		this.setFile2(service.getValue("FILE_2"));
-		this.setFile3(service.getValue("FILE_3"));
-		this.setFile4(service.getValue("FILE_4"));
-		this.setFile5(service.getValue("FILE_5"));
-		this.setFile6(service.getValue("FILE_6"));
-		this.setFile7(service.getValue("FILE_7"));
-		this.setFile8(service.getValue("FILE_8"));
-		this.setFile9(service.getValue("FILE_9"));
-		this.setFile10(service.getValue("FILE_10"));
-		this.setFileEvaluationResult(service.getValue("FILE_EVALUATION_RESULT"));
-		this.setAppReason(service.getValue("APP_REASON"));
-
-	}
 
 	public void setDocCtrler(String value) {
 		this.docCtrler = value;

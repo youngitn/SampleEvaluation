@@ -1,69 +1,59 @@
 package oa.SampleEvaluation.common.global;
 
-import java.lang.reflect.Constructor;
 import java.sql.SQLException;
 
 import com.ysp.util.DateTimeUtil;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.daointerface.IFlowcDao;
-import oa.SampleEvaluation.daointerface.IFlowcHisDao;
-import oa.SampleEvaluation.daointerface.ITableDao;
-import oa.SampleEvaluation.dto.FlowcDto;
-import oa.SampleEvaluation.dto.FlowcHisDto;
-import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisService;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcHisService;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcService;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
 public class FlowcUtil {
-	public static FlowcDto getFlowcDtoWithData(String gateName, SampleEvaluationSubBaseDto s) {
-		FlowcDto Dto = new FlowcDto();
-		Dto.setId(s.getOwnPno());
-		String time = DateTimeUtil.getApproveAddSeconds(0);
-		Dto.setF_INP_ID(s.getApplicant());
-		Dto.setF_INP_STAT(gateName);
-		Dto.setF_INP_TIME(time);
-		return Dto;
-	}
 
-	public static FlowcHisDto getFlowcHisDtoWithData(String gateName, SampleEvaluationSubBaseDto s) {
-		FlowcHisDto Dto = new FlowcHisDto();
-		Dto.setId(s.getOwnPno());
-		String time = DateTimeUtil.getApproveAddSeconds(0);
-		Dto.setF_INP_ID(s.getApplicant());
-		Dto.setF_INP_STAT(gateName);
-		Dto.setF_INP_TIME(time);
-		return Dto;
-	}
+	public static void goCheckSubFlow(String ownPno, String applicant, String gateName, talk t)
+			throws SQLException, Exception {
 
-	public static void goSubFlow(String type, SampleEvaluationSubBaseDto s, talk t, String gateName)
-			throws ClassNotFoundException, SQLException, Exception {
+		SampleEvaluationCheckFlowc secf = new SampleEvaluationCheckFlowc();
+		secf.setOwnPno(ownPno);
+		secf.setfInpId(applicant);
+		secf.setfInpStat(gateName);
+		secf.setfInpTime(DateTimeUtil.getApproveAddSeconds(0));
+		SampleEvaluationCheckFlowcHis secfh = new SampleEvaluationCheckFlowcHis();
+		secfh.setOwnPno(ownPno);
+		secfh.setfInpId(applicant);
+		secfh.setfInpStat(gateName);
+		secfh.setfInpTime(secf.getfInpTime());
 
-		try {
-			Class<?> mainDao = Class.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "DaoImpl");
-			Constructor<?> DaoCon = mainDao.getConstructor(talk.class);
-			ITableDao<SampleEvaluationSubBaseDto> Dao = (ITableDao<SampleEvaluationSubBaseDto>) DaoCon.newInstance(t);
-
-			if (Dao.findById(s.getOwnPno()) != null) {
-				Dao.update(s);
-			} else {
-				// insert一筆子流程主檔
-				Dao.add(s);
-
-				FlowcDto Dto = FlowcUtil.getFlowcDtoWithData(gateName, s);
-				IFlowcDao<FlowcDto> secfDao = (IFlowcDao<FlowcDto>) Class
-						.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcDaoImpl")
-						.newInstance();
-				secfDao.create(t.getConnectionFromPool(), Dto);
-				FlowcHisDto his = FlowcUtil.getFlowcHisDtoWithData(gateName, s);
-
-				IFlowcHisDao<FlowcHisDto> secfhDao = (IFlowcHisDao<FlowcHisDto>) Class
-						.forName("oa.SampleEvaluation" + type + ".dao.SampleEvaluation" + type + "FlowcHisDaoImpl")
-						.newInstance();
-
-				secfhDao.create(t.getConnectionFromPool(), his);
-			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("找不到類別");
-		}
+		BaseDao service = new SampleEvaluationCheckFlowcService(t);
+		service.add(secf);
+		service = new SampleEvaluationCheckFlowcHisService(t);
+		service.add(secfh);
 
 	}
+
+	public static void goTpSubFlow(String ownPno, String applicant, String gateName, talk t)
+			throws SQLException, Exception {
+
+		SampleEvaluationTpFlowc secf = new SampleEvaluationTpFlowc();
+		secf.setOwnPno(ownPno);
+		secf.setfInpId(applicant);
+		secf.setfInpStat(gateName);
+		secf.setfInpTime(DateTimeUtil.getApproveAddSeconds(0));
+		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
+		secfh.setOwnPno(ownPno);
+		secfh.setfInpId(applicant);
+		secfh.setfInpStat(gateName);
+		secfh.setfInpTime(secf.getfInpTime());
+		BaseDao service = new SampleEvaluationTpFlowcService(t);
+		service.add(secfh);
+		service = new SampleEvaluationTpFlowcHisService(t);
+		service.add(secf);
+	}
+
 }

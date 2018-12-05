@@ -1,19 +1,19 @@
 package oa.SampleEvaluationTp.flow.approve;
 
-import oa.SampleEvaluation.common.MailToolInApprove;
-import oa.SampleEvaluation.common.global.FlowcUtil;
-import oa.SampleEvaluation.dao.SampleEvaluationDaoImpl;
-import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
-import oa.SampleEvaluation.flow.approve.Approve;
-
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpDaoImpl;
-import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
-
 import com.ysp.service.BaseService;
 
+import jcx.db.talk;
 import jcx.jform.bProcFlow;
+import oa.SampleEvaluation.common.MailToolInApprove;
+import oa.SampleEvaluation.common.global.BaseDao;
+import oa.SampleEvaluation.common.global.DtoUtil;
+import oa.SampleEvaluation.common.global.FlowcUtil;
+import oa.SampleEvaluation.dao.SampleEvaluationService;
+import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
 public class DoCheckFlow extends bProcFlow {
 
@@ -22,6 +22,7 @@ public class DoCheckFlow extends bProcFlow {
 		// 回傳值為 false 表示接下來不執行任何流程處理
 		// 傳入值 value 為 "核准"
 		boolean ret = true;
+		talk t = getTalk();
 		ret = doReminder("將新增資訊傳遞通知單 請驗簽核流程  ");
 		if (ret) {
 
@@ -29,23 +30,23 @@ public class DoCheckFlow extends bProcFlow {
 
 				setValue("IS_CHECK", "1");
 				BaseService service = new BaseService(this);
-				SampleEvaluationSubBaseDto secDto = new SampleEvaluationCheck();
-				secDto.setAllValue(service);
-				FlowcUtil.goSubFlow("Check", secDto, getTalk(), "填寫請驗單號");
+				BaseDao bdservice = new SampleEvaluationCheckService(t);
+				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(),
+						this);
+				bdservice.upsert(ck);
+				FlowcUtil.goCheckSubFlow(ck.getPno() + "CHECK", ck.getApplicant(), "填寫請驗單號", t);
 
 				String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
 				// 有請驗流程 寄出通知信
-				MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
+				MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), ck, title);
 
-				SampleEvaluationTpDaoImpl tpDao = new SampleEvaluationTpDaoImpl(getTalk());
-				SampleEvaluationTp tp = new SampleEvaluationTp();
-				tp.setAllValue(service);
-				tpDao.update(tp);
+				bdservice = new SampleEvaluationTpService(t);
+				SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+				bdservice.upsert(tp);
 
-				SampleEvaluationDaoImpl seDao = new SampleEvaluationDaoImpl(getTalk());
-				SampleEvaluation se = new SampleEvaluation();
-				se.setAllValue(service);
-				seDao.update(se);
+				bdservice = new SampleEvaluationService(t);
+				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+				bdservice.upsert(se);
 				ret = true;
 			} else if (getValue("IS_CHECK").equals("1")) {
 				message("已進行過請驗流程");
