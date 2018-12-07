@@ -7,10 +7,10 @@ import java.util.Map;
 
 import com.ysp.service.BaseService;
 
+import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.MainQuery;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
-import oa.SampleEvaluation.common.global.AddUtil;
 import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.FormInitUtil;
@@ -21,7 +21,7 @@ import oa.SampleEvaluation.enums.Actions;
 
 /**
  * 
- * 可測試<br>
+ * 
  * 
  * @author u52116
  *
@@ -93,10 +93,10 @@ public class SampleEvaluationActionController extends HprocImpl {
 		// go
 		MainQuery mquery = new MainQuery(cdo);
 
-		String[][] list = mquery.getQueryResult();
-		message(mquery.getSqlQueryStr());
+		String[][] list = mquery.testtest();
+		// message(mquery.getSqlQueryStr());
 		if (list == null || list.length <= 0) {
-			// message("查無紀錄");
+			message("查無紀錄");
 		}
 		setTableData("QUERY_LIST", list);
 	}
@@ -189,28 +189,5 @@ public class SampleEvaluationActionController extends HprocImpl {
 		return inercdo;
 
 	}
-
-//	public Object setFormDataToDto(final Object o) {
-//		try {
-//			// SampleEvaluationX s = new SampleEvaluationX();
-//			Field[] fld = o.getClass().getDeclaredFields();
-//			for (Field field : fld) {
-//				field.setAccessible(true);
-//				Annotation[] annotations = field.getAnnotations();
-//				for (Annotation annotation : annotations) {
-//					if (annotation instanceof xmaker) {
-//						xmaker myAnnotation = (xmaker) annotation;
-//						System.out.println("name: " + myAnnotation.name());
-//						field.set(o, getValue(myAnnotation.name()));
-//					}
-//				}
-//
-//			}
-//
-//		} catch (Exception e) {
-//			System.out.println(e.getMessage());
-//		}
-//		return o;
-//	}
 
 }

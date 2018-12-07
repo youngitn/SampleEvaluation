@@ -2,7 +2,6 @@ package oa.SampleEvaluation.controller;
 
 import java.sql.SQLException;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 import org.apache.commons.lang.StringUtils;

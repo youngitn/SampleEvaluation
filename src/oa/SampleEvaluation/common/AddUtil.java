@@ -1,10 +1,12 @@
-package oa.SampleEvaluation.common.global;
+package oa.SampleEvaluation.common;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.ysp.service.BaseService;
+
+import oa.SampleEvaluation.common.global.CommonDataObj;
 
 /**
  * ¤£¨Ì¿àhproc

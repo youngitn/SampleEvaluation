@@ -14,6 +14,7 @@ import jcx.util.datetime;
 public class FormInitUtil {
 
 	UserData userdata;
+	//form
 	hproc c;
 
 	public FormInitUtil(hproc c) throws NullPointerException {

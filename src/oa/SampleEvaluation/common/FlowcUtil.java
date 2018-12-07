@@ -1,10 +1,11 @@
-package oa.SampleEvaluation.common.global;
+package oa.SampleEvaluation.common;
 
 import java.sql.SQLException;
 
 import com.ysp.util.DateTimeUtil;
 
 import jcx.db.talk;
+import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisService;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
@@ -15,6 +16,10 @@ import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
 public class FlowcUtil {
+	
+	private FlowcUtil() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	public static void goCheckSubFlow(String ownPno, String applicant, String gateName, talk t)
 			throws SQLException, Exception {

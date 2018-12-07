@@ -1,6 +1,5 @@
 package oa.SampleEvaluationTp.controller;
 
-import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
@@ -12,7 +11,6 @@ import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 public class SampleEvaluationTpController extends HprocImpl {
 
 	public boolean confirm;
-	public SampleEvaluationDataObj cdo;
 
 	@Override
 	public String action(String arg0) throws Throwable {

@@ -140,24 +140,24 @@ public class DtoUtil {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ArrayList getDbDataToDtoList(final Object o, talk t) throws SQLException {
+	public static ArrayList getDbDataToDtoList(final Class clazz, talk t, String condition) throws SQLException {
 		ArrayList list = new ArrayList();
 		ResultSet r = null;
 		try {
-			Class clazz = o.getClass();
+
 			Field[] fld = clazz.getDeclaredFields();
-			r = DtoUtil.getResultSet(clazz, t);
-			System.out.println();
+			r = DtoUtil.getResultSetWithCondition(clazz, t, condition);
+			// System.out.println();
 			while (r.next()) {
 				Constructor<?> ctor = clazz.getConstructor();
 				Object object = ctor.newInstance(new Object[] {});
-				System.out.println(r.getString("pno"));
+				// System.out.println(r.getString("pno"));
 				for (Field field : fld) {
 					field.setAccessible(true);
 					Annotation[] as = field.getDeclaredAnnotations();
 					for (Annotation aa : as) {
 						if (aa instanceof xmaker) {
-							System.out.println(((xmaker) aa).name());
+							// System.out.println(((xmaker) aa).name());
 							field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
 						}
 					}
@@ -217,7 +217,8 @@ public class DtoUtil {
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public static ResultSet getResultSet(final Class clazz, talk t) throws SQLException, ClassNotFoundException {
+	public static ResultSet getResultSetWithCondition(final Class clazz, talk t, String condition)
+			throws SQLException, ClassNotFoundException {
 		dbTable a = (dbTable) clazz.getAnnotation(dbTable.class);
 		String tableName = a.name();
 		ResultSet r = null;
@@ -225,8 +226,8 @@ public class DtoUtil {
 		try {
 			c = t.getConnectionFromPool();
 			Statement stmt = c.createStatement();
-			r = stmt.executeQuery("select * from " + tableName);
-
+			r = stmt.executeQuery("select * from " + tableName + " " + condition);
+			System.out.println("select * from " + tableName + " " + condition);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -310,6 +311,12 @@ public class DtoUtil {
 		m.put(DbProcessType.INSERT, "INSERT INTO  " + tableName + "  (" + instf + ") VALUES (" + instv + " )");
 		m.put(DbProcessType.UPDATE, "UPDATE  " + tableName + "  SET " + up + whereStringForUpdatePkField);
 		return m;
+	}
+
+	public static ArrayList<Object> getDbDataListToDtoListByCondition(Class clazz, talk t, String condition)
+			throws SQLException, ClassNotFoundException {
+		DtoUtil.getResultSetWithCondition(clazz, t, condition);
+		return null;
 	}
 
 }

@@ -1,58 +1,35 @@
 package oa.SampleEvaluation;
 
-import java.sql.SQLException;
 import java.util.Vector;
 
-import jcx.db.talk;
-import jcx.jform.hproc;
-
 import com.ysp.util.DateFormatUtil;
+
+import jcx.jform.hproc;
 
 public class ShowSignHistory extends hproc {
 
 	// private Log log = LogUtil.getLog(this.getClass());11
 
 	public String action(String value) throws Throwable {
-
-//		SignFlowHistoryService service = new SignFlowHistoryService(this);
-//		service.doDefaultDisplaySignFlowHistory();
-		getDefaultValue(value);
-		return value;
-	}
-
-	public String getDefaultValue(String value) throws Throwable {
-		return getHtml(value);
-	}
-
-	/**
-	 * @param value
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-	private String getHtml(String value) throws SQLException, Exception {
-
 		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'";
 		String rec[][] = getFlowHistory(getFunctionName(), id);
 
-		if (rec.length == 0 || rec == null) {
+		if (rec == null || rec.length == 0) {
 			setValue("text3", "<center><font size=\"4\" color=red></font></center>");
 			return value;
 		}
-
-		talk t = getTalk();
-		StringBuffer sb = getMainFlowHistory(id, rec);
+		StringBuilder sb = getMainFlowHistory(id, rec);
 
 		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'";
 		String subRec[][] = getFlowHistory(getFunctionName() + "_請驗流程", subid);
-		StringBuffer sb1 = new StringBuffer("");
+		StringBuilder sb1 = new StringBuilder("");
 		if (subRec == null || subRec.length != 0) {
 			sb1 = getMainFlowHistory(subid, subRec);
 		}
 
 		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'";
 		String subRecTp[][] = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
-		StringBuffer sbTp = new StringBuffer("");
+		StringBuilder sbTp = new StringBuilder("");
 		if (subRecTp == null || subRecTp.length != 0) {
 			sbTp = getMainFlowHistory(subidTp, subRecTp);
 		}
@@ -61,6 +38,7 @@ public class ShowSignHistory extends hproc {
 				+ sb1.toString() + "</td><td valign=\"top\">" + sbTp.toString() + "</td></tr></table>");
 
 		return value;
+
 	}
 
 	/**
@@ -68,8 +46,8 @@ public class ShowSignHistory extends hproc {
 	 * @param rec
 	 * @return
 	 */
-	private StringBuffer getMainFlowHistory(String id, String[][] rec) {
-		StringBuffer sb = new StringBuffer();
+	private StringBuilder getMainFlowHistory(String id, String[][] rec) {
+		StringBuilder sb = new StringBuilder();
 		String APPLYEMPNAME = "";
 		String fName = getFunctionName();
 		if (id.contains("CHECK")) {
@@ -79,16 +57,11 @@ public class ShowSignHistory extends hproc {
 			fName = fName + "_試製流程";
 		}
 		sb.append("<div  style=\"float:left;\"><TABLE>");
-		sb.append("<tr>");
-		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>");
-
-		sb.append("<p align='center'><font size='2'>" + fName + "</font></p></td>");
-		sb.append("<td align='center' width='400'></td>");
-		sb.append("</tr>");
+		sb.append(getHeaderStr(fName));
 		for (int i = 0; i < rec.length; i++) {
-			sb.append("<tr>");
+			sb.append("<TR>");
 			sb.append(
-					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>"); // 2-1嚙踝蕭謕蕭豯歹蕭謕�蕭嚙踐�蕭豲
+					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>");
 
 			if ("AUTO".equals(rec[i][1])) {
 				APPLYEMPNAME = "AUTO";
@@ -118,7 +91,7 @@ public class ShowSignHistory extends hproc {
 					"<td nowrap align='center' width='150' height='82' style='background-image:url(/image/eip/circle1.gif);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'>"
 							+ rec[i][0] + "</font></td>");
 		}
-		StringBuffer sb1 = new StringBuffer();
+		StringBuilder sb1 = new StringBuilder();
 		Vector people = getApprovablePeople(fName, id);
 		if (people != null) {
 			if (people.size() != 0) {
@@ -137,6 +110,17 @@ public class ShowSignHistory extends hproc {
 		sb.append("</TABLE>");
 		sb.append("</DIV>");
 		return sb;
+	}
+
+	private String getHeaderStr(String fName) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<tr>");
+		sb.append("<td nowrap align='right' width='150' style='border:solid 1px #003333';>");
+
+		sb.append("<p align='center'><font size='2'>" + fName + "</font></p></td>");
+		sb.append("<td align='center' width='400'></td>");
+		sb.append("</tr>");
+		return sb.toString();
 	}
 
 	public String getInformation() {

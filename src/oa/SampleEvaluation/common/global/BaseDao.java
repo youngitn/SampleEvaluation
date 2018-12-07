@@ -3,6 +3,7 @@ package oa.SampleEvaluation.common.global;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import jcx.db.talk;
@@ -51,6 +52,10 @@ public class BaseDao {
 
 	public Object findById(String pno) throws SQLException, Exception {
 		return DtoUtil.getDbDataToDtoById(clazz, t, pno);
+	}
+
+	public ArrayList findByCondition(String condition) throws SQLException, Exception {
+		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
 	}
 
 }

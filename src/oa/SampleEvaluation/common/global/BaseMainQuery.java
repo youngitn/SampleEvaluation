@@ -50,14 +50,14 @@ public abstract class BaseMainQuery {
 	}
 
 	// 取得查詢權限SQL條件
-	public abstract String getQueryRightSql() throws Exception;
+	//public abstract String getQueryRightSql() throws Exception;
 
 	/**
 	 * 
 	 * 
 	 * @return
 	 */
-	public abstract String getAdvancedCondition();
+	//public abstract String getAdvancedCondition();
 
 	/**
 	 * @param queryFlowStatus
@@ -76,7 +76,7 @@ public abstract class BaseMainQuery {
 		return advanced_sql.toString();
 	}
 
-	public abstract String getSqlQueryStr() throws Exception;
+	//public abstract String getSqlQueryStr() throws Exception;
 
 	/**
 	 * 創建主查詢SQL字串 員工資料部分 將hruser和hruser_dept_bas 作交差查詢 取得員工基本資料
@@ -98,16 +98,16 @@ public abstract class BaseMainQuery {
 		return "(select f_inp_stat from " + tableName + "_flowc where " + key + "=a." + key + ") ";
 	}
 
-	public String[][] getQueryResult() throws Throwable {
-		String sql = "";
-		sql = getSqlQueryStr();
-		String[][] list = cdo.getTalk().queryFromPool(sql);
-		if (list.length > 0) {
-			return getQueryResultAfterProcess(list, cdo.getQuerySpec().getQueryResultView());
-		}
-		return list;
-
-	}
+//	public String[][] getQueryResult() throws Throwable {
+//		String sql = "";
+//		sql = getSqlQueryStr();
+//		String[][] list = cdo.getTalk().queryFromPool(sql);
+//		if (list.length > 0) {
+//			return getQueryResultAfterProcess(list, cdo.getQuerySpec().getQueryResultView());
+//		}
+//		return list;
+//
+//	}
 
 	/**
 	 * @param queryResults          查詢結果 String[][]
@@ -116,8 +116,8 @@ public abstract class BaseMainQuery {
 	 * @return
 	 * @throws Throwable
 	 */
-	protected abstract String[][] getQueryResultAfterProcess(String[][] queryResults,
-			List<String> viewFieldOfResultList) throws Throwable;
+//	protected abstract String[][] getQueryResultAfterProcess(String[][] queryResults,
+//			List<String> viewFieldOfResultList) throws Throwable;
 
 	/**
 	 * 取得目前簽核關卡名稱與簽核人員資料字串 EX:"-(關卡名稱-簽核人1,簽核人2..)"
@@ -151,7 +151,7 @@ public abstract class BaseMainQuery {
 	// 確定查詢權限
 	protected boolean isAdmin() {
 		return (userData.getDepNo().equals("1001") || userData.getEmpid().equals("52116")
-				|| userData.getEmpid().equals("21"));
+				|| userData.getDepNo().equals("21"));
 
 	}
 
