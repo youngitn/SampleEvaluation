@@ -18,20 +18,46 @@ import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
 
 public class MainQuery extends BaseMainQuery {
+	SampleEvaluationQuerySpec qc;
 
 	public MainQuery(CommonDataObj cdo) {
 		super(cdo);
+		qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
+	}
 
+	/**
+	 * 建立依查詢頁面簽核狀態作為查詢條件的SQL字串,
+	 * 
+	 * @param queryFlowStatus
+	 * @return
+	 */
+	protected String getFlowStateSqlStrByQueryCondition(String queryFlowStatus) {
+
+		String stateCondition = "";
+		if (!queryFlowStatus.equals("")) {
+			if ("已結案".equals(queryFlowStatus))
+				stateCondition = "= '結案'";
+			if ("簽核中".equals(queryFlowStatus))
+				stateCondition = "not in ('結案','取消')";
+			if ("待處理".equals(queryFlowStatus))
+				stateCondition = " = '待處理' ";
+
+			stateCondition = "AND PNO in (SELECT PNO FROM SAMPLE_EVALUATION_FLOWC WHERE F_INP_STAT " + stateCondition
+					+ " )";
+		}
+		return stateCondition;
 	}
 
 	public String[][] testtest() throws Throwable {
 		talk t = cdo.getTalk();
-		String condition = " where 1=1 " + getQueryRightSqlForService() + getAdvancedConditionForService();
+		String condition = " where 1=1 " + getQueryRightSqlForService() + getAdvancedConditionForService()
+				+ getFlowStateSqlStrByQueryCondition(qc.getQueryStatus());
 		System.out.println("condition==>" + condition);
 		BaseDao dao = new SampleEvaluationService(t);
 		ArrayList<SampleEvaluation> s = (ArrayList<SampleEvaluation>) dao.findByCondition(condition);
 		String[][] array = new String[s.size()][8];
 		System.out.println(s.size());
+		String queryFlowStatus = qc.getQueryStatus();
 		int i = 0;
 		for (SampleEvaluation sampleEvaluation : s) {
 			// array[i][0] = sampleEvaluation.getPno();
@@ -39,11 +65,11 @@ public class MainQuery extends BaseMainQuery {
 					.findById(sampleEvaluation.getPno());
 			SampleEvaluationTpFlowc sampleEvaluationTpFlow = null;
 			SampleEvaluationCheckFlowc sampleEvaluationCheckFlow = null;
-			if (sampleEvaluation.getIsCheck().equals("")) {
+			if (sampleEvaluation.getIsCheck().equals("1")) {
 				sampleEvaluationCheckFlow = (SampleEvaluationCheckFlowc) new SampleEvaluationCheckFlowcService(t)
 						.findById(sampleEvaluation.getPno() + "CHECK");
 			}
-			if (sampleEvaluation.getIsTrialProduction().equals("")) {
+			if (sampleEvaluation.getIsTrialProduction().equals("1")) {
 				sampleEvaluationTpFlow = (SampleEvaluationTpFlowc) new SampleEvaluationTpFlowcService(t)
 						.findById(sampleEvaluation.getPno() + "TP");
 			}
@@ -54,14 +80,14 @@ public class MainQuery extends BaseMainQuery {
 			String u = sampleEvaluation.getUrgency();
 			String appDate = sampleEvaluation.getAppDate();
 			System.out.println(sampleEvaluation.getPno() + " " + type + " " + u + " " + appDate + " "
-					+ sampleEvaluationFlow.getfInpStat() + " " + tp + " " + ck + " " + "明細" + "簽核紀錄");
+					+ sampleEvaluationFlow.getfInpStat() + " (" + tp + "/ " + ck + ") " + "明細" + "簽核紀錄");
 			array[i][0] = sampleEvaluation.getPno();
 			UserData queryUser = new UserData(sampleEvaluation.getApplicant(), innerTalk);
 			array[i][1] = queryUser.getEmpid() + " " + queryUser.getHecname() + " " + queryUser.getDepName();
 			array[i][2] = type;
 			array[i][3] = u;
 			array[i][4] = appDate;
-			array[i][5] = sampleEvaluationFlow.getfInpStat() + " 請驗:" + tp + " 試製:" + ck;
+			array[i][5] = sampleEvaluationFlow.getfInpStat() + " (試製:" + tp + "/ 請驗:" + ck + ")";
 			array[i][6] = "明細";
 			array[i][7] = "簽核紀錄";
 			i++;
@@ -86,7 +112,8 @@ public class MainQuery extends BaseMainQuery {
 	public String getQueryRightSqlForService() throws SQLException, Exception {
 		String sql = "";
 		String loginUserId = cdo.getLoginUserId();
-		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
+		// SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec)
+		// cdo.getQuerySpec();
 
 		String queryEmpDepNo = "";
 		boolean isSameDepNoInPurch = false;
@@ -126,14 +153,15 @@ public class MainQuery extends BaseMainQuery {
 	 */
 	public String getAdvancedConditionForService() {
 		// 設置查詢欄位
-		SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec) cdo.getQuerySpec();
+		// SampleEvaluationQuerySpec qc = (SampleEvaluationQuerySpec)
+		// cdo.getQuerySpec();
 		String queryId = qc.getQueryBillId();
 		String empid = qc.getQueryEmpid();
 		String sdate = qc.getQueryReqSDate();
 		String edate = qc.getQueryReqEDate();
 		String queryFlowStatus = qc.getQueryStatus();
-		String queryFlowStatusCheck = qc.getQueryStatusCheck();
-		String queryFlowStatusTp = qc.getQueryStatusTp();
+//		String queryFlowStatusCheck = qc.getQueryStatusCheck();
+//		String queryFlowStatusTp = qc.getQueryStatusTp();
 		String queryDepNo = qc.getQueryDepNo();
 		String queryUrgency = qc.getQueryUrgency();
 		String querySapCode = qc.getQuerySapCode();
@@ -159,9 +187,9 @@ public class MainQuery extends BaseMainQuery {
 			advancedSql.append("and Mfr like '%" + queryMfr + "%' ");
 
 		// status
-		advancedSql.append(statusCheck(queryFlowStatus, "b"));
-		advancedSql.append(statusCheck(queryFlowStatusCheck, "c"));
-		advancedSql.append(statusCheck(queryFlowStatusTp, "d"));
+		// advancedSql.append(statusCheckForQueryFromPool(queryFlowStatus, "b"));
+//		advancedSql.append(statusCheckForQueryFromPool(queryFlowStatusCheck, "c"));
+//		advancedSql.append(statusCheckForQueryFromPool(queryFlowStatusTp, "d"));
 		if (!"".equals(queryId))
 			advancedSql.append("and " + tablePKName + " like '%" + queryId + "%' ");
 

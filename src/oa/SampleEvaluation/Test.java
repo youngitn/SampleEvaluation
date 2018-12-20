@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import jcx.db.talk;
 import jcx.jform.hproc;
-import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
+import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.UserData;
@@ -23,6 +23,7 @@ public class Test extends hproc {
 
 	public static void main(String[] arg) throws Throwable {
 		Test tes = new Test();
+		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 		// tes.test1();
 //		tes.test2();
 //		tes.test3();
@@ -30,8 +31,15 @@ public class Test extends hproc {
 //		DtoUtil.getDeclaredXmakerFields(new SampleEvaluationTp());
 		// tes.testUpdate();
 		// tes.testAdd();
-		tes.testtest();
+		// tes.testtest();
+		String ret[][] = t
+				.queryFromPool("SELECT top 1 DEP_NAME  FROM USER_INOFFICE_INFO_VIEW WHERE DEP_NO='" + "264" + "'");
+		if (ret[0][0].contains("醫院")) {
+			System.out.println("YES");
 
+		}
+		System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
+		//System.out.println(DateTool.getAfterWorkDate("20181101",80, t));
 	}
 
 	// 取得查詢權限SQL條件
@@ -74,7 +82,7 @@ public class Test extends hproc {
 	}
 
 	public void testtest() throws Throwable {
-		String condition = " where 1= 1 "+getQueryRightSql();
+		String condition = " where 1= 1 " + getQueryRightSql();
 		System.out.println(condition);
 		BaseDao dao = new SampleEvaluationService(t);
 		ArrayList<SampleEvaluation> s = (ArrayList<SampleEvaluation>) dao.findByCondition(condition);

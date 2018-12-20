@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
 import oa.SampleEvaluation.enums.FlowState;
@@ -46,7 +47,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 
 			case DETAIL_PAGE_INIT:// 進入明細畫面
 				init.doDetailPageProcess();
-				setDeadLine();
+				setAllFieldUneditable();
 				break;
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();
@@ -128,8 +129,8 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 
 	}
 
-	private void setDeadLine() {
-		Calendar c = Calendar.getInstance();
+	private void setDeadLine() throws Exception {
+
 		int addDaysNum = 0;
 		String value = getValue("URGENCY");
 		if (!value.isEmpty()) {
@@ -140,12 +141,8 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			} else if (value.equals("C")) {
 				addDaysNum = 130;
 			}
-			c.add(Calendar.DATE, addDaysNum);
-			Date d = c.getTime();
-			SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMdd");
-			String dldate = sdFormat.format(d);
 
-			setValue("DL", dldate);
+			setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
 		}
 	}
 

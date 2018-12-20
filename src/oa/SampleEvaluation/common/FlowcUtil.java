@@ -16,7 +16,7 @@ import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
 public class FlowcUtil {
-	
+
 	private FlowcUtil() {
 		throw new IllegalStateException("Utility class");
 	}
@@ -36,9 +36,9 @@ public class FlowcUtil {
 		secfh.setfInpTime(secf.getfInpTime());
 
 		BaseDao service = new SampleEvaluationCheckFlowcService(t);
-		service.add(secf);
+		service.upsert(secf);
 		service = new SampleEvaluationCheckFlowcHisService(t);
-		service.add(secfh);
+		service.upsert(secfh);
 
 	}
 
@@ -56,9 +56,9 @@ public class FlowcUtil {
 		secfh.setfInpStat(gateName);
 		secfh.setfInpTime(secf.getfInpTime());
 		BaseDao service = new SampleEvaluationTpFlowcService(t);
-		service.add(secfh);
+		service.upsert(secfh);
 		service = new SampleEvaluationTpFlowcHisService(t);
-		service.add(secf);
+		service.upsert(secf);
 	}
 
 }

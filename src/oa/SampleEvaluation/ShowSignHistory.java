@@ -13,7 +13,6 @@ public class ShowSignHistory extends hproc {
 	public String action(String value) throws Throwable {
 		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'";
 		String rec[][] = getFlowHistory(getFunctionName(), id);
-
 		if (rec == null || rec.length == 0) {
 			setValue("text3", "<center><font size=\"4\" color=red></font></center>");
 			return value;
@@ -21,14 +20,14 @@ public class ShowSignHistory extends hproc {
 		StringBuilder sb = getMainFlowHistory(id, rec);
 
 		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'";
-		String subRec[][] = getFlowHistory(getFunctionName() + "_請驗流程", subid);
+		String[][] subRec = getFlowHistory(getFunctionName() + "_請驗流程", subid);
 		StringBuilder sb1 = new StringBuilder("");
 		if (subRec == null || subRec.length != 0) {
 			sb1 = getMainFlowHistory(subid, subRec);
 		}
 
 		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'";
-		String subRecTp[][] = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
+		String[][] subRecTp = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
 		StringBuilder sbTp = new StringBuilder("");
 		if (subRecTp == null || subRecTp.length != 0) {
 			sbTp = getMainFlowHistory(subidTp, subRecTp);

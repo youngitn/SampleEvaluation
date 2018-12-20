@@ -50,20 +50,20 @@ public abstract class BaseMainQuery {
 	}
 
 	// 取得查詢權限SQL條件
-	//public abstract String getQueryRightSql() throws Exception;
+	// public abstract String getQueryRightSql() throws Exception;
 
 	/**
 	 * 
 	 * 
 	 * @return
 	 */
-	//public abstract String getAdvancedCondition();
+	// public abstract String getAdvancedCondition();
 
 	/**
 	 * @param queryFlowStatus
 	 * @param advanced_sql
 	 */
-	protected String statusCheck(String queryFlowStatus, String tableCode) {
+	protected String statusCheckForQueryFromPool(String queryFlowStatus, String tableCode) {
 		StringBuilder advanced_sql = new StringBuilder("");
 
 		if ("已結案".equals(queryFlowStatus))
@@ -73,10 +73,13 @@ public abstract class BaseMainQuery {
 		if ("待處理".equals(queryFlowStatus))
 			advanced_sql.append("and " + tableCode + ".F_INP_STAT = '待處理' ");
 
+		advanced_sql.append(" and " + tableCode + ".F_INP_STAT = '待處理' ");
 		return advanced_sql.toString();
+
 	}
 
-	//public abstract String getSqlQueryStr() throws Exception;
+
+	// public abstract String getSqlQueryStr() throws Exception;
 
 	/**
 	 * 創建主查詢SQL字串 員工資料部分 將hruser和hruser_dept_bas 作交差查詢 取得員工基本資料

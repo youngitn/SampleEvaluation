@@ -8,6 +8,7 @@ import java.util.Map;
 import com.ysp.service.BaseService;
 
 import oa.SampleEvaluation.common.AddUtil;
+import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.common.MainQuery;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
@@ -84,9 +85,26 @@ public class SampleEvaluationActionController extends HprocImpl {
 		if (getValue("IS_TRIAL_PRODUCTION").equals("1")) {
 			setVisible("ASSESSOR", true);
 		}
-
+		setDeadLine();
 		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
 
+	}
+
+	private void setDeadLine() throws Exception {
+
+		int addDaysNum = 0;
+		String value = getValue("URGENCY");
+		if (!value.isEmpty()) {
+			if (value.equals("A")) {
+				addDaysNum = 100;
+			} else if (value.equals("B")) {
+				addDaysNum = 110;
+			} else if (value.equals("C")) {
+				addDaysNum = 130;
+			}
+
+			setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
+		}
 	}
 
 	private void doQuery() throws Throwable {
@@ -124,7 +142,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 				// DMAKER 內建ADD功能 需將資料塞進去表單欄位才吃的到
 				setValue(cdo.getTablePKName(), uuid);
-				FileItemSetChecker();
+				fileItemSetChecker();
 				// confirm = true 控制是否真的送出
 				if (confirm) {
 					// 觸發Dmaker內建的新增鈕來送出表單
@@ -138,7 +156,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	}
 
-	private void FileItemSetChecker() {
+	private void fileItemSetChecker() {
 
 		if (!getValue("FILE_SPEC").equals("")) {
 			setValue("PROVIDE_SPEC", "1");

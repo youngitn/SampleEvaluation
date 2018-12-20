@@ -11,7 +11,9 @@ import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
 public class Approve extends bProcFlow {
@@ -70,9 +72,15 @@ public class Approve extends bProcFlow {
 							.setFormDataToDto(new SampleEvaluationCheck(), this);
 
 					String ownPno = secDto.getPno() + "CHECK";
+					secDto.setOwnPno(ownPno);
+					SampleEvaluationCheckService secs = new SampleEvaluationCheckService(t);
+					// insert check主檔
+					secs.upsert(secDto);
+					// insert check流程DATA
 					FlowcUtil.goCheckSubFlow(ownPno, getValue("APPLICANT"), "填寫請驗單號", t);
-					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
+
 					// 有請驗流程 寄出通知信
+					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
 					MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
 
 				}
@@ -80,9 +88,15 @@ public class Approve extends bProcFlow {
 					SampleEvaluationTp setDto = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(),
 							this);
 					String ownPno = setDto.getPno() + "TP";
+					setDto.setOwnPno(ownPno);
+					SampleEvaluationTpService sets = new SampleEvaluationTpService(t);
+					// insert TP主檔
+					sets.upsert(setDto);
+					// insert TP流程DATA
 					FlowcUtil.goCheckSubFlow(ownPno, getValue("APPLICANT"), "評估人員", t);
-					String title = "簽核通知：" + this.getFunctionName() + "_試製流程";
+
 					// 有試製流程 寄出通知信
+					String title = "簽核通知：" + this.getFunctionName() + "_試製流程";
 					MailToolInApprove.sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
 				}
 			}
