@@ -50,15 +50,17 @@ public class FlowcUtil {
 		secf.setfInpId(applicant);
 		secf.setfInpStat(gateName);
 		secf.setfInpTime(DateTimeUtil.getApproveAddSeconds(0));
+
 		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
 		secfh.setOwnPno(ownPno);
 		secfh.setfInpId(applicant);
 		secfh.setfInpStat(gateName);
 		secfh.setfInpTime(secf.getfInpTime());
+
 		BaseDao service = new SampleEvaluationTpFlowcService(t);
-		service.upsert(secfh);
-		service = new SampleEvaluationTpFlowcHisService(t);
 		service.upsert(secf);
+		service = new SampleEvaluationTpFlowcHisService(t);
+		service.upsert(secfh);
 	}
 
 }

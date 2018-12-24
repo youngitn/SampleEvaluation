@@ -96,6 +96,10 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		case 受理單位主管分案:
 			setEditable("DESIGNEE", true);
 			break;
+		case 採購經辦:
+			setEditable("EVALUATION_RESULT", true);
+			setEditable("FILE_EVALUATION_RESULT", true);
+			break;
 		default:
 			break;
 		}

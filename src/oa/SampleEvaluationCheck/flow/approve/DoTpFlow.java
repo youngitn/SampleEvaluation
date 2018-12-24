@@ -1,4 +1,4 @@
-package oa.SampleEvaluationTp.flow.approve;
+package oa.SampleEvaluationCheck.flow.approve;
 
 import com.ysp.service.BaseService;
 
@@ -15,7 +15,7 @@ import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
-public class DoCheckFlow extends bProcFlow {
+public class DoTpFlow extends bProcFlow {
 
 	public boolean action(String value) throws Throwable {
 		// 回傳值為 true 表示執行接下來的流程處理
@@ -23,34 +23,39 @@ public class DoCheckFlow extends bProcFlow {
 		// 傳入值 value 為 "核准"
 		boolean ret = true;
 		talk t = getTalk();
-		ret = doReminder("將新增資訊傳遞通知單 請驗簽核流程  ");
+		ret = doReminder("將新增資訊傳遞通知單 試製簽核流程  ");
 		if (ret) {
 
-			if (getValue("IS_CHECK").equals("0")) {
-
-				setValue("IS_CHECK", "1");
+			if (getValue("IS_TRIAL_PRODUCTION").equals("0")) {
+				if ("".equals(getValue("ASSESSOR")) || "".equals(getValue("LAB_EXE"))) {
+					message("請指定評估人員/實驗室經辦");
+					return false;
+				}
+				setValue("IS_TRIAL_PRODUCTION", "1");
 				BaseService service = new BaseService(this);
-				BaseDao bdservice = new SampleEvaluationCheckService(t);
+				BaseDao bdservice = new SampleEvaluationTpService(t);
+				SampleEvaluationTp tk = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+				tk.setOwnPno(tk.getPno() + "TP");
+				bdservice.upsert(tk);
+				FlowcUtil.goTpSubFlow(tk.getPno() + "TP", tk.getApplicant(), "評估人員", t);
+
+				String title = "簽核通知：資訊傳遞通知單_試製流程";
+				// 有試製流程 寄出通知信
+				MailToolInApprove.sendSubFlowMail(service, getValue("ASSESSOR"), tk, title);
+
+				// 同步請驗主檔
+				bdservice = new SampleEvaluationCheckService(t);
 				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(),
 						this);
-				ck.setOwnPno(ck.getPno() + "CHECK");
 				bdservice.upsert(ck);
-				FlowcUtil.goCheckSubFlow(ck.getPno() + "CHECK", ck.getApplicant(), "填寫請驗單號", t);
 
-				String title = "簽核通知：資訊傳遞通知單_請驗流程";
-				// 有請驗流程 寄出通知信
-				MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), ck, title);
-
-				bdservice = new SampleEvaluationTpService(t);
-				SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
-				bdservice.upsert(tp);
-
+				// 同步主檔
 				bdservice = new SampleEvaluationService(t);
 				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
 				bdservice.upsert(se);
 				ret = true;
-			} else if (getValue("IS_CHECK").equals("1")) {
-				message("已進行過請驗流程");
+			} else if (getValue("IS_TRIAL_PRODUCTION").equals("1")) {
+				message("已進行過試製流程");
 				ret = false;
 			}
 		}

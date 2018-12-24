@@ -32,39 +32,40 @@ public abstract class BaseEmailNotify extends bNotify {
 		// MailService
 
 		// 大部分表單動作皆委派給service
-		//try {
-			service = new BaseService(this);
-			emailUtil = new EmailUtil(service);
-			mailService = new MailService(service);
-			// SampleEvaluation se = new SampleEvaluation();
-			SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
-			// se.setAllValue(service);
-			this.t = this.getTalk();
-			if (this.t == null) {
-				this.t = getTalk();
-			}
-			// 建立內容
-			String content = buildContent(se);
-			content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
+		// try {
+		service = new BaseService(this);
+		emailUtil = new EmailUtil(service);
+		mailService = new MailService(service);
+		setIsLastGate();
+		// SampleEvaluation se = new SampleEvaluation();
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		// se.setAllValue(service);
+		this.t = this.getTalk();
+		if (this.t == null) {
+			this.t = getTalk();
+		}
+		// 建立內容
+		String content = buildContent(se);
+		content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
 
-			// 判斷是否結案通知
-			String title = MailToolInApprove.emailTitleBuilder(service);
-			setIsLastGate();
-			if (isLastGate) {
-				// 取得簽核過的所有人
-				usr = emailUtil.getAllSignedPeopleEmailForLastGateToSend();
-				title = emailTitleBuilderForFinalGate();
-			} else {
-				String[] arrUsr = mailService.getMailAddresseeByEngagedPeople();
-				for (String string : arrUsr) {
-					usr.add(string);
-				}
+		// 判斷是否結案通知
+		String title = MailToolInApprove.emailTitleBuilder(service);
+
+		if (isLastGate) {
+			// 取得簽核過的所有人
+			usr = emailUtil.getAllSignedPeopleEmailForLastGateToSend();
+			title = emailTitleBuilderForFinalGate();
+		} else {
+			String[] arrUsr = mailService.getMailAddresseeByEngagedPeople();
+			for (String string : arrUsr) {
+				usr.add(string);
 			}
-			changeMailToUsr();
-			MailBody mBody = new MailBody(title, content);
-			MailMan m = new MailMan(mailService);
-			String[] mailTo = new String[usr.size()];
-			m.send(usr.toArray(mailTo), mBody);
+		}
+		changeMailToUsr();
+		MailBody mBody = new MailBody(title, content);
+		MailMan m = new MailMan(mailService);
+		String[] mailTo = new String[usr.size()];
+		m.send(usr.toArray(mailTo), mBody);
 //		} catch (NullPointerException e) {
 //			System.out.println(e.getMessage());
 //			message("BaseEmailNotify.class:有物件為null,因對其進行操作而產生錯誤!" + e.toString());

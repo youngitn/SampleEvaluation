@@ -6,11 +6,12 @@ import oa.SampleEvaluation.common.global.dbTable;
 import oa.SampleEvaluation.common.global.xmaker;
 
 /**
- *his的pk默認一個
+ * his的pk默認一個
+ * 
  * @author u52116
  *
  */
-@dbTable(name = "SAMPLE_EVALUATION_TP_FLOWC", pkName = "OWN_PNO")
+@dbTable(name = "SAMPLE_EVALUATION_TP_FLOWC_HIS", pkName = "OWN_PNO")
 public class SampleEvaluationTpFlowcHis implements Serializable {
 	/**
 	 * 

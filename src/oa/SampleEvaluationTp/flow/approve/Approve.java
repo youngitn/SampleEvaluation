@@ -21,18 +21,17 @@ public class Approve extends bProcFlow {
 
 		BaseDao service = new SampleEvaluationTpService(t);
 		SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
-		// tp.setOwnPno("GGGG" + "hTP");
-		service.upsert(tp);
+		tp.setOwnPno(tp.getPno() + "TP");
+		service.update(tp);
 
 		service = new SampleEvaluationCheckService(t);
 		SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(), this);
-		// ck.setOwnPno("GGGG" + "CHECK");
-		service.upsert(ck);
+		ck.setOwnPno(ck.getPno() + "CHECK");
+		service.update(ck);
 
 		service = new SampleEvaluationService(t);
 		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
-		// se.setPno("GGGG");
-		service.upsert(se);
+		service.update(se);
 		return true;
 
 	}

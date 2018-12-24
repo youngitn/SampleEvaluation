@@ -27,6 +27,7 @@ public class Rule extends bRule {
 
 			break;
 		case 請驗作業跟催:
+		case 組長確認是否試製:
 			u = getData("DESIGNEE").trim().split(" ");
 			id.addElement("admin");
 			id.addElement(u[0]);

@@ -41,6 +41,10 @@ public class SampleEvaluationCheckController extends HprocImpl {
 				break;
 			case 請驗作業跟催:
 				break;
+			case 組長確認是否試製:
+				setEditable("ASSESSOR", true);
+				setEditable("LAB_EXE", true);
+				break;
 			default:
 				break;
 

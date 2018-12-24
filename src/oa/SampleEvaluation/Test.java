@@ -3,9 +3,12 @@ package oa.SampleEvaluation;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.ysp.util.DateTimeUtil;
+
 import jcx.db.talk;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.DateTool;
+import oa.SampleEvaluation.common.FlowcUtil;
 import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.UserData;
@@ -13,10 +16,13 @@ import oa.SampleEvaluation.dao.SampleEvaluationFlowcService;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.dto.SampleEvaluationFlowc;
+import oa.SampleEvaluation.rule.Rule;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcHisService;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
+import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
 public class Test extends hproc {
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
@@ -38,8 +44,18 @@ public class Test extends hproc {
 			System.out.println("YES");
 
 		}
+
 		System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
-		//System.out.println(DateTool.getAfterWorkDate("20181101",80, t));
+		System.out.println(DateTool.getAfterWorkDate("20181224", 5, t));
+		// System.out.println( DateTool.getBeforeWorkDateOver25Day("20181224",1, t));
+		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
+		secfh.setOwnPno("sss");
+		secfh.setfInpId("sss");
+		secfh.setfInpStat("sss");
+		secfh.setfInpTime(DateTimeUtil.getApproveAddSeconds(0));
+		SampleEvaluationTpFlowcHisService service = new SampleEvaluationTpFlowcHisService(t);
+		service.upsert(secfh);
+		System.exit(0);
 	}
 
 	// 取得查詢權限SQL條件

@@ -35,6 +35,8 @@ public class SampleEvaluationTpController extends HprocImpl {
 		case 組長:
 			break;
 		case 組長確認是否請驗:
+			setEditable("DOC_CTRLER", true);
+			setEditable("LAB_EXE", true);
 			break;
 		case 結案:
 			break;

@@ -28,8 +28,11 @@ public class EmailNotify extends BaseEmailNotify {
 		String name = appUser.getHecname();
 		String depName = appUser.getDepName();
 		String content = "";
-		content += "您有一筆 " + service.getFunctionName() + " 等待簽核；" + Mail.HTML_LINE_BREAK;
-		content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
+		if (!this.isLastGate) {
+			content += "您有一筆 " + service.getFunctionName() + " 等待簽核；" + Mail.HTML_LINE_BREAK;
+			content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
+		}
+
 		content += Mail.HTML_LINE_BREAK;
 		content += Mail.MAIL_CONTENT_LINE_WORD + Mail.HTML_LINE_BREAK;
 		content += "單號：" + se.getPno() + Mail.HTML_LINE_BREAK;

@@ -32,9 +32,9 @@ public class SampleEvaluationAlert extends bNotify {
 			String before12 = DateTool.getBeforeWorkDate(today, 12, t);// 急件
 			String before22 = DateTool.getBeforeWorkDate(today, 11, t);// 一般 6 for test
 
-			String before50 = DateTool.getBeforeWorkDateOver25Day(today, 50, t);// 特級
-			String before55 = DateTool.getBeforeWorkDateOver25Day(today, 55, t);// 急件
-			String before65 = DateTool.getBeforeWorkDateOver25Day(today, 65, t);// 一般
+			String before50 = DateTool.getBeforeWorkDate(today, 50, t);// 特級
+			String before55 = DateTool.getBeforeWorkDate(today, 55, t);// 急件
+			String before65 = DateTool.getBeforeWorkDate(today, 65, t);// 一般
 
 			before7Ret = getRetByAppDate(before7, "A", t);
 			before12Ret = getRetByAppDate(before12, "B", t);
