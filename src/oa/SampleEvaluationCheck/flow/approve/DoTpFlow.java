@@ -55,7 +55,7 @@ public class DoTpFlow extends bProcFlow {
 				bdservice.upsert(se);
 				ret = true;
 			} else if (getValue("IS_TRIAL_PRODUCTION").equals("1")) {
-				message("已進行過試製流程");
+				message("無法重覆進行試製流程");
 				ret = false;
 			}
 		}

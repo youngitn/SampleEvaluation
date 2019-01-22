@@ -1,5 +1,6 @@
 package oa.SampleEvaluationTp.controller;
 
+import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
@@ -26,6 +27,17 @@ public class SampleEvaluationTpController extends HprocImpl {
 		}
 		setAllFieldUneditable();
 		setAllFileUploadFieldEditable();
+		int addDaysNum = 0;
+
+		if (getValue("URGENCY").equals("A")) {
+			addDaysNum = 100;
+		} else if (getValue("URGENCY").equals("B")) {
+			addDaysNum = 110;
+		} else if (getValue("URGENCY").equals("C")) {
+			addDaysNum = 130;
+		}
+
+		setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
 		// 就算是default 名稱也要存在FlowState
 		// switch條件才會生效
 		switch (FlowState.valueOf(getState())) {

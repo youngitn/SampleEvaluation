@@ -16,8 +16,72 @@ import jcx.db.talk;
 import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
+import oa.SampleEvaluation.query.QueryStatus;
 
 public class DtoUtil {
+
+	public String getAppDateWhereStr(String Q_SDATE, String Q_EDATE) {
+		if (!"".equals(Q_SDATE + Q_EDATE)) {
+			if ("".equals(Q_SDATE) && !"".equals(Q_EDATE)) {
+				return "AND APP_DATE <=" + Q_EDATE;
+			} else if (!"".equals(Q_SDATE) && "".equals(Q_EDATE)) {
+				return "AND APP_DATE >=" + Q_SDATE;
+			} else {
+				return "AND APP_DATE >=" + Q_SDATE + " AND APP_DATE <=" + Q_EDATE;
+			}
+		}
+
+		return "";
+
+	}
+
+	public static String getSelectConditionByDtoWithXmakerAdapDbFieldName(final Object o) {
+
+		StringBuilder sqlWhere = new StringBuilder();
+		String status = "";
+		try {
+			Field[] fld = o.getClass().getDeclaredFields();
+			for (Field field : fld) {
+				field.setAccessible(true);
+				Annotation[] annotations = field.getAnnotations();
+				for (Annotation annotation : annotations) {
+					if (annotation instanceof xmaker) {
+						xmaker myAnnotation = (xmaker) annotation;
+						String adapName = myAnnotation.adapDbFieldName();
+						String val = (String) field.get(o);
+
+						if (!"".equals(val) && !(null == val)) {
+							if (myAnnotation.isDateStart()) {
+								sqlWhere.append(myAnnotation.adapDbFieldName()).append(">=").append(field.get(o))
+										.append(" AND ");
+							} else if (myAnnotation.isDateEnd()) {
+								sqlWhere.append(myAnnotation.adapDbFieldName()).append("<=").append(field.get(o))
+										.append(" AND ");
+							} else if (myAnnotation.isFlowStatus()) {
+
+								status = QueryStatus.getFlowStateSqlStrByQueryCondition((String) field.get(o));
+
+							} else if (!"".equals(adapName)) {
+								System.out.println("name: " + myAnnotation.adapDbFieldName());
+								sqlWhere.append(myAnnotation.adapDbFieldName()).append(" like ").append("'%")
+										.append(field.get(o)).append("%'").append(" AND ");
+
+							}
+						}
+
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		String condition = sqlWhere.insert(0, "WHERE ").delete(sqlWhere.lastIndexOf("AND"), sqlWhere.length())
+				.toString() + status;
+		System.out.println("sqlWhere=  " + condition);
+		return condition;
+	}
 
 	/**
 	 * 取得物件屬性中對應的資料表欄位的名稱list
@@ -51,7 +115,7 @@ public class DtoUtil {
 	/**
 	 * 表單資料塞入物件
 	 * 
-	 * @param o
+	 * @param o       需new為實體物件
 	 * @param service
 	 * @return
 	 */
@@ -102,17 +166,16 @@ public class DtoUtil {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static Object getDbDataToDtoById(Class clazz, talk t, String pno) throws SQLException {
+	public static Object getDbDataToDtoById(Class<?> clazz, talk t, String pno) throws SQLException {
 		Object object = null;
 		ResultSet r = null;
 		try {
-			// ArrayList<Object> list = new ArrayList<Object>();
 
 			Field[] fld = clazz.getDeclaredFields();
 			r = DtoUtil.getResultSet(clazz, t, pno);
 			while (r.next()) {
 				Constructor<?> ctor = clazz.getConstructor();
-				object = ctor.newInstance(new Object[] {});
+				object = ctor.newInstance();
 				for (Field field : fld) {
 					field.setAccessible(true);
 					Annotation[] as = field.getDeclaredAnnotations();
@@ -140,37 +203,102 @@ public class DtoUtil {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ArrayList getDbDataToDtoList(final Class clazz, talk t, String condition) throws SQLException {
+	public static ArrayList<Object> getDbDataToDtoList(final Class<Object> clazz, talk t, String condition)
+			throws SQLException {
 		ArrayList list = new ArrayList();
 		ResultSet r = null;
+
 		try {
-
-			Field[] fld = clazz.getDeclaredFields();
 			r = DtoUtil.getResultSetWithCondition(clazz, t, condition);
-			// System.out.println();
-			while (r.next()) {
-				Constructor<?> ctor = clazz.getConstructor();
-				Object object = ctor.newInstance(new Object[] {});
-				// System.out.println(r.getString("pno"));
-				for (Field field : fld) {
-					field.setAccessible(true);
-					Annotation[] as = field.getDeclaredAnnotations();
-					for (Annotation aa : as) {
-						if (aa instanceof xmaker) {
-							// System.out.println(((xmaker) aa).name());
-							field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
-						}
-					}
-				}
-				list.add(object);
-			}
-
+			list = resultSetToArrayList(r, clazz);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			r.close();
 		}
 		return list;
+	}
+
+	/**
+	 * 
+	 * @param clazz
+	 * @param t
+	 * @param condition
+	 * @return
+	 * @throws Exception
+	 */
+	public static String[][] getDbDataTo2DStringArray(final Class<Object> clazz, talk t, String condition)
+			throws Exception {
+
+		return arrayListTo2DStringArray(getDbDataToDtoList(clazz, t, condition), clazz);
+	}
+
+	/**
+	 * 注意 回傳值類型
+	 * 
+	 * @param o
+	 * @param t
+	 * @return
+	 * @throws Exception
+	 */
+	public static ArrayList<Object> resultSetToArrayList(ResultSet r, Class<Object> clazz) throws Exception {
+		ArrayList<Object> list = new ArrayList<Object>();
+		Field[] fld = clazz.getDeclaredFields();
+		Constructor<?> ctor = null;
+		Object object = null;
+		Annotation[] as = null;
+		while (r.next()) {
+			ctor = clazz.getConstructor();
+			object = ctor.newInstance();
+
+			for (Field field : fld) {
+				field.setAccessible(true);
+				as = field.getDeclaredAnnotations();
+				for (Annotation aa : as) {
+					if (aa instanceof xmaker) {
+						if (((xmaker) aa).isText()) {
+							field.set(object, (String) ((xmaker) aa).name());
+						}
+						if (((xmaker) aa).isFlowStatus()) {
+							// TODO 如何彈性在這邊加入運算
+							field.set(object, "");
+						} else {
+							field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
+						}
+					}
+				}
+			}
+			list.add(object);
+		}
+		return list;
+	}
+
+	public static String[][] arrayListTo2DStringArray(ArrayList<Object> arraylist, Class<Object> clazz)
+			throws Exception {
+
+		Field[] fld = clazz.getDeclaredFields();
+		String[][] ret = new String[arraylist.size()][fld.length];
+		int rc = 0;
+		int c = 0;
+		Annotation[] as = null;
+		for (Object object : arraylist) {
+			c = 0;
+
+			for (Field field : fld) {
+				field.setAccessible(true);
+				as = field.getDeclaredAnnotations();
+				for (Annotation aa : as) {
+					if (aa instanceof xmaker) {
+						ret[rc][c] = (String) field.get(object);
+					}
+				}
+				c++;
+			}
+			rc++;
+		}
+
+		return ret;
+
 	}
 
 	/**
@@ -196,10 +324,10 @@ public class DtoUtil {
 			r = stmt.executeQuery("select * from " + tableName + " where " + pkName + "='" + pno + "'");
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		} finally {
 			// c.close();
@@ -227,7 +355,7 @@ public class DtoUtil {
 			c = t.getConnectionFromPool();
 			Statement stmt = c.createStatement();
 			r = stmt.executeQuery("select * from " + tableName + " " + condition);
-			System.out.println("select * from " + tableName + " " + condition);
+			System.out.println("do ->select * from " + tableName + " " + condition);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -240,17 +368,28 @@ public class DtoUtil {
 	public static Object setDtoDataToForm(final Object o, Object service) {
 		try {
 			Field[] fld = o.getClass().getDeclaredFields();
+			String value = null;
+			xmaker myAnnotation = null;
+			Annotation[] annotations = null;
 			for (Field field : fld) {
 				field.setAccessible(true);
-				Annotation[] annotations = field.getAnnotations();
+				annotations = field.getAnnotations();
 				for (Annotation annotation : annotations) {
 					if (annotation instanceof xmaker) {
-						xmaker myAnnotation = (xmaker) annotation;
+						myAnnotation = (xmaker) annotation;
 						System.out.println("name: " + myAnnotation.name());
 						if (service instanceof hproc) {
-							((hproc) service).setValue(myAnnotation.name(), (String) field.get(o));
+							value = (String) field.get(o);
+							if ("null".equals(value)) {
+								value = "";
+							}
+							((hproc) service).setValue(myAnnotation.name(), value);
 						}
 						if (service instanceof BaseService) {
+							value = (String) field.get(o);
+							if ("null".equals(value)) {
+								value = "";
+							}
 							((BaseService) service).setValue(myAnnotation.name(), (String) field.get(o));
 						}
 
@@ -277,13 +416,14 @@ public class DtoUtil {
 		String pkName = a.pkName();
 		String tableName = a.name();
 		try {
-
+			Annotation[] annotations = null;
+			xmaker myAnnotation = null;
 			for (Field field : fld) {
 				field.setAccessible(true);
-				Annotation[] annotations = field.getAnnotations();
+				annotations = field.getAnnotations();
 				for (Annotation annotation : annotations) {
 					if (annotation instanceof xmaker) {
-						xmaker myAnnotation = (xmaker) annotation;
+						myAnnotation = (xmaker) annotation;
 						insertField.append(myAnnotation.name() + ",");
 						String value = "";
 						if (field.get(o) != null) {

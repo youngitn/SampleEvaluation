@@ -16,7 +16,7 @@ import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
-public class Approve extends bProcFlow {
+public class ApproveV1 extends bProcFlow {
 
 	String nowState;
 	talk t;
@@ -93,7 +93,7 @@ public class Approve extends bProcFlow {
 					// insert TP主檔
 					sets.upsert(setDto);
 					// insert TP流程DATA
-					FlowcUtil.goCheckSubFlow(ownPno, getValue("APPLICANT"), "評估人員", t);
+					FlowcUtil.goTpSubFlow(ownPno, getValue("APPLICANT"), "評估人員", t);
 
 					// 有試製流程 寄出通知信
 					String title = "簽核通知：" + this.getFunctionName() + "_試製流程";
@@ -125,16 +125,35 @@ public class Approve extends bProcFlow {
 			break;
 		case 採購經辦:
 
-			if (getValue("IS_CHECK").equals("0") && getValue("IS_TRIAL_PRODUCTION").equals("0")) {
+			// 當請驗與試製選項皆未勾選則核准後結案
+			if ("0".equals(getValue("IS_CHECK")) && "0".equals(getValue("IS_TRIAL_PRODUCTION"))) {
 				ret = true;
-			} else if (getValue("EVALUATION_RESULT").trim().equals("")
+
+			} // 如果有勾選請驗試製任一選項則會判斷評估結果&夾檔是否為空
+			else if (getValue("EVALUATION_RESULT").trim().equals("")
 					|| getValue("FILE_EVALUATION_RESULT").trim().equals("")) {
 				message("評估結果與其夾檔不得為空");
 				ret = false;
 			} else if (ret) {
 				FileItemSetChecked();
-				s = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
-				bdService.update(s);
+				BaseDao daoservice = null;
+				if ("1".equals(getValue("IS_TRIAL_PRODUCTION"))) {
+					daoservice = new SampleEvaluationTpService(t);
+					SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(),
+							this);
+					tp.setOwnPno(tp.getPno() + "TP");
+					daoservice.update(tp);
+				}
+				if ("1".equals(getValue("IS_CHECK"))) {
+					daoservice = new SampleEvaluationCheckService(t);
+					SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil
+							.setFormDataToDto(new SampleEvaluationCheck(), this);
+					ck.setOwnPno(ck.getPno() + "CHECK");
+					daoservice.update(ck);
+				}
+				daoservice = new SampleEvaluationService(t);
+				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+				daoservice.update(se);
 				ret = true;
 			}
 			break;

@@ -1,9 +1,5 @@
 package oa.SampleEvaluation.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.common.global.FormInitUtil;
 import oa.SampleEvaluation.common.global.UIHidderString;
@@ -24,7 +20,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		// 各頁面載入處理於類別中實作
 
 		FormInitUtil init = new FormInitUtil(this);
-
+		
 		String actionObjName = getActionName(getName()).trim();
 		try {
 			switch (PageInitType.valueOf(actionObjName)) {
@@ -48,6 +44,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			case DETAIL_PAGE_INIT:// 進入明細畫面
 				init.doDetailPageProcess();
 				setAllFieldUneditable();
+				//不需在此setDeadLine(); 須將邏輯寫在明細按鈕action中
 				break;
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();

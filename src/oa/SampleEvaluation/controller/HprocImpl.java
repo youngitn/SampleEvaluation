@@ -26,15 +26,20 @@ public class HprocImpl extends hproc {
 		}
 	}
 
+	//設定資料上傳相關欄位為可編輯
 	protected void setAllFileUploadFieldEditable() {
 		Hashtable h = getAllcLabels();
 		for (Enumeration e = h.keys(); e.hasMoreElements();) {
 			String s = e.nextElement().toString();
-			if (s.startsWith("FILE_")) {
+			//可編輯條件 符合設為true
+			//名稱開頭FILE_ 表示上傳欄位本體
+			//名稱開頭PROVIDE_ 表示上傳欄位的勾選項目
+			if (s.startsWith("FILE_") || s.startsWith("PROVIDE_")) {
 				setEditable(s, true);
 			}
 
 		}
+		
 	}
 
 	protected void setFormEMPBaseInfo() throws SQLException, Exception {
@@ -98,7 +103,7 @@ public class HprocImpl extends hproc {
 	}
 
 	/**
-	 * 取得欄位標題
+	 * 取得UI元素的標題
 	 * 
 	 * @param fieldName
 	 */

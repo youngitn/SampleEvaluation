@@ -2,13 +2,11 @@ package oa.SampleEvaluation;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import com.ysp.util.DateTimeUtil;
+import java.util.List;
 
 import jcx.db.talk;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluation.common.FlowcUtil;
 import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.UserData;
@@ -16,13 +14,14 @@ import oa.SampleEvaluation.dao.SampleEvaluationFlowcService;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.dto.SampleEvaluationFlowc;
-import oa.SampleEvaluation.rule.Rule;
+import oa.SampleEvaluation.query.Query;
+import oa.SampleEvaluation.query.QueryConditionDto;
+import oa.SampleEvaluation.query.QueryResultDto;
+import oa.SampleEvaluation.query.QueryResultService;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcHisService;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
-import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
 
 public class Test extends hproc {
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
@@ -30,6 +29,26 @@ public class Test extends hproc {
 	public static void main(String[] arg) throws Throwable {
 		Test tes = new Test();
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
+		QueryConditionDto targetLikeThis = new QueryConditionDto();
+		targetLikeThis.setQ_PNO("20190001");
+//		targetLikeThis.setQ_EMPID("52116");
+//		targetLikeThis.setQ_SDATE("20190101");
+//		targetLikeThis.setQ_URGENCY("A");
+//		targetLikeThis.setQ_EDATE("20190109");
+//		targetLikeThis.setQ_SAP_CODE("11111111111111");
+//		targetLikeThis.setQ_MATERIAL("2222222222222222");
+//		targetLikeThis.setQ_MFR("3333333333");
+		targetLikeThis.setQ_STATUS("已結案");
+		// 用條件執行查詢
+		// s.doQuery();
+		// 或取得SQL查詢字串
+		String targetCondition = DtoUtil.getSelectConditionByDtoWithXmakerAdapDbFieldName(targetLikeThis);
+		QueryResultService qrs = new QueryResultService(t);
+		String[][] al = (String[][]) qrs.findByConditionReturn2DStringArray(targetCondition);
+		/*使用方式 ----> 在繼承hproc狀況下 String[][] list = new Query(this).get2DStringArrayResult();*/
+		System.out.println("ret=>"+al.length);
+		System.out.println(al[0][0]);
+		System.out.println(al[0][1]);
 		// tes.test1();
 //		tes.test2();
 //		tes.test3();
@@ -38,23 +57,36 @@ public class Test extends hproc {
 		// tes.testUpdate();
 		// tes.testAdd();
 		// tes.testtest();
-		String ret[][] = t
-				.queryFromPool("SELECT top 1 DEP_NAME  FROM USER_INOFFICE_INFO_VIEW WHERE DEP_NO='" + "264" + "'");
-		if (ret[0][0].contains("醫院")) {
-			System.out.println("YES");
+//		String ret[][] = t
+//				.queryFromPool("SELECT top 1 DEP_NAME  FROM USER_INOFFICE_INFO_VIEW WHERE DEP_NO='" + "264" + "'");
+//		if (ret[0][0].contains("醫院")) {
+//			System.out.println("YES");
+//
+//		}
 
-		}
-
-		System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
-		System.out.println(DateTool.getAfterWorkDate("20181224", 5, t));
+		// System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
+		System.out.println(DateTool.getAfterWorkDate("20190103", 5, t));
 		// System.out.println( DateTool.getBeforeWorkDateOver25Day("20181224",1, t));
-		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
-		secfh.setOwnPno("sss");
-		secfh.setfInpId("sss");
-		secfh.setfInpStat("sss");
-		secfh.setfInpTime(DateTimeUtil.getApproveAddSeconds(0));
-		SampleEvaluationTpFlowcHisService service = new SampleEvaluationTpFlowcHisService(t);
-		service.upsert(secfh);
+//		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
+//		secfh.setOwnPno("sss");
+//		secfh.setfInpId("sss");
+//		secfh.setfInpStat("sss");
+//		secfh.setfInpTime(DateTimeUtil.getApproveAddSeconds(0));
+//		SampleEvaluationTpFlowcHisService service = new SampleEvaluationTpFlowcHisService(t);
+//		service.upsert(secfh);
+		List<?>[] lsa = new List<?>[10]; // OK, array of unbounded wildcard type.
+		Object o = lsa;
+		Object[] oa = (Object[]) o;
+		List<Integer> li = new ArrayList<Integer>();
+		li.add(new Integer(3));
+		li.add(5555);
+		oa[1] = li; // Correct.
+		Integer i = (Integer) lsa[1].get(0); // OK
+		System.out.println(i);
+		System.out.println(lsa[1].get(1));
+		System.out.println(((List) oa[1]).get(1));
+
+		// System.out.println(aa);
 		System.exit(0);
 	}
 
@@ -105,38 +137,7 @@ public class Test extends hproc {
 		String[][] array = new String[s.size()][8];
 		System.out.println(s.size());
 		int i = 0;
-		for (SampleEvaluation sampleEvaluation : s) {
-			// array[i][0] = sampleEvaluation.getPno();
-			SampleEvaluationFlowc sampleEvaluationFlow = (SampleEvaluationFlowc) new SampleEvaluationFlowcService(t)
-					.findById(sampleEvaluation.getPno());
-			SampleEvaluationTpFlowc sampleEvaluationTpFlow = null;
-			SampleEvaluationCheckFlowc sampleEvaluationCheckFlow = null;
-			if (sampleEvaluation.getIsCheck().equals("")) {
-				sampleEvaluationCheckFlow = (SampleEvaluationCheckFlowc) new SampleEvaluationCheckFlowcService(t)
-						.findById(sampleEvaluation.getPno() + "CHECK");
-			}
-			if (sampleEvaluation.getIsTrialProduction().equals("")) {
-				sampleEvaluationTpFlow = (SampleEvaluationTpFlowc) new SampleEvaluationTpFlowcService(t)
-						.findById(sampleEvaluation.getPno() + "TP");
-			}
-
-			String tp = sampleEvaluationTpFlow != null ? sampleEvaluationTpFlow.getfInpStat() : "無";
-			String ck = sampleEvaluationCheckFlow != null ? sampleEvaluationCheckFlow.getfInpStat() : "無";
-			String type = sampleEvaluation.getAppType();
-			String u = sampleEvaluation.getUrgency();
-			String appDate = sampleEvaluation.getAppDate();
-			System.out.println(sampleEvaluation.getPno() + " " + type + " " + u + " " + appDate + " "
-					+ sampleEvaluationFlow.getfInpStat() + " " + tp + " " + ck + " " + "明細" + "簽核紀錄");
-			array[i][0] = sampleEvaluation.getPno();
-			array[i][1] = sampleEvaluation.getPno();
-			array[i][2] = type;
-			array[i][3] = u;
-			array[i][4] = appDate;
-			array[i][5] = sampleEvaluationFlow.getfInpStat() + " 請驗:" + tp + " 試製:" + ck;
-			array[i][6] = "明細";
-			array[i][7] = "簽核紀錄";
-			i++;
-		}
+		
 		// String[][] aaa = t.queryFromPool("select * from sample_Evaluation");
 		System.out.println();
 		for (String[] strings : array) {

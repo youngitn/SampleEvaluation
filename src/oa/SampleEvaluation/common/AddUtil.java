@@ -34,9 +34,9 @@ public class AddUtil {
 	public List<String> emptyCheck(Map<String, String> fieldMap) {
 
 		ArrayList<String> ret = new ArrayList<String>();
-
+		String value = null;
 		for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			String value = service.getValue(entry.getKey()).trim();
+			value = service.getValue(entry.getKey()).trim();
 			if (value != null && value.equals("")) {
 				ret.add(fieldMap.get(entry.getKey()));
 			}
@@ -49,10 +49,11 @@ public class AddUtil {
 
 		String uuid = "";
 		String tablePKName = cdo.getTablePKName();
-		String table = cdo.getTableName();
-		String sql = "select max(" + tablePKName + ") from " + table;
-		String[][] ret = service.getTalk().queryFromPool(sql);
 		String appdate = service.getValue("APP_DATE").trim().substring(0, 4);
+		String table = cdo.getTableName();
+		String sql = "select max(" + tablePKName + ") from " + table + " WHERE PNO like '"+appdate+"%'";
+		String[][] ret = service.getTalk().queryFromPool(sql);
+		
 		if ("".equals(ret[0][0])) {
 			uuid = appdate + "0001";
 		} else {

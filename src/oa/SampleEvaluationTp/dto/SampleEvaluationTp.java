@@ -9,7 +9,7 @@ import oa.SampleEvaluation.common.global.xmaker;
 import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
 
 /**
- * 同SampleEvaluation 只多增加了 OWN_PNO 一張資料表應該就能處理, 這邊多建了兩張表 多很多麻煩.
+ * 同SampleEvaluation 
  * 
  */
 @dbTable(name = "SAMPLE_EVALUATION_TP", pkName = "OWN_PNO")

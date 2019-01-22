@@ -33,8 +33,9 @@ public class ShowSignHistory extends hproc {
 			sbTp = getMainFlowHistory(subidTp, subRecTp);
 		}
 
-		setValue("text3", "<table ><tr><td valign=\"top\">" + sb.toString() + "</td><td valign=\"top\">"
-				+ sb1.toString() + "</td><td valign=\"top\">" + sbTp.toString() + "</td></tr></table>");
+		setValue("text3", "<table ><tr><td valign=\"top\">" + sb.toString()+"</td>"+
+											"<td valign=\"top\">"+ sb1.toString() + "</td>"+
+											"<td valign=\"top\">" + sbTp.toString() + "</td></tr></table>");
 
 		return value;
 
@@ -60,7 +61,7 @@ public class ShowSignHistory extends hproc {
 		for (int i = 0; i < rec.length; i++) {
 			sb.append("<TR>");
 			sb.append(
-					"<td align='center' width='150' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>");
+					"<td align='center' height='28' style='background-image:url(/image/eip/down_alt.png);background-repeat:no-repeat;background-position: center;'><font size='2' color='#003333'></font></td>");
 
 			if ("AUTO".equals(rec[i][1])) {
 				APPLYEMPNAME = "AUTO";

@@ -9,7 +9,6 @@ import com.ysp.service.BaseService;
 
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluation.common.MainQuery;
 import oa.SampleEvaluation.common.SampleEvaluationDataObj;
 import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
 import oa.SampleEvaluation.common.global.BaseDao;
@@ -19,6 +18,7 @@ import oa.SampleEvaluation.common.global.UIHidderString;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.enums.Actions;
+import oa.SampleEvaluation.query.Query;
 
 /**
  * 
@@ -109,9 +109,10 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	private void doQuery() throws Throwable {
 		// go
-		MainQuery mquery = new MainQuery(cdo);
-
-		String[][] list = mquery.testtest();
+		String[][] list = new Query(this).get2DStringArrayResult();
+		
+//		MainQuery mquery = new MainQuery(cdo);
+		// String[][] list = mquery.testtest();
 		// message(mquery.getSqlQueryStr());
 		if (list == null || list.length <= 0) {
 			message("¬dµL¬ö¿ý");

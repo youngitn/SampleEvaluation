@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import jcx.db.talk;
 
-public class BaseDao {
+public abstract class BaseDao {
 
 	protected talk t;
 	protected Class clazz;
@@ -54,8 +54,18 @@ public class BaseDao {
 		return DtoUtil.getDbDataToDtoById(clazz, t, pno);
 	}
 
-	public ArrayList findByCondition(String condition) throws SQLException, Exception {
+	public ArrayList<?> findByCondition(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
 	}
+	
+	//主查詢
+	public String[][] findByConditionReturn2DStringArray(String condition) throws SQLException, Exception {
+		return DtoUtil.getDbDataTo2DStringArray(clazz, t, condition);
+	}
+
+//	//回傳欄位 和 查詢條件
+//	public ArrayList findByCondition(String retFiel, String condition) throws SQLException, Exception {
+//		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
+//	}
 
 }

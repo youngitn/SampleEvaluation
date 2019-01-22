@@ -1,12 +1,14 @@
 package oa.SampleEvaluation.notify;
 
-import oa.SampleEvaluation.enums.*;
 import java.io.IOException;
 import java.sql.SQLException;
-import jcx.util.*;
+
+import jcx.util.convert;
+import oa.SampleEvaluation.common.global.MailString;
 import oa.SampleEvaluation.common.global.UserData;
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import com.ysp.field.Mail;
+import oa.SampleEvaluation.enums.AppType;
+import oa.SampleEvaluation.enums.Urgency;
 
 public class EmailNotify extends BaseEmailNotify {
 
@@ -29,22 +31,22 @@ public class EmailNotify extends BaseEmailNotify {
 		String depName = appUser.getDepName();
 		String content = "";
 		if (!this.isLastGate) {
-			content += "您有一筆 " + service.getFunctionName() + " 等待簽核；" + Mail.HTML_LINE_BREAK;
-			content += "請進入 Emaker 應用服務系統 " + Mail.getOaSystemUrl() + " 簽核。" + Mail.HTML_LINE_BREAK;
+			content += "您有一筆 " + service.getFunctionName() + " 等待簽核；" + MailString.HTML_LINE_BREAK;
+			content += "請進入 Emaker 應用服務系統 " + MailString.getOaSystemUrl() + " 簽核。" + MailString.HTML_LINE_BREAK;
 		}
 
-		content += Mail.HTML_LINE_BREAK;
-		content += Mail.MAIL_CONTENT_LINE_WORD + Mail.HTML_LINE_BREAK;
-		content += "單號：" + se.getPno() + Mail.HTML_LINE_BREAK;
-		content += "申請日期：" + convert.FormatedDate(se.getAppDate(), "/") + Mail.HTML_LINE_BREAK;
-		content += "申請人：" + depName + " " + name + "(" + appUser.getEmpid() + ")" + Mail.HTML_LINE_BREAK;
-		content += "申請類型：" + AppType.getAppType(se.getAppType()) + Mail.HTML_LINE_BREAK;
-		content += "急迫性：" + Urgency.getUrgency(se.getUrgency()) + Mail.HTML_LINE_BREAK;
-		content += "物料名稱：" + se.getMaterial() + Mail.HTML_LINE_BREAK;
+		content += MailString.HTML_LINE_BREAK;
+		content += MailString.MAIL_CONTENT_LINE_WORD + MailString.HTML_LINE_BREAK;
+		content += "單號：" + se.getPno() + MailString.HTML_LINE_BREAK;
+		content += "申請日期：" + convert.FormatedDate(se.getAppDate(), "/") + MailString.HTML_LINE_BREAK;
+		content += "申請人：" + depName + " " + name + "(" + appUser.getEmpid() + ")" + MailString.HTML_LINE_BREAK;
+		content += "申請類型：" + AppType.getAppType(se.getAppType()) + MailString.HTML_LINE_BREAK;
+		content += "急迫性：" + Urgency.getUrgency(se.getUrgency()) + MailString.HTML_LINE_BREAK;
+		content += "物料名稱：" + se.getMaterial() + MailString.HTML_LINE_BREAK;
 
-		content += "受理單位：" + emailUtil.getDepName(se.getReceiptUnit()) + Mail.HTML_LINE_BREAK;
+		content += "受理單位：" + emailUtil.getDepName(se.getReceiptUnit()) + MailString.HTML_LINE_BREAK;
 
-		content += "計畫代號：" + se.getProjectCode() + Mail.HTML_LINE_BREAK;
+		content += "計畫代號：" + se.getProjectCode() + MailString.HTML_LINE_BREAK;
 
 		String projectLeaderLine = "";
 		if (projectLeaderUserDate != null) {
@@ -52,12 +54,12 @@ public class EmailNotify extends BaseEmailNotify {
 					+ projectLeaderUserDate.getEmpid() + ") ";
 		}
 
-		content += "計畫主持人：" + projectLeaderLine + Mail.HTML_LINE_BREAK;
+		content += "計畫主持人：" + projectLeaderLine + MailString.HTML_LINE_BREAK;
 
-		content += "<br>" + buildApproveConfirmMsgStr(se) + Mail.HTML_LINE_BREAK;
-		content += "==========================" + Mail.HTML_LINE_BREAK;
-		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + Mail.HTML_LINE_BREAK;
-		content += "意見記錄：" + Mail.HTML_LINE_BREAK;
+		content += "<br>" + buildApproveConfirmMsgStr(se) + MailString.HTML_LINE_BREAK;
+		content += "==========================" + MailString.HTML_LINE_BREAK;
+		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + MailString.HTML_LINE_BREAK;
+		content += "意見記錄：" + MailString.HTML_LINE_BREAK;
 
 		return content;
 	}

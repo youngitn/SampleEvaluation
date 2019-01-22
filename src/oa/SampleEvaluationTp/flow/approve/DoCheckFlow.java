@@ -28,6 +28,10 @@ public class DoCheckFlow extends bProcFlow {
 
 			if (getValue("IS_CHECK").equals("0")) {
 
+				if ("".equals(getValue("DOC_CTRLER"))) {
+					message("請選擇文管人員");
+					return false;
+				}
 				setValue("IS_CHECK", "1");
 				BaseService service = new BaseService(this);
 				BaseDao bdservice = new SampleEvaluationCheckService(t);
@@ -49,8 +53,9 @@ public class DoCheckFlow extends bProcFlow {
 				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
 				bdservice.upsert(se);
 				ret = true;
+
 			} else if (getValue("IS_CHECK").equals("1")) {
-				message("已進行過請驗流程");
+				message("無法重覆進行請驗流程");
 				ret = false;
 			}
 		}
