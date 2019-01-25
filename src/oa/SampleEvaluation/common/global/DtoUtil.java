@@ -77,8 +77,18 @@ public class DtoUtil {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		String condition = sqlWhere.insert(0, "WHERE ").delete(sqlWhere.lastIndexOf("AND"), sqlWhere.length())
-				.toString() + status;
+
+		if (sqlWhere != null && sqlWhere.length() > 0) {
+			sqlWhere.insert(0, "WHERE ");
+			int index = sqlWhere.lastIndexOf("AND");
+			if (index > 0) {
+				sqlWhere.delete(index, sqlWhere.length());
+			}
+		} else {
+			sqlWhere.append(" WHERE ");
+			status = status.replace("AND", "");
+		}
+		String condition = sqlWhere.toString() + status;
 		System.out.println("sqlWhere=  " + condition);
 		return condition;
 	}
@@ -211,6 +221,7 @@ public class DtoUtil {
 		try {
 			r = DtoUtil.getResultSetWithCondition(clazz, t, condition);
 			list = resultSetToArrayList(r, clazz);
+			System.out.println("getDbDataToDtoList->" + list.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -247,10 +258,11 @@ public class DtoUtil {
 		Constructor<?> ctor = null;
 		Object object = null;
 		Annotation[] as = null;
+
 		while (r.next()) {
+			System.out.println("isNew=YES");
 			ctor = clazz.getConstructor();
 			object = ctor.newInstance();
-
 			for (Field field : fld) {
 				field.setAccessible(true);
 				as = field.getDeclaredAnnotations();
@@ -258,18 +270,20 @@ public class DtoUtil {
 					if (aa instanceof xmaker) {
 						if (((xmaker) aa).isText()) {
 							field.set(object, (String) ((xmaker) aa).name());
-						}
-						if (((xmaker) aa).isFlowStatus()) {
-							// TODO 如何彈性在這邊加入運算
+
+						} else if (((xmaker) aa).isFlowStatus()) {
 							field.set(object, "");
 						} else {
 							field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
 						}
+
 					}
 				}
 			}
+
 			list.add(object);
 		}
+
 		return list;
 	}
 

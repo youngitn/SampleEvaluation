@@ -4,15 +4,18 @@ import com.ysp.service.BaseService;
 
 import jcx.db.talk;
 import jcx.jform.bProcFlow;
-import oa.SampleEvaluation.common.FlowcUtil;
 import oa.SampleEvaluation.common.MailToolInApprove;
-import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluation.subflowbuilder.CheckFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.SubFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.TpFlowBuilder;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
+import oa.SampleEvaluationTest.dto.SampleEvaluationTest;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
@@ -26,133 +29,124 @@ public class ApproveV1 extends bProcFlow {
 	public boolean action(String value) throws Throwable {
 		nowState = getState();
 		t = getTalk();
-		SampleEvaluation s = null;
-		BaseDao bdService = new SampleEvaluationService(t);
-		BaseService service = new BaseService(this);
+
 		String labExe = getValue("LAB_EXE").trim();
 		String lassessor = getValue("ASSESSOR").trim();
 		String docCtrler = getValue("DOC_CTRLER").trim();
 		String designee = getValue("DESIGNEE").trim();
-		designee.trim().split(" ");
+		// designee.trim().split(" ");
 		getValue("PNO");
 		this.isCheckValue = getValue("IS_CHECK").trim();
 		this.isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
 		boolean ret = doReminder("");
+		// å»ºç«‹å¸¶è³‡æ–™DTO&DAO
+
+		SampleEvaluationTpService daoserviceTp = new SampleEvaluationTpService(t);
+		SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+		tp.setOwnPno(tp.getPno() + "TP");
+
+		SampleEvaluationCheckService daoserviceCheck = new SampleEvaluationCheckService(t);
+		SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(), this);
+		ck.setOwnPno(ck.getPno() + "CHECK");
+
+		SampleEvaluationTestService daoserviceTest = new SampleEvaluationTestService(t);
+		SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataToDto(new SampleEvaluationTest(), this);
+		ck.setOwnPno(test.getPno() + "TEST");
+
+		SampleEvaluationService daoservice = new SampleEvaluationService(t);
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+
 		switch (FlowState.valueOf(nowState)) {
-		case ²Õªø:
+		case çµ„é•·:
 
 			if ((isCheckValue.equals("1") || isTrialProdValue.equals("1")) && labExe.equals("")) {
-				message("½Ğ¿ï¾Ü¹êÅç«Ç¸g¿ì¤H­û");
+				message("è«‹é¸æ“‡å¯¦é©—å®¤ç¶“è¾¦äººå“¡");
 				ret = false;
 			}
 
 			if (isTrialProdValue.equals("1") && lassessor.equals("")) {
-				message("½Ğ¿ï¾Ü¸Õ»sµû¦ô¤H­û");
+				message("è«‹é¸æ“‡è©¦è£½è©•ä¼°äººå“¡");
 				ret = false;
 			}
 
 			if ((isTrialProdValue.equals("1") || isCheckValue.equals("1")) && docCtrler.equals("")) {
-				message("½Ğ¿ï¾Ü¤åºŞ¤H­û");
+				message("è«‹é¸æ“‡æ–‡ç®¡äººå“¡");
 				ret = false;
 			}
 			if (getValue("QR_NO").trim().equals("")) {
-				message("½Ğ¶ñ¼gQR¸¹½X");
+				message("è«‹å¡«å¯«QRè™Ÿç¢¼");
 				ret = false;
 			}
 			if (ret) {
-				// §ó·s¥Dªí½ĞÅç©M¸Õ»sµû¦ô¤Ä¿ïÄæ¦ì
-				// §ó·s¥Dªí µû¦ô¤H­û©M¹êÅç«Ç¸g¿ì
-				s = new SampleEvaluation();
-				s = (SampleEvaluation) DtoUtil.setFormDataToDto(s, this);
-				bdService.update(s);
 
-				// «Ø¥ß¤l¬yµ{FLOWCª«¥ó ¨Ï¨ä¥X²{¦b«İÃ±®Öªí³æ¦Cªí
+				daoservice.update(se);
+				SubFlowBuilder sfb = null;
+
+				// å»ºç«‹å­æµç¨‹FLOWCç‰©ä»¶ ä½¿å…¶å‡ºç¾åœ¨å¾…ç°½æ ¸è¡¨å–®åˆ—è¡¨
 				if (isCheckValue.equals("1")) {
-					SampleEvaluationCheck secDto = (SampleEvaluationCheck) DtoUtil
-							.setFormDataToDto(new SampleEvaluationCheck(), this);
+					sfb = new CheckFlowBuilder();
+					sfb.setStartGateName("å¡«å¯«è«‹é©—å–®è™Ÿ");
+					sfb.setMainDto(ck);
+					sfb.setTalk(t);
+					sfb.construct();
 
-					String ownPno = secDto.getPno() + "CHECK";
-					secDto.setOwnPno(ownPno);
-					SampleEvaluationCheckService secs = new SampleEvaluationCheckService(t);
-					// insert check¥DÀÉ
-					secs.upsert(secDto);
-					// insert check¬yµ{DATA
-					FlowcUtil.goCheckSubFlow(ownPno, getValue("APPLICANT"), "¶ñ¼g½ĞÅç³æ¸¹", t);
-
-					// ¦³½ĞÅç¬yµ{ ±H¥X³qª¾«H
-					String title = "Ã±®Ö³qª¾¡G" + this.getFunctionName() + "_½ĞÅç¬yµ{";
-					MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), secDto, title);
+					// æœ‰è«‹é©—æµç¨‹ å¯„å‡ºé€šçŸ¥ä¿¡
+					String title = "ç°½æ ¸é€šçŸ¥ï¼š" + this.getFunctionName() + "_è«‹é©—æµç¨‹";
+					MailToolInApprove.sendSubFlowMail(new BaseService(this), getValue("DOC_CTRLER"), ck, title);
 
 				}
 				if (isTrialProdValue.equals("1")) {
-					SampleEvaluationTp setDto = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(),
-							this);
-					String ownPno = setDto.getPno() + "TP";
-					setDto.setOwnPno(ownPno);
-					SampleEvaluationTpService sets = new SampleEvaluationTpService(t);
-					// insert TP¥DÀÉ
-					sets.upsert(setDto);
-					// insert TP¬yµ{DATA
-					FlowcUtil.goTpSubFlow(ownPno, getValue("APPLICANT"), "µû¦ô¤H­û", t);
 
-					// ¦³¸Õ»s¬yµ{ ±H¥X³qª¾«H
-					String title = "Ã±®Ö³qª¾¡G" + this.getFunctionName() + "_¸Õ»s¬yµ{";
-					MailToolInApprove.sendSubFlowMail(service, getValue("ASSESSOR"), setDto, title);
+					sfb = new TpFlowBuilder();
+					sfb.setStartGateName("è©•ä¼°äººå“¡");
+					sfb.setMainDto(tp);
+					sfb.setTalk(t);
+					sfb.construct();
+					// æœ‰è©¦è£½æµç¨‹ å¯„å‡ºé€šçŸ¥ä¿¡
+					String title = "ç°½æ ¸é€šçŸ¥ï¼š" + this.getFunctionName() + "_è©¦è£½æµç¨‹";
+					MailToolInApprove.sendSubFlowMail(new BaseService(this), getValue("ASSESSOR"), tp, title);
 				}
 			}
 			break;
-		case ¨ü²z³æ¦ì¥DºŞ¤À®×:
-			// §ó·s¥Dªí¤À®×¤HÄæ¦ì
+		case å—ç†å–®ä½ä¸»ç®¡åˆ†æ¡ˆ:
+			// æ›´æ–°ä¸»è¡¨åˆ†æ¡ˆäººæ¬„ä½
 			if (ret && !designee.equals("")) {
-				t.execFromPool("UPDATE  sample_evaluation  SET DESIGNEE=?" + " where pno=?",
-						new Object[] { designee, getValue("PNO") });
-				t.execFromPool("UPDATE  sample_evaluation_check  SET DESIGNEE=?" + " where own_pno=?",
-						new Object[] { designee, getValue("OWN_PNO") });
+				daoserviceCheck.update(ck);
+				daoservice.update(se);
 			} else {
-				message("½Ğ¿ï¾Ü ¨ü²z³æ¦ì«ü¬£¤H­û Äæ¦ì");
+				message("è«‹é¸æ“‡ å—ç†å–®ä½æŒ‡æ´¾äººå“¡ æ¬„ä½");
 				ret = false;
 			}
 			break;
-		case «İ³B²z:
-		case ±ÄÁÊ¸g¿ì½T»{:
-			// §ó·s¥Dªí¤À®×¤HÄæ¦ì
+		case å¾…è™•ç†:
+		case æ¡è³¼ç¶“è¾¦ç¢ºèª:
+			// æ›´æ–°ä¸»è¡¨åˆ†æ¡ˆäººæ¬„ä½
 			if (ret) {
-				FileItemSetChecked();
-				s = new SampleEvaluation();
-				s = (SampleEvaluation) DtoUtil.setFormDataToDto(s, this);
-				bdService.update(s);
+				fileItemSetChecked();
+				daoservice.update(se);
 			}
 			break;
-		case ±ÄÁÊ¸g¿ì:
+		case æ¡è³¼ç¶“è¾¦:
 
-			// ·í½ĞÅç»P¸Õ»s¿ï¶µ¬Ò¥¼¤Ä¿ï«h®Ö­ã«áµ²®×
-			if ("0".equals(getValue("IS_CHECK")) && "0".equals(getValue("IS_TRIAL_PRODUCTION"))) {
+			// ç•¶è«‹é©—èˆ‡è©¦è£½é¸é …çš†æœªå‹¾é¸å‰‡æ ¸å‡†å¾Œçµæ¡ˆ
+			if ("0".equals(this.isCheckValue) && "0".equals(this.isTrialProdValue)) {
 				ret = true;
 
-			} // ¦pªG¦³¤Ä¿ï½ĞÅç¸Õ»s¥ô¤@¿ï¶µ«h·|§PÂ_µû¦ôµ²ªG&§¨ÀÉ¬O§_¬°ªÅ
+			} // å¦‚æœæœ‰å‹¾é¸è«‹é©—è©¦è£½ä»»ä¸€é¸é …å‰‡æœƒåˆ¤æ–·è©•ä¼°çµæœ&å¤¾æª”æ˜¯å¦ç‚ºç©º
 			else if (getValue("EVALUATION_RESULT").trim().equals("")
 					|| getValue("FILE_EVALUATION_RESULT").trim().equals("")) {
-				message("µû¦ôµ²ªG»P¨ä§¨ÀÉ¤£±o¬°ªÅ");
+				message("è©•ä¼°çµæœèˆ‡å…¶å¤¾æª”ä¸å¾—ç‚ºç©º");
 				ret = false;
 			} else if (ret) {
-				FileItemSetChecked();
-				BaseDao daoservice = null;
+				fileItemSetChecked();
 				if ("1".equals(getValue("IS_TRIAL_PRODUCTION"))) {
-					daoservice = new SampleEvaluationTpService(t);
-					SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(),
-							this);
-					tp.setOwnPno(tp.getPno() + "TP");
-					daoservice.update(tp);
+					daoserviceTp.update(tp);
 				}
+
 				if ("1".equals(getValue("IS_CHECK"))) {
-					daoservice = new SampleEvaluationCheckService(t);
-					SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil
-							.setFormDataToDto(new SampleEvaluationCheck(), this);
-					ck.setOwnPno(ck.getPno() + "CHECK");
-					daoservice.update(ck);
+					daoserviceCheck.update(ck);
 				}
-				daoservice = new SampleEvaluationService(t);
-				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+
 				daoservice.update(se);
 				ret = true;
 			}
@@ -164,7 +158,7 @@ public class ApproveV1 extends bProcFlow {
 		return ret;
 	}
 
-	private void FileItemSetChecked() {
+	private void fileItemSetChecked() {
 
 		if (!getValue("FILE_SPEC").equals("")) {
 			setValue("PROVIDE_SPEC", "1");
@@ -184,20 +178,20 @@ public class ApproveV1 extends bProcFlow {
 	}
 
 	/**
-	 * ·ÅÄÉ´£¿ô ¤£¶Ç¤J ¦^¶Çtrue/false
+	 * æº«é¦¨æé†’ ä¸å‚³å…¥ å›å‚³true/false
 	 */
 	private boolean doReminder(String addStr) throws Exception {
-		int result = showConfirmDialog(addStr + "½T©w°e¥Xªí³æ¡H", "·ÅÄÉ´£¿ô", 0);
+		int result = showConfirmDialog(addStr + "ç¢ºå®šé€å‡ºè¡¨å–®ï¼Ÿ", "æº«é¦¨æé†’", 0);
 		if (result == 1) {
-			message("¤w¨ú®ø°e¥Xªí³æ");
+			message("å·²å–æ¶ˆé€å‡ºè¡¨å–®");
 			return false;
 		}
-		String space = "";
+		StringBuilder space = new StringBuilder();
 		for (int i = 0; i < 16; i++) {
-			space += "&emsp;";
+			space.append("&emsp;");
 		}
-		percent(100, space + "ªí³æ°e¥X¤¤¡A½Ğµy­Ô...<font color=white>");
-		message("Ã±®Ö§¹¦¨");
+		percent(100, space.toString() + "è¡¨å–®é€å‡ºä¸­ï¼Œè«‹ç¨å€™...<font color=white>");
+		message("ç°½æ ¸å®Œæˆ");
 		return true;
 	}
 

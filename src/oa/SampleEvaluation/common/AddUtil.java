@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.ysp.service.BaseService;
 
-import oa.SampleEvaluation.common.global.CommonDataObj;
-
 /**
  * ¤£¨Ì¿àhproc
  * 
@@ -45,15 +43,14 @@ public class AddUtil {
 		return ret;
 	}
 
-	public String getUUID(CommonDataObj cdo) throws Exception {
+	public String getUUID(String tableName) throws Exception {
 
 		String uuid = "";
-		String tablePKName = cdo.getTablePKName();
 		String appdate = service.getValue("APP_DATE").trim().substring(0, 4);
-		String table = cdo.getTableName();
-		String sql = "select max(" + tablePKName + ") from " + table + " WHERE PNO like '"+appdate+"%'";
+		String table = tableName;
+		String sql = "select max(PNO) from " + table + " WHERE PNO like '" + appdate + "%'";
 		String[][] ret = service.getTalk().queryFromPool(sql);
-		
+
 		if ("".equals(ret[0][0])) {
 			uuid = appdate + "0001";
 		} else {

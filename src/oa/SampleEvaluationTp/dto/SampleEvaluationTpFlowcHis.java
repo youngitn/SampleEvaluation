@@ -2,6 +2,7 @@ package oa.SampleEvaluationTp.dto;
 
 import java.io.Serializable;
 
+import oa.SampleEvaluation.common.Flowc;
 import oa.SampleEvaluation.common.global.dbTable;
 import oa.SampleEvaluation.common.global.xmaker;
 
@@ -12,7 +13,7 @@ import oa.SampleEvaluation.common.global.xmaker;
  *
  */
 @dbTable(name = "SAMPLE_EVALUATION_TP_FLOWC_HIS", pkName = "OWN_PNO")
-public class SampleEvaluationTpFlowcHis implements Serializable {
+public class SampleEvaluationTpFlowcHis implements  Flowc,Serializable {
 	/**
 	 * 
 	 */

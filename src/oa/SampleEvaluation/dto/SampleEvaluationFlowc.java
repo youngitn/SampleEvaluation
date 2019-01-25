@@ -2,6 +2,7 @@ package oa.SampleEvaluation.dto;
 
 import java.io.Serializable;
 
+import oa.SampleEvaluation.common.Flowc;
 import oa.SampleEvaluation.common.global.dbTable;
 import oa.SampleEvaluation.common.global.xmaker;
 

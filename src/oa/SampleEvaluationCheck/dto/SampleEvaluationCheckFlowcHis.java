@@ -2,11 +2,12 @@ package oa.SampleEvaluationCheck.dto;
 
 import java.io.Serializable;
 
+import oa.SampleEvaluation.common.Flowc;
 import oa.SampleEvaluation.common.global.dbTable;
 import oa.SampleEvaluation.common.global.xmaker;
 
 @dbTable(name = "SAMPLE_EVALUATION_CHECK_FLOWC_HIS", pkName = "OWN_PNO")
-public class SampleEvaluationCheckFlowcHis implements Serializable {
+public class SampleEvaluationCheckFlowcHis implements  Flowc,Serializable {
 	/**
 	 * 
 	 */

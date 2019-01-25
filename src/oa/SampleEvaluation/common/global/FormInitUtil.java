@@ -32,18 +32,19 @@ public class FormInitUtil {
 
 	public void doQueryPageProcess() throws Exception {
 
+		
 		userdata = getNowApplicant();
 		// 取得user資料類別
 		// 填入query畫面基本欄位資料
-		c.setValue(FinalString.QUERY_EMPID_FIELD_NAME, userdata.getEmpid());
-		c.setValue(FinalString.QUERY_EMP_NAME_FIELD_NAME, userdata.getHecname());
-		c.setValue(FinalString.QUERY_DEP_NO_FIELD_NAME, userdata.getDepNo());
-		c.setValue(FinalString.QUERY_DEP_NAME_FIELD_NAME, userdata.getDepName());
+		c.setValue("Q_EMPID", userdata.getEmpid());
+		c.setValue("Q_EMP_NAME", userdata.getHecname());
+		c.setValue("Q_DEP_NO", userdata.getDepNo());
+		c.setValue("Q_DEP_NAME", userdata.getDepName());
 		String today = c.getToday("YYYYmmdd");
 		String edate = today;
 		String sdate = datetime.dateAdd(edate, "d", -14);
-		c.setValue(FinalString.QUERY_REQ_SDATE_FIELD_NAME, sdate);
-		c.setValue(FinalString.QUERY_REQ_EDATE_FIELD_NAME, edate);
+		c.setValue("Q_SDATE", sdate);
+		c.setValue("Q_EDATE", edate);
 		userdata = null;
 		c.setNewView("QueryPage");
 	}

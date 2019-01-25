@@ -1,4 +1,4 @@
-package oa.SampleEvaluationTp.dto;
+package oa.SampleEvaluationTest.dto;
 
 import java.io.Serializable;
 
@@ -6,8 +6,14 @@ import oa.SampleEvaluation.common.Flowc;
 import oa.SampleEvaluation.common.global.dbTable;
 import oa.SampleEvaluation.common.global.xmaker;
 
-@dbTable(name = "SAMPLE_EVALUATION_TP_FLOWC", pkName = "OWN_PNO")
-public class SampleEvaluationTpFlowc implements Flowc,Serializable {
+/**
+ * his的pk默認一個
+ * 
+ * @author u52116
+ *
+ */
+@dbTable(name = "SAMPLE_EVALUATION_TEST_FLOWC_HIS", pkName = "OWN_PNO")
+public class SampleEvaluationTestFlowcHis implements Flowc, Serializable {
 	/**
 	 * 
 	 */

@@ -9,8 +9,7 @@ import com.ysp.service.BaseService;
 
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluation.common.SampleEvaluationDataObj;
-import oa.SampleEvaluation.common.SampleEvaluationQuerySpec;
+
 import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.FormInitUtil;
@@ -30,7 +29,6 @@ import oa.SampleEvaluation.query.Query;
 public class SampleEvaluationActionController extends HprocImpl {
 
 	private boolean confirm = true;
-	private SampleEvaluationDataObj cdo;
 	private BaseService service;
 	String actionObjName;
 
@@ -69,8 +67,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 		if (service == null || service.getFunctionName().equals("")) {
 			throw new Exception("new BaseService(this) is null......");
 		}
-		// 測試物件
-		cdo = buildCdo();
+
 
 	}
 
@@ -110,7 +107,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 	private void doQuery() throws Throwable {
 		// go
 		String[][] list = new Query(this).get2DStringArrayResult();
-		
+
 //		MainQuery mquery = new MainQuery(cdo);
 		// String[][] list = mquery.testtest();
 		// message(mquery.getSqlQueryStr());
@@ -139,10 +136,10 @@ public class SampleEvaluationActionController extends HprocImpl {
 			int result = showConfirmDialog("確定送出表單？", "溫馨提醒", 0);
 			if (result != 1) {
 				// 產生單號
-				String uuid = addUtil.getUUID(cdo);
+				String uuid = addUtil.getUUID(getTableName());
 
 				// DMAKER 內建ADD功能 需將資料塞進去表單欄位才吃的到
-				setValue(cdo.getTablePKName(), uuid);
+				setValue("PNO", uuid);
 				fileItemSetChecker();
 				// confirm = true 控制是否真的送出
 				if (confirm) {
@@ -186,27 +183,6 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	}
 
-	private SampleEvaluationDataObj buildCdo() throws SQLException, Exception {
 
-		/** init **/
-		SampleEvaluationDataObj inercdo = new SampleEvaluationDataObj(getTalk(), getTableName(), "PNO", "APPLICANT");
-		SampleEvaluationQuerySpec qs = new SampleEvaluationQuerySpec(this);
-
-		inercdo.setTableAppDateFieldName("APP_DATE");
-		inercdo.setLoginUserId(getUser());
-		ArrayList<String> flist = new ArrayList<String>();
-		flist.add("PNO");
-		flist.add("APPLICANT");
-		flist.add("APP_TYPE");
-		flist.add("URGENCY");
-		flist.add("APP_DATE");
-		flist.add("'簽核狀態'");
-		flist.add("'明細'");
-		flist.add("'簽核紀錄'");
-		qs.setQueryResultView(flist);
-		inercdo.setQuerySpec(qs);
-		return inercdo;
-
-	}
 
 }
