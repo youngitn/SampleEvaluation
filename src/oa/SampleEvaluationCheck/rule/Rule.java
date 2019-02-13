@@ -15,30 +15,21 @@ public class Rule extends bRule {
 		String[] u = null;
 		// 受理單位主管所分派之人員
 		switch (FlowState.valueOf(state)) {
-		case 填寫請驗單號:
+		case 文管人員:
 			id.addElement("admin");
-			u = getData("DOC_CTRLER").trim().split(" ");
+			u = getData("DOC_CTRLER_CHECK").trim().split(" ");
 			id.addElement(u[0]);
 			break;
-		case 實驗室經辦:
-			id.addElement("admin");
-			u = getData("LAB_EXE").trim().split(" ");
-			id.addElement(u[0]);
-
-			break;
-		case 請驗作業跟催:
-		case 組長確認是否試製:
-			u = getData("DESIGNEE").trim().split(" ");
+		case 品保課長:
+			u = getData("QC_BOSS").trim().split(" ");
 			id.addElement("admin");
 			id.addElement(u[0]);
 			break;
 		case 組長:
 			u = getData("DESIGNEE").trim().split(" ");
-
 			id.addElement("admin");
 			id.addElement(u[0]);
 			break;
-
 		default:
 			break;
 		}

@@ -10,14 +10,15 @@ import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
+import oa.SampleEvaluationTp.dto.TestSeTP;
 
 public class TestTp extends hproc {
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 
 	public static void main(String[] arg) throws Throwable {
 		TestTp tes = new TestTp();
-		// tes.testSync();
-		tes.testFindById();
+		tes.testSync();
+		//tes.testFindById();
 		System.exit(0);
 
 	}
@@ -26,7 +27,8 @@ public class TestTp extends hproc {
 
 		BaseDao service = new SampleEvaluationTpService(t);
 		SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
-		tp.setOwnPno("GGGG" + "hTP");
+		tp.setOwnPno("iiiiiii" + "hTP");
+		tp.setPno("PNOOOOO");
 		service.upsert(tp);
 
 		service = new SampleEvaluationCheckService(t);
@@ -43,7 +45,7 @@ public class TestTp extends hproc {
 	public void testFindById() throws Throwable {
 
 		BaseDao bao = new SampleEvaluationTpService(t);
-		SampleEvaluationTp s = (SampleEvaluationTp) bao.findById("GGGGhTP");
+		SampleEvaluationTp s = (SampleEvaluationTp) bao.findById("iiiiiiihTP");
 		System.out.println(s.getAppType());
 //
 	}

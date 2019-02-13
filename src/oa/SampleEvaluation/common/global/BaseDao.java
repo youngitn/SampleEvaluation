@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import jcx.db.talk;
 
 public abstract class BaseDao {
@@ -29,8 +31,11 @@ public abstract class BaseDao {
 		Class clazz = o.getClass();
 		dbTable a = (dbTable) clazz.getAnnotation(dbTable.class);
 		String pkName = a.pkName();
-		Field[] fld = o.getClass().getDeclaredFields();
+		Field[] fld1 = clazz.getDeclaredFields();
+		Field[] fld2 = clazz.getSuperclass().getDeclaredFields();
+		Field[] fld = (Field[]) ArrayUtils.addAll(fld1, fld2);
 		String pk = "";
+		System.out.println(fld.length);
 		for (Field field : fld) {
 			field.setAccessible(true);
 			Annotation[] annotations = field.getAnnotations();
@@ -43,6 +48,7 @@ public abstract class BaseDao {
 				}
 			}
 		}
+		System.out.println("pk-->" + pk + "  pkName-->" + pkName);
 		if (findById(pk) == null) {
 			t.execFromPool(m.get(DbProcessType.INSERT));
 		} else {
@@ -57,8 +63,8 @@ public abstract class BaseDao {
 	public ArrayList<?> findByCondition(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
 	}
-	
-	//主查詢
+
+	// 主查詢
 	public String[][] findByConditionReturn2DStringArray(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataTo2DStringArray(clazz, t, condition);
 	}

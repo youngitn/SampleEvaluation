@@ -7,6 +7,8 @@
 		</delete>
 		<delete dir="Z:\babylon\ysphr\oa\SampleEvaluationTp\">
 		</delete>
+		<delete dir="Z:\babylon\ysphr\oa\SampleEvaluationTest\">
+		</delete>
 		<!--建立來源和目的資料路徑即可 fileset表示多數檔案  -->
 		<copy encoding="UTF-8" includeemptydirs="false" todir="Z:\babylon\ysphr\oa\SampleEvaluation\">
 			<fileset dir="src\oa\SampleEvaluation\">
@@ -20,6 +22,11 @@
 		</copy>
 		<copy encoding="UTF-8" includeemptydirs="false" todir="Z:\babylon\ysphr\oa\SampleEvaluationTp\">
 			<fileset dir="src\oa\SampleEvaluationTp\">
+				<!--<exclude name="**/*.class"/>-->
+			</fileset>
+		</copy>
+		<copy encoding="UTF-8" includeemptydirs="false" todir="Z:\babylon\ysphr\oa\SampleEvaluationTest\">
+			<fileset dir="src\oa\SampleEvaluationTest\">
 				<!--<exclude name="**/*.class"/>-->
 			</fileset>
 		</copy>

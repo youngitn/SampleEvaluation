@@ -47,8 +47,8 @@ public class Test extends hproc {
 		String[][] al = (String[][]) qrs.findByConditionReturn2DStringArray(targetCondition);
 		/*使用方式 ----> 在繼承hproc狀況下 String[][] list = new Query(this).get2DStringArrayResult();*/
 		System.out.println("ret=>"+al.length);
-		System.out.println(al[0][0]);
-		System.out.println(al[0][1]);
+		//System.out.println(al[0][0]);
+		//System.out.println(al[0][1]);
 		// tes.test1();
 //		tes.test2();
 //		tes.test3();
@@ -65,7 +65,7 @@ public class Test extends hproc {
 //		}
 
 		// System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
-		System.out.println(DateTool.getAfterWorkDate("20190103", 5, t));
+		System.out.println("------->"+DateTool.getAfterWorkDate("20190103", 150, t));
 		// System.out.println( DateTool.getBeforeWorkDateOver25Day("20181224",1, t));
 //		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
 //		secfh.setOwnPno("sss");

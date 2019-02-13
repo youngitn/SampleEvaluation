@@ -1,46 +1,44 @@
-package oa.SampleEvaluationCheck.controller;
+package oa.SampleEvaluationTest.controller;
 
 import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
 /**
- * 
- * 
+ *
  * @author u52116
  *
  */
-public class SampleEvaluationCheckController extends HprocImpl {
+public class SampleEvaluationTestController extends HprocImpl {
+
+	public boolean confirm;
 
 	@Override
 	public String action(String arg0) throws Throwable {
-
-		setFormEMPBaseInfo();
-
+		// message(getState().trim());
 		// 申請人基本資料
-
+		setFormEMPBaseInfo();
 		String ownPno = getValue("OWN_PNO").trim();
 		if (ownPno.length() <= 0) {
 			changeForm(getFunctionName());
 		} else {
+
 			showRejectWarning(ownPno, "OWN_PNO");
 		}
 		setAllFieldUneditable();
 		setAllFileUploadFieldEditable();
 		setDeadLine();
 		showSubFlowSignPeopleTab();
-		
-		System.out.println("getState----->" + getState());
-		switch (FlowState.valueOf(getState().trim())) {
+
+		// 就算是default 名稱也要存在FlowState
+		// switch條件才會生效
+		switch (FlowState.valueOf(getState())) {
 		case 文管人員:
-			setEditable("NOTIFY_NO_CHECK", true);
-			setEditable("NOTIFY_NO_TRIAL_PROD", true);
+			setEditable("EVALUATION_RESULT", true);
 			break;
 		default:
 			break;
-
 		}
-
 		return arg0;
 
 	}

@@ -2,23 +2,20 @@ package oa.SampleEvaluation.subflowbuilder;
 
 import jcx.db.talk;
 import oa.SampleEvaluation.common.Flowc;
-import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
+import oa.SampleEvaluation.dto.SampleEvaluation;
 
 public abstract class SubFlowBuilder {
 
-	protected SampleEvaluationSubBaseDto se;
+	protected SampleEvaluation se;
 	protected talk t;
 	protected String gateName;
+	protected String ownPnoType;
 
-	public abstract void setOwnPno();
-
-	public void setStartGateName(String gateName) {
-		this.gateName = gateName;
-	}
+	public abstract void setStartGateName(String gateName);
 
 	public abstract void insertSubMainData() throws Exception;
 
-	public void setMainDto(SampleEvaluationSubBaseDto se) {
+	public void setMainDto(SampleEvaluation se) {
 		this.se = se;
 	}
 
@@ -30,16 +27,16 @@ public abstract class SubFlowBuilder {
 	}
 
 	public void construct() throws Exception {
-
-		this.setOwnPno();
+		this.setSubFlowOwnPnoType();
 		this.insertSubMainData();
 		this.setAndInsertFlowData();
 
 	}
 
-	public Flowc setFlowData(Flowc c, String State, String time) {
+	public abstract void setSubFlowOwnPnoType();
 
-		c.setOwnPno(this.se.getOwnPno());
+	public Flowc setFlowData(Flowc c, String State, String time) {
+		c.setOwnPno(this.se.getPno() + this.ownPnoType);
 		c.setfInpId(this.se.getApplicant());
 		c.setfInpStat(State);
 		c.setfInpTime(time);

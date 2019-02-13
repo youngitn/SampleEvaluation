@@ -3,7 +3,7 @@ package oa.SampleEvaluation.common;
 import com.ysp.service.BaseService;
 import com.ysp.service.MailService;
 
-import oa.SampleEvaluation.dto.SampleEvaluationSubBaseDto;
+import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.notify.EmailNotify;
 
 public class MailToolInApprove {
@@ -28,7 +28,7 @@ public class MailToolInApprove {
 		return title + service.getFunctionName() + "( ³æ¸¹¡G" + service.getValue("PNO") + " )";
 	}
 
-	public static void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationSubBaseDto dto, String title)
+	public static void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluation dto, String title)
 			throws Exception {
 		MailService mailService = new MailService(service);
 		// Mail to

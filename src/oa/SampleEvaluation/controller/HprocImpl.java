@@ -7,6 +7,7 @@ import java.util.Hashtable;
 import org.apache.commons.lang.StringUtils;
 
 import jcx.jform.hproc;
+import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.common.global.UserData;
 
 public class HprocImpl extends hproc {
@@ -26,20 +27,20 @@ public class HprocImpl extends hproc {
 		}
 	}
 
-	//設定資料上傳相關欄位為可編輯
+	// 設定資料上傳相關欄位為可編輯
 	protected void setAllFileUploadFieldEditable() {
 		Hashtable h = getAllcLabels();
 		for (Enumeration e = h.keys(); e.hasMoreElements();) {
 			String s = e.nextElement().toString();
-			//可編輯條件 符合設為true
-			//名稱開頭FILE_ 表示上傳欄位本體
-			//名稱開頭PROVIDE_ 表示上傳欄位的勾選項目
+			// 可編輯條件 符合設為true
+			// 名稱開頭FILE_ 表示上傳欄位本體
+			// 名稱開頭PROVIDE_ 表示上傳欄位的勾選項目
 			if (s.startsWith("FILE_") || s.startsWith("PROVIDE_")) {
 				setEditable(s, true);
 			}
 
 		}
-		
+
 	}
 
 	protected void setFormEMPBaseInfo() throws SQLException, Exception {
@@ -110,5 +111,32 @@ public class HprocImpl extends hproc {
 	protected String getFieldCaption(String fieldName) {
 		Hashtable ht = (Hashtable) getAllcLabels().get(fieldName);
 		return (String) ht.get("caption");
+	}
+
+	protected void setDeadLine() throws Exception {
+
+		int addDaysNum = 0;
+		String value = getValue("URGENCY");
+		if (!value.isEmpty()) {
+			if (value.equals("A")) {
+				addDaysNum = 100;
+			} else if (value.equals("B")) {
+				addDaysNum = 110;
+			} else if (value.equals("C")) {
+				addDaysNum = 130;
+			}
+
+			setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
+		}
+	}
+
+	protected void showSubFlowSignPeopleTab() throws Exception {
+		// 根據勾選的子流程將相關資料顯示
+		if ("1".equals(getValue("IS_CHECK").trim()))
+			setVisible("SUB_FLOW_TAB_CHECK", true);
+		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim()))
+			setVisible("SUB_FLOW_TAB_TP", true);
+		if ("1".equals(getValue("IS_TEST").trim()))
+			setVisible("SUB_FLOW_TAB_TEST", true);
 	}
 }

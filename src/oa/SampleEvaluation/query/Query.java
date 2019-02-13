@@ -2,7 +2,7 @@ package oa.SampleEvaluation.query;
 
 import java.sql.SQLException;
 
-import jcx.jform.hproc;
+import jcx.db.talk;
 import oa.SampleEvaluation.common.global.DtoUtil;
 
 /**
@@ -12,24 +12,19 @@ import oa.SampleEvaluation.common.global.DtoUtil;
  *
  */
 public class Query {
-	QueryConditionDto targetLikeThis;
-	hproc hpc;
+	;
 
-	public Query(hproc hpc) {
-
-		this.hpc = hpc;
-
-		this.targetLikeThis = (QueryConditionDto) DtoUtil.setFormDataToDto(new QueryConditionDto(), hpc);
+	public Query() {
 
 	}
 
-	public String[][] get2DStringArrayResult() throws SQLException, Exception {
-		QueryResultService qrs = new QueryResultService(hpc.getTalk());
-		return (String[][]) qrs.findByConditionReturn2DStringArray(getCondition());
+	public String[][] get2DStringArrayResult(QueryConditionDto targetLikeThis, talk t) throws SQLException, Exception {
+		QueryResultService qrs = new QueryResultService(t);
+		return (String[][]) qrs.findByConditionReturn2DStringArray(getCondition(targetLikeThis));
 	}
 
-	public String getCondition() {
-		String targetCondition = DtoUtil.getSelectConditionByDtoWithXmakerAdapDbFieldName(this.targetLikeThis);
+	public String getCondition(QueryConditionDto targetLikeThis) {
+		String targetCondition = DtoUtil.getSelectConditionByDtoWithXmakerAdapDbFieldName(targetLikeThis);
 		return targetCondition;
 	}
 

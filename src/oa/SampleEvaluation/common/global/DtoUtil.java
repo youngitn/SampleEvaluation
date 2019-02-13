@@ -4,11 +4,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.apache.commons.lang.ArrayUtils;
 
 import com.ysp.service.BaseService;
 
@@ -18,6 +21,14 @@ import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.query.QueryStatus;
 
+/**
+ * 物件(or Class)作為參數,僅支援單層繼承欄位向上查找.<br>
+ * EX: son fields = son fields+father fields<br>
+ * 帶入物件(or Class)注意是否為子孫類別.
+ * 
+ * @author u52116
+ *
+ */
 public class DtoUtil {
 
 	public String getAppDateWhereStr(String Q_SDATE, String Q_EDATE) {
@@ -40,7 +51,8 @@ public class DtoUtil {
 		StringBuilder sqlWhere = new StringBuilder();
 		String status = "";
 		try {
-			Field[] fld = o.getClass().getDeclaredFields();
+
+			Field[] fld = getFields(o);
 			for (Field field : fld) {
 				field.setAccessible(true);
 				Annotation[] annotations = field.getAnnotations();
@@ -102,7 +114,9 @@ public class DtoUtil {
 	public static ArrayList<Field> getDeclaredXmakerFields(final Object o) {
 		ArrayList<Field> fields = new ArrayList<Field>();
 		try {
-			Field[] fld = o.getClass().getDeclaredFields();
+
+			Field[] fld = getFields(o);
+			// Field[] fld = o.getClass().getDeclaredFields();
 			for (Field field : fld) {
 				field.setAccessible(true);
 				Annotation[] annotations = field.getAnnotations();
@@ -132,7 +146,9 @@ public class DtoUtil {
 	public static Object setFormDataToDto(final Object o, Object service) {
 
 		try {
-			Field[] fld = o.getClass().getDeclaredFields();
+
+			Field[] fld = getFields(o);
+			// Field[] fld = o.getClass().getDeclaredFields();
 			for (Field field : fld) {
 				field.setAccessible(true);
 				Annotation[] annotations = field.getAnnotations();
@@ -181,7 +197,8 @@ public class DtoUtil {
 		ResultSet r = null;
 		try {
 
-			Field[] fld = clazz.getDeclaredFields();
+			Field[] fld = getFields(clazz);
+			// Field[] fld = clazz.getDeclaredFields();
 			r = DtoUtil.getResultSet(clazz, t, pno);
 			while (r.next()) {
 				Constructor<?> ctor = clazz.getConstructor();
@@ -254,7 +271,9 @@ public class DtoUtil {
 	 */
 	public static ArrayList<Object> resultSetToArrayList(ResultSet r, Class<Object> clazz) throws Exception {
 		ArrayList<Object> list = new ArrayList<Object>();
-		Field[] fld = clazz.getDeclaredFields();
+
+		Field[] fld = getFields(clazz);
+		// Field[] fld = clazz.getDeclaredFields();
 		Constructor<?> ctor = null;
 		Object object = null;
 		Annotation[] as = null;
@@ -290,7 +309,8 @@ public class DtoUtil {
 	public static String[][] arrayListTo2DStringArray(ArrayList<Object> arraylist, Class<Object> clazz)
 			throws Exception {
 
-		Field[] fld = clazz.getDeclaredFields();
+		Field[] fld = getFields(clazz);
+		// Field[] fld = clazz.getDeclaredFields();
 		String[][] ret = new String[arraylist.size()][fld.length];
 		int rc = 0;
 		int c = 0;
@@ -367,8 +387,13 @@ public class DtoUtil {
 		Connection c = null;
 		try {
 			c = t.getConnectionFromPool();
-			Statement stmt = c.createStatement();
-			r = stmt.executeQuery("select * from " + tableName + " " + condition);
+			// Statement stmt = c.createStatement();
+			PreparedStatement pstmt = null;
+			// String query = "select * from ? ?";
+			pstmt = c.prepareStatement("select * from " + tableName + " " + condition);
+
+			r = pstmt.executeQuery();
+			// r = stmt.executeQuery("select * from " + tableName + " " + condition);
 			System.out.println("do ->select * from " + tableName + " " + condition);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -381,7 +406,8 @@ public class DtoUtil {
 
 	public static Object setDtoDataToForm(final Object o, Object service) {
 		try {
-			Field[] fld = o.getClass().getDeclaredFields();
+			Field[] fld = getFields(o);
+
 			String value = null;
 			xmaker myAnnotation = null;
 			Annotation[] annotations = null;
@@ -424,9 +450,10 @@ public class DtoUtil {
 		StringBuilder insertField = new StringBuilder();
 		StringBuilder insertValue = new StringBuilder();
 		StringBuilder updateFieldWithValue = new StringBuilder();
-		Class clazz = o.getClass();
-		Field[] fld = clazz.getDeclaredFields();
-		dbTable a = (dbTable) clazz.getAnnotation(dbTable.class);
+		// Class clazz = o.getClass();
+		Field[] fld = getFields(o);
+		// Field[] fld = clazz.getDeclaredFields();
+		dbTable a = (dbTable) o.getClass().getAnnotation(dbTable.class);
 		String pkName = a.pkName();
 		String tableName = a.name();
 		try {
@@ -465,6 +492,28 @@ public class DtoUtil {
 		m.put(DbProcessType.INSERT, "INSERT INTO  " + tableName + "  (" + instf + ") VALUES (" + instv + " )");
 		m.put(DbProcessType.UPDATE, "UPDATE  " + tableName + "  SET " + up + whereStringForUpdatePkField);
 		return m;
+	}
+
+	public static Field[] getFields(final Object o) {
+
+		return getFields(o.getClass());
+	}
+
+	/**
+	 * 支援單層繼承欄位輸出
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	public static Field[] getFields(Class<?> clazz) {
+		Field[] sonFld = clazz.getDeclaredFields();
+		Field[] fatherFld = clazz.getSuperclass().getDeclaredFields();
+		if (fatherFld != null && fatherFld.length > 0) {
+			return (Field[]) ArrayUtils.addAll(sonFld, fatherFld);
+		} else {
+			return sonFld;
+		}
+
 	}
 
 	public static ArrayList<Object> getDbDataListToDtoListByCondition(Class clazz, talk t, String condition)

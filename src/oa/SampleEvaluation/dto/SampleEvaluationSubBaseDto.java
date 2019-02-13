@@ -11,15 +11,9 @@ public abstract class SampleEvaluationSubBaseDto extends SampleEvaluation {
 	 */
 	protected String ownPno;
 
-	public SampleEvaluationSubBaseDto(String[] strings) {
-		super(strings);
-		this.ownPno = strings[28];
-	}
-
 	public SampleEvaluationSubBaseDto() {
 
 	}
-
 
 	public String getOwnPno() {
 		return ownPno;
@@ -28,7 +22,6 @@ public abstract class SampleEvaluationSubBaseDto extends SampleEvaluation {
 	public void setOwnPno(String ownPno) {
 		this.ownPno = ownPno;
 	}
-
 
 	// 讓子類別實做 因為有分check和tp系列
 	protected abstract String buildOwnPno(String pno);

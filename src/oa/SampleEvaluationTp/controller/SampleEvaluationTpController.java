@@ -27,34 +27,13 @@ public class SampleEvaluationTpController extends HprocImpl {
 		}
 		setAllFieldUneditable();
 		setAllFileUploadFieldEditable();
-		int addDaysNum = 0;
-
-		if (getValue("URGENCY").equals("A")) {
-			addDaysNum = 100;
-		} else if (getValue("URGENCY").equals("B")) {
-			addDaysNum = 110;
-		} else if (getValue("URGENCY").equals("C")) {
-			addDaysNum = 130;
-		}
-
-		setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
+		setDeadLine();
+		showSubFlowSignPeopleTab();
 		// 就算是default 名稱也要存在FlowState
 		// switch條件才會生效
 		switch (FlowState.valueOf(getState())) {
-		case 實驗室經辦:
+		case 文管人員:
 			setEditable("EVALUATION_RESULT", true);
-			break;
-		case 組長:
-			break;
-		case 組長確認是否請驗:
-			setEditable("DOC_CTRLER", true);
-			setEditable("LAB_EXE", true);
-			break;
-		case 結案:
-			break;
-		case 評估人員:
-			break;
-		case 試製作業跟崔:
 			break;
 		default:
 			break;

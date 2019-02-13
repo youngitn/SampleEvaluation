@@ -22,6 +22,10 @@ public class QueryConditionDto {
 	private String Q_MFR;
 	@xmaker(name = "Q_STATUS", isFlowStatus = true)
 	private String Q_STATUS;
+	@xmaker(name = "Q_QR_NO", adapDbFieldName = "QR_NO")
+	private String Q_QR_NO;
+	@xmaker(name = "Q_RECEIPT_UNIT", adapDbFieldName = "RECEIPT_UNIT")
+	private String Q_RECEIPT_UNIT;
 
 	public String getQ_PNO() {
 		return Q_PNO;
@@ -93,6 +97,22 @@ public class QueryConditionDto {
 
 	public void setQ_STATUS(String q_STATUS) {
 		Q_STATUS = q_STATUS;
+	}
+
+	public String getQ_QR_NO() {
+		return Q_QR_NO;
+	}
+
+	public void setQ_QR_NO(String q_QR_NO) {
+		Q_QR_NO = q_QR_NO;
+	}
+
+	public String getQ_RECEIPT_UNIT() {
+		return Q_RECEIPT_UNIT;
+	}
+
+	public void setQ_RECEIPT_UNIT(String q_RECEIPT_UNIT) {
+		Q_RECEIPT_UNIT = q_RECEIPT_UNIT;
 	}
 
 }

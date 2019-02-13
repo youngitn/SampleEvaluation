@@ -1,7 +1,7 @@
-package oa.SampleEvaluationTp.rule;
+package oa.SampleEvaluationTest.rule;
 
 import jcx.jform.bRule;
-import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationTest.flow.approve.gateEnum.FlowState;
 
 import java.util.*;
 
@@ -9,13 +9,13 @@ public class Rule extends bRule {
 	public Vector<String> getIDs(String value) throws Throwable {
 		// 回傳值為 Vector contails 符合這條規格的帳號
 		// value 為 "不動產、廠房及設備異動申請單_取得"
-		String state = getState();
+		String state = getState().trim();
 		Vector<String> id = new Vector<String>();
 		String[] ret = null;
 		switch (FlowState.valueOf(state)) {
 
-		case 文管人員:
-			ret = getData("DOC_CTRLER_TP").trim().split(" ");
+		case 配合人員:
+			ret = getData("COORDINATOR").trim().split(" ");
 			id.addElement("admin");
 			id.addElement(ret[0]);
 

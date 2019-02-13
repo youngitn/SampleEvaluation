@@ -20,7 +20,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		// 各頁面載入處理於類別中實作
 
 		FormInitUtil init = new FormInitUtil(this);
-		
+
 		String actionObjName = getActionName(getName()).trim();
 		try {
 			switch (PageInitType.valueOf(actionObjName)) {
@@ -44,7 +44,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			case DETAIL_PAGE_INIT:// 進入明細畫面
 				init.doDetailPageProcess();
 				setAllFieldUneditable();
-				//不需在此setDeadLine(); 須將邏輯寫在明細按鈕action中
+				// 不需在此setDeadLine(); 須將邏輯寫在明細按鈕action中
 				break;
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();
@@ -60,11 +60,18 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				} else {
 					showRejectWarning(pno);
 				}
+
+				// 流程畫面在各關卡的初始化switch處理方法
 				switchByStateForFlowInit(FlowState.valueOf(getState().trim()));
-				// 如果帶出的資料 試製選項有打勾 就顯示評估人員
-				if (getValue("IS_TRIAL_PRODUCTION").trim().equals("1")) {
-					setVisible("ASSESSOR", true);
-				}
+
+				// 根據勾選的子流程將相關資料顯示
+				if ("1".equals(getValue("IS_CHECK").trim()))
+					setVisible("SUB_FLOW_TAB_CHECK", true);
+				if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim()))
+					setVisible("SUB_FLOW_TAB_TP", true);
+				if ("1".equals(getValue("IS_TEST").trim()))
+					setVisible("SUB_FLOW_TAB_TEST", true);
+
 				break;
 			default:
 
@@ -83,12 +90,16 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		case 組長:
 
 			setEditable("IS_CHECK", true);
+			setEditable("IS_TEST", true);
 			setEditable("IS_TRIAL_PRODUCTION", true);
 			setEditable("ASSESSOR", true);
 			setEditable("NOTE", true);
 			setEditable("LAB_EXE", true);
 			setEditable("QR_NO", true);
-			setEditable("DOC_CTRLER", true);
+			setEditable("DOC_CTRLER_TP", true);
+			setEditable("DOC_CTRLER_CHECK", true);
+			setEditable("QC_BOSS", true);
+			setEditable("COORDINATOR", true);
 			break;
 		case 受理單位主管分案:
 			setEditable("DESIGNEE", true);
@@ -128,23 +139,6 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		}
 		return name.toUpperCase();
 
-	}
-
-	private void setDeadLine() throws Exception {
-
-		int addDaysNum = 0;
-		String value = getValue("URGENCY");
-		if (!value.isEmpty()) {
-			if (value.equals("A")) {
-				addDaysNum = 100;
-			} else if (value.equals("B")) {
-				addDaysNum = 110;
-			} else if (value.equals("C")) {
-				addDaysNum = 130;
-			}
-
-			setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
-		}
 	}
 
 }

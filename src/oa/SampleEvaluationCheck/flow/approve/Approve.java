@@ -23,8 +23,7 @@ public class Approve extends bProcFlow {
 		String state = getState();
 		boolean ret = doReminder("");
 		switch (FlowState.valueOf(state)) {
-		case 填寫請驗單號:
-		case 實驗室經辦:
+		case 文管人員:
 			/*
 			 * 判斷請驗單號欄位是否空值會在填寫請驗單號舊處理完畢 到實驗室經辦時 只會同步更新三表
 			 */

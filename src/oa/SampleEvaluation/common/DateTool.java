@@ -8,8 +8,8 @@ public class DateTool {
 	public static String getAfterWorkDate(String date, int day, talk t) throws Exception {
 
 		String workDate = "";
-
-		String DD = date.substring(6, 8);// 取得上課日期的日
+		System.out.println("------>"+date);
+		String DD = date.substring(6, 8);
 		int int_DD = Integer.parseInt(DD);
 		int D = 0;
 		int yy = Integer.parseInt(date.substring(0, 4));

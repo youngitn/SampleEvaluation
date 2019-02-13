@@ -11,6 +11,7 @@ import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
 import oa.SampleEvaluation.subflowbuilder.CheckFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.SubFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.TestFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.TpFlowBuilder;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
@@ -25,19 +26,24 @@ public class ApproveV1 extends bProcFlow {
 	talk t;
 	String isCheckValue;
 	String isTrialProdValue;
+	String isTestValue;
 
 	public boolean action(String value) throws Throwable {
 		nowState = getState();
 		t = getTalk();
 
 		String labExe = getValue("LAB_EXE").trim();
-		String lassessor = getValue("ASSESSOR").trim();
-		String docCtrler = getValue("DOC_CTRLER").trim();
+		String assessor = getValue("ASSESSOR").trim();
+		String docCtrlerTp = getValue("DOC_CTRLER_TP").trim();
+		String docCtrlerCheck = getValue("DOC_CTRLER_CHECK").trim();
+		String qcBoss = getValue("QC_BOSS").trim();
 		String designee = getValue("DESIGNEE").trim();
+		String coordinator = getValue("COORDINATOR").trim();
 		// designee.trim().split(" ");
 		getValue("PNO");
 		this.isCheckValue = getValue("IS_CHECK").trim();
 		this.isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
+		this.isTestValue = getValue("IS_TEST").trim();
 		boolean ret = doReminder("");
 		// 建立帶資料DTO&DAO
 
@@ -51,7 +57,7 @@ public class ApproveV1 extends bProcFlow {
 
 		SampleEvaluationTestService daoserviceTest = new SampleEvaluationTestService(t);
 		SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataToDto(new SampleEvaluationTest(), this);
-		ck.setOwnPno(test.getPno() + "TEST");
+		test.setOwnPno(test.getPno() + "TEST");
 
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
 		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
@@ -59,52 +65,65 @@ public class ApproveV1 extends bProcFlow {
 		switch (FlowState.valueOf(nowState)) {
 		case 組長:
 
-			if ((isCheckValue.equals("1") || isTrialProdValue.equals("1")) && labExe.equals("")) {
-				message("請選擇實驗室經辦人員");
+			if ("1".equals(isCheckValue)) {
+				if ("".equals(docCtrlerCheck) || "".equals(qcBoss)) {
+					message("請驗流程中之文管人員與品保課長欄位皆不得為空");
+					ret = false;
+				}
+			}
+
+			if ("1".equals(isTrialProdValue)) {
+				if ("".equals(docCtrlerTp) || "".equals(assessor) || "".equals(labExe)) {
+					message("試製流程中之文管人員,試製人員,檢驗人員欄位皆不得為空");
+					ret = false;
+				}
+			}
+
+			if ("1".equals(isTestValue) && "".equals(coordinator)) {
+				message("試車流程中之配合人員不得為空");
 				ret = false;
 			}
 
-			if (isTrialProdValue.equals("1") && lassessor.equals("")) {
-				message("請選擇試製評估人員");
-				ret = false;
-			}
-
-			if ((isTrialProdValue.equals("1") || isCheckValue.equals("1")) && docCtrler.equals("")) {
-				message("請選擇文管人員");
-				ret = false;
-			}
-			if (getValue("QR_NO").trim().equals("")) {
-				message("請填寫QR號碼");
-				ret = false;
-			}
 			if (ret) {
 
 				daoservice.update(se);
 				SubFlowBuilder sfb = null;
-
+				String mailTitle = "簽核通知：" + this.getFunctionName();
 				// 建立子流程FLOWC物件 使其出現在待簽核表單列表
 				if (isCheckValue.equals("1")) {
 					sfb = new CheckFlowBuilder();
-					sfb.setStartGateName("填寫請驗單號");
+					sfb.setStartGateName("文管人員");
 					sfb.setMainDto(ck);
 					sfb.setTalk(t);
 					sfb.construct();
 
 					// 有請驗流程 寄出通知信
-					String title = "簽核通知：" + this.getFunctionName() + "_請驗流程";
-					MailToolInApprove.sendSubFlowMail(new BaseService(this), getValue("DOC_CTRLER"), ck, title);
+					String title = mailTitle + "_請驗流程";
+					MailToolInApprove.sendSubFlowMail(new BaseService(this), docCtrlerCheck, ck, title);
 
 				}
 				if (isTrialProdValue.equals("1")) {
 
 					sfb = new TpFlowBuilder();
-					sfb.setStartGateName("評估人員");
+					sfb.setStartGateName("試製人員");
 					sfb.setMainDto(tp);
 					sfb.setTalk(t);
 					sfb.construct();
 					// 有試製流程 寄出通知信
-					String title = "簽核通知：" + this.getFunctionName() + "_試製流程";
-					MailToolInApprove.sendSubFlowMail(new BaseService(this), getValue("ASSESSOR"), tp, title);
+					String title = mailTitle + "_試製流程";
+					MailToolInApprove.sendSubFlowMail(new BaseService(this), assessor, tp, title);
+				}
+				// 試車流程
+				if (isTestValue.equals("1")) {
+
+					sfb = new TestFlowBuilder();
+					sfb.setStartGateName("配合人員");
+					sfb.setMainDto(test);
+					sfb.setTalk(t);
+					sfb.construct();
+					// 有試製流程 寄出通知信
+					String title = mailTitle + "_試車流程";
+					MailToolInApprove.sendSubFlowMail(new BaseService(this), coordinator, test, title);
 				}
 			}
 			break;

@@ -8,8 +8,6 @@ import java.util.Map;
 import com.ysp.service.BaseService;
 
 import oa.SampleEvaluation.common.AddUtil;
-import oa.SampleEvaluation.common.DateTool;
-
 import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.common.global.FormInitUtil;
@@ -18,6 +16,7 @@ import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.enums.Actions;
 import oa.SampleEvaluation.query.Query;
+import oa.SampleEvaluation.query.QueryConditionDto;
 
 /**
  * 
@@ -68,7 +67,6 @@ public class SampleEvaluationActionController extends HprocImpl {
 			throw new Exception("new BaseService(this) is null......");
 		}
 
-
 	}
 
 	private void showDetail() throws SQLException, Exception {
@@ -83,34 +81,21 @@ public class SampleEvaluationActionController extends HprocImpl {
 			setVisible("ASSESSOR", true);
 		}
 		setDeadLine();
+		showSubFlowSignPeopleTab();
 		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
 
 	}
 
-	private void setDeadLine() throws Exception {
-
-		int addDaysNum = 0;
-		String value = getValue("URGENCY");
-		if (!value.isEmpty()) {
-			if (value.equals("A")) {
-				addDaysNum = 100;
-			} else if (value.equals("B")) {
-				addDaysNum = 110;
-			} else if (value.equals("C")) {
-				addDaysNum = 130;
-			}
-
-			setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
-		}
-	}
-
+	/**
+	 * 主查詢
+	 * @throws Throwable
+	 */
 	private void doQuery() throws Throwable {
-		// go
-		String[][] list = new Query(this).get2DStringArrayResult();
-
-//		MainQuery mquery = new MainQuery(cdo);
-		// String[][] list = mquery.testtest();
-		// message(mquery.getSqlQueryStr());
+		// 透過 DtoUtil 取得client端查詢條件value,並寫入QueryConditionDto
+		QueryConditionDto targetLikeThis = (QueryConditionDto) DtoUtil.setFormDataToDto(new QueryConditionDto(), this);
+		//取得2D array格式查詢結果
+		String[][] list = new Query().get2DStringArrayResult(targetLikeThis, getTalk());
+		
 		if (list == null || list.length <= 0) {
 			message("查無紀錄");
 		}
@@ -126,7 +111,13 @@ public class SampleEvaluationActionController extends HprocImpl {
 		fieldMap.put("RECEIPT_UNIT", "受理單位");
 		fieldMap.put("URGENCY", "急迫性");
 		fieldMap.put("MATERIAL", "原物料名稱");
-
+		fieldMap.put("AB_CODE", "AB編號");
+		fieldMap.put("MFR", " 製造商");
+		fieldMap.put("MFG_LOT_NO", "製造批號");
+		fieldMap.put("SUPPLIER", "供應商");
+		fieldMap.put("QTY", "數量");
+		fieldMap.put("UNIT", "單位");
+		fieldMap.put("SAP_CODE", "SAP物料編號");
 		// 新增不需cdo等額外其他資料
 		AddUtil addUtil = new AddUtil(service);
 		ArrayList<String> ret = (ArrayList<String>) addUtil.emptyCheck(fieldMap);
@@ -143,7 +134,6 @@ public class SampleEvaluationActionController extends HprocImpl {
 				fileItemSetChecker();
 				// confirm = true 控制是否真的送出
 				if (confirm) {
-					// 觸發Dmaker內建的新增鈕來送出表單
 					// 寫在view部分會好點
 					addScript("document.getElementById('em_add_button-box').click();");
 
@@ -182,7 +172,5 @@ public class SampleEvaluationActionController extends HprocImpl {
 		return Name.toUpperCase();
 
 	}
-
-
 
 }

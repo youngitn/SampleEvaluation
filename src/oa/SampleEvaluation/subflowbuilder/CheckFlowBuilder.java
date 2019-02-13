@@ -9,6 +9,7 @@ import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisService;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
 
@@ -35,16 +36,24 @@ public class CheckFlowBuilder extends SubFlowBuilder {
 	}
 
 	@Override
-	public void setOwnPno() {
-		this.se.setOwnPno(this.se.getPno() + "CHECK");
+	public void insertSubMainData() throws Exception {
+		SampleEvaluationCheckService secs = new SampleEvaluationCheckService(t);
+		SampleEvaluationCheck seCheckDto = (SampleEvaluationCheck) this.se;
+		seCheckDto.setOwnPno(this.se.getPno() + this.ownPnoType);
+		// insert check主檔
+		secs.upsert(this.se);
 
 	}
 
 	@Override
-	public void insertSubMainData() throws Exception {
-		SampleEvaluationCheckService secs = new SampleEvaluationCheckService(t);
-		// insert check主檔
-		secs.upsert(this.se);
+	public void setStartGateName(String gateName) {
+		this.gateName = "文管人員";
+
+	}
+
+	@Override
+	public void setSubFlowOwnPnoType() {
+		this.ownPnoType = "CHECK";
 
 	}
 
