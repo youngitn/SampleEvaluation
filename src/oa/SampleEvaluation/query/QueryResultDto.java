@@ -7,26 +7,29 @@ import oa.SampleEvaluation.common.global.xmaker;
 public class QueryResultDto {
 	@xmaker(name = "PNO")
 	private String pno;
-	
+
 	@xmaker(name = "APPLICANT")
 	private String applicant;
-	
+
 	@xmaker(name = "APP_TYPE")
 	private String appType;
-	
+
 	@xmaker(name = "URGENCY")
 	private String urgency;
-	
+
 	@xmaker(name = "APP_DATE")
 	private String appDate;
-	
-	@xmaker(name = "Ã±®Öª¬ºA",isFlowStatus=true)
+
+	@xmaker(name = "¹O´Á¤Ñ¼Æ", isText = true)
+	private String numberOfOverdueDays;
+
+	@xmaker(name = "Ã±®Öª¬ºA", isFlowStatus = true)
 	private String text;
-	
-	@xmaker(name = "©ú²Ó",isText=true)
+
+	@xmaker(name = "©ú²Ó", isText = true)
 	private String detail;
-	
-	@xmaker(name = "Ã±®Ö¬ö¿ý",isText=true)
+
+	@xmaker(name = "Ã±®Ö¬ö¿ý", isText = true)
 	private String flowHis;
 
 	public String getPno() {

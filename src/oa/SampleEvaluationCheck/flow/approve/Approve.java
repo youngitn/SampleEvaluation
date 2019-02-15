@@ -53,7 +53,8 @@ public class Approve extends bProcFlow {
 				// message("簽核完成！");
 			}
 			return ret;
-
+		case 品保課長:
+			break;
 		case 組長:// 目前未開放這個關卡
 			// 能退?要退去哪?
 			// 建立子流程FLOWC物件 使其出現在待簽核表單列表

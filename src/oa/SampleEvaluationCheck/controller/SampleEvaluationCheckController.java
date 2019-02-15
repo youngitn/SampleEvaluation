@@ -27,7 +27,7 @@ public class SampleEvaluationCheckController extends HprocImpl {
 		}
 		setAllFieldUneditable();
 		setAllFileUploadFieldEditable();
-		setDeadLine();
+		setValue("DL", getDeadLine(getValue("APP_DATE"),getValue("URGENCY")));
 		showSubFlowSignPeopleTab();
 		
 		System.out.println("getState----->" + getState());

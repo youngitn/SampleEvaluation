@@ -20,16 +20,6 @@ public class Rule extends bRule {
 			id.addElement(ret[0]);
 
 			break;
-		case 檢驗人員:
-			id.addElement("admin");
-			ret = getData("LAB_EXE").trim().split(" ");
-			id.addElement(ret[0]);
-			break;
-		case 試製人員:
-			id.addElement("admin");
-			ret = getData("ASSESSOR").trim().split(" ");
-			id.addElement(ret[0]);
-			break;
 		default:
 			break;
 		}

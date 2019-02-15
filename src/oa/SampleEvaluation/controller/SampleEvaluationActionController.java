@@ -1,9 +1,14 @@
 package oa.SampleEvaluation.controller;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import com.ysp.service.BaseService;
 
@@ -30,13 +35,18 @@ public class SampleEvaluationActionController extends HprocImpl {
 	private boolean confirm = true;
 	private BaseService service;
 	String actionObjName;
+	int stateFieldIndex = 6;
+	int numberOfOverdueDaysFieldIndex = 5;
+	int pnoFieldIndex = 0;
+	int appDateFieldIndex = 4;
+	int urgencyFieldIndex = 3;
 
 	@Override
 	public String action(String arg0) throws Throwable {
-		// Ãş§OÄİ©Êªì©l¤Æ³]©w
+		// é¡åˆ¥å±¬æ€§åˆå§‹åŒ–è¨­å®š
 		setProperty();
 		try {
-			// «ö¶s°Ê§@³B²z¶i¤JÂI
+			// æŒ‰éˆ•å‹•ä½œè™•ç†é€²å…¥é»
 			switch (Actions.valueOf(actionObjName.trim())) {
 			case QUERY_CLICK:
 				doQuery();
@@ -52,7 +62,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 				break;
 			}
 		} catch (EnumConstantNotPresentException e) {
-			message("enum:Actions.clss µo¥ÍµLªk¿ëÃÑªº·N¥~");
+			message("enum:Actions.clss ç™¼ç”Ÿç„¡æ³•è¾¨è­˜çš„æ„å¤–");
 		}
 		return null;
 
@@ -80,61 +90,64 @@ public class SampleEvaluationActionController extends HprocImpl {
 		if (getValue("IS_TRIAL_PRODUCTION").equals("1")) {
 			setVisible("ASSESSOR", true);
 		}
-		setDeadLine();
+		setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
+
 		showSubFlowSignPeopleTab();
 		addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
 
 	}
 
 	/**
-	 * ¥D¬d¸ß
+	 * ä¸»æŸ¥è©¢
+	 * 
 	 * @throws Throwable
 	 */
 	private void doQuery() throws Throwable {
-		// ³z¹L DtoUtil ¨ú±oclientºİ¬d¸ß±ø¥óvalue,¨Ã¼g¤JQueryConditionDto
+		// é€é DtoUtil å–å¾—clientç«¯æŸ¥è©¢æ¢ä»¶value,ä¸¦å¯«å…¥QueryConditionDto
 		QueryConditionDto targetLikeThis = (QueryConditionDto) DtoUtil.setFormDataToDto(new QueryConditionDto(), this);
-		//¨ú±o2D array®æ¦¡¬d¸ßµ²ªG
+		// å–å¾—2D arrayæ ¼å¼æŸ¥è©¢çµæœ
 		String[][] list = new Query().get2DStringArrayResult(targetLikeThis, getTalk());
-		
+
 		if (list == null || list.length <= 0) {
-			message("¬dµL¬ö¿ı");
+			message("æŸ¥ç„¡ç´€éŒ„");
+		} else {
+			setTableData("QUERY_LIST", setInfoTo2DStringArrayResult(list));
 		}
-		setTableData("QUERY_LIST", list);
 	}
 
 	private void doSave() throws Throwable {
 
-		// ¥²¶ñÄæ¦ì¸ê®Æ (Äæ¦ì¦W,Äæ¦ì¼ĞÃD)
+		// å¿…å¡«æ¬„ä½è³‡æ–™ (æ¬„ä½å,æ¬„ä½æ¨™é¡Œ)
 		Map<String, String> fieldMap = new HashMap<String, String>();
-		fieldMap.put("APPLICANT", "¥Ó½Ğ¤H");
-		fieldMap.put("APP_TYPE", "¥Ó½ĞÃş«¬");
-		fieldMap.put("RECEIPT_UNIT", "¨ü²z³æ¦ì");
-		fieldMap.put("URGENCY", "«æ­¢©Ê");
-		fieldMap.put("MATERIAL", "­ìª«®Æ¦WºÙ");
-		fieldMap.put("AB_CODE", "AB½s¸¹");
-		fieldMap.put("MFR", " »s³y°Ó");
-		fieldMap.put("MFG_LOT_NO", "»s³y§å¸¹");
-		fieldMap.put("SUPPLIER", "¨ÑÀ³°Ó");
-		fieldMap.put("QTY", "¼Æ¶q");
-		fieldMap.put("UNIT", "³æ¦ì");
-		fieldMap.put("SAP_CODE", "SAPª«®Æ½s¸¹");
-		// ·s¼W¤£»İcdoµ¥ÃB¥~¨ä¥L¸ê®Æ
+		fieldMap.put("APPLICANT", "ç”³è«‹äºº");
+		fieldMap.put("APP_TYPE", "ç”³è«‹é¡å‹");
+		fieldMap.put("RECEIPT_UNIT", "å—ç†å–®ä½");
+		fieldMap.put("URGENCY", "æ€¥è¿«æ€§");
+		fieldMap.put("MATERIAL", "åŸç‰©æ–™åç¨±");
+		fieldMap.put("AB_CODE", "ABç·¨è™Ÿ");
+		fieldMap.put("MFR", " è£½é€ å•†");
+		fieldMap.put("MFG_LOT_NO", "è£½é€ æ‰¹è™Ÿ");
+		fieldMap.put("SUPPLIER", "ä¾›æ‡‰å•†");
+		fieldMap.put("QTY", "æ•¸é‡");
+		fieldMap.put("UNIT", "å–®ä½");
+		fieldMap.put("SAP_CODE", "SAPç‰©æ–™ç·¨è™Ÿ");
+		// æ–°å¢ä¸éœ€cdoç­‰é¡å¤–å…¶ä»–è³‡æ–™
 		AddUtil addUtil = new AddUtil(service);
 		ArrayList<String> ret = (ArrayList<String>) addUtil.emptyCheck(fieldMap);
 		if (ret != null && ret.size() > 0) {
-			message("¥H¤UÄæ¦ì½Ğ°µ¿ï¾Ü©Î¿é¤J:" + ret);
+			message("ä»¥ä¸‹æ¬„ä½è«‹åšé¸æ“‡æˆ–è¼¸å…¥:" + ret);
 		} else {
-			int result = showConfirmDialog("½T©w°e¥Xªí³æ¡H", "·ÅÄÉ´£¿ô", 0);
+			int result = showConfirmDialog("ç¢ºå®šé€å‡ºè¡¨å–®ï¼Ÿ", "æº«é¦¨æé†’", 0);
 			if (result != 1) {
-				// ²£¥Í³æ¸¹
+				// ç”¢ç”Ÿå–®è™Ÿ
 				String uuid = addUtil.getUUID(getTableName());
 
-				// DMAKER ¤º«ØADD¥\¯à »İ±N¸ê®Æ¶ë¶i¥hªí³æÄæ¦ì¤~¦Yªº¨ì
+				// DMAKER å…§å»ºADDåŠŸèƒ½ éœ€å°‡è³‡æ–™å¡é€²å»è¡¨å–®æ¬„ä½æ‰åƒçš„åˆ°
 				setValue("PNO", uuid);
 				fileItemSetChecker();
-				// confirm = true ±±¨î¬O§_¯uªº°e¥X
+				// confirm = true æ§åˆ¶æ˜¯å¦çœŸçš„é€å‡º
 				if (confirm) {
-					// ¼g¦bview³¡¤À·|¦nÂI
+					// å¯«åœ¨viewéƒ¨åˆ†æœƒå¥½é»
 					addScript("document.getElementById('em_add_button-box').click();");
 
 				}
@@ -171,6 +184,113 @@ public class SampleEvaluationActionController extends HprocImpl {
 		}
 		return Name.toUpperCase();
 
+	}
+
+	public String setNumberOfOverdueDaysToField(String appDate, String urgency) throws Exception {
+
+		if (appDate == null || "".equals(appDate)) {
+			return "æŸ¥ç„¡è³‡æ–™";
+		} else {
+			appDate = appDate.trim();
+			urgency = urgency.trim();
+
+			String deadLine = getDeadLine(appDate, urgency);
+			int days = diffDays(appDate, deadLine);
+			if (days > 0) {
+				return "æœªé€¾æœŸ";
+			} else {
+				return "å·²é€¾æœŸ " + days + " æ—¥";
+			}
+		}
+
+	}
+
+	public int diffDays(String FD, String SD) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		Date start = sdf.parse(FD);
+		Date end = sdf.parse(SD);
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(start);
+
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(end);
+		int day1 = cal1.get(Calendar.DAY_OF_YEAR);
+		int day2 = cal2.get(Calendar.DAY_OF_YEAR);
+
+		int year1 = cal1.get(Calendar.YEAR);
+		int year2 = cal2.get(Calendar.YEAR);
+		if (year1 != year2) // åŒä¸€å¹´
+		{
+			int timeDistance = 0;
+			for (int i = year1; i < year2; i++) {
+				if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) // é–å¹´
+				{
+					timeDistance += 366;
+				} else // ä¸æ˜¯é–å¹´
+				{
+					timeDistance += 365;
+				}
+			}
+
+			return timeDistance + (day2 - day1);
+		} else // ä¸åŒå¹´
+		{
+			System.out.println("åˆ¤æ–·day2 - day1 : " + (day2 - day1));
+			return day2 - day1;
+		}
+	}
+
+	public String setNowFlowStateAndNowSignPeopleToFidld(String pno) {
+		Vector nowPeople = getApprovablePeople(getFunctionName(), "pno='" + pno + "'");
+
+		// å–å¾—ç°½æ ¸æ­·å²(åº•å±¤å¯èƒ½é‚„æ˜¯ä½¿ç”¨SQL,é€™é‚Šç¶­æŒAPIå½¢å¼å‘¼å«)
+		String[][] flowHis = getFlowHistory(getFunctionName(), "a.pno='" + pno + "'");
+
+		// å®šç¾©ç°½æ ¸ç‹€æ…‹å­—ä¸²
+		StringBuilder nowFlowInfo = new StringBuilder();
+		// åˆ¤æ–·è©²ç­†å–®è™Ÿæ˜¯å¦å­˜åœ¨ç°½æ ¸ç‹€æ…‹
+		// å¦‚ç„¡ç°½æ ¸ç‹€æ…‹å‰‡é¡¯ç¤º"æŸ¥ç„¡ç°½æ ¸é—œå¡"
+		if (flowHis.length == 0) {
+			nowFlowInfo.append("<font color=\"red\">æŸ¥ç„¡ç°½æ ¸é—œå¡</font>");
+		} else {
+			// æœ€æ–°ä¸€ç­†ç°½æ ¸æ­·å²=ç•¶å‰é—œå¡
+			int lastFlowStateIndex = flowHis.length - 1;
+			nowFlowInfo.append("<font color=\"blue\">" + flowHis[lastFlowStateIndex][0] + "</font>");
+		}
+
+		// åˆ¤æ–·è©²ç­†å–®è™Ÿæ˜¯å¦å­˜åœ¨ç°½æ ¸è€…
+		// å¦‚ç„¡ç°½æ ¸ç‹€æ…‹å‰‡é¡¯ç¤º"æŸ¥ç„¡ç°½æ ¸äºº"
+		String peopleId = "<font color=\"red\">(æŸ¥ç„¡ç°½æ ¸äºº)</font>";
+		if (nowPeople == null || nowPeople.isEmpty()) {
+			nowFlowInfo.append(peopleId);
+		} else {
+			peopleId = (String) nowPeople.get(0);
+			nowFlowInfo.append("(");
+			nowFlowInfo.append(peopleId + getName(peopleId));
+			nowFlowInfo.append(")");
+		}
+
+		return nowFlowInfo.toString();
+	}
+
+	public String[][] setInfoTo2DStringArrayResult(String[][] result) throws Exception {
+		String overdueDays = "";
+		String appDate = "";
+		String urgency = "";
+		for (int i = 0; i < result.length; i++) {
+			overdueDays = "æŸ¥ç„¡è³‡æ–™";
+			result[i][stateFieldIndex] = setNowFlowStateAndNowSignPeopleToFidld(result[i][pnoFieldIndex]);
+			appDate = result[i][appDateFieldIndex];
+			urgency = result[i][urgencyFieldIndex];
+			if (notEmpty(appDate) && notEmpty(urgency)) {
+				//System.out.println("appDate not null");
+				overdueDays = setNumberOfOverdueDaysToField(appDate, urgency);
+			}
+			result[i][numberOfOverdueDaysFieldIndex] = overdueDays;
+		}
+
+		return result;
 	}
 
 }

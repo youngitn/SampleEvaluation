@@ -156,6 +156,8 @@ public class SampleEvaluation implements Serializable {
 	protected String isTest;
 	@xmaker(name = "APP_REASON")
 	protected String appReason;
+	@xmaker(name = "MFR_ADDRESS")
+	protected String mfrAddress;
 
 	public String getFileSpecNote() {
 		return fileSpecNote;
@@ -723,6 +725,14 @@ public class SampleEvaluation implements Serializable {
 
 	public void setIsTest(String isTest) {
 		this.isTest = isTest;
+	}
+
+	public String getMfrAddress() {
+		return mfrAddress;
+	}
+
+	public void setMfrAddress(String mfrAddress) {
+		this.mfrAddress = mfrAddress;
 	}
 
 }

@@ -38,7 +38,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			case PENING_PAGE_INIT:// 進入待處理畫面
 
 				init.doPendingPageProcess();
-				setDeadLine();
+				setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
 				break;
 
 			case DETAIL_PAGE_INIT:// 進入明細畫面
@@ -48,7 +48,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				break;
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();
-				setDeadLine();
+				setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
 				// 所有欄位不可編輯
 				setAllFieldUneditable();
 				// 夾檔欄位可編輯

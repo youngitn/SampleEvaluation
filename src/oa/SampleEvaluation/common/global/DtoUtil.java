@@ -97,8 +97,12 @@ public class DtoUtil {
 				sqlWhere.delete(index, sqlWhere.length());
 			}
 		} else {
-			sqlWhere.append(" WHERE ");
+			//去除因loop增加的末端"AND"
 			status = status.replace("AND", "");
+			//
+			if (!"".equals(status)) {
+				sqlWhere.append(" WHERE ");
+			}
 		}
 		String condition = sqlWhere.toString() + status;
 		System.out.println("sqlWhere=  " + condition);
@@ -242,7 +246,8 @@ public class DtoUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			r.close();
+			if (r != null)
+				r.close();
 		}
 		return list;
 	}

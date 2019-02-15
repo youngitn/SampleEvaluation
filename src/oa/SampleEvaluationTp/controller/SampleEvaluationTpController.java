@@ -27,7 +27,7 @@ public class SampleEvaluationTpController extends HprocImpl {
 		}
 		setAllFieldUneditable();
 		setAllFileUploadFieldEditable();
-		setDeadLine();
+		setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
 		showSubFlowSignPeopleTab();
 		// 就算是default 名稱也要存在FlowState
 		// switch條件才會生效

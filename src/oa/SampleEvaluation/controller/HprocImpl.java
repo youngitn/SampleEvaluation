@@ -113,10 +113,10 @@ public class HprocImpl extends hproc {
 		return (String) ht.get("caption");
 	}
 
-	protected void setDeadLine() throws Exception {
+	protected String getDeadLine(String appDate, String urgency) throws Exception {
 
 		int addDaysNum = 0;
-		String value = getValue("URGENCY");
+		String value = urgency;
 		if (!value.isEmpty()) {
 			if (value.equals("A")) {
 				addDaysNum = 100;
@@ -126,8 +126,10 @@ public class HprocImpl extends hproc {
 				addDaysNum = 130;
 			}
 
-			setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum, getTalk()));
+			// setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"), addDaysNum,
+			// getTalk()));
 		}
+		return DateTool.getAfterWorkDate(appDate, addDaysNum, getTalk());
 	}
 
 	protected void showSubFlowSignPeopleTab() throws Exception {
@@ -138,5 +140,9 @@ public class HprocImpl extends hproc {
 			setVisible("SUB_FLOW_TAB_TP", true);
 		if ("1".equals(getValue("IS_TEST").trim()))
 			setVisible("SUB_FLOW_TAB_TEST", true);
+	}
+
+	public boolean notEmpty(String s) {
+		return (s != null && s.length() > 0);
 	}
 }
