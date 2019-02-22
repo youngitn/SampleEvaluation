@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 import java.util.ArrayList;
 import java.util.Arrays;

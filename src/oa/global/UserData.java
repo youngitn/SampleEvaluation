@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 import java.sql.SQLException;
 

@@ -17,25 +17,35 @@ public class ShowSignHistory extends hproc {
 			setValue("text3", "<center><font size=\"4\" color=red></font></center>");
 			return value;
 		}
-		StringBuilder sb = getMainFlowHistory(id, rec);
+		StringBuilder sb = getMainFlowHistory(id, rec, getFunctionName());
 
 		String subid = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "CHECK'";
 		String[][] subRec = getFlowHistory(getFunctionName() + "_請驗流程", subid);
-		StringBuilder sb1 = new StringBuilder("");
-		if (subRec == null || subRec.length != 0) {
-			sb1 = getMainFlowHistory(subid, subRec);
+		StringBuilder sbCheck = new StringBuilder("");
+		if (subRec != null && subRec.length != 0) {
+			sbCheck = getMainFlowHistory(subid, subRec, getFunctionName() + "_請驗流程");
 		}
 
 		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'";
 		String[][] subRecTp = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
 		StringBuilder sbTp = new StringBuilder("");
-		if (subRecTp == null || subRecTp.length != 0) {
-			sbTp = getMainFlowHistory(subidTp, subRecTp);
+		if (subRecTp != null && subRecTp.length != 0) {
+			sbTp = getMainFlowHistory(subidTp, subRecTp, getFunctionName() + "_試製流程");
 		}
 
-		setValue("text3", "<table ><tr><td valign=\"top\">" + sb.toString()+"</td>"+
-											"<td valign=\"top\">"+ sb1.toString() + "</td>"+
-											"<td valign=\"top\">" + sbTp.toString() + "</td></tr></table>");
+		String subidTest = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TEST'";
+		String[][] subRecTest = getFlowHistory(getFunctionName() + "_試車流程", subidTest);
+		StringBuilder sbTest = new StringBuilder("");
+		if (subRecTest != null && subRecTest.length != 0) {
+			sbTest = getMainFlowHistory(subidTest, subRecTest, getFunctionName() + "_試車流程");
+		}
+
+		setValue("text3",
+				"<table ><tr>" + "<td valign=\"top\">" + sb.toString() + "</td>" + "<td valign=\"top\">"
+						+ sbCheck.toString() + "</td>" + "<td valign=\"top\">" + sbTp.toString() + "</td>"
+						+ "<td valign=\"top\">" + sbTest.toString() + "</td></tr>" +
+
+						"</table>");
 
 		return value;
 
@@ -46,16 +56,10 @@ public class ShowSignHistory extends hproc {
 	 * @param rec
 	 * @return
 	 */
-	private StringBuilder getMainFlowHistory(String id, String[][] rec) {
+	private StringBuilder getMainFlowHistory(String id, String[][] rec, String fName) {
 		StringBuilder sb = new StringBuilder();
 		String APPLYEMPNAME = "";
-		String fName = getFunctionName();
-		if (id.contains("CHECK")) {
-			fName = fName + "_請驗流程";
-		}
-		if (id.contains("TP")) {
-			fName = fName + "_試製流程";
-		}
+
 		sb.append("<div  style=\"float:left;\"><TABLE>");
 		sb.append(getHeaderStr(fName));
 		for (int i = 0; i < rec.length; i++) {

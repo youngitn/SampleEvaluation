@@ -1,0 +1,17 @@
+修改方試
+
+#欄位異動(起單儲存使用內建方式insert,如果新增的欄位只有在起單才會異動則不需做任何調整)
+在表單目錄中找到dto資料夾,修改和資料表同名的class,如SampleEvaluation/dto/SampleEvaluation.java
+增加類別屬性 如下語法:protected 給子流程做繼承用
+@xmaker(name = "PNO") //必須要有此描述 name=表單欄位名稱(假設和DB欄位同名稱)
+protected String pno;
+//setter & getter
+....
+
+#修改查詢 查詢進入點 oa.SampleEvaluation.controller.SampleEvaluationActionController.java
+**查詢條件的修改,請修改SampleEvaluation/query/QueryConditionDto.java
+@xmaker(name = "Q_PNO", adapDbFieldName = "PNO")//name=UI欄位名  ;adapDbFieldName=對應的db欄位名
+private String Q_PNO;
+其他關於描述部分 還有是否日期起迄等識別屬性.可至xmaker.java查難相關說明
+**查詢結果的修改 請修改SampleEvaluation/query/QueryResultDto
+一樣增加顯示欄位(UI欄位也需啦好,因為牽涉到顯示順序).

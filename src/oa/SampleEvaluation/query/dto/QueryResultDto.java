@@ -1,8 +1,15 @@
-package oa.SampleEvaluation.query;
+package oa.SampleEvaluation.query.dto;
 
-import oa.SampleEvaluation.common.global.dbTable;
-import oa.SampleEvaluation.common.global.xmaker;
-
+import oa.global.dbTable;
+import oa.global.xmaker;
+/**
+ * 查詢結果所欲顯示的欄位定義
+ * 須對應emaker表單查詢結果顯示表格.
+ * @dbTable(name = "資料表名稱", pkName = "PK名稱")
+ * @xmaker(name = "資料表欄位名稱",isText = 是否將NAME值作為字串直接顯示)
+ * @author u52116
+ *
+ */
 @dbTable(name = "SAMPLE_EVALUATION", pkName = "PNO")
 public class QueryResultDto {
 	@xmaker(name = "PNO")

@@ -1,8 +1,8 @@
 package oa.SampleEvaluationTp.dao;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
+import oa.global.BaseDao;
 
 public class SampleEvaluationTpFlowcService extends BaseDao {
 	public SampleEvaluationTpFlowcService(talk t) {

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import jcx.util.convert;
-import oa.SampleEvaluation.common.global.MailString;
-import oa.SampleEvaluation.common.global.UserData;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.enums.AppType;
 import oa.SampleEvaluation.enums.Urgency;
+import oa.global.MailString;
+import oa.global.UserData;
 
 public class EmailNotify extends BaseEmailNotify {
 
@@ -56,7 +56,8 @@ public class EmailNotify extends BaseEmailNotify {
 
 		content += "計畫主持人：" + projectLeaderLine + MailString.HTML_LINE_BREAK;
 
-		content += "<br>" + buildApproveConfirmMsgStr(se) + MailString.HTML_LINE_BREAK;
+		// content += "<br>" + buildApproveConfirmMsgStr(se) +
+		// MailString.HTML_LINE_BREAK;
 		content += "==========================" + MailString.HTML_LINE_BREAK;
 		content += "此郵件由系統自動發出，請勿回信，謝謝!!" + MailString.HTML_LINE_BREAK;
 		content += "意見記錄：" + MailString.HTML_LINE_BREAK;

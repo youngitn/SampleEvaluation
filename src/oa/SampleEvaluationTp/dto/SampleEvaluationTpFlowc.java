@@ -2,9 +2,9 @@ package oa.SampleEvaluationTp.dto;
 
 import java.io.Serializable;
 
-import oa.SampleEvaluation.common.Flowc;
-import oa.SampleEvaluation.common.global.dbTable;
-import oa.SampleEvaluation.common.global.xmaker;
+import oa.SampleEvaluation.i.Flowc;
+import oa.global.dbTable;
+import oa.global.xmaker;
 
 @dbTable(name = "SAMPLE_EVALUATION_TP_FLOWC", pkName = "OWN_PNO")
 public class SampleEvaluationTpFlowc implements Flowc,Serializable {

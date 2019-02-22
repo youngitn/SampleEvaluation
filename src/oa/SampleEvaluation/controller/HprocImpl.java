@@ -8,15 +8,9 @@ import org.apache.commons.lang.StringUtils;
 
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluation.common.global.UserData;
+import oa.global.UserData;
 
-public class HprocImpl extends hproc {
-
-	@Override
-	public String action(String arg0) throws Throwable {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public abstract class HprocImpl extends hproc {
 
 	protected void setAllFieldUneditable() {
 		Hashtable h = getAllcLabels();
@@ -113,7 +107,7 @@ public class HprocImpl extends hproc {
 		return (String) ht.get("caption");
 	}
 
-	protected String getDeadLine(String appDate, String urgency) throws Exception {
+	public String getDeadLine(String appDate, String urgency) throws Exception {
 
 		int addDaysNum = 0;
 		String value = urgency;
@@ -132,7 +126,7 @@ public class HprocImpl extends hproc {
 		return DateTool.getAfterWorkDate(appDate, addDaysNum, getTalk());
 	}
 
-	protected void showSubFlowSignPeopleTab() throws Exception {
+	public void showSubFlowSignPeopleTab() throws Exception {
 		// 根據勾選的子流程將相關資料顯示
 		if ("1".equals(getValue("IS_CHECK").trim()))
 			setVisible("SUB_FLOW_TAB_CHECK", true);
@@ -144,5 +138,24 @@ public class HprocImpl extends hproc {
 
 	public boolean notEmpty(String s) {
 		return (s != null && s.length() > 0);
+	}
+
+	public void fileItemSetChecker() {
+
+		if (!getValue("FILE_SPEC").equals("")) {
+			setValue("PROVIDE_SPEC", "1");
+		}
+		if (!getValue("FILE_COA").equals("")) {
+			setValue("PROVIDE_COA", "1");
+		}
+		if (!getValue("FILE_SDS").equals("")) {
+			setValue("PROVIDE_SDS", "1");
+		}
+		if (!getValue("FILE_OTHERS").equals("")) {
+			setValue("PROVIDE_OTHERS", "1");
+		}
+		if (!getValue("FILE_TEST_METHOD").equals("")) {
+			setValue("PROVIDE_TEST_METHOD", "1");
+		}
 	}
 }

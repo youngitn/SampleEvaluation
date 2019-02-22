@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -26,57 +26,55 @@ import oa.SampleEvaluation.query.QueryStatus;
  * EX: son fields = son fields+father fields<br>
  * 帶入物件(or Class)注意是否為子孫類別.
  * 
+ * 注意:這裡部分方法(setFormDataToDto()&setDtoDataToForm())會依賴jcx物件(hproc....)
+ * 
  * @author u52116
  *
  */
 public class DtoUtil {
 
-	public String getAppDateWhereStr(String Q_SDATE, String Q_EDATE) {
-		if (!"".equals(Q_SDATE + Q_EDATE)) {
-			if ("".equals(Q_SDATE) && !"".equals(Q_EDATE)) {
-				return "AND APP_DATE <=" + Q_EDATE;
-			} else if (!"".equals(Q_SDATE) && "".equals(Q_EDATE)) {
-				return "AND APP_DATE >=" + Q_SDATE;
-			} else {
-				return "AND APP_DATE >=" + Q_SDATE + " AND APP_DATE <=" + Q_EDATE;
-			}
-		}
-
-		return "";
-
-	}
-
-	public static String getSelectConditionByDtoWithXmakerAdapDbFieldName(final Object o) {
+	/**
+	 * 根據QueryConditionDto類別中xmaker所定義的adapDbFieldName,<br>
+	 * 組成where字串並回傳。
+	 * 
+	 * @param o 需搭配xmaker,且必須帶值(搭配setFormDataToDto),
+	 * @return
+	 */
+	public static String getSqlWhereStringByXmakerMappingDbFieldName(Object dto) {
 
 		StringBuilder sqlWhere = new StringBuilder();
 		String status = "";
 		try {
 
-			Field[] fld = getFields(o);
+			Field[] fld = getFields(dto);
 			for (Field field : fld) {
 				field.setAccessible(true);
 				Annotation[] annotations = field.getAnnotations();
 				for (Annotation annotation : annotations) {
 					if (annotation instanceof xmaker) {
 						xmaker myAnnotation = (xmaker) annotation;
-						String adapName = myAnnotation.adapDbFieldName();
-						String val = (String) field.get(o);
+						String adapName = myAnnotation.mappingDbFieldName();
+						String val = (String) field.get(dto);
 
 						if (!"".equals(val) && !(null == val)) {
+							//該欄位是日期起日則組合對應字串
 							if (myAnnotation.isDateStart()) {
-								sqlWhere.append(myAnnotation.adapDbFieldName()).append(">=").append(field.get(o))
-										.append(" AND ");
-							} else if (myAnnotation.isDateEnd()) {
-								sqlWhere.append(myAnnotation.adapDbFieldName()).append("<=").append(field.get(o))
-										.append(" AND ");
-							} else if (myAnnotation.isFlowStatus()) {
+								sqlWhere.append(adapName).append(">=").append(field.get(dto)).append(" AND ");
+							}//該欄位是日期迄日則組合對應字串 
+							else if (myAnnotation.isDateEnd()) {
+								sqlWhere.append(adapName).append("<=").append(field.get(dto)).append(" AND ");
+							}
+							//該欄位是簽核狀態則使用QueryStatus.getFlowStateSqlStrByQueryCondition("該欄value")
+							//組出查詢字串
+							else if (myAnnotation.isFlowStatus()) {
 
-								status = QueryStatus.getFlowStateSqlStrByQueryCondition((String) field.get(o));
+								status = QueryStatus.getFlowStateSqlStrByQueryCondition((String) field.get(dto));
 
-							} else if (!"".equals(adapName)) {
-								System.out.println("name: " + myAnnotation.adapDbFieldName());
-								sqlWhere.append(myAnnotation.adapDbFieldName()).append(" like ").append("'%")
-										.append(field.get(o)).append("%'").append(" AND ");
+							}//其他非特殊欄位皆使用'db欄位名稱  like  % 值%'組出字串
+							else if (!"".equals(adapName)) {
+								System.out.println("name: " + myAnnotation.mappingDbFieldName());
+								sqlWhere.append(adapName).append(" like ").append("'%").append(field.get(dto))
+										.append("%'").append(" AND ");
 
 							}
 						}
@@ -97,7 +95,7 @@ public class DtoUtil {
 				sqlWhere.delete(index, sqlWhere.length());
 			}
 		} else {
-			//去除因loop增加的末端"AND"
+			// 去除因loop增加的末端"AND"
 			status = status.replace("AND", "");
 			//
 			if (!"".equals(status)) {
@@ -112,14 +110,14 @@ public class DtoUtil {
 	/**
 	 * 取得物件屬性中對應的資料表欄位的名稱list
 	 * 
-	 * @param o
+	 * @param o 需搭配xmaker
 	 * @return
 	 */
-	public static ArrayList<Field> getDeclaredXmakerFields(final Object o) {
+	public static ArrayList<Field> getDeclaredXmakerFields(final Object dto) {
 		ArrayList<Field> fields = new ArrayList<Field>();
 		try {
 
-			Field[] fld = getFields(o);
+			Field[] fld = getFields(dto);
 			// Field[] fld = o.getClass().getDeclaredFields();
 			for (Field field : fld) {
 				field.setAccessible(true);
@@ -141,10 +139,10 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 表單資料塞入物件
+	 * 將表單畫面欄位資料塞入物件
 	 * 
-	 * @param o       需new為實體物件
-	 * @param service
+	 * @param o       需為實體物件,且需搭配xmaker,作為資料藍圖使用
+	 * @param service [hproc,BaseService,bProcFlow....]
 	 * @return
 	 */
 	public static Object setFormDataToDto(final Object o, Object service) {
@@ -188,9 +186,10 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 注意 回傳值類型; ResultSet to Object
+	 * 根據pno取得DB資料, 根據clazz藍圖,將資料塞入DTO<br>
+	 * 注意 回傳值類型; ResultSet to Object<br>
 	 * 
-	 * @param o
+	 * @param clazz 類別藍圖
 	 * @param t
 	 * @param pno
 	 * @return
@@ -227,10 +226,10 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 注意 回傳值類型
+	 * 從資料庫取得多筆資料, 且回傳類型為 ArrayList<代入clazz>
 	 * 
-	 * @param o
-	 * @param t
+	 * @param o 需搭配xmaker
+	 * @param t talk
 	 * @return
 	 * @throws SQLException
 	 */
@@ -253,8 +252,9 @@ public class DtoUtil {
 	}
 
 	/**
+	 * 根據查詢條件, 回傳二維陣列查詢結果
 	 * 
-	 * @param clazz
+	 * @param clazz     需搭配xmaker
 	 * @param t
 	 * @param condition
 	 * @return
@@ -311,6 +311,13 @@ public class DtoUtil {
 		return list;
 	}
 
+	/**
+	 * 
+	 * @param arraylist
+	 * @param clazz
+	 * @return
+	 * @throws Exception
+	 */
 	public static String[][] arrayListTo2DStringArray(ArrayList<Object> arraylist, Class<Object> clazz)
 			throws Exception {
 
@@ -376,7 +383,8 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 注意 回傳值類型
+	 * 注意 回傳值類型,<br>
+	 * 傳入之dto其屬性A,B,C宣告順序=組出來的select A,B,C順序
 	 * 
 	 * @param clazz
 	 * @param t
@@ -392,13 +400,10 @@ public class DtoUtil {
 		Connection c = null;
 		try {
 			c = t.getConnectionFromPool();
-			// Statement stmt = c.createStatement();
 			PreparedStatement pstmt = null;
-			// String query = "select * from ? ?";
 			pstmt = c.prepareStatement("select * from " + tableName + " " + condition);
 
 			r = pstmt.executeQuery();
-			// r = stmt.executeQuery("select * from " + tableName + " " + condition);
 			System.out.println("do ->select * from " + tableName + " " + condition);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -409,6 +414,14 @@ public class DtoUtil {
 
 	}
 
+	/**
+	 * 將代入物件顯示在dmaker表單畫面. <br>
+	 * 物件的xmaker屬性 name = dmaker表單欄位名稱. 依賴jcx物件
+	 * 
+	 * @param o
+	 * @param   service(jcx)
+	 * @return
+	 */
 	public static Object setDtoDataToForm(final Object o, Object service) {
 		try {
 			Field[] fld = getFields(o);
@@ -449,15 +462,19 @@ public class DtoUtil {
 		return o;
 	}
 
+	/**
+	 * 根據傳入物件屬性, 創建各欄位帶值的INSERT或UPDATE SQL字串
+	 * 
+	 * @param o
+	 * @return
+	 */
 	public static HashMap<DbProcessType, String> getSqlStringForDbCreateAndUpdate(final Object o) {
 		String whereStringForUpdatePkField = " where ";
 		HashMap<DbProcessType, String> m = new HashMap<DbProcessType, String>();
 		StringBuilder insertField = new StringBuilder();
 		StringBuilder insertValue = new StringBuilder();
 		StringBuilder updateFieldWithValue = new StringBuilder();
-		// Class clazz = o.getClass();
 		Field[] fld = getFields(o);
-		// Field[] fld = clazz.getDeclaredFields();
 		dbTable a = (dbTable) o.getClass().getAnnotation(dbTable.class);
 		String pkName = a.pkName();
 		String tableName = a.name();
@@ -519,12 +536,6 @@ public class DtoUtil {
 			return sonFld;
 		}
 
-	}
-
-	public static ArrayList<Object> getDbDataListToDtoListByCondition(Class clazz, talk t, String condition)
-			throws SQLException, ClassNotFoundException {
-		DtoUtil.getResultSetWithCondition(clazz, t, condition);
-		return null;
 	}
 
 }

@@ -1,11 +1,8 @@
 package oa.SampleEvaluation;
 
-import java.util.ArrayList;
-
 import jcx.jform.hproc;
-import oa.SampleEvaluation.common.global.DtoUtil;
-import oa.SampleEvaluation.query.QueryConditionDto;
-import oa.SampleEvaluation.query.QueryResultService;
+import oa.SampleEvaluation.query.dto.QueryConditionDto;
+import oa.global.DtoUtil;
 
 public class QueryTest extends hproc {
 

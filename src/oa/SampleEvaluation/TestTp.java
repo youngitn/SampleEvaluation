@@ -2,15 +2,14 @@ package oa.SampleEvaluation;
 
 import jcx.db.talk;
 import jcx.jform.hproc;
-import oa.SampleEvaluation.common.global.BaseDao;
-import oa.SampleEvaluation.common.global.DtoUtil;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
-import oa.SampleEvaluationTp.dto.TestSeTP;
+import oa.global.BaseDao;
+import oa.global.DtoUtil;
 
 public class TestTp extends hproc {
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");

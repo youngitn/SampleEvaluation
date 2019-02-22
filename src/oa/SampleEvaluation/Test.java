@@ -7,21 +7,13 @@ import java.util.List;
 import jcx.db.talk;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluation.common.global.BaseDao;
-import oa.SampleEvaluation.common.global.DtoUtil;
-import oa.SampleEvaluation.common.global.UserData;
-import oa.SampleEvaluation.dao.SampleEvaluationFlowcService;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.SampleEvaluation.dto.SampleEvaluationFlowc;
-import oa.SampleEvaluation.query.Query;
-import oa.SampleEvaluation.query.QueryConditionDto;
-import oa.SampleEvaluation.query.QueryResultDto;
-import oa.SampleEvaluation.query.QueryResultService;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcService;
-import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
+import oa.SampleEvaluation.query.dao.QueryResultService;
+import oa.SampleEvaluation.query.dto.QueryConditionDto;
+import oa.global.BaseDao;
+import oa.global.DtoUtil;
+import oa.global.UserData;
 
 public class Test extends hproc {
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
@@ -42,7 +34,8 @@ public class Test extends hproc {
 		// 用條件執行查詢
 		// s.doQuery();
 		// 或取得SQL查詢字串
-		String targetCondition = DtoUtil.getSelectConditionByDtoWithXmakerAdapDbFieldName(targetLikeThis);
+		
+		String targetCondition = DtoUtil.getSqlWhereStringByXmakerMappingDbFieldName(targetLikeThis);
 		QueryResultService qrs = new QueryResultService(t);
 		String[][] al = (String[][]) qrs.findByConditionReturn2DStringArray(targetCondition);
 		/*使用方式 ----> 在繼承hproc狀況下 String[][] list = new Query(this).get2DStringArrayResult();*/

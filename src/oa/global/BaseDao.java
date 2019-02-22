@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -21,11 +21,26 @@ public abstract class BaseDao {
 		t.execFromPool(m.get(DbProcessType.INSERT));
 	}
 
+	/**
+	 * 更新資料
+	 * 
+	 * @param o
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	public void update(final Object o) throws SQLException, Exception {
 		HashMap<DbProcessType, String> m = DtoUtil.getSqlStringForDbCreateAndUpdate(o);
 		t.execFromPool(m.get(DbProcessType.UPDATE));
 	}
 
+	/**
+	 * 資料存在進行更新<br>
+	 * 否則新增.
+	 * 
+	 * @param o
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	public void upsert(final Object o) throws SQLException, Exception {
 		HashMap<DbProcessType, String> m = DtoUtil.getSqlStringForDbCreateAndUpdate(o);
 		Class clazz = o.getClass();
@@ -56,22 +71,42 @@ public abstract class BaseDao {
 		}
 	}
 
+	/**
+	 * 根據單號進行查詢
+	 * 
+	 * @param pno
+	 * @return
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	public Object findById(String pno) throws SQLException, Exception {
 		return DtoUtil.getDbDataToDtoById(clazz, t, pno);
 	}
 
+	/**
+	 * 根據條件進行查詢
+	 * 
+	 * @param condition
+	 * @return
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	public ArrayList<?> findByCondition(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
 	}
 
-	// 主查詢
+	/**
+	 * 代入SQL條件執行主查詢,
+	 * 回傳二維陣列資料,
+	 * 每筆資料Sing[n][x=比照dto屬性宣告順序]
+	 * 
+	 * @param condition [String]
+	 * @return
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	public String[][] findByConditionReturn2DStringArray(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataTo2DStringArray(clazz, t, condition);
 	}
-
-//	//回傳欄位 和 查詢條件
-//	public ArrayList findByCondition(String retFiel, String condition) throws SQLException, Exception {
-//		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
-//	}
 
 }

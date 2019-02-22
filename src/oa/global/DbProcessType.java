@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 public enum DbProcessType {
 	INSERT, UPDATE

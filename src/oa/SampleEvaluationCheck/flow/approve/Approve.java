@@ -1,19 +1,9 @@
 package oa.SampleEvaluationCheck.flow.approve;
 
-import jcx.jform.bProcFlow;
-import oa.SampleEvaluation.common.global.BaseDao;
-import oa.SampleEvaluation.common.global.DtoUtil;
-import oa.SampleEvaluation.dao.SampleEvaluationService;
-import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
+import oa.SampleEvaluation.flow.approve.BaseSubApprove;
 import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
-import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
-public class Approve extends bProcFlow {
-
-	String table_name = "MIS_SERVICE";
+public class Approve extends BaseSubApprove {
 
 	public boolean action(String value) throws Throwable {
 		// 回傳值為 true 表示執行接下來的流程處理
@@ -33,27 +23,13 @@ public class Approve extends bProcFlow {
 				ret = false;
 			}
 			if (ret) {
-				// 三表同步
-				// BaseService service = new BaseService(this);
-
-				BaseDao service = new SampleEvaluationTpService(getTalk());
-				SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
-				tp.setOwnPno(tp.getPno() + "TP");
-				service.update(tp);
-
-				service = new SampleEvaluationCheckService(getTalk());
-				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(),
-						this);
-				ck.setOwnPno(ck.getPno() + "CHECK");
-				service.update(ck);
-
-				service = new SampleEvaluationService(getTalk());
-				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
-				service.update(se);
-				// message("簽核完成！");
+				syncData();
 			}
 			return ret;
 		case 品保課長:
+			if (ret) {
+				syncData();
+			}
 			break;
 		case 組長:// 目前未開放這個關卡
 			// 能退?要退去哪?
@@ -66,24 +42,6 @@ public class Approve extends bProcFlow {
 		}
 		return ret;
 
-	}
-
-	/**
-	 * 溫馨提醒 不傳入 回傳true/false
-	 */
-	private boolean doReminder(String addStr) throws Exception {
-		int result = showConfirmDialog(addStr + "確定送出表單？", "溫馨提醒", 0);
-		if (result == 1) {
-			message("已取消送出表單");
-			return false;
-		}
-		String space = "";
-		for (int i = 0; i < 16; i++) {
-			space += "&emsp;";
-		}
-		percent(100, space + "表單送出中，請稍候...<font color=white>");
-		message("簽核完成");
-		return true;
 	}
 
 }

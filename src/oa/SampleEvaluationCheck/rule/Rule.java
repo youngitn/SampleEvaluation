@@ -25,11 +25,6 @@ public class Rule extends bRule {
 			id.addElement("admin");
 			id.addElement(u[0]);
 			break;
-		case ²Õªø:
-			u = getData("DESIGNEE").trim().split(" ");
-			id.addElement("admin");
-			id.addElement(u[0]);
-			break;
 		default:
 			break;
 		}

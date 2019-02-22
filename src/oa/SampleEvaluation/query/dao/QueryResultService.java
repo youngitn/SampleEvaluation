@@ -1,7 +1,8 @@
-package oa.SampleEvaluation.query;
+package oa.SampleEvaluation.query.dao;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.common.global.BaseDao;
+import oa.SampleEvaluation.query.dto.QueryResultDto;
+import oa.global.BaseDao;
 
 public class QueryResultService extends BaseDao {
 	public QueryResultService(talk t) {

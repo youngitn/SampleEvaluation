@@ -1,6 +1,5 @@
 package oa.SampleEvaluationCheck.controller;
 
-import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
 
@@ -14,10 +13,8 @@ public class SampleEvaluationCheckController extends HprocImpl {
 
 	@Override
 	public String action(String arg0) throws Throwable {
-
-		setFormEMPBaseInfo();
-
 		// 申請人基本資料
+		setFormEMPBaseInfo();
 
 		String ownPno = getValue("OWN_PNO").trim();
 		if (ownPno.length() <= 0) {

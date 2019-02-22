@@ -1,7 +1,7 @@
 /**
  * 
  */
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 import static java.lang.annotation.ElementType.TYPE;
 

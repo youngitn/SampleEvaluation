@@ -4,14 +4,14 @@ import java.sql.SQLException;
 
 import com.ysp.util.DateTimeUtil;
 
-import oa.SampleEvaluation.common.Flowc;
-import oa.SampleEvaluation.common.global.BaseDao;
+import oa.SampleEvaluation.i.Flowc;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisService;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
+import oa.global.BaseDao;
 
 public class CheckFlowBuilder extends SubFlowBuilder {
 
@@ -46,7 +46,7 @@ public class CheckFlowBuilder extends SubFlowBuilder {
 	}
 
 	@Override
-	public void setStartGateName(String gateName) {
+	public void setStartGateName() {
 		this.gateName = "文管人員";
 
 	}

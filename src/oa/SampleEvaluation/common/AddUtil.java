@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.ysp.service.BaseService;
 
+import oa.SampleEvaluation.controller.HprocImpl;
+
 /**
  * 不依賴hproc
  * 
@@ -14,22 +16,25 @@ import com.ysp.service.BaseService;
  */
 public class AddUtil {
 
-	private BaseService service;
+	private HprocImpl service;
 
 	public AddUtil() {
 
 	}
 
-	public AddUtil(BaseService service) {
+	public AddUtil(HprocImpl service) {
 		this.service = service;
 	}
 
 	/**
-	 * 
 	 * 欄位檢核，只會檢查是否空白，回傳所有空白欄位標題<br>
 	 * 
+	 * @param fieldMap
+	 * @return 
+	 * @return 回傳List
+	 * @throws Exception
 	 */
-	public List<String> emptyCheck(Map<String, String> fieldMap) {
+	public void emptyCheck(Map<String, String> fieldMap) throws Exception {
 
 		ArrayList<String> ret = new ArrayList<String>();
 		String value = null;
@@ -40,7 +45,23 @@ public class AddUtil {
 			}
 
 		}
-		return ret;
+		if (ret != null && ret.size() > 0) {
+			service.message("以下欄位請做選擇或輸入:" + ret);
+		} else {
+			int result = service.showConfirmDialog("確定送出表單？", "溫馨提醒", 0);
+			if (result != 1) {
+				// 產生單號
+				String uuid = getUUID(service.getTableName());
+
+				// DMAKER 內建ADD功能 需將資料塞進去表單欄位才吃的到
+				service.setValue("PNO", uuid);
+				service.fileItemSetChecker();
+				// confirm = true 控制是否真的送出
+				service.addScript("document.getElementById('em_add_button-box').click();");
+
+			}
+
+		}
 	}
 
 	public String getUUID(String tableName) throws Exception {

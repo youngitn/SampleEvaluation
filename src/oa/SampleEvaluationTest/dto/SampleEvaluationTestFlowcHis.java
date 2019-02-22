@@ -2,9 +2,9 @@ package oa.SampleEvaluationTest.dto;
 
 import java.io.Serializable;
 
-import oa.SampleEvaluation.common.Flowc;
-import oa.SampleEvaluation.common.global.dbTable;
-import oa.SampleEvaluation.common.global.xmaker;
+import oa.SampleEvaluation.i.Flowc;
+import oa.global.dbTable;
+import oa.global.xmaker;
 
 /**
  * his的pk默認一個

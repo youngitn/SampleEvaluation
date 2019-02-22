@@ -17,7 +17,7 @@ public class EmailNotifyForCaseSubFlowFinish extends EmailNotify {
 	@Override
 	protected void changeMailToUsr() {
 
-		// usr.add(getEmail(getDeptBoss("21")));
+		usr.add(getEmail(getDeptBoss("21")));
 	}
 
 }

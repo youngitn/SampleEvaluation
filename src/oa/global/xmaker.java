@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common.global;
+package oa.global;
 
 import static java.lang.annotation.ElementType.FIELD;
 
@@ -26,7 +26,7 @@ public @interface xmaker {
 	 *  
 	 * @return
 	 */
-	public String adapDbFieldName() default "";;
+	public String mappingDbFieldName() default "";;
 	
 	/**
 	 * 適用當該欄位為查詢條件時
@@ -51,10 +51,8 @@ public @interface xmaker {
 	
 	
 	/**
-	 * 適用當該欄位為查詢條件時
-	 * 
-	 * 該欄位是否為流程狀態
-	 * @return
+	 * 作為查詢條件或結果時用來判斷該欄位是否為流程狀態
+	 * @return 
 	 */
 	public boolean isFlowStatus() default false;
 }

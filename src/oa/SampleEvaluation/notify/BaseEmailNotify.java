@@ -12,9 +12,9 @@ import jcx.jform.bNotify;
 import oa.SampleEvaluation.common.MailBody;
 import oa.SampleEvaluation.common.MailMan;
 import oa.SampleEvaluation.common.MailToolInApprove;
-import oa.SampleEvaluation.common.global.DtoUtil;
-import oa.SampleEvaluation.common.global.EmailUtil;
 import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.global.DtoUtil;
+import oa.global.EmailUtil;
 
 public abstract class BaseEmailNotify extends bNotify {
 

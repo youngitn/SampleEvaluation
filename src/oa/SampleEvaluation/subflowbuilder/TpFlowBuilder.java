@@ -4,14 +4,14 @@ import java.sql.SQLException;
 
 import com.ysp.util.DateTimeUtil;
 
-import oa.SampleEvaluation.common.Flowc;
-import oa.SampleEvaluation.common.global.BaseDao;
+import oa.SampleEvaluation.i.Flowc;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcHisService;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpFlowcService;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowc;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTpFlowcHis;
+import oa.global.BaseDao;
 
 public class TpFlowBuilder extends SubFlowBuilder {
 
@@ -46,7 +46,7 @@ public class TpFlowBuilder extends SubFlowBuilder {
 	}
 
 	@Override
-	public void setStartGateName(String gateName) {
+	public void setStartGateName() {
 		this.gateName = "試製人員";
 
 	}

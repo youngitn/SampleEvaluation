@@ -1,10 +1,15 @@
 package oa.SampleEvaluation.controller;
 
-import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluation.common.global.FormInitUtil;
-import oa.SampleEvaluation.common.global.UIHidderString;
-import oa.SampleEvaluation.enums.FlowState;
+import java.sql.SQLException;
+
 import oa.SampleEvaluation.enums.PageInitType;
+import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.global.BaseDao;
+import oa.global.FormInitUtil;
+import oa.global.UIHidderString;
 
 /**
  * 判斷頁面名稱並於載入後執行
@@ -39,13 +44,9 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 
 				init.doPendingPageProcess();
 				setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
+
 				break;
 
-			case DETAIL_PAGE_INIT:// 進入明細畫面
-				init.doDetailPageProcess();
-				setAllFieldUneditable();
-				// 不需在此setDeadLine(); 須將邏輯寫在明細按鈕action中
-				break;
 			case FLOW_PAGE_INIT:// 進入流程簽核畫面
 				init.doPendingPageProcess();
 				setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
@@ -65,12 +66,19 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				switchByStateForFlowInit(FlowState.valueOf(getState().trim()));
 
 				// 根據勾選的子流程將相關資料顯示
-				if ("1".equals(getValue("IS_CHECK").trim()))
+				if ("1".equals(getValue("IS_CHECK").trim())) {
 					setVisible("SUB_FLOW_TAB_CHECK", true);
-				if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim()))
+					setTextAndCheckWithSubFlow(new SampleEvaluationCheckService(getTalk()), getValue("PNO") + "CHECK");
+
+				}
+				if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
 					setVisible("SUB_FLOW_TAB_TP", true);
-				if ("1".equals(getValue("IS_TEST").trim()))
+					setTextAndCheckWithSubFlow(new SampleEvaluationTpService(getTalk()), getValue("PNO") + "TP");
+				}
+				if ("1".equals(getValue("IS_TEST").trim())) {
 					setVisible("SUB_FLOW_TAB_TEST", true);
+					setTextAndCheckWithSubFlow(new SampleEvaluationTestService(getTalk()), getValue("PNO") + "TEST");
+				}
 
 				break;
 			default:
@@ -82,6 +90,35 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		}
 		return null;
 
+	}
+
+	protected void setTextAndCheckWithSubFlow(BaseDao dao, String pno) {
+
+		try {
+			if (dao.findById(pno) != null) {
+				if (pno.contains("CHECK")) {
+					setValue("START_CHECK_FLOW_TEXT", "已執行!");
+					setEditable("START_CHECK_FLOW", false);
+					setEditable("IS_CHECK", false);
+				}
+				if (pno.contains("TEST")) {
+					setValue("START_TEST_FLOW_TEXT", "已執行!");
+					setEditable("START_TEST_FLOW", false);
+					setEditable("IS_TEST", false);
+				}
+				if (pno.contains("TP")) {
+					setValue("START_TP_FLOW_TEXT", "已執行!");
+					setEditable("START_TP_FLOW", false);
+					setEditable("IS_TRIAL_PRODUCTION", false);
+				}
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	private void switchByStateForFlowInit(FlowState en) {
@@ -100,6 +137,10 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			setEditable("DOC_CTRLER_CHECK", true);
 			setEditable("QC_BOSS", true);
 			setEditable("COORDINATOR", true);
+
+			setEditable("START_CHECK_FLOW", true);
+			setEditable("START_TP_FLOW", true);
+			setEditable("START_TEST_FLOW", true);
 			break;
 		case 受理單位主管分案:
 			setEditable("DESIGNEE", true);

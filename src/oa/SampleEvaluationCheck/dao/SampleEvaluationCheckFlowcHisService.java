@@ -1,8 +1,8 @@
 package oa.SampleEvaluationCheck.dao;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.common.global.BaseDao;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
+import oa.global.BaseDao;
 
 public class SampleEvaluationCheckFlowcHisService extends BaseDao {
 

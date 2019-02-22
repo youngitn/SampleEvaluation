@@ -1,8 +1,8 @@
 package oa.SampleEvaluation.subflowbuilder;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.common.Flowc;
 import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.i.Flowc;
 
 public abstract class SubFlowBuilder {
 
@@ -11,7 +11,7 @@ public abstract class SubFlowBuilder {
 	protected String gateName;
 	protected String ownPnoType;
 
-	public abstract void setStartGateName(String gateName);
+	public abstract void setStartGateName();
 
 	public abstract void insertSubMainData() throws Exception;
 
@@ -27,6 +27,7 @@ public abstract class SubFlowBuilder {
 	}
 
 	public void construct() throws Exception {
+		this.setStartGateName();
 		this.setSubFlowOwnPnoType();
 		this.insertSubMainData();
 		this.setAndInsertFlowData();

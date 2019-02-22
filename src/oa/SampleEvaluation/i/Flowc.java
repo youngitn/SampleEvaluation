@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common;
+package oa.SampleEvaluation.i;
 
 public interface Flowc {
 	public String getOwnPno();

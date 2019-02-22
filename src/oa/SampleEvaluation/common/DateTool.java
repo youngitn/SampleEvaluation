@@ -1,5 +1,10 @@
 package oa.SampleEvaluation.common;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import jcx.db.talk;
 
 public class DateTool {
@@ -8,7 +13,7 @@ public class DateTool {
 	public static String getAfterWorkDate(String date, int day, talk t) throws Exception {
 
 		String workDate = "";
-		System.out.println("------>"+date);
+		System.out.println("------>" + date);
 		String DD = date.substring(6, 8);
 		int int_DD = Integer.parseInt(DD);
 		int D = 0;
@@ -126,5 +131,49 @@ public class DateTool {
 			int_DD = 31;
 		}
 		return workDate + "";
+	}
+
+	/**
+	 * 取得兩日期差異天數
+	 * 
+	 * @param FD
+	 * @param SD
+	 * @return
+	 * @throws ParseException
+	 */
+	public static int diffDays(String FD, String SD) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		Date start = sdf.parse(FD);
+		Date end = sdf.parse(SD);
+
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(start);
+
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(end);
+		int day1 = cal1.get(Calendar.DAY_OF_YEAR);
+		int day2 = cal2.get(Calendar.DAY_OF_YEAR);
+
+		int year1 = cal1.get(Calendar.YEAR);
+		int year2 = cal2.get(Calendar.YEAR);
+		if (year1 != year2) // 同一年
+		{
+			int timeDistance = 0;
+			for (int i = year1; i < year2; i++) {
+				if (i % 4 == 0 && i % 100 != 0 || i % 400 == 0) // 閏年
+				{
+					timeDistance += 366;
+				} else // 不是閏年
+				{
+					timeDistance += 365;
+				}
+			}
+
+			return timeDistance + (day2 - day1);
+		} else // 不同年
+		{
+			System.out.println("判斷day2 - day1 : " + (day2 - day1));
+			return day2 - day1;
+		}
 	}
 }

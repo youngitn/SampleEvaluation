@@ -2,8 +2,8 @@ package oa.SampleEvaluation.dto;
 
 import java.io.Serializable;
 
-import oa.SampleEvaluation.common.global.dbTable;
-import oa.SampleEvaluation.common.global.xmaker;
+import oa.global.dbTable;
+import oa.global.xmaker;
 
 /**
  * SampleEvaluation
@@ -158,6 +158,8 @@ public class SampleEvaluation implements Serializable {
 	protected String appReason;
 	@xmaker(name = "MFR_ADDRESS")
 	protected String mfrAddress;
+	@xmaker(name = "URGENCY_TYPE")
+	protected String urgencytType;
 
 	public String getFileSpecNote() {
 		return fileSpecNote;
@@ -733,6 +735,14 @@ public class SampleEvaluation implements Serializable {
 
 	public void setMfrAddress(String mfrAddress) {
 		this.mfrAddress = mfrAddress;
+	}
+
+	public String getUrgencytType() {
+		return urgencytType;
+	}
+
+	public void setUrgencytType(String urgencytType) {
+		this.urgencytType = urgencytType;
 	}
 
 }

@@ -1,5 +1,9 @@
 package oa.SampleEvaluation.query;
-
+/**
+ * 將表單所輸入之簽核狀態查詢欄位的值轉換為sql where 條件字串
+ * @author u52116
+ *
+ */
 public class QueryStatus {
 
 	public static String getFlowStateSqlStrByQueryCondition(String queryFlowStatus) {
