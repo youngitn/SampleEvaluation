@@ -12,7 +12,6 @@ import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
 import oa.SampleEvaluationTest.dto.SampleEvaluationTest;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
-import oa.global.DtoUtil;
 
 public class ApproveV1 extends bProcFlow {
 
@@ -36,24 +35,14 @@ public class ApproveV1 extends bProcFlow {
 		this.isTestValue = getValue("IS_TEST").trim();
 		boolean ret = doReminder("");
 		// 建立帶資料DTO&DAO
-		
-		SampleEvaluationTpService daoserviceTp = new SampleEvaluationTpService(t);
-		SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
-		tp.setOwnPno(tp.getPno() + "TP");
-
-		SampleEvaluationCheckService daoserviceCheck = new SampleEvaluationCheckService(t);
-		SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(), this);
-		ck.setOwnPno(ck.getPno() + "CHECK");
-
-		SampleEvaluationTestService daoserviceTest = new SampleEvaluationTestService(t);
-		SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataToDto(new SampleEvaluationTest(), this);
-		test.setOwnPno(test.getPno() + "TEST");
 
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = new SampleEvaluation();
+		se.setFormDataIntoDto(this);
 
 		switch (FlowState.valueOf(nowState)) {
 		case 課主管:
+			daoservice.update(se);
 			break;
 		case 組長:
 			SyncData.subFlowSync(t, this);
@@ -61,10 +50,9 @@ public class ApproveV1 extends bProcFlow {
 		case 受理單位主管分案:
 			// 更新主表分案人欄位
 			if (ret && !designee.equals("")) {
-				daoserviceCheck.update(ck);
 				daoservice.update(se);
 			} else {
-				message("請選擇 受理單位指派人員 欄位");
+				message("請選擇 受理單位指派人員(組長) 欄位");
 				ret = false;
 			}
 			break;

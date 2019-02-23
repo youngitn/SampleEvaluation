@@ -38,7 +38,8 @@ public abstract class BaseEmailNotify extends bNotify {
 		mailService = new MailService(service);
 		setIsLastGate();
 		// SampleEvaluation se = new SampleEvaluation();
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = new SampleEvaluation();
+		se.setFormDataIntoDto(this);
 		// se.setAllValue(service);
 		this.t = this.getTalk();
 		if (this.t == null) {

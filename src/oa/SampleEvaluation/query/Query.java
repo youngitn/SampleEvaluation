@@ -13,17 +13,19 @@ import oa.global.DtoUtil;
 import oa.global.UserData;
 
 /**
- * 查詢條件欄位
- * 
- * @author u52116
- *
+ * The Class Query.
  */
 public class Query {
 
 	talk t;
 	HprocImpl h;
-	DtoUtil dtoUtil;
+	String[][] ret;
 
+	/**
+	 * Instantiates a new query.
+	 *
+	 * @param h [HprocImpl]
+	 */
 	public Query(HprocImpl h) {
 
 		this.t = h.getTalk();
@@ -32,60 +34,59 @@ public class Query {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 * get Result By QueryConditionDto define.
+	 *
+	 * @return the result by query condition
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
-	public String[][] getMainQueryResult() throws SQLException, Exception {
-		return get2DStringArrayResult();
-
-	}
-
-	/**
-	 * 將查詢條件物件做為參數傳入, 回傳查詢結果的二維陣列.
-	 * 
-	 * @param targetLikeThis 需搭配xmaker使用
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-	public String[][] get2DStringArrayResult() throws SQLException, Exception {
+	public Query getResultByQueryCondition() throws SQLException, Exception {
+		// 從畫面取得查詢條件並塞入QueryConditionDto,後回傳
+		QueryConditionDto sqlWhereSto = new QueryConditionDto();
+		sqlWhereSto.setFormDataIntoDto(h);
+		// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
+		String sqlWhereString = DtoUtil.queryConditionDtoConvertToSqlWhereString(sqlWhereSto);
+		// 將原本的SQL WHERE增加申請人部門編號的查詢條件-qDepNoInSqlWhere(部門編號)
+		// 因申請人部門編號沒有儲存在資料庫,所以須手動撰寫SQL敘述
+		sqlWhereString = sqlWhereString + qDepNoInSqlWhere(sqlWhereSto.getQ_DEP_NO());
+		// 實體化dao服務,因查詢結果需符合QueryResultDto,所以實體化相對應Dao.
 		QueryResultService resultService = new QueryResultService(this.t);
-		return setInfoTo2DStringArrayResult((String[][]) resultService.findByConditionReturn2DStringArray(getCondition()));
+
+		ret = (String[][]) resultService.getResultBySqlWhereString(sqlWhereString);
+		//
+		ret = addInfoToResult(ret);
+		return this;
+
 	}
 
-	public String getCondition() throws SQLException, Exception {
-		QueryConditionDto targetLikeThis = (QueryConditionDto) DtoUtil.setFormDataToDto(new QueryConditionDto(), h);
-		//帶值DTO
-		String targetCondition = DtoUtil.getSqlWhereStringByXmakerMappingDbFieldName(targetLikeThis);
-		return targetCondition + qDepNoInSqlWhere(targetLikeThis.getQ_DEP_NO());
+	public String[][] getResult() {
+		return this.ret;
 	}
 
 	/**
-	 * 針對申請人用部門做查詢條件, 手動創建where字串
-	 * 
-	 * @param qDepNo
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 * Q dep no in sql where.
+	 *
+	 * @param depno [String]
+	 * @return [String]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
-	public String qDepNoInSqlWhere(String qDepNo) throws SQLException, Exception {
-		if (!"".equals(qDepNo)) {
+	public String qDepNoInSqlWhere(String depno) throws SQLException, Exception {
+		if (!"".equals(depno)) {
 
-			return " AND APPLICANT IN (SELECT EMPID FROM USER_INOFFICE_INFO_VIEW WHERE DEPT_NO = '" + qDepNo + "' )";
+			return " AND APPLICANT IN (SELECT EMPID FROM USER_INOFFICE_INFO_VIEW WHERE DEPT_NO = '" + depno + "' )";
 		}
 
 		return "";
 	}
 
 	/**
-	 * 設置各張單據簽核關卡與簽核人資訊
-	 * 
-	 * @param pno
-	 * @return
+	 * Sets the now flow state and now sign people to field.
+	 *
+	 * @param pno [String]
+	 * @return [String]
 	 */
-	public String setNowFlowStateAndNowSignPeopleToFidld(String pno) {
+	public String setNowFlowStateAndNowSignPeopleToField(String pno) {
 		Vector nowPeople = h.getApprovablePeople(h.getFunctionName(), "pno='" + pno + "'");
 
 		// 取得簽核歷史(底層可能還是使用SQL,這邊維持API形式呼叫)
@@ -119,12 +120,12 @@ public class Query {
 	}
 
 	/**
-	 * 取得兩逾期天數
-	 * 
-	 * @param appDate
-	 * @param urgency
-	 * @return
-	 * @throws Exception
+	 * Sets the number of overdue days to field.
+	 *
+	 * @param appDate [String]
+	 * @param urgency [String]
+	 * @return [String]
+	 * @throws Exception the exception
 	 */
 	public String setNumberOfOverdueDaysToField(String appDate, String urgency) throws Exception {
 
@@ -146,13 +147,13 @@ public class Query {
 	}
 
 	/**
-	 * 將二維陣列查詢結果傳入, 進行資料加工作業
-	 * 
-	 * @param result String[][]
-	 * @return
-	 * @throws Exception
+	 * Sets the info to 2 D string array result.
+	 *
+	 * @param result [String[][]]
+	 * @return [String[][]]
+	 * @throws Exception the exception
 	 */
-	private String[][] setInfoTo2DStringArrayResult(String[][] result) throws Exception {
+	private String[][] addInfoToResult(String[][] result) throws Exception {
 		int stateFieldIndex = 6;
 		int numberOfOverdueDaysFieldIndex = 5;
 		int pnoFieldIndex = 0;
@@ -165,7 +166,7 @@ public class Query {
 		ArrayList<String[]> al = new ArrayList<String[]>();
 		for (int i = 0; i < result.length; i++) {
 			// 設置簽核狀態
-			result[i][stateFieldIndex] = setNowFlowStateAndNowSignPeopleToFidld(result[i][pnoFieldIndex]);
+			result[i][stateFieldIndex] = setNowFlowStateAndNowSignPeopleToField(result[i][pnoFieldIndex]);
 
 			// 判斷逾期天數-->
 			overdueDays = "查無資料";
@@ -186,6 +187,14 @@ public class Query {
 		return ret;
 	}
 
+	/**
+	 * Checks if is user got right.
+	 *
+	 * @param pno       [String]
+	 * @param applicant [String]
+	 * @return true, if is user got right
+	 * @throws Exception the exception
+	 */
 	private boolean isUserGotRight(String pno, String applicant) throws Exception {
 		UserData nowUserData = new UserData(h.getUser(), t);
 		UserData applicantData = new UserData(applicant, t);

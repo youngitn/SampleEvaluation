@@ -1,7 +1,16 @@
 package oa.SampleEvaluation.dto;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 
+import com.ysp.service.BaseService;
+
+import jcx.jform.bNotify;
+import jcx.jform.bProcFlow;
+import jcx.jform.hproc;
+import oa.SampleEvaluation.common.BaseDto;
+import oa.global.DtoUtil;
 import oa.global.dbTable;
 import oa.global.xmaker;
 
@@ -11,7 +20,7 @@ import oa.global.xmaker;
  * 
  */
 @dbTable(name = "SAMPLE_EVALUATION", pkName = "PNO")
-public class SampleEvaluation implements Serializable {
+public class SampleEvaluation extends BaseDto implements Serializable {
 	// declare a new annotation
 
 	protected static final long serialVersionUID = 42L;

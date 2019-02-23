@@ -34,7 +34,7 @@ public class DoTpFlow extends bProcFlow {
 				setValue("IS_TRIAL_PRODUCTION", "1");
 				BaseService service = new BaseService(this);
 				BaseDao bdservice = new SampleEvaluationTpService(t);
-				SampleEvaluationTp tk = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+				SampleEvaluationTp tk = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), this);
 				tk.setOwnPno(tk.getPno() + "TP");
 				bdservice.upsert(tk);
 				FlowcUtil.goTpSubFlow(tk.getPno() + "TP", tk.getApplicant(), "評估人員", t);
@@ -45,13 +45,13 @@ public class DoTpFlow extends bProcFlow {
 
 				// 同步請驗主檔
 				bdservice = new SampleEvaluationCheckService(t);
-				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(),
+				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(),
 						this);
 				bdservice.upsert(ck);
 
 				// 同步主檔
 				bdservice = new SampleEvaluationService(t);
-				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 				bdservice.upsert(se);
 				ret = true;
 			} else if (getValue("IS_TRIAL_PRODUCTION").equals("1")) {

@@ -7,8 +7,20 @@ import java.util.Date;
 
 import jcx.db.talk;
 
+/**
+ * The Class DateTool.
+ */
 public class DateTool {
 
+	/**
+	 * Gets the AfterWorkDate.
+	 *
+	 * @param date [String]
+	 * @param day  [int]
+	 * @param t    [talk]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
 	// 依日期取得未來n個工作天
 	public static String getAfterWorkDate(String date, int day, talk t) throws Exception {
 
@@ -71,8 +83,16 @@ public class DateTool {
 		return workDate + "";
 	}
 
-	// 依日期取得前n個工作天
-	public static String getBeforeWorkDate(String date, int day, talk t) throws Exception {
+	/**
+	 * Gets the BeforeWorkDate.
+	 *
+	 * @param date   [String]
+	 * @param dayNum [int]
+	 * @param t      [talk]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
+	public static String getBeforeWorkDate(String date, int dayNum, talk t) throws Exception {
 
 		String workDate = "";
 
@@ -82,7 +102,7 @@ public class DateTool {
 		int yy = Integer.parseInt(date.substring(0, 4));
 		int mm = Integer.parseInt(date.substring(4, 6));
 		int dayNumInMon = 0;
-		while (D != day) {
+		while (D != dayNum) {
 			String SQL = "";
 
 			String mM = "";
@@ -116,7 +136,7 @@ public class DateTool {
 					dayNumInMon = i;
 					D++;
 				}
-				if (D == day) {
+				if (D == dayNum) {
 
 					workDate = yy + "" + mM + String.format("%02d", i - 1);
 					break;
@@ -134,12 +154,12 @@ public class DateTool {
 	}
 
 	/**
-	 * 取得兩日期差異天數
-	 * 
-	 * @param FD
-	 * @param SD
-	 * @return
-	 * @throws ParseException
+	 * 取得兩日期差異天數.
+	 *
+	 * @param FD [String]
+	 * @param SD [String]
+	 * @return [int]
+	 * @throws ParseException the parse exception
 	 */
 	public static int diffDays(String FD, String SD) throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");

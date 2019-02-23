@@ -1,6 +1,5 @@
 package oa.SampleEvaluation.controller;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,6 +7,9 @@ import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.Detail;
 import oa.SampleEvaluation.enums.Actions;
 import oa.SampleEvaluation.query.Query;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 
 /**
  * 
@@ -26,13 +28,20 @@ public class SampleEvaluationActionController extends HprocImpl {
 			// 按鈕動作處理進入點
 			switch (Actions.valueOf(getActionName(getName()))) {
 			case QUERY_CLICK:
-				doQuery();
+				Query query = new Query(this);
+				String[][] list = query.getResultByQueryCondition().getResult();
+				if (list == null || list.length <= 0) {
+					message("查無紀錄");
+				}
+				setTableData("QUERY_LIST", list);
 				break;
 			case SAVE_CLICK:
 				doSave();
 				break;
 			case SHOW_DETAIL_CLICK:
-				showDetail();
+				Detail detail = new Detail(this);
+				detail.show();
+				setTextAndCheckIsSubFlowRunning();
 				break;
 			default:
 				break;
@@ -42,32 +51,6 @@ public class SampleEvaluationActionController extends HprocImpl {
 		}
 		return null;
 
-	}
-
-	/**
-	 * 按下主查詢之明細鈕後所執行邏輯.
-	 * 
-	 * @throws SQLException
-	 * @throws Exception
-	 */
-	private void showDetail() throws SQLException, Exception {
-
-		Detail detail = new Detail(this);
-		detail.show();
-	}
-
-	/**
-	 * 主查詢
-	 * 
-	 * @throws Throwable
-	 */
-	private void doQuery() throws Throwable {
-		Query query = new Query(this);
-		String[][] list = query.getMainQueryResult();
-		if (list == null || list.length <= 0) {
-			message("查無紀錄");
-		}
-		setTableData("QUERY_LIST", list);
 	}
 
 	/**

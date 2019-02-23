@@ -80,7 +80,7 @@ public abstract class BaseDao {
 	 * @throws Exception
 	 */
 	public Object findById(String pno) throws SQLException, Exception {
-		return DtoUtil.getDbDataToDtoById(clazz, t, pno);
+		return DtoUtil.getDtoById(clazz, t, pno);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public abstract class BaseDao {
 	 * @throws Exception
 	 */
 	public ArrayList<?> findByCondition(String condition) throws SQLException, Exception {
-		return DtoUtil.getDbDataToDtoList(clazz, t, condition);
+		return DtoUtil.resultSetToArrayList(clazz, t, condition);
 	}
 
 	/**
@@ -101,11 +101,11 @@ public abstract class BaseDao {
 	 * 每筆資料Sing[n][x=比照dto屬性宣告順序]
 	 * 
 	 * @param condition [String]
-	 * @return
+	 * @return String[][] 
 	 * @throws SQLException
 	 * @throws Exception
 	 */
-	public String[][] findByConditionReturn2DStringArray(String condition) throws SQLException, Exception {
+	public String[][] getResultBySqlWhereString(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataTo2DStringArray(clazz, t, condition);
 	}
 

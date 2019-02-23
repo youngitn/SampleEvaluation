@@ -23,28 +23,30 @@ public abstract class BaseSubApprove extends bProcFlow {
 		BaseDao service = null;
 		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
 			service = new SampleEvaluationTpService(t);
-			SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+			SampleEvaluationTp tp = new SampleEvaluationTp();
+			tp.setFormDataIntoDto(this);
 			tp.setOwnPno(tp.getPno() + "TP");
 			service.update(tp);
 		}
 		if ("1".equals(getValue("IS_CHECK").trim())) {
 			service = new SampleEvaluationCheckService(t);
-			SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(),
-					this);
+			SampleEvaluationCheck ck = new SampleEvaluationCheck();
+			ck.setFormDataIntoDto(this);
 			ck.setOwnPno(ck.getPno() + "CHECK");
 			service.update(ck);
 		}
 
 		if ("1".equals(getValue("IS_TEST").trim())) {
 			service = new SampleEvaluationTestService(t);
-			SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataToDto(new SampleEvaluationTest(),
-					this);
+			SampleEvaluationTest test = new SampleEvaluationTest();
+			test.setFormDataIntoDto(this);
 			test.setOwnPno(test.getPno() + "TEST");
 			service.update(test);
 		}
 
 		service = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = new SampleEvaluation();
+		se.setFormDataIntoDto(this);
 		service.update(se);
 
 		return true;

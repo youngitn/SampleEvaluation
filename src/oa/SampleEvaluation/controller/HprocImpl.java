@@ -8,10 +8,21 @@ import org.apache.commons.lang.StringUtils;
 
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.DateTool;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.global.BaseDao;
 import oa.global.UserData;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HprocImpl.
+ */
 public abstract class HprocImpl extends hproc {
 
+	/**
+	 * Sets the all field uneditable.
+	 */
 	protected void setAllFieldUneditable() {
 		Hashtable h = getAllcLabels();
 		for (Enumeration e = h.keys(); e.hasMoreElements();) {
@@ -21,7 +32,9 @@ public abstract class HprocImpl extends hproc {
 		}
 	}
 
-	// 設定資料上傳相關欄位為可編輯
+	/**
+	 * Sets the all file upload field editable.
+	 */
 	protected void setAllFileUploadFieldEditable() {
 		Hashtable h = getAllcLabels();
 		for (Enumeration e = h.keys(); e.hasMoreElements();) {
@@ -37,6 +50,12 @@ public abstract class HprocImpl extends hproc {
 
 	}
 
+	/**
+	 * Sets the form EMP base info.
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
+	 */
 	protected void setFormEMPBaseInfo() throws SQLException, Exception {
 		UserData u = new UserData(getValue("APPLICANT").trim(), getTalk());
 		setValue("APPLICANT_NAME", u.getHecname());
@@ -47,9 +66,10 @@ public abstract class HprocImpl extends hproc {
 	}
 
 	/**
-	 * @param pno
-	 * @throws SQLException
-	 * @throws Exception
+	 * Show reject warning.
+	 *
+	 * @param pno [String]
+	 * @throws Exception the exception
 	 */
 	protected void showRejectWarning(String pno) throws Exception {
 		String sql = "select f_inp_info from " + getTableName() + "_flowc where PNO = '" + pno + "'";
@@ -62,6 +82,13 @@ public abstract class HprocImpl extends hproc {
 		}
 	}
 
+	/**
+	 * Show reject warning.
+	 *
+	 * @param pno         [String]
+	 * @param pnoFileName [String]
+	 * @throws Exception the exception
+	 */
 	protected void showRejectWarning(String pno, String pnoFileName) throws Exception {
 		String sql = "select f_inp_info from " + getTableName() + "_flowc where " + pnoFileName + " = '" + pno + "'";
 		String[][] ret = getTalk().queryFromPool(sql);
@@ -73,6 +100,11 @@ public abstract class HprocImpl extends hproc {
 		}
 	}
 
+	/**
+	 * Gets the AllFieldNameString.
+	 *
+	 * @return [String]
+	 */
 	protected String getAllFieldNameString() {
 		String str = "";
 		String strrr = "";
@@ -90,6 +122,11 @@ public abstract class HprocImpl extends hproc {
 
 	}
 
+	/**
+	 * Gets the AllFieldNameArray.
+	 *
+	 * @return [String[]]
+	 */
 	protected String[] getAllFieldNameArray() {
 		String str = getAllFieldNameString();
 
@@ -98,15 +135,24 @@ public abstract class HprocImpl extends hproc {
 	}
 
 	/**
-	 * 取得UI元素的標題
-	 * 
-	 * @param fieldName
+	 * 取得UI元素的標題.
+	 *
+	 * @param fieldName [String]
+	 * @return [String]
 	 */
 	protected String getFieldCaption(String fieldName) {
 		Hashtable ht = (Hashtable) getAllcLabels().get(fieldName);
 		return (String) ht.get("caption");
 	}
 
+	/**
+	 * Gets the DeadLine.
+	 *
+	 * @param appDate [String]
+	 * @param urgency [String]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
 	public String getDeadLine(String appDate, String urgency) throws Exception {
 
 		int addDaysNum = 0;
@@ -126,6 +172,11 @@ public abstract class HprocImpl extends hproc {
 		return DateTool.getAfterWorkDate(appDate, addDaysNum, getTalk());
 	}
 
+	/**
+	 * Show sub flow sign people tab.
+	 *
+	 * @throws Exception the exception
+	 */
 	public void showSubFlowSignPeopleTab() throws Exception {
 		// 根據勾選的子流程將相關資料顯示
 		if ("1".equals(getValue("IS_CHECK").trim()))
@@ -136,10 +187,19 @@ public abstract class HprocImpl extends hproc {
 			setVisible("SUB_FLOW_TAB_TEST", true);
 	}
 
+	/**
+	 * Not empty.
+	 *
+	 * @param s [String]
+	 * @return true, if successful
+	 */
 	public boolean notEmpty(String s) {
 		return (s != null && s.length() > 0);
 	}
 
+	/**
+	 * File item set checker.
+	 */
 	public void fileItemSetChecker() {
 
 		if (!getValue("FILE_SPEC").equals("")) {
@@ -158,4 +218,58 @@ public abstract class HprocImpl extends hproc {
 			setValue("PROVIDE_TEST_METHOD", "1");
 		}
 	}
+
+	protected void setTextAndCheckIsSubFlowRunning() {
+		// 根據勾選的子流程顯示其是否已進行過
+		if ("1".equals(getValue("IS_CHECK").trim())) {
+			setVisible("SUB_FLOW_TAB_CHECK", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationCheckService(getTalk()), getValue("PNO") + "CHECK");
+
+		}
+		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
+			setVisible("SUB_FLOW_TAB_TP", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTpService(getTalk()), getValue("PNO") + "TP");
+		}
+		if ("1".equals(getValue("IS_TEST").trim())) {
+			setVisible("SUB_FLOW_TAB_TEST", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTestService(getTalk()), getValue("PNO") + "TEST");
+		}
+	}
+
+	/**
+	 * 判斷子流程是否已簽核中,<br>
+	 * 如已執行子流程則關閉執行流程的按鈕與勾選格.
+	 *
+	 * @param dao [BaseDao]
+	 * @param pno [String]
+	 */
+	protected void setTextAndCheckIsSubFlowRunning(BaseDao dao, String pno) {
+
+		try {
+			if (dao.findById(pno) != null) {
+				if (pno.contains("CHECK")) {
+					setValue("START_CHECK_FLOW_TEXT", "已進行!");
+					setEditable("START_CHECK_FLOW", false);
+					setEditable("IS_CHECK", false);
+				}
+				if (pno.contains("TEST")) {
+					setValue("START_TEST_FLOW_TEXT", "已進行!");
+					setEditable("START_TEST_FLOW", false);
+					setEditable("IS_TEST", false);
+				}
+				if (pno.contains("TP")) {
+					setValue("START_TP_FLOW_TEXT", "已進行!");
+					setEditable("START_TP_FLOW", false);
+					setEditable("IS_TRIAL_PRODUCTION", false);
+				}
+			}
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+	}
+
 }

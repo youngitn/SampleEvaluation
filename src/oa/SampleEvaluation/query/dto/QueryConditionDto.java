@@ -1,5 +1,6 @@
 package oa.SampleEvaluation.query.dto;
 
+import oa.SampleEvaluation.common.BaseDto;
 import oa.global.xmaker;
 /**
  * 各屬性對應查詢畫面可輸入欄位
@@ -13,7 +14,7 @@ import oa.global.xmaker;
  * @author u52116
  *
  */
-public class QueryConditionDto {
+public class QueryConditionDto extends BaseDto {
 
 	@xmaker(name = "Q_PNO", mappingDbFieldName = "PNO")
 	private String Q_PNO;

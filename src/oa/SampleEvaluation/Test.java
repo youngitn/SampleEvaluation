@@ -34,14 +34,17 @@ public class Test extends hproc {
 		// 用條件執行查詢
 		// s.doQuery();
 		// 或取得SQL查詢字串
-		
-		String targetCondition = DtoUtil.getSqlWhereStringByXmakerMappingDbFieldName(targetLikeThis);
+
+		String targetCondition = DtoUtil.queryConditionDtoConvertToSqlWhereString(targetLikeThis);
 		QueryResultService qrs = new QueryResultService(t);
-		String[][] al = (String[][]) qrs.findByConditionReturn2DStringArray(targetCondition);
-		/*使用方式 ----> 在繼承hproc狀況下 String[][] list = new Query(this).get2DStringArrayResult();*/
-		System.out.println("ret=>"+al.length);
-		//System.out.println(al[0][0]);
-		//System.out.println(al[0][1]);
+		String[][] al = (String[][]) qrs.getResultBySqlWhereString(targetCondition);
+		/*
+		 * 使用方式 ----> 在繼承hproc狀況下 String[][] list = new
+		 * Query(this).get2DStringArrayResult();
+		 */
+		System.out.println("ret=>" + al.length);
+		// System.out.println(al[0][0]);
+		// System.out.println(al[0][1]);
 		// tes.test1();
 //		tes.test2();
 //		tes.test3();
@@ -58,7 +61,7 @@ public class Test extends hproc {
 //		}
 
 		// System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
-		System.out.println("------->"+DateTool.getAfterWorkDate("20190103", 150, t));
+		System.out.println("------->" + DateTool.getAfterWorkDate("20190103", 150, t));
 		// System.out.println( DateTool.getBeforeWorkDateOver25Day("20181224",1, t));
 //		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
 //		secfh.setOwnPno("sss");
@@ -130,7 +133,7 @@ public class Test extends hproc {
 		String[][] array = new String[s.size()][8];
 		System.out.println(s.size());
 		int i = 0;
-		
+
 		// String[][] aaa = t.queryFromPool("select * from sample_Evaluation");
 		System.out.println();
 		for (String[] strings : array) {
@@ -165,7 +168,7 @@ public class Test extends hproc {
 	}
 
 	public void testUpdate() throws Throwable {
-		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDbDataToDtoById(SampleEvaluation.class, t, "20189999");
+		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDtoById(SampleEvaluation.class, t, "20189999");
 		s.setQty("99.99");
 		BaseDao bao = new SampleEvaluationService(t);
 		bao.update(s);
@@ -199,8 +202,8 @@ public class Test extends hproc {
 
 	public void test2() throws Throwable {
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
-		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDbDataToDtoById(SampleEvaluation.class, t, "20180003");
-		DtoUtil.setDtoDataToForm(s, this);
+		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDtoById(SampleEvaluation.class, t, "20180003");
+		s.setDtoDataToForm(this);
 	}
 
 	public void test1() throws Throwable {

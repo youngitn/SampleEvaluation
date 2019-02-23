@@ -37,12 +37,12 @@ public class StartTpFlow extends HprocImpl {
 			}
 		}
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		daoservice.update(se);
 		SubFlowBuilder sfb = null;
 		String mailTitle = "Ã±®Ö³qª¾¡G" + this.getFunctionName();
 
-		tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+		tp = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), this);
 		tp.setOwnPno(tp.getPno() + "TP");
 		sfb = new TpFlowBuilder();
 		sfb.setMainDto(tp);

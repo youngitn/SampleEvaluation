@@ -35,7 +35,7 @@ public class DoCheckFlow extends bProcFlow {
 				setValue("IS_CHECK", "1");
 				BaseService service = new BaseService(this);
 				BaseDao bdservice = new SampleEvaluationCheckService(t);
-				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(),
+				SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(),
 						this);
 				ck.setOwnPno(ck.getPno() + "CHECK");
 				bdservice.upsert(ck);
@@ -46,11 +46,11 @@ public class DoCheckFlow extends bProcFlow {
 				MailToolInApprove.sendSubFlowMail(service, getValue("DOC_CTRLER"), ck, title);
 
 				bdservice = new SampleEvaluationTpService(t);
-				SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+				SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), this);
 				bdservice.upsert(tp);
 
 				bdservice = new SampleEvaluationService(t);
-				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+				SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 				bdservice.upsert(se);
 				ret = true;
 

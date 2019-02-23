@@ -25,18 +25,18 @@ public class TestTp extends hproc {
 	public void testSync() throws Throwable {
 
 		BaseDao service = new SampleEvaluationTpService(t);
-		SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), this);
+		SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), this);
 		tp.setOwnPno("iiiiiii" + "hTP");
 		tp.setPno("PNOOOOO");
 		service.upsert(tp);
 
 		service = new SampleEvaluationCheckService(t);
-		SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(), this);
+		SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(), this);
 		ck.setOwnPno("GGGG" + "CHECK");
 		service.upsert(ck);
 
 		service = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		se.setPno("GGGG");
 		service.upsert(se);
 	}
@@ -59,7 +59,7 @@ public class TestTp extends hproc {
 	}
 
 	public void testUpdate() throws Throwable {
-		SampleEvaluationTp s = (SampleEvaluationTp) DtoUtil.getDbDataToDtoById(SampleEvaluationTp.class, t,
+		SampleEvaluationTp s = (SampleEvaluationTp) DtoUtil.getDtoById(SampleEvaluationTp.class, t,
 				"20189981TP");
 		s.setQty("99.99");
 		BaseDao bao = new SampleEvaluationService(t);

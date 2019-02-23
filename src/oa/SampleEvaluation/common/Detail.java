@@ -2,39 +2,60 @@ package oa.SampleEvaluation.common;
 
 import java.sql.SQLException;
 
-import oa.SampleEvaluation.controller.SampleEvaluationActionController;
+import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
-import oa.global.FormInitUtil;
 import oa.global.UIHidderString;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Detail.
+ */
 public class Detail {
-	SampleEvaluationActionController controller;
 
-	public Detail(SampleEvaluationActionController sampleEvaluationActionController) {
-		// TODO Auto-generated constructor stub
+	/** The controller. */
+	HprocImpl controller;
+
+	/**
+	 * Instantiates a new detail.
+	 *
+	 * @param sampleEvaluationActionController the sample evaluation action
+	 *                                         controller
+	 */
+	public Detail(HprocImpl sampleEvaluationActionController) {
+
+		if (sampleEvaluationActionController instanceof HprocImpl)
+			controller = sampleEvaluationActionController;
+
 	}
 
+	/**
+	 * Show.
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
+	 */
 	public void show() throws SQLException, Exception {
+
+		String pno = controller.getValue("QUERY_LIST.PNO");
+
 		BaseDao bao = new SampleEvaluationService(controller.getTalk());
-		SampleEvaluation s = (SampleEvaluation) bao.findById(controller.getValue("QUERY_LIST.PNO"));
-		DtoUtil.setDtoDataToForm(s, this);
+		SampleEvaluation s = (SampleEvaluation) bao.findById(pno);
+		s.setDtoDataToForm(controller);
+		// getValue必須在setDtoDataToForm之後,否則抓到的都是空值
+		String appDate = controller.getValue("APP_DATE");
+		String urgency = controller.getValue("URGENCY");
+		String deadDate = controller.getDeadLine(appDate, urgency);
 		FormInitUtil init = new FormInitUtil(controller);
 
 		init.doDetailPageProcess();
-		if (controller.getValue("IS_TRIAL_PRODUCTION").equals("1")) {
-			controller.setVisible("ASSESSOR", true);
-		}
-		controller.setValue("DL",
-				controller.getDeadLine(controller.getValue("APP_DATE"), controller.getValue("URGENCY")));
+
+		controller.setValue("DL", deadDate);
 
 		controller.showSubFlowSignPeopleTab();
 		controller.addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
-		if (controller.getUser().equals(controller.getValue("DESIGNEE").trim().split(" ")[0])) {
-
-		}
 
 	}
 

@@ -32,8 +32,8 @@ public class Rule extends bRule {
 
 			String[] ret = getData("DESIGNEE").trim().split(" ");
 
-			id.addElement("admin");
 			id.addElement(ret[0]);
+			id.addElement("admin");
 
 			return id;
 		}

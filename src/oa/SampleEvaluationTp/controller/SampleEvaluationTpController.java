@@ -1,7 +1,9 @@
 package oa.SampleEvaluationTp.controller;
 
-import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.controller.HprocImpl;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
 
 /**
@@ -37,6 +39,20 @@ public class SampleEvaluationTpController extends HprocImpl {
 			break;
 		default:
 			break;
+		}
+		// 根據勾選的子流程顯示其是否已進行過
+		if ("1".equals(getValue("IS_CHECK").trim())) {
+			setVisible("SUB_FLOW_TAB_CHECK", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationCheckService(getTalk()), getValue("PNO") + "CHECK");
+
+		}
+		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
+			setVisible("SUB_FLOW_TAB_TP", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTpService(getTalk()), getValue("PNO") + "TP");
+		}
+		if ("1".equals(getValue("IS_TEST").trim())) {
+			setVisible("SUB_FLOW_TAB_TEST", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTestService(getTalk()), getValue("PNO") + "TEST");
 		}
 		return arg0;
 

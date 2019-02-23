@@ -1,8 +1,10 @@
 package oa.SampleEvaluationTest.controller;
 
-import oa.SampleEvaluation.common.DateTool;
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
+import oa.SampleEvaluationTest.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 
 /**
  *
@@ -33,11 +35,25 @@ public class SampleEvaluationTestController extends HprocImpl {
 		// 就算是default 名稱也要存在FlowState
 		// switch條件才會生效
 		switch (FlowState.valueOf(getState())) {
-		case 文管人員:
+		case 配合人員:
 			setEditable("EVALUATION_RESULT", true);
 			break;
 		default:
 			break;
+		}
+		// 根據勾選的子流程顯示其是否已進行過
+		if ("1".equals(getValue("IS_CHECK").trim())) {
+			setVisible("SUB_FLOW_TAB_CHECK", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationCheckService(getTalk()), getValue("PNO") + "CHECK");
+
+		}
+		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
+			setVisible("SUB_FLOW_TAB_TP", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTpService(getTalk()), getValue("PNO") + "TP");
+		}
+		if ("1".equals(getValue("IS_TEST").trim())) {
+			setVisible("SUB_FLOW_TAB_TEST", true);
+			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTestService(getTalk()), getValue("PNO") + "TEST");
 		}
 		return arg0;
 

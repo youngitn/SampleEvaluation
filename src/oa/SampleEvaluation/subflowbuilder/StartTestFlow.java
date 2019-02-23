@@ -34,14 +34,14 @@ public class StartTestFlow extends HprocImpl {
 		}
 		// update main data
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		daoservice.update(se);
 
 		// start sub flow
 		SubFlowBuilder sfb = null;
 		String mailTitle = "Ã±®Ö³qª¾¡G" + this.getFunctionName();
 
-		test = (SampleEvaluationTest) DtoUtil.setFormDataToDto(new SampleEvaluationTest(), this);
+		test = (SampleEvaluationTest) DtoUtil.setFormDataIntoDto(new SampleEvaluationTest(), this);
 		test.setOwnPno(test.getPno() + "TEST");
 		sfb = new TestFlowBuilder();
 		sfb.setMainDto(test);

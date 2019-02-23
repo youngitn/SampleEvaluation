@@ -38,13 +38,13 @@ public class StartCheckFlow extends HprocImpl {
 		}
 		// update main data
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), this);
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		daoservice.update(se);
 		// start sub flow
 		SubFlowBuilder sfb = null;
 		String mailTitle = "Ã±®Ö³qª¾¡G" + this.getFunctionName();
 
-		ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(), this);
+		ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(), this);
 		ck.setOwnPno(ck.getPno() + "CHECK");
 		sfb = new CheckFlowBuilder();
 		sfb.setMainDto(ck);

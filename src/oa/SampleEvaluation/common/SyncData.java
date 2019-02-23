@@ -35,7 +35,7 @@ public class SyncData {
 		BaseDao service = null;
 		if ("1".equals(isTp)) {
 			service = new SampleEvaluationTpService(t);
-			SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataToDto(new SampleEvaluationTp(), h);
+			SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), h);
 			tp.setOwnPno(tp.getPno() + "TP");
 			if (service.findById(tp.getPno() + "TP") != null) {
 				service.update(tp);
@@ -43,7 +43,7 @@ public class SyncData {
 		}
 		if ("1".equals(isCheck)) {
 			service = new SampleEvaluationCheckService(t);
-			SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataToDto(new SampleEvaluationCheck(), h);
+			SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(), h);
 			ck.setOwnPno(ck.getPno() + "CHECK");
 			if (service.findById(ck.getPno() + "CHECK") != null) {
 				service.update(ck);
@@ -53,7 +53,7 @@ public class SyncData {
 
 		if ("1".equals(isTest)) {
 			service = new SampleEvaluationTestService(t);
-			SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataToDto(new SampleEvaluationTest(), h);
+			SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataIntoDto(new SampleEvaluationTest(), h);
 			test.setOwnPno(test.getPno() + "TEST");
 			if (service.findById(test.getPno() + "TEST") != null) {
 				service.update(test);
@@ -61,7 +61,7 @@ public class SyncData {
 		}
 
 		service = new SampleEvaluationService(t);
-		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataToDto(new SampleEvaluation(), h);
+		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), h);
 		service.update(se);
 
 		return true;
