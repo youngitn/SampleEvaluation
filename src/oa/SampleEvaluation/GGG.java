@@ -11,7 +11,7 @@ import jcx.db.*;
 public class GGG extends hproc {
 	public String action(String value) throws Throwable {
 		SampleEvaluation s = new SampleEvaluation();
-		s.setFormDataIntoDto(this);
+		s.getFormData(this);
 		message(s.getFileSdsNote());
 		return value;
 	}

@@ -6,7 +6,6 @@ import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.global.BaseDao;
-import oa.global.DtoUtil;
 import oa.global.UIHidderString;
 
 // TODO: Auto-generated Javadoc
@@ -43,7 +42,7 @@ public class Detail {
 
 		BaseDao bao = new SampleEvaluationService(controller.getTalk());
 		SampleEvaluation s = (SampleEvaluation) bao.findById(pno);
-		s.setDtoDataToForm(controller);
+		s.setDataToForm(controller);
 		// getValue必須在setDtoDataToForm之後,否則抓到的都是空值
 		String appDate = controller.getValue("APP_DATE");
 		String urgency = controller.getValue("URGENCY");
@@ -54,7 +53,7 @@ public class Detail {
 
 		controller.setValue("DL", deadDate);
 
-		controller.showSubFlowSignPeopleTab();
+		controller.setTextAndCheckIsSubFlowRunning();
 		controller.addScript(UIHidderString.hideDmakerAddButton() + UIHidderString.hideDmakerFlowPanel());
 
 	}

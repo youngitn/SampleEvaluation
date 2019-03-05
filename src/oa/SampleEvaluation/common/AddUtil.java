@@ -9,7 +9,7 @@ import com.ysp.service.BaseService;
 import oa.SampleEvaluation.controller.HprocImpl;
 
 /**
- * 不依賴hproc
+ * 起單時會用到的動作
  * 
  * @author u52116
  *

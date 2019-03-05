@@ -203,7 +203,7 @@ public class Test extends hproc {
 	public void test2() throws Throwable {
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 		SampleEvaluation s = (SampleEvaluation) DtoUtil.getDtoById(SampleEvaluation.class, t, "20180003");
-		s.setDtoDataToForm(this);
+		s.setDataToForm(this);
 	}
 
 	public void test1() throws Throwable {

@@ -24,14 +24,14 @@ public abstract class BaseSubApprove extends bProcFlow {
 		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
 			service = new SampleEvaluationTpService(t);
 			SampleEvaluationTp tp = new SampleEvaluationTp();
-			tp.setFormDataIntoDto(this);
+			tp.getFormData(this);
 			tp.setOwnPno(tp.getPno() + "TP");
 			service.update(tp);
 		}
 		if ("1".equals(getValue("IS_CHECK").trim())) {
 			service = new SampleEvaluationCheckService(t);
 			SampleEvaluationCheck ck = new SampleEvaluationCheck();
-			ck.setFormDataIntoDto(this);
+			ck.getFormData(this);
 			ck.setOwnPno(ck.getPno() + "CHECK");
 			service.update(ck);
 		}
@@ -39,14 +39,14 @@ public abstract class BaseSubApprove extends bProcFlow {
 		if ("1".equals(getValue("IS_TEST").trim())) {
 			service = new SampleEvaluationTestService(t);
 			SampleEvaluationTest test = new SampleEvaluationTest();
-			test.setFormDataIntoDto(this);
+			test.getFormData(this);
 			test.setOwnPno(test.getPno() + "TEST");
 			service.update(test);
 		}
 
 		service = new SampleEvaluationService(t);
 		SampleEvaluation se = new SampleEvaluation();
-		se.setFormDataIntoDto(this);
+		se.getFormData(this);
 		service.update(se);
 
 		return true;

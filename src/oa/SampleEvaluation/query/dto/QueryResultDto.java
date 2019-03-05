@@ -1,7 +1,7 @@
 package oa.SampleEvaluation.query.dto;
 
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 /**
  * 查詢結果所欲顯示的欄位定義
  * 須對應emaker表單查詢結果顯示表格.

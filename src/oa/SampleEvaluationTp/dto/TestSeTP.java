@@ -1,8 +1,8 @@
 package oa.SampleEvaluationTp.dto;
 
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 @dbTable(name = "SAMPLE_EVALUATION_TP", pkName = "OWN_PNO")
 public class TestSeTP extends SampleEvaluation {

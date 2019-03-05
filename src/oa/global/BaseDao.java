@@ -9,6 +9,8 @@ import java.util.HashMap;
 import org.apache.commons.lang.ArrayUtils;
 
 import jcx.db.talk;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 public abstract class BaseDao {
 

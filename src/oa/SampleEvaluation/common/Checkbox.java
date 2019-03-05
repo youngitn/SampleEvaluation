@@ -24,19 +24,23 @@ public class Checkbox extends hproc {
 					setVisible("SUB_FLOW_TAB_CHECK", true);
 					String[][] ret = getSubFlowSignPeople("DOC_CTRLER_CHECK");
 					setValue("DOC_CTRLER_CHECK", ret[0][0]);
+					setVisible("START_CHECK_FLOW", true);
 				} else {
 					setVisible("SUB_FLOW_TAB_CHECK", false);
 					setValue("DOC_CTRLER_CHECK", "");
 					setValue("QC_BOSS", "");
+					setVisible("START_CHECK_FLOW", false);
 				}
 				break;
 			case IS_TEST:
 				if (value.trim().equals("1")) {
 
 					setVisible("SUB_FLOW_TAB_TEST", true);
+					setVisible("START_TEST_FLOW", true);
 				} else {
 					setVisible("SUB_FLOW_TAB_TEST", false);
 					setValue("COORDINATOR", "");
+					setVisible("START_TEST_FLOW", false);
 				}
 				break;
 			case IS_TRIAL_PRODUCTION:
@@ -44,11 +48,13 @@ public class Checkbox extends hproc {
 					String[][] ret = getSubFlowSignPeople("DOC_CTRLER_TP");
 					setValue("DOC_CTRLER_TP", ret[0][0]);
 					setVisible("SUB_FLOW_TAB_TP", true);
+					setVisible("START_TP_FLOW", true);
 				} else {
 					setVisible("SUB_FLOW_TAB_TP", false);
 					setValue("ASSESSOR", "");
 					setValue("DOC_CTRLER_TP", "");
 					setValue("LAB_EXE", "");
+					setVisible("START_TP_FLOW", false);
 				}
 				break;
 			default:

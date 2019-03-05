@@ -9,10 +9,10 @@ import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
 import oa.global.DtoUtil;
-import oa.global.xmaker;
+import oa.global.annotation.xmaker;
 
-public abstract class BaseDto {
-	public void setFormDataIntoDto(Object service) {
+public  abstract class BaseDto {
+	public void getFormData(Object service) {
 
 		try {
 
@@ -51,7 +51,7 @@ public abstract class BaseDto {
 		}
 	}
 
-	public void setDtoDataToForm(Object service) {
+	public void setDataToForm(Object service) {
 		try {
 			Field[] fld = DtoUtil.getFields(this);
 

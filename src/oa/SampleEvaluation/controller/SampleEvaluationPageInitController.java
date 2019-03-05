@@ -1,5 +1,7 @@
 package oa.SampleEvaluation.controller;
 
+import java.sql.SQLException;
+
 import oa.SampleEvaluation.common.FormInitUtil;
 import oa.SampleEvaluation.enums.PageInitType;
 import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
@@ -45,7 +47,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
 				// 所有欄位不可編輯
 				setAllFieldUneditable();
-				
+
 				// 簽核完後跳至主頁面
 				String pno = getValue("PNO").trim();
 				if (pno.length() <= 0) {
@@ -97,6 +99,21 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			break;
 		case 受理單位主管分案:
 			setEditable("DESIGNEE", true);
+
+			//根據對應表填入預設組長
+			try {
+				String[][] designee = getTalk()
+						.queryFromPool("SELECT DESIGNEE FROM SAMPLE_EVALUATION_SUB_FLOW_SIGN_MAP WHERE DEPNO='"
+								+ getValue("RECEIPT_UNIT") + "'");
+				if (designee != null && designee.length > 0 ) {
+					setValue("DESIGNEE",designee[0][0]);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			break;
 		case 採購經辦:
 			setEditable("EVALUATION_RESULT", true);

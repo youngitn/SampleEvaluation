@@ -28,7 +28,6 @@ public class SampleEvaluationCheckController extends HprocImpl {
 		setAllFieldUneditable();
 		setAllFileUploadFieldEditable();
 		setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
-		showSubFlowSignPeopleTab();
 
 		System.out.println("getState----->" + getState());
 		switch (FlowState.valueOf(getState().trim())) {
@@ -41,19 +40,7 @@ public class SampleEvaluationCheckController extends HprocImpl {
 
 		}
 		// 根據勾選的子流程顯示其是否已進行過
-		if ("1".equals(getValue("IS_CHECK").trim())) {
-			setVisible("SUB_FLOW_TAB_CHECK", true);
-			setTextAndCheckIsSubFlowRunning(new SampleEvaluationCheckService(getTalk()), getValue("PNO") + "CHECK");
-
-		}
-		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
-			setVisible("SUB_FLOW_TAB_TP", true);
-			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTpService(getTalk()), getValue("PNO") + "TP");
-		}
-		if ("1".equals(getValue("IS_TEST").trim())) {
-			setVisible("SUB_FLOW_TAB_TEST", true);
-			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTestService(getTalk()), getValue("PNO") + "TEST");
-		}
+		setTextAndCheckIsSubFlowRunning();
 		return arg0;
 
 	}

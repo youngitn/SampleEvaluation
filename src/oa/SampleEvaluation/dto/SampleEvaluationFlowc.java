@@ -2,8 +2,8 @@ package oa.SampleEvaluation.dto;
 
 import java.io.Serializable;
 
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 @dbTable(name = "SAMPLE_EVALUATION_FLOWC", pkName = "PNO")
 public class SampleEvaluationFlowc implements Serializable {

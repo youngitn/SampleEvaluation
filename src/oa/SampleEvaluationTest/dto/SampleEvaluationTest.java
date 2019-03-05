@@ -1,8 +1,8 @@
 package oa.SampleEvaluationTest.dto;
 
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 /**
  * ¦PSampleEvaluation

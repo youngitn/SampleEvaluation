@@ -173,21 +173,6 @@ public abstract class HprocImpl extends hproc {
 	}
 
 	/**
-	 * Show sub flow sign people tab.
-	 *
-	 * @throws Exception the exception
-	 */
-	public void showSubFlowSignPeopleTab() throws Exception {
-		// 根據勾選的子流程將相關資料顯示
-		if ("1".equals(getValue("IS_CHECK").trim()))
-			setVisible("SUB_FLOW_TAB_CHECK", true);
-		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim()))
-			setVisible("SUB_FLOW_TAB_TP", true);
-		if ("1".equals(getValue("IS_TEST").trim()))
-			setVisible("SUB_FLOW_TAB_TEST", true);
-	}
-
-	/**
 	 * Not empty.
 	 *
 	 * @param s [String]
@@ -219,7 +204,7 @@ public abstract class HprocImpl extends hproc {
 		}
 	}
 
-	protected void setTextAndCheckIsSubFlowRunning() {
+	public void setTextAndCheckIsSubFlowRunning() {
 		// 根據勾選的子流程顯示其是否已進行過
 		if ("1".equals(getValue("IS_CHECK").trim())) {
 			setVisible("SUB_FLOW_TAB_CHECK", true);

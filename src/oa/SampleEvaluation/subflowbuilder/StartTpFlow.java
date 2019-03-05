@@ -30,12 +30,12 @@ public class StartTpFlow extends HprocImpl {
 			message("已執行過試製流程");
 			return arg0;
 		}
-		if ("1".equals(isTrialProdValue)) {
-			if ("".equals(docCtrlerTp) || "".equals(assessor) || "".equals(labExe)) {
-				message("試製流程中之文管人員,試製人員,檢驗人員欄位皆不得為空");
-				return arg0;
-			}
+		// if ("1".equals(isTrialProdValue)) {
+		if ("".equals(docCtrlerTp) || "".equals(assessor) || "".equals(labExe)) {
+			message("試製流程中之文管人員,試製人員,檢驗人員欄位皆不得為空");
+			return arg0;
 		}
+		// }
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
 		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		daoservice.update(se);

@@ -20,6 +20,8 @@ import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.query.QueryStatus;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 /**
  * 物件(or Class)作為參數,僅支援單層繼承欄位向上查找.<br>

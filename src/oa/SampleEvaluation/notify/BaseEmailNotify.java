@@ -13,7 +13,6 @@ import oa.SampleEvaluation.common.MailBody;
 import oa.SampleEvaluation.common.MailMan;
 import oa.SampleEvaluation.common.MailToolInApprove;
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.global.DtoUtil;
 import oa.global.EmailUtil;
 
 public abstract class BaseEmailNotify extends bNotify {
@@ -39,7 +38,7 @@ public abstract class BaseEmailNotify extends bNotify {
 		setIsLastGate();
 		// SampleEvaluation se = new SampleEvaluation();
 		SampleEvaluation se = new SampleEvaluation();
-		se.setFormDataIntoDto(this);
+		se.getFormData(this);
 		// se.setAllValue(service);
 		this.t = this.getTalk();
 		if (this.t == null) {

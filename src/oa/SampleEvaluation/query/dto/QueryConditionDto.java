@@ -1,7 +1,7 @@
 package oa.SampleEvaluation.query.dto;
 
 import oa.SampleEvaluation.common.BaseDto;
-import oa.global.xmaker;
+import oa.global.annotation.xmaker;
 /**
  * 各屬性對應查詢畫面可輸入欄位
  * xmaker(

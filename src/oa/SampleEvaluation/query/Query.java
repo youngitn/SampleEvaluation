@@ -43,7 +43,7 @@ public class Query {
 	public Query getResultByQueryCondition() throws SQLException, Exception {
 		// 從畫面取得查詢條件並塞入QueryConditionDto,後回傳
 		QueryConditionDto sqlWhereSto = new QueryConditionDto();
-		sqlWhereSto.setFormDataIntoDto(h);
+		sqlWhereSto.getFormData(h);
 		// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
 		String sqlWhereString = DtoUtil.queryConditionDtoConvertToSqlWhereString(sqlWhereSto);
 		// 將原本的SQL WHERE增加申請人部門編號的查詢條件-qDepNoInSqlWhere(部門編號)

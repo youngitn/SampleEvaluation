@@ -11,8 +11,8 @@ import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.BaseDto;
 import oa.global.DtoUtil;
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 /**
  * SampleEvaluation

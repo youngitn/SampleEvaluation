@@ -3,8 +3,8 @@ package oa.SampleEvaluationTp.dto;
 import java.io.Serializable;
 
 import oa.SampleEvaluation.i.Flowc;
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 /**
  * his的pk默認一個

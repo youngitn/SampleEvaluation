@@ -28,7 +28,7 @@ public class StartTestFlow extends HprocImpl {
 			message("已執行過試車流程");
 			return arg0;
 		}
-		if ("1".equals(isTestValue) && "".equals(coordinator)) {
+		if ("".equals(coordinator)) {
 			message("試車流程中之配合人員不得為空");
 			return arg0;
 		}

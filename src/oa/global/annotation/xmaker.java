@@ -1,4 +1,4 @@
-package oa.global;
+package oa.global.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
 

@@ -30,12 +30,12 @@ public class StartCheckFlow extends HprocImpl {
 			message("已執行過請驗流程");
 			return arg0;
 		}
-		if ("1".equals(isCheckValue)) {
-			if ("".equals(docCtrlerCheck) || "".equals(qcBoss)) {
-				message("請驗流程中之文管人員與品保課長欄位皆不得為空");
-				return arg0;
-			}
+		// if ("1".equals(isCheckValue)) {
+		if ("".equals(docCtrlerCheck) || "".equals(qcBoss)) {
+			message("請驗流程中之文管人員與品保課長欄位皆不得為空");
+			return arg0;
 		}
+		// }
 		// update main data
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
 		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);

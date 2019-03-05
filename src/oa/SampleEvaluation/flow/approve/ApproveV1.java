@@ -38,7 +38,7 @@ public class ApproveV1 extends bProcFlow {
 
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
 		SampleEvaluation se = new SampleEvaluation();
-		se.setFormDataIntoDto(this);
+		se.getFormData(this);
 
 		switch (FlowState.valueOf(nowState)) {
 		case 課主管:

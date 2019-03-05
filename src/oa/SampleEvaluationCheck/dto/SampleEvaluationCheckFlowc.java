@@ -3,8 +3,8 @@ package oa.SampleEvaluationCheck.dto;
 import java.io.Serializable;
 
 import oa.SampleEvaluation.i.Flowc;
-import oa.global.dbTable;
-import oa.global.xmaker;
+import oa.global.annotation.dbTable;
+import oa.global.annotation.xmaker;
 
 @dbTable(name = "SAMPLE_EVALUATION_CHECK_FLOWC", pkName = "OWN_PNO")
 public class SampleEvaluationCheckFlowc implements  Flowc,Serializable {
