@@ -36,16 +36,17 @@ public class SyncData {
 		if ("1".equals(isTp)) {
 			service = new SampleEvaluationTpService(t);
 			SampleEvaluationTp tp = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), h);
-			tp.setOwnPno(tp.getPno() + "TP");
-			if (service.findById(tp.getPno() + "TP") != null) {
+			tp.setOwnPno(tp.getOwnPno());
+			if (service.findById(tp.getOwnPno()) != null) {
 				service.update(tp);
 			}
 		}
 		if ("1".equals(isCheck)) {
 			service = new SampleEvaluationCheckService(t);
-			SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(), h);
-			ck.setOwnPno(ck.getPno() + "CHECK");
-			if (service.findById(ck.getPno() + "CHECK") != null) {
+			SampleEvaluationCheck ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(),
+					h);
+			ck.setOwnPno(ck.getOwnPno());
+			if (service.findById(ck.getOwnPno()) != null) {
 				service.update(ck);
 			}
 
@@ -53,9 +54,10 @@ public class SyncData {
 
 		if ("1".equals(isTest)) {
 			service = new SampleEvaluationTestService(t);
-			SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataIntoDto(new SampleEvaluationTest(), h);
-			test.setOwnPno(test.getPno() + "TEST");
-			if (service.findById(test.getPno() + "TEST") != null) {
+			SampleEvaluationTest test = (SampleEvaluationTest) DtoUtil.setFormDataIntoDto(new SampleEvaluationTest(),
+					h);
+			test.setOwnPno(test.getOwnPno());
+			if (service.findById(test.getOwnPno()) != null) {
 				service.update(test);
 			}
 		}

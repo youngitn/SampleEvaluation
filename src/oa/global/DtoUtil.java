@@ -36,6 +36,80 @@ import oa.global.annotation.xmaker;
 public class DtoUtil {
 
 	/**
+	 * 根據QueryConditionDto類別中xmaker所定義的adapDbFieldName,<br>
+	 * 組成where字串並回傳。.
+	 *
+	 * @param dto [Object]
+	 * @return [String]
+	 */
+	public static String queryConditionDtoConvertToSqlWhereString(Object dto) {
+	
+		StringBuilder sqlWhere = new StringBuilder();
+		String status = "";
+		try {
+	
+			Field[] fld = getFields(dto);
+			for (Field field : fld) {
+				field.setAccessible(true);
+				Annotation[] annotations = field.getAnnotations();
+				for (Annotation annotation : annotations) {
+					if (annotation instanceof xmaker) {
+						xmaker myAnnotation = (xmaker) annotation;
+						String adapName = myAnnotation.mappingDbFieldName();
+						String val = (String) field.get(dto);
+	
+						if (!"".equals(val) && !(null == val)) {
+							// 該欄位是日期起日則組合對應字串
+							if (myAnnotation.isDateStart()) {
+								sqlWhere.append(adapName).append(">=").append(field.get(dto)).append(" AND ");
+							} // 該欄位是日期迄日則組合對應字串
+							else if (myAnnotation.isDateEnd()) {
+								sqlWhere.append(adapName).append("<=").append(field.get(dto)).append(" AND ");
+							}
+							// 該欄位是簽核狀態則使用QueryStatus.getFlowStateSqlStrByQueryCondition("該欄value")
+							// 組出查詢字串
+							else if (myAnnotation.isFlowStatus()) {
+	
+								status = QueryStatus.getFlowStateSqlStrByQueryCondition((String) field.get(dto));
+	
+							} // 其他非特殊欄位皆使用'db欄位名稱 like % 值%'組出字串
+							else if (!"".equals(adapName)) {
+								System.out.println("name: " + myAnnotation.mappingDbFieldName());
+								sqlWhere.append(adapName).append(" like ").append("'%").append(field.get(dto))
+										.append("%'").append(" AND ");
+	
+							}
+						}
+	
+					}
+				}
+	
+			}
+	
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	
+		if (sqlWhere != null && sqlWhere.length() > 0) {
+			sqlWhere.insert(0, "WHERE ");
+			int index = sqlWhere.lastIndexOf("AND");
+			if (index > 0) {
+				sqlWhere.delete(index, sqlWhere.length());
+			}
+		} else {
+			// 去除因loop增加的末端"AND"
+			status = status.replace("AND", "");
+			//
+			if (!"".equals(status)) {
+				sqlWhere.append(" WHERE ");
+			}
+		}
+		String condition = sqlWhere.toString() + status;
+		System.out.println("sqlWhere=  " + condition);
+		return condition;
+	}
+
+	/**
 	 * 將表單畫面欄位資料塞入物件.
 	 *
 	 * @param o       需為實體物件,且需搭配xmaker,作為資料藍圖使用
@@ -83,77 +157,58 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 根據QueryConditionDto類別中xmaker所定義的adapDbFieldName,<br>
-	 * 組成where字串並回傳。.
+	 * 根據pno取得DB資料, 根據clazz藍圖,將資料塞入DTO<br>
+	 * 注意 回傳值類型; ResultSet to Object<br>
+	 * .
 	 *
-	 * @param dto [Object]
-	 * @return [String]
+	 * @param clazz 類別藍圖
+	 * @param t     [talk]
+	 * @param pno   [String]
+	 * @return the db data to dto by id
+	 * @throws SQLException the SQL exception
 	 */
-	public static String queryConditionDtoConvertToSqlWhereString(Object dto) {
-
-		StringBuilder sqlWhere = new StringBuilder();
-		String status = "";
+	public static Object getDtoById(Class<?> clazz, talk t, String pno) throws SQLException {
+		Object object = null;
+		ResultSet r = null;
 		try {
-
-			Field[] fld = getFields(dto);
-			for (Field field : fld) {
-				field.setAccessible(true);
-				Annotation[] annotations = field.getAnnotations();
-				for (Annotation annotation : annotations) {
-					if (annotation instanceof xmaker) {
-						xmaker myAnnotation = (xmaker) annotation;
-						String adapName = myAnnotation.mappingDbFieldName();
-						String val = (String) field.get(dto);
-
-						if (!"".equals(val) && !(null == val)) {
-							// 該欄位是日期起日則組合對應字串
-							if (myAnnotation.isDateStart()) {
-								sqlWhere.append(adapName).append(">=").append(field.get(dto)).append(" AND ");
-							} // 該欄位是日期迄日則組合對應字串
-							else if (myAnnotation.isDateEnd()) {
-								sqlWhere.append(adapName).append("<=").append(field.get(dto)).append(" AND ");
-							}
-							// 該欄位是簽核狀態則使用QueryStatus.getFlowStateSqlStrByQueryCondition("該欄value")
-							// 組出查詢字串
-							else if (myAnnotation.isFlowStatus()) {
-
-								status = QueryStatus.getFlowStateSqlStrByQueryCondition((String) field.get(dto));
-
-							} // 其他非特殊欄位皆使用'db欄位名稱 like % 值%'組出字串
-							else if (!"".equals(adapName)) {
-								System.out.println("name: " + myAnnotation.mappingDbFieldName());
-								sqlWhere.append(adapName).append(" like ").append("'%").append(field.get(dto))
-										.append("%'").append(" AND ");
-
-							}
-						}
-
-					}
-				}
-
+	
+			Field[] fld = getFields(clazz);
+			// Field[] fld = clazz.getDeclaredFields();
+			r = DtoUtil.getResultSet(clazz, t, pno);
+			while (r.next()) {
+				object = setResultSetToDto(clazz, fld, r);
 			}
-
+	
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+		} finally {
+			r.close();
 		}
+		return object;
+	}
 
-		if (sqlWhere != null && sqlWhere.length() > 0) {
-			sqlWhere.insert(0, "WHERE ");
-			int index = sqlWhere.lastIndexOf("AND");
-			if (index > 0) {
-				sqlWhere.delete(index, sqlWhere.length());
-			}
-		} else {
-			// 去除因loop增加的末端"AND"
-			status = status.replace("AND", "");
-			//
-			if (!"".equals(status)) {
-				sqlWhere.append(" WHERE ");
+	public static Object setResultSetToDto(Class clazz, Field[] fld, ResultSet r) throws Exception {
+		Constructor<?> ctor = clazz.getConstructor();
+		Object object = ctor.newInstance();
+		for (Field field : fld) {
+			field.setAccessible(true);
+			Annotation[] as = field.getDeclaredAnnotations();
+			for (Annotation aa : as) {
+				if (aa instanceof xmaker) {
+					// field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
+	
+					if (((xmaker) aa).isText()) {
+						field.set(object, (String) ((xmaker) aa).name());
+	
+					} else if (((xmaker) aa).isFlowStatus()) {
+						field.set(object, "");
+					} else {
+						field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
+					}
+				}
 			}
 		}
-		String condition = sqlWhere.toString() + status;
-		System.out.println("sqlWhere=  " + condition);
-		return condition;
+		return object;
 	}
 
 	/**
@@ -188,58 +243,32 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 根據pno取得DB資料, 根據clazz藍圖,將資料塞入DTO<br>
-	 * 注意 回傳值類型; ResultSet to Object<br>
-	 * .
+	 * 注意 回傳值類型.
 	 *
-	 * @param clazz 類別藍圖
-	 * @param t     [talk]
-	 * @param pno   [String]
-	 * @return the db data to dto by id
-	 * @throws SQLException the SQL exception
+	 * @param r     [ResultSet]
+	 * @param clazz [Class<Object>]
+	 * @return [ArrayList<Object>]
+	 * @throws Exception the exception
 	 */
-	public static Object getDtoById(Class<?> clazz, talk t, String pno) throws SQLException {
+	public static ArrayList<Object> resultSetToArrayList(ResultSet r, Class<Object> clazz) throws Exception {
+		ArrayList<Object> list = new ArrayList<Object>();
+	
+		Field[] fld = getFields(clazz);
+		// Field[] fld = clazz.getDeclaredFields();
+		Constructor<?> ctor = null;
 		Object object = null;
-		ResultSet r = null;
-		try {
-
-			Field[] fld = getFields(clazz);
-			// Field[] fld = clazz.getDeclaredFields();
-			r = DtoUtil.getResultSet(clazz, t, pno);
-			while (r.next()) {
-				object = setResultSetToDto(clazz, fld, r);
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		} finally {
-			r.close();
+		Annotation[] as = null;
+	
+		while (r.next()) {
+			System.out.println("isNew=YES");
+			ctor = clazz.getConstructor();
+			object = ctor.newInstance();
+			object = setResultSetToDto(clazz, fld, r);
+	
+			list.add(object);
 		}
-		return object;
-	}
-
-	public static Object setResultSetToDto(Class clazz, Field[] fld, ResultSet r) throws Exception {
-		Constructor<?> ctor = clazz.getConstructor();
-		Object object = ctor.newInstance();
-		for (Field field : fld) {
-			field.setAccessible(true);
-			Annotation[] as = field.getDeclaredAnnotations();
-			for (Annotation aa : as) {
-				if (aa instanceof xmaker) {
-					// field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
-
-					if (((xmaker) aa).isText()) {
-						field.set(object, (String) ((xmaker) aa).name());
-
-					} else if (((xmaker) aa).isFlowStatus()) {
-						field.set(object, "");
-					} else {
-						field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
-					}
-				}
-			}
-		}
-		return object;
+	
+		return list;
 	}
 
 	/**
@@ -285,35 +314,6 @@ public class DtoUtil {
 	}
 
 	/**
-	 * 注意 回傳值類型.
-	 *
-	 * @param r     [ResultSet]
-	 * @param clazz [Class<Object>]
-	 * @return [ArrayList<Object>]
-	 * @throws Exception the exception
-	 */
-	public static ArrayList<Object> resultSetToArrayList(ResultSet r, Class<Object> clazz) throws Exception {
-		ArrayList<Object> list = new ArrayList<Object>();
-
-		Field[] fld = getFields(clazz);
-		// Field[] fld = clazz.getDeclaredFields();
-		Constructor<?> ctor = null;
-		Object object = null;
-		Annotation[] as = null;
-
-		while (r.next()) {
-			System.out.println("isNew=YES");
-			ctor = clazz.getConstructor();
-			object = ctor.newInstance();
-			object = setResultSetToDto(clazz, fld, r);
-
-			list.add(object);
-		}
-
-		return list;
-	}
-
-	/**
 	 * Array list to 2 D string array.
 	 *
 	 * @param arraylist [ArrayList<Object>]
@@ -323,7 +323,7 @@ public class DtoUtil {
 	 */
 	public static String[][] arrayListTo2DStringArray(ArrayList<Object> arraylist, Class<Object> clazz)
 			throws Exception {
-
+	
 		Field[] fld = getFields(clazz);
 		// Field[] fld = clazz.getDeclaredFields();
 		String[][] ret = new String[arraylist.size()][fld.length];
@@ -332,7 +332,7 @@ public class DtoUtil {
 		Annotation[] as = null;
 		for (Object object : arraylist) {
 			c = 0;
-
+	
 			for (Field field : fld) {
 				field.setAccessible(true);
 				as = field.getDeclaredAnnotations();
@@ -345,9 +345,64 @@ public class DtoUtil {
 			}
 			rc++;
 		}
-
+	
 		return ret;
+	
+	}
 
+	/**
+	 * 根據傳入物件屬性, 創建各欄位帶值的INSERT或UPDATE SQL字串.
+	 *
+	 * @param o [Object]
+	 * @return [HashMap<DbProcessType,String>]
+	 */
+	public static HashMap<DbProcessType, String> getSqlStringForDbCreateAndUpdate(final Object o) {
+		String whereStringForUpdatePkField = " where ";
+		HashMap<DbProcessType, String> m = new HashMap<DbProcessType, String>();
+		StringBuilder insertField = new StringBuilder();
+		StringBuilder insertValue = new StringBuilder();
+		StringBuilder updateFieldWithValue = new StringBuilder();
+		Field[] fld = getFields(o);
+		dbTable a = (dbTable) o.getClass().getAnnotation(dbTable.class);
+		String pkName = a.pkName();
+		String tableName = a.name();
+		Annotation[] annotations = null;
+		xmaker myAnnotation = null;
+		try {
+	
+			for (Field field : fld) {
+				field.setAccessible(true);
+				annotations = field.getAnnotations();
+				for (Annotation annotation : annotations) {
+					if (annotation instanceof xmaker) {
+						myAnnotation = (xmaker) annotation;
+						insertField.append(myAnnotation.name() + ",");
+						String value = "";
+						if (field.get(o) != null) {
+							value = (String) (field.get(o));
+						}
+						insertValue.append("'" + value + "'" + ",");
+						// pk 免更新
+						if (!myAnnotation.name().equals(pkName)) {
+							updateFieldWithValue.append(myAnnotation.name() + "=" + "'" + value + "',");
+						} else {
+							whereStringForUpdatePkField = " where " + pkName + "='" + value + "'";
+						}
+	
+					}
+				}
+	
+			}
+	
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		String instf = insertField.toString().replaceAll(",$", "");
+		String instv = insertValue.toString().replaceAll(",$", "");
+		String up = updateFieldWithValue.toString().replaceAll(",$", "");
+		m.put(DbProcessType.INSERT, "INSERT INTO  " + tableName + "  (" + instf + ") VALUES (" + instv + " )");
+		m.put(DbProcessType.UPDATE, "UPDATE  " + tableName + "  SET " + up + whereStringForUpdatePkField);
+		return m;
 	}
 
 	/**
@@ -415,61 +470,6 @@ public class DtoUtil {
 		}
 		return r;
 
-	}
-
-	/**
-	 * 根據傳入物件屬性, 創建各欄位帶值的INSERT或UPDATE SQL字串.
-	 *
-	 * @param o [Object]
-	 * @return [HashMap<DbProcessType,String>]
-	 */
-	public static HashMap<DbProcessType, String> getSqlStringForDbCreateAndUpdate(final Object o) {
-		String whereStringForUpdatePkField = " where ";
-		HashMap<DbProcessType, String> m = new HashMap<DbProcessType, String>();
-		StringBuilder insertField = new StringBuilder();
-		StringBuilder insertValue = new StringBuilder();
-		StringBuilder updateFieldWithValue = new StringBuilder();
-		Field[] fld = getFields(o);
-		dbTable a = (dbTable) o.getClass().getAnnotation(dbTable.class);
-		String pkName = a.pkName();
-		String tableName = a.name();
-		Annotation[] annotations = null;
-		xmaker myAnnotation = null;
-		try {
-
-			for (Field field : fld) {
-				field.setAccessible(true);
-				annotations = field.getAnnotations();
-				for (Annotation annotation : annotations) {
-					if (annotation instanceof xmaker) {
-						myAnnotation = (xmaker) annotation;
-						insertField.append(myAnnotation.name() + ",");
-						String value = "";
-						if (field.get(o) != null) {
-							value = (String) (field.get(o));
-						}
-						insertValue.append("'" + value + "'" + ",");
-						// pk 免更新
-						if (!myAnnotation.name().equals(pkName)) {
-							updateFieldWithValue.append(myAnnotation.name() + "=" + "'" + value + "',");
-						} else {
-							whereStringForUpdatePkField = " where " + pkName + "='" + value + "'";
-						}
-
-					}
-				}
-
-			}
-
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		String instf = insertField.toString().replaceAll(",$", "");
-		String instv = insertValue.toString().replaceAll(",$", "");
-		String up = updateFieldWithValue.toString().replaceAll(",$", "");
-		m.put(DbProcessType.INSERT, "INSERT INTO  " + tableName + "  (" + instf + ") VALUES (" + instv + " )");
-		m.put(DbProcessType.UPDATE, "UPDATE  " + tableName + "  SET " + up + whereStringForUpdatePkField);
-		return m;
 	}
 
 	public static Field[] getFields(final Object o) {

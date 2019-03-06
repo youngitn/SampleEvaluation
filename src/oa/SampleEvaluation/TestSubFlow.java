@@ -2,8 +2,8 @@ package oa.SampleEvaluation;
 
 import jcx.db.talk;
 import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.SampleEvaluation.subflowbuilder.SubFlowBuilder;
-import oa.SampleEvaluation.subflowbuilder.TpFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 
 public class TestSubFlow {

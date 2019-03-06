@@ -27,7 +27,10 @@ public class SampleEvaluationCheck extends SampleEvaluation {
 	}
 
 	public String getOwnPno() {
-		return ownPno;
+		if (this.ownPno.length() == 0) {
+			return buildOwnPno(this.getPno());
+		}
+		return this.ownPno;
 	}
 
 	public void setOwnPno(String ownPno) {

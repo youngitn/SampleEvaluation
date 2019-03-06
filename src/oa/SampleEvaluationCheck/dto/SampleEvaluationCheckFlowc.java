@@ -62,4 +62,5 @@ public class SampleEvaluationCheckFlowc implements  Flowc,Serializable {
 	public void setfInpInfo(String fInpInfo) {
 		this.fInpInfo = fInpInfo;
 	}
+
 }

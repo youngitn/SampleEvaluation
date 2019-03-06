@@ -9,6 +9,8 @@ import oa.SampleEvaluation.common.SyncData;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.subflowbuilder.builder.CheckFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
 import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
 import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
 import oa.global.BaseDao;
@@ -31,7 +33,9 @@ public class StartCheckFlow extends HprocImpl {
 			return arg0;
 		}
 		// if ("1".equals(isCheckValue)) {
-		if ("".equals(docCtrlerCheck) || "".equals(qcBoss)) {
+		SubFlowBuilder sfb = null;
+		sfb = new CheckFlowBuilder();
+		if (!sfb.isReady(this)) {
 			message("請驗流程中之文管人員與品保課長欄位皆不得為空");
 			return arg0;
 		}
@@ -41,12 +45,12 @@ public class StartCheckFlow extends HprocImpl {
 		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		daoservice.update(se);
 		// start sub flow
-		SubFlowBuilder sfb = null;
+
 		String mailTitle = "簽核通知：" + this.getFunctionName();
 
 		ck = (SampleEvaluationCheck) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheck(), this);
 		ck.setOwnPno(ck.getPno() + "CHECK");
-		sfb = new CheckFlowBuilder();
+
 		sfb.setMainDto(ck);
 		sfb.setTalk(t);
 		sfb.construct();

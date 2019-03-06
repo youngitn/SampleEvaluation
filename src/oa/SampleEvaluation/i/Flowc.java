@@ -20,4 +20,5 @@ public interface Flowc {
 	public String getfInpInfo();
 
 	public void setfInpInfo(String fInpInfo);
+
 }

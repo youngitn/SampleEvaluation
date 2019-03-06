@@ -64,7 +64,7 @@ public class Query {
 	}
 
 	/**
-	 * Q dep no in sql where.
+	 * 加入部門代號至SQL查詢條件字串
 	 *
 	 * @param depno [String]
 	 * @return [String]
@@ -81,7 +81,7 @@ public class Query {
 	}
 
 	/**
-	 * Sets the now flow state and now sign people to field.
+	 * 取得目前簽核人與簽核狀態
 	 *
 	 * @param pno [String]
 	 * @return [String]
@@ -120,7 +120,7 @@ public class Query {
 	}
 
 	/**
-	 * Sets the number of overdue days to field.
+	 * 逾期天數計算
 	 *
 	 * @param appDate [String]
 	 * @param urgency [String]
@@ -147,18 +147,18 @@ public class Query {
 	}
 
 	/**
-	 * Sets the info to 2 D string array result.
-	 *
+	 * 對查詢結果二維陣列進行所需資料處理&置換
+	 * 處理欄位:簽核狀態,逾期天數
 	 * @param result [String[][]]
 	 * @return [String[][]]
 	 * @throws Exception the exception
 	 */
 	private String[][] addInfoToResult(String[][] result) throws Exception {
-		int stateFieldIndex = 6;
-		int numberOfOverdueDaysFieldIndex = 5;
-		int pnoFieldIndex = 0;
-		int appDateFieldIndex = 4;
-		int urgencyFieldIndex = 3;
+		int stateFieldIndex = 6;//簽核狀態顯示於查詢結果第7欄
+		int numberOfOverdueDaysFieldIndex = 5;//逾期天數顯示於於查詢結果第6欄
+		int pnoFieldIndex = 0; //單號,位於查詢結果第1欄
+		int appDateFieldIndex = 4;//逾期天數會用到申請日期資料,位於查詢結果第5欄
+		int urgencyFieldIndex = 3;//逾期天數會用到急迫性資料,位於查詢結果第4欄
 		String overdueDays = "";
 		String appDate = "";
 		String urgency = "";
@@ -188,7 +188,7 @@ public class Query {
 	}
 
 	/**
-	 * Checks if is user got right.
+	 * 判斷目前登入使用者的權限
 	 *
 	 * @param pno       [String]
 	 * @param applicant [String]

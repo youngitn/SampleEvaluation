@@ -12,11 +12,24 @@ import jcx.db.talk;
 import oa.global.annotation.dbTable;
 import oa.global.annotation.xmaker;
 
+/**
+ * 根據DTO進行資料庫操作的方法集合
+ * 
+ * @author u52116
+ *
+ */
 public abstract class BaseDao {
 
 	protected talk t;
 	protected Class clazz;
 
+	/**
+	 * 將傳入的DTO進行INSERT動作.
+	 * 
+	 * @param o
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	public void add(final Object o) throws SQLException, Exception {
 
 		HashMap<DbProcessType, String> m = DtoUtil.getSqlStringForDbCreateAndUpdate(o);
@@ -24,7 +37,7 @@ public abstract class BaseDao {
 	}
 
 	/**
-	 * 更新資料
+	 * 將傳入的DTO進行資料更新
 	 * 
 	 * @param o
 	 * @throws SQLException
@@ -36,7 +49,7 @@ public abstract class BaseDao {
 	}
 
 	/**
-	 * 資料存在進行更新<br>
+	 * 如果資料存在則進行更新<br>
 	 * 否則新增.
 	 * 
 	 * @param o
@@ -86,7 +99,8 @@ public abstract class BaseDao {
 	}
 
 	/**
-	 * 根據條件進行查詢
+	 * 根據傳入SQL條件字串進行查詢<br>
+	 * condition字串需以"WHERE"開頭.<br>
 	 * 
 	 * @param condition
 	 * @return
@@ -98,12 +112,13 @@ public abstract class BaseDao {
 	}
 
 	/**
-	 * 代入SQL條件執行主查詢,
-	 * 回傳二維陣列資料,
-	 * 每筆資料Sing[n][x=比照dto屬性宣告順序]
+	 * 代入SQL條件執行主查詢,<br>
+	 * 回傳二維陣列資料,<br>
+	 * 每筆資料Sing[n][x=比照dto屬性宣告順序]<br>
+	 * condition字串需以"WHERE"開頭.<br>
 	 * 
 	 * @param condition [String]
-	 * @return String[][] 
+	 * @return String[][]
 	 * @throws SQLException
 	 * @throws Exception
 	 */

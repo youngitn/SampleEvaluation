@@ -59,6 +59,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				// 流程畫面在各關卡的初始化switch處理方法
 				switchByStateForFlowInit(FlowState.valueOf(getState().trim()));
 
+				//判斷子流程checkBox勾選狀況作介面調整
 				setTextAndCheckIsSubFlowRunning();
 
 				break;

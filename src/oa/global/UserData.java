@@ -3,7 +3,11 @@ package oa.global;
 import java.sql.SQLException;
 
 import jcx.db.talk;
-
+/**
+ * 用於填入表單的申請人基本資料欄位.
+ * @author u52116
+ *
+ */
 public class UserData {
 	private String cpnyid, hecname, dep_no, ext, dep_name, empid;
 

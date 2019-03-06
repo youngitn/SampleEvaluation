@@ -6,12 +6,10 @@ import oa.SampleEvaluation.common.SyncData;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
-import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
-import oa.SampleEvaluationTest.dto.SampleEvaluationTest;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
-import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
+import oa.SampleEvaluation.subflowbuilder.builder.CheckFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.TestFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
 
 public class ApproveV1 extends bProcFlow {
 
@@ -46,6 +44,18 @@ public class ApproveV1 extends bProcFlow {
 			break;
 		case 組長:
 			SyncData.subFlowSync(t, this);
+
+			SubFlowBuilder sfbCheck = new CheckFlowBuilder();
+			SubFlowBuilder sfbTp = new TpFlowBuilder();
+			SubFlowBuilder sfbTest = new TestFlowBuilder();
+			if (!sfbCheck.isReady(this) || !sfbTp.isReady(this) || !sfbTest.isReady(this)) {
+				message("請檢查子流程是否有未填寫欄位");
+				ret = false;
+			}
+			if (getValue("QR_NO") == null || "".equals(getValue("").trim())) {
+				message("請輸入QR號碼");
+				ret = false;
+			}
 			break;
 		case 受理單位主管分案:
 			// 更新主表分案人欄位

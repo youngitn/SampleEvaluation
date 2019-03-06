@@ -3,12 +3,13 @@ package oa.SampleEvaluation.query.dto;
 import oa.SampleEvaluation.common.BaseDto;
 import oa.global.annotation.xmaker;
 /**
- * 各屬性對應查詢畫面可輸入欄位
- * xmaker(
- * name = "表單欄位名稱", 
- * adapDbFieldName = "資料表欄位名稱",
- * isDateStart/isDateEnd = 該屬性是否對應日期起/迄日,
- * isFlowStatus = 該屬性是否對應簽核狀態查詢欄位
+ * 各屬性對應表單查詢頁面中,查詢條件欄位<br>
+ * 
+ * xmaker(<br>
+ * name = "表單欄位名稱", <br>
+ * adapDbFieldName = "資料表欄位名稱",<br>
+ * isDateStart/isDateEnd = 該屬性是否對應日期起/迄日,<br>
+ * isFlowStatus = 該屬性是否對應簽核狀態查詢欄位<br>
  * 
  * )
  * @author u52116

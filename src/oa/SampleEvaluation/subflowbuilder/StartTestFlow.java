@@ -9,6 +9,8 @@ import oa.SampleEvaluation.common.SyncData;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.TestFlowBuilder;
 import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
 import oa.SampleEvaluationTest.dto.SampleEvaluationTest;
 import oa.global.BaseDao;
@@ -28,7 +30,9 @@ public class StartTestFlow extends HprocImpl {
 			message("已執行過試車流程");
 			return arg0;
 		}
-		if ("".equals(coordinator)) {
+		SubFlowBuilder sfb = null;
+		sfb = new TestFlowBuilder();
+		if (!sfb.isReady(this)) {
 			message("試車流程中之配合人員不得為空");
 			return arg0;
 		}
@@ -38,12 +42,12 @@ public class StartTestFlow extends HprocImpl {
 		daoservice.update(se);
 
 		// start sub flow
-		SubFlowBuilder sfb = null;
+
 		String mailTitle = "簽核通知：" + this.getFunctionName();
 
 		test = (SampleEvaluationTest) DtoUtil.setFormDataIntoDto(new SampleEvaluationTest(), this);
 		test.setOwnPno(test.getPno() + "TEST");
-		sfb = new TestFlowBuilder();
+
 		sfb.setMainDto(test);
 		sfb.setTalk(t);
 		sfb.construct();
@@ -59,7 +63,7 @@ public class StartTestFlow extends HprocImpl {
 	}
 
 	public void setNeedValue() throws Throwable {
-		isTestValue = getValue("IS_CHECK").trim();
+		isTestValue = getValue("IS_TEST").trim();
 		coordinator = getValue("COORDINATOR").trim();
 		t = getTalk();
 	}

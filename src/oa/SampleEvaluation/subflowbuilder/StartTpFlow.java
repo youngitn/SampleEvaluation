@@ -9,6 +9,8 @@ import oa.SampleEvaluation.common.SyncData;
 import oa.SampleEvaluation.controller.HprocImpl;
 import oa.SampleEvaluation.dao.SampleEvaluationService;
 import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
+import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
 import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
 import oa.SampleEvaluationTp.dto.SampleEvaluationTp;
 import oa.global.BaseDao;
@@ -31,7 +33,9 @@ public class StartTpFlow extends HprocImpl {
 			return arg0;
 		}
 		// if ("1".equals(isTrialProdValue)) {
-		if ("".equals(docCtrlerTp) || "".equals(assessor) || "".equals(labExe)) {
+		SubFlowBuilder sfb = null;
+		sfb = new TpFlowBuilder();
+		if (!sfb.isReady(this)) {
 			message("試製流程中之文管人員,試製人員,檢驗人員欄位皆不得為空");
 			return arg0;
 		}
@@ -39,19 +43,19 @@ public class StartTpFlow extends HprocImpl {
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
 		SampleEvaluation se = (SampleEvaluation) DtoUtil.setFormDataIntoDto(new SampleEvaluation(), this);
 		daoservice.update(se);
-		SubFlowBuilder sfb = null;
+
 		String mailTitle = "簽核通知：" + this.getFunctionName();
 
 		tp = (SampleEvaluationTp) DtoUtil.setFormDataIntoDto(new SampleEvaluationTp(), this);
-		tp.setOwnPno(tp.getPno() + "TP");
-		sfb = new TpFlowBuilder();
+		tp.setOwnPno(tp.getOwnPno());
+
 		sfb.setMainDto(tp);
 		sfb.setTalk(t);
 		sfb.construct();
 		SyncData.subFlowSync(t, this);
 		// 有請驗流程 寄出通知信
 		String title = mailTitle + "_試製流程";
-		MailToolInApprove.sendSubFlowMail(new BaseService(this), docCtrlerTp, tp, title);
+		MailToolInApprove.sendSubFlowMail(new BaseService(this), assessor, tp, title);
 		message("已執行");
 		setValue("START_TP_FLOW_TEXT", "已執行!");
 		setEditable("START_TP_FLOW", false);
