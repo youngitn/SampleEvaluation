@@ -3,8 +3,8 @@ package oa.SampleEvaluation.common;
 import java.sql.SQLException;
 
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluation.dao.SampleEvaluationService;
-import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.model.SampleEvaluationPO;
+import oa.SampleEvaluation.service.SampleEvaluationService;
 import oa.global.BaseDao;
 import oa.global.UIHidderString;
 
@@ -41,7 +41,7 @@ public class Detail {
 		String pno = controller.getValue("QUERY_LIST.PNO");
 
 		BaseDao bao = new SampleEvaluationService(controller.getTalk());
-		SampleEvaluation s = (SampleEvaluation) bao.findById(pno);
+		SampleEvaluationPO s = (SampleEvaluationPO) bao.findById(pno);
 		s.setDataToForm(controller);
 		// getValue必須在setDtoDataToForm之後,否則抓到的都是空值
 		String appDate = controller.getValue("APP_DATE");

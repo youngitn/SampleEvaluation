@@ -5,11 +5,10 @@ import java.util.Map;
 
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.Detail;
-import oa.SampleEvaluation.enums.Actions;
-import oa.SampleEvaluation.query.Query;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.SampleEvaluation.enums.ActionsEnum;
+import oa.SampleEvaluation.model.QueryConditionDTO;
+import oa.SampleEvaluation.service.QueryResultService;
+import oa.SampleEvaluation.service.TempSaveService;
 
 /**
  * 
@@ -22,18 +21,28 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	@Override
 	public String action(String arg0) throws Throwable {
-		// é¡åˆ¥å±¬æ€§åˆå§‹åŒ–è¨­å®š
-		// setProperty();
+
+		// Ãş§OÄİ©Êªì©l¤Æ³]©w
 		try {
-			// æŒ‰éˆ•å‹•ä½œè™•ç†é€²å…¥é»
-			switch (Actions.valueOf(getActionName(getName()))) {
+			// «ö¶s°Ê§@³B²z¶i¤JÂI
+
+			switch (ActionsEnum.valueOf(getActionName(getName()))) {
 			case QUERY_CLICK:
-				Query query = new Query(this);
-				String[][] list = query.getResultByQueryCondition().getResult();
-				if (list == null || list.length <= 0) {
-					message("æŸ¥ç„¡ç´€éŒ„");
+
+				// ±qµe­±¨ú±o¬d¸ß±ø¥ó¨Ã¶ë¤JQueryConditionDto
+				QueryConditionDTO qcDto = new QueryConditionDTO();
+				qcDto.getFormData(this);
+				// ±N«e¤@¨BÆJ¨ú±oªºQueryConditionDtoÂà´«¦¨SQL WHERE±Ô­z¦¡
+				String sql = qcDto.toSql();
+
+				// ¹êÅé¤ÆdaoªA°È,¦]µ²ªGÄæ¦ì»İ²Å¦XQueryResultDtoªºÄİ©Ê©Ò©w¸q,©Ò¥H¹êÅé¤Æ¬Û¹ïÀ³Dao.
+				QueryResultService resultService = new QueryResultService(this);
+				String[][] ret = (String[][]) resultService.getResult(sql);
+
+				if (ret == null || ret.length <= 0) {
+					message("¬dµL¬ö¿ı");
 				}
-				setTableData("QUERY_LIST", list);
+				setTableData("QUERY_LIST", ret);
 				break;
 			case SAVE_CLICK:
 				doSave();
@@ -43,39 +52,46 @@ public class SampleEvaluationActionController extends HprocImpl {
 				detail.show();
 				setTextAndCheckIsSubFlowRunning();
 				break;
+			case TEMP_CLICK:
+				new TempSaveService().save(this);
+				
+				break;
+			case LOAD_TEMP_CLICK:
+				new TempSaveService().load(this);
+				
+				break;
 			default:
 				break;
 			}
 		} catch (EnumConstantNotPresentException e) {
-			message("enum:Actions.clss ç™¼ç”Ÿç„¡æ³•è¾¨è­˜çš„æ„å¤–");
+			message("enum:Actions.clss µo¥ÍµLªk¿ëÃÑªº·N¥~");
 		}
 		return null;
 
 	}
 
 	/**
-	 * èµ·å–®
+	 * °_³æ
 	 * 
 	 * @throws Throwable
 	 */
 	private void doSave() throws Throwable {
-		// æ‰‹å‹•å»ºç«‹å¿…å¡«æ¬„ä½è³‡æ–™ (æ¬„ä½å,æ¬„ä½æ¨™é¡Œ)
+		// ¤â°Ê«Ø¥ß¥²¶ñÄæ¦ì¸ê®Æ (Äæ¦ì¦W,Äæ¦ì¼ĞÃD)
 		Map<String, String> fieldMap = new HashMap<String, String>();
-		fieldMap.put("APPLICANT", "ç”³è«‹äºº");
-		fieldMap.put("APP_TYPE", "ç”³è«‹é¡å‹");
-		fieldMap.put("RECEIPT_UNIT", "å—ç†å–®ä½");
-		fieldMap.put("URGENCY", "æ€¥è¿«æ€§");
-		fieldMap.put("MATERIAL", "åŸç‰©æ–™åç¨±");
-		fieldMap.put("AB_CODE", "ABç·¨è™Ÿ");
-		fieldMap.put("MFR", " è£½é€ å•†");
-		fieldMap.put("MFG_LOT_NO", "è£½é€ æ‰¹è™Ÿ");
-		fieldMap.put("SUPPLIER", "ä¾›æ‡‰å•†");
-		fieldMap.put("QTY", "æ•¸é‡");
-		fieldMap.put("UNIT", "å–®ä½");
-		fieldMap.put("SAP_CODE", "SAPç‰©æ–™ç·¨è™Ÿ");
-		// æ–°å¢ä¸éœ€cdoç­‰é¡å¤–å…¶ä»–è³‡æ–™
+		fieldMap.put("APPLICANT", "¥Ó½Ğ¤H");
+		fieldMap.put("APP_TYPE", "¥Ó½ĞÃş«¬");
+		fieldMap.put("RECEIPT_UNIT", "¨ü²z³æ¦ì");
+		fieldMap.put("URGENCY", "«æ­¢©Ê");
+		fieldMap.put("MATERIAL", "­ìª«®Æ¦WºÙ");
+		fieldMap.put("AB_CODE", "AB½s¸¹");
+		fieldMap.put("MFR", " »s³y°Ó");
+		fieldMap.put("MFG_LOT_NO", "»s³y§å¸¹");
+		fieldMap.put("SUPPLIER", "¨ÑÀ³°Ó");
+		fieldMap.put("QTY", "¼Æ¶q");
+		fieldMap.put("UNIT", "³æ¦ì");
+		fieldMap.put("SAP_CODE", "SAPª«®Æ½s¸¹");
 		AddUtil addUtil = new AddUtil(this);
-		addUtil.emptyCheck(fieldMap);
+		addUtil.doAdd(fieldMap);
 
 	}
 

@@ -1,6 +1,3 @@
 eclipse.preferences.version=1
-encoding//src/oa/SampleEvaluation/ShowSignHistory.java=UTF-8
-encoding//src/oa/SampleEvaluation/Test.java=UTF-8
-encoding//src/oa/SampleEvaluation/TestTp.java=UTF-8
-encoding//src/oa/SampleEvaluation/controller/SampleEvaluationActionController.java=UTF-8
-encoding//src/oa/SampleEvaluation/flow/approve/ApproveV1.java=UTF-8
+encoding//src/oa/SampleEvaluation/test/Test.java=UTF-8
+encoding//src/oa/SampleEvaluation/test/TestTp.java=UTF-8

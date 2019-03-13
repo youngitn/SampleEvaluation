@@ -3,8 +3,10 @@ package oa.global;
 import java.sql.SQLException;
 
 import jcx.db.talk;
+
 /**
  * 用於填入表單的申請人基本資料欄位.
+ * 
  * @author u52116
  *
  */
@@ -35,17 +37,6 @@ public class UserData {
 	public String getEmpid() {
 		return this.empid;
 	}
-
-//	public static UserData getInstance(String empid,talk t) throws SQLException, Exception {
-//		if (instance == null) {
-//			synchronized (UserData.class) {
-//				if (instance == null) {
-//					instance = new UserData(empid,t);
-//				}
-//			}
-//		}
-//		return instance;
-//	}
 
 	/**
 	 * @return the cpnyid

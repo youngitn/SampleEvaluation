@@ -27,24 +27,17 @@ public class AddUtil {
 	}
 
 	/**
-	 * 欄位檢核，只會檢查是否空白，回傳所有空白欄位標題<br>
+	 * 檢查必填欄位&儲存資料<br>
 	 * 
 	 * @param fieldMap
-	 * @return 
+	 * @return
 	 * @return 回傳List
 	 * @throws Exception
 	 */
-	public void emptyCheck(Map<String, String> fieldMap) throws Exception {
+	public void doAdd(Map<String, String> fieldMap) throws Exception {
 
-		ArrayList<String> ret = new ArrayList<String>();
-		String value = null;
-		for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
-			value = service.getValue(entry.getKey()).trim();
-			if (value != null && value.equals("")) {
-				ret.add(fieldMap.get(entry.getKey()));
-			}
+		ArrayList<String> ret = getValidateEmptyField(fieldMap);
 
-		}
 		if (ret != null && ret.size() > 0) {
 			service.message("以下欄位請做選擇或輸入:" + ret);
 		} else {
@@ -56,12 +49,26 @@ public class AddUtil {
 				// DMAKER 內建ADD功能 需將資料塞進去表單欄位才吃的到
 				service.setValue("PNO", uuid);
 				service.fileItemSetChecker();
+				
 				// confirm = true 控制是否真的送出
 				service.addScript("document.getElementById('em_add_button-box').click();");
 
 			}
 
 		}
+	}
+
+	public ArrayList<String> getValidateEmptyField(Map<String, String> fieldMap) {
+		ArrayList<String> ret = new ArrayList<String>();
+		String value = null;
+		for (Map.Entry<String, String> entry : fieldMap.entrySet()) {
+			value = service.getValue(entry.getKey()).trim();
+			if (value != null && value.equals("")) {
+				ret.add(fieldMap.get(entry.getKey()));
+			}
+
+		}
+		return ret;
 	}
 
 	public String getUUID(String tableName) throws Exception {

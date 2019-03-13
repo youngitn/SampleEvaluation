@@ -12,7 +12,7 @@ import jcx.jform.bNotify;
 import oa.SampleEvaluation.common.MailBody;
 import oa.SampleEvaluation.common.MailMan;
 import oa.SampleEvaluation.common.MailToolInApprove;
-import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.global.EmailUtil;
 
 public abstract class BaseEmailNotify extends bNotify {
@@ -23,27 +23,26 @@ public abstract class BaseEmailNotify extends bNotify {
 	protected EmailUtil emailUtil;
 	protected BaseService service;
 	protected talk t;
+	protected SampleEvaluationPO se;
+	protected String content;
 
-	public void actionPerformed(String value) throws Throwable {
-		// 當表單進入流程狀態直屬主管時,會執行本段程式
-		// 可用以寄發Email通知等等與資料庫無關的做業
-		// 如果要異動資料庫，建議放在流程預處理程序中，用 addToTransaction(sql); 以確保資料庫異動一致.
-		// MailService
-
-		// 大部分表單動作皆委派給service
-		// try {
+	public void initialization() {
 		service = new BaseService(this);
 		emailUtil = new EmailUtil(service);
 		mailService = new MailService(service);
 		setIsLastGate();
-		// SampleEvaluation se = new SampleEvaluation();
-		SampleEvaluation se = new SampleEvaluation();
+		se = new SampleEvaluationPO();
 		se.getFormData(this);
-		// se.setAllValue(service);
 		this.t = this.getTalk();
 		if (this.t == null) {
 			this.t = getTalk();
 		}
+	}
+
+	public void actionPerformed(String value) throws Throwable {
+
+		// try {
+		initialization();
 		// 建立內容
 		String content = buildContent(se);
 		content += "" + emailUtil.getHisOpinion() + Mail.HTML_LINE_BREAK;
@@ -66,10 +65,7 @@ public abstract class BaseEmailNotify extends bNotify {
 		MailMan m = new MailMan(mailService);
 		String[] mailTo = new String[usr.size()];
 		m.send(usr.toArray(mailTo), mBody);
-//		} catch (NullPointerException e) {
-//			System.out.println(e.getMessage());
-//			message("BaseEmailNotify.class:有物件為null,因對其進行操作而產生錯誤!" + e.toString());
-//		}
+
 	}
 
 	protected abstract void changeMailToUsr();
@@ -100,7 +96,7 @@ public abstract class BaseEmailNotify extends bNotify {
 		isLastGate = false;
 	}
 
-	public abstract String buildContent(SampleEvaluation se) throws SQLException, Exception;
+	public abstract String buildContent(SampleEvaluationPO se) throws SQLException, Exception;
 
 	protected String emailTitleBuilderForFinalGate() {
 

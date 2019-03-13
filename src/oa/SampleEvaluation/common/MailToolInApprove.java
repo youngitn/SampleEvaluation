@@ -1,10 +1,13 @@
 package oa.SampleEvaluation.common;
 
+import java.sql.SQLException;
+
 import com.ysp.service.BaseService;
 import com.ysp.service.MailService;
 
-import oa.SampleEvaluation.dto.SampleEvaluation;
+import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.SampleEvaluation.notify.EmailNotify;
+import oa.global.MailString;
 
 public class MailToolInApprove {
 
@@ -28,7 +31,7 @@ public class MailToolInApprove {
 		return title + service.getFunctionName() + "( 單號：" + service.getValue("PNO") + " )";
 	}
 
-	public static void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluation dto, String title)
+	public static void sendSubFlowMail(BaseService service, String mailTo, SampleEvaluationPO dto, String title)
 			throws Exception {
 		MailService mailService = new MailService(service);
 		// Mail to
@@ -38,7 +41,22 @@ public class MailToolInApprove {
 		// 內容
 		EmailNotify en = new EmailNotify();
 		en.setService(service);
-		String content = en.getContent(dto);
+		String content = en.buildContent(dto);
+		new MailMan(mailService).send(usr, new MailBody(title, content));
+	}
+
+	public static void sendNotifyToApplicant(BaseService service, String mailTo, SampleEvaluationPO dto, String title)
+			throws SQLException, Exception {
+		MailService mailService = new MailService(service);
+		// Mail to
+		String[] ret = mailTo.trim().split(" ");
+		String[] usr = { service.getEmail(ret[0]) };
+
+		// 內容
+		EmailNotify en = new EmailNotify();
+		en.setService(service);
+		String content = en.buildContent(dto);
+		content = content.substring(content.indexOf("=="));
 		new MailMan(mailService).send(usr, new MailBody(title, content));
 	}
 }

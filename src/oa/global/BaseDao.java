@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.apache.commons.lang.ArrayUtils;
 
 import jcx.db.talk;
+import oa.SampleEvaluation.model.QueryConditionDTO;
 import oa.global.annotation.dbTable;
 import oa.global.annotation.xmaker;
 
@@ -124,6 +125,16 @@ public abstract class BaseDao {
 	 */
 	public String[][] getResultBySqlWhereString(String condition) throws SQLException, Exception {
 		return DtoUtil.getDbDataTo2DStringArray(clazz, t, condition);
+	}
+
+	/**
+	 * Not empty.
+	 *
+	 * @param s [String]
+	 * @return true, if successful
+	 */
+	public boolean notEmpty(String s) {
+		return (s != null && s.length() > 0);
 	}
 
 }

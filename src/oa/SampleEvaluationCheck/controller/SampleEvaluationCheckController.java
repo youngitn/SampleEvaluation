@@ -1,10 +1,10 @@
 package oa.SampleEvaluationCheck.controller;
 
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
-import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowStateEnum;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 
 /**
  * 
@@ -30,7 +30,7 @@ public class SampleEvaluationCheckController extends HprocImpl {
 		setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
 
 		System.out.println("getState----->" + getState());
-		switch (FlowState.valueOf(getState().trim())) {
+		switch (FlowStateEnum.valueOf(getState().trim())) {
 		case 文管人員:
 			setEditable("NOTIFY_NO_CHECK", true);
 			setEditable("NOTIFY_NO_TRIAL_PROD", true);

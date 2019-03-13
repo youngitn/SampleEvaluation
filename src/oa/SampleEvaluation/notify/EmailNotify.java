@@ -4,16 +4,16 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import jcx.util.convert;
-import oa.SampleEvaluation.dto.SampleEvaluation;
-import oa.SampleEvaluation.enums.AppType;
-import oa.SampleEvaluation.enums.Urgency;
+import oa.SampleEvaluation.enums.AppTypeEnum;
+import oa.SampleEvaluation.enums.UrgencyEnum;
+import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.global.MailString;
 import oa.global.UserData;
 
 public class EmailNotify extends BaseEmailNotify {
 
 	@Override
-	public String buildContent(SampleEvaluation se) throws SQLException, Exception {
+	public String buildContent(SampleEvaluationPO se) throws SQLException, Exception {
 		try {
 			if (t == null) {
 				throw new ArithmeticException("talk 為空");
@@ -40,8 +40,8 @@ public class EmailNotify extends BaseEmailNotify {
 		content += "單號：" + se.getPno() + MailString.HTML_LINE_BREAK;
 		content += "申請日期：" + convert.FormatedDate(se.getAppDate(), "/") + MailString.HTML_LINE_BREAK;
 		content += "申請人：" + depName + " " + name + "(" + appUser.getEmpid() + ")" + MailString.HTML_LINE_BREAK;
-		content += "申請類型：" + AppType.getAppType(se.getAppType()) + MailString.HTML_LINE_BREAK;
-		content += "急迫性：" + Urgency.getUrgency(se.getUrgency()) + MailString.HTML_LINE_BREAK;
+		content += "申請類型：" + AppTypeEnum.getAppType(se.getAppType()) + MailString.HTML_LINE_BREAK;
+		content += "急迫性：" + UrgencyEnum.getUrgency(se.getUrgency()) + MailString.HTML_LINE_BREAK;
 		content += "物料名稱：" + se.getMaterial() + MailString.HTML_LINE_BREAK;
 
 		content += "受理單位：" + emailUtil.getDepName(se.getReceiptUnit()) + MailString.HTML_LINE_BREAK;
@@ -70,7 +70,7 @@ public class EmailNotify extends BaseEmailNotify {
 		this.isLastGate = false;
 	}
 
-	protected String buildApproveConfirmMsgStr(SampleEvaluation se) throws IOException {
+	protected String buildApproveConfirmMsgStr(SampleEvaluationPO se) throws IOException {
 		String alertStr = "";
 		String isCheckStr = se.getIsCheck();
 		String isTrialPrdStr = se.getIsTrialProduction();
@@ -92,11 +92,7 @@ public class EmailNotify extends BaseEmailNotify {
 		return alertStr;
 	}
 
-	public String getContent(SampleEvaluation dto) throws SQLException, Exception {
-
-		return buildContent(dto);
-	}
-
+	
 	@Override
 	protected void changeMailToUsr() {
 		// TODO Auto-generated method stub

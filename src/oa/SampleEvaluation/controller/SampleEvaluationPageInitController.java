@@ -3,11 +3,11 @@ package oa.SampleEvaluation.controller;
 import java.sql.SQLException;
 
 import oa.SampleEvaluation.common.FormInitUtil;
-import oa.SampleEvaluation.enums.PageInitType;
-import oa.SampleEvaluation.flow.approve.gateEnum.FlowState;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.SampleEvaluation.enums.FlowStateEnum;
+import oa.SampleEvaluation.enums.PageInitTypeEnum;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.UIHidderString;
 
 /**
@@ -27,7 +27,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		addScript(UIHidderString.hideDmakerAddButton());
 		String actionObjName = getActionName(getName()).trim();
 		try {
-			switch (PageInitType.valueOf(actionObjName)) {
+			switch (PageInitTypeEnum.valueOf(actionObjName)) {
 			case QUERY_PAGE_INIT:
 				init.doQueryPageProcess();
 				break;
@@ -57,7 +57,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				}
 
 				// 流程畫面在各關卡的初始化switch處理方法
-				switchByStateForFlowInit(FlowState.valueOf(getState().trim()));
+				switchByStateForFlowInit(FlowStateEnum.valueOf(getState().trim()));
 
 				//判斷子流程checkBox勾選狀況作介面調整
 				setTextAndCheckIsSubFlowRunning();
@@ -74,7 +74,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 
 	}
 
-	private void switchByStateForFlowInit(FlowState en) {
+	private void switchByStateForFlowInit(FlowStateEnum en) {
 
 		switch (en) {
 		case 課主管:

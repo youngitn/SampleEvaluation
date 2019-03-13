@@ -6,15 +6,12 @@ import java.util.ArrayList;
 import com.ysp.util.DateTimeUtil;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.dto.SampleEvaluation;
 import oa.SampleEvaluation.i.Flowc;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisService;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
-import oa.global.BaseDao;
+import oa.SampleEvaluation.model.SampleEvaluationPO;
 
 public abstract class SubFlowBuilder {
 
-	protected SampleEvaluation se;
+	protected SampleEvaluationPO se;
 	protected talk t;
 	protected String startGateName;
 	protected ArrayList<Boolean> al = new ArrayList<Boolean>();
@@ -24,7 +21,7 @@ public abstract class SubFlowBuilder {
 	
 	public abstract void insertSubMainData() throws Exception;
 
-	public void setMainDto(SampleEvaluation se) {
+	public void setMainDto(SampleEvaluationPO se) {
 		this.se = se;
 	}
 

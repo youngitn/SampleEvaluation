@@ -8,7 +8,6 @@ import jcx.jform.bRule;
 public class Rule extends bRule {
 	public Vector<String> getIDs(String value) throws Throwable {
 		// 回傳值為 Vector contails 符合這條規格的帳號
-		// value 為 "不動產、廠房及設備異動申請單_取得"
 		String state = getState();
 		String depNo = getData("RECEIPT_UNIT").trim(); // 受理單位號碼
 

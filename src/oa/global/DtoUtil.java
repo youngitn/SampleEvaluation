@@ -19,7 +19,6 @@ import jcx.db.talk;
 import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
-import oa.SampleEvaluation.query.QueryStatus;
 import oa.global.annotation.dbTable;
 import oa.global.annotation.xmaker;
 
@@ -43,11 +42,11 @@ public class DtoUtil {
 	 * @return [String]
 	 */
 	public static String queryConditionDtoConvertToSqlWhereString(Object dto) {
-	
+
 		StringBuilder sqlWhere = new StringBuilder();
 		String status = "";
 		try {
-	
+
 			Field[] fld = getFields(dto);
 			for (Field field : fld) {
 				field.setAccessible(true);
@@ -57,7 +56,7 @@ public class DtoUtil {
 						xmaker myAnnotation = (xmaker) annotation;
 						String adapName = myAnnotation.mappingDbFieldName();
 						String val = (String) field.get(dto);
-	
+
 						if (!"".equals(val) && !(null == val)) {
 							// 該欄位是日期起日則組合對應字串
 							if (myAnnotation.isDateStart()) {
@@ -66,30 +65,30 @@ public class DtoUtil {
 							else if (myAnnotation.isDateEnd()) {
 								sqlWhere.append(adapName).append("<=").append(field.get(dto)).append(" AND ");
 							}
-							// 該欄位是簽核狀態則使用QueryStatus.getFlowStateSqlStrByQueryCondition("該欄value")
+							// 該欄位是簽核狀態則使用getFlowStateSqlStrByQueryCondition("待處理 or 結案 or 簽核中")
 							// 組出查詢字串
 							else if (myAnnotation.isFlowStatus()) {
-	
-								status = QueryStatus.getFlowStateSqlStrByQueryCondition((String) field.get(dto));
-	
+								// dto為來自客戶端輸入值的查詢條件物件
+								status = getFlowStateSqlStrByQueryCondition((String) field.get(dto));
+
 							} // 其他非特殊欄位皆使用'db欄位名稱 like % 值%'組出字串
 							else if (!"".equals(adapName)) {
 								System.out.println("name: " + myAnnotation.mappingDbFieldName());
 								sqlWhere.append(adapName).append(" like ").append("'%").append(field.get(dto))
 										.append("%'").append(" AND ");
-	
+
 							}
 						}
-	
+
 					}
 				}
-	
+
 			}
-	
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-	
+
 		if (sqlWhere != null && sqlWhere.length() > 0) {
 			sqlWhere.insert(0, "WHERE ");
 			int index = sqlWhere.lastIndexOf("AND");
@@ -171,14 +170,14 @@ public class DtoUtil {
 		Object object = null;
 		ResultSet r = null;
 		try {
-	
+
 			Field[] fld = getFields(clazz);
 			// Field[] fld = clazz.getDeclaredFields();
 			r = DtoUtil.getResultSet(clazz, t, pno);
 			while (r.next()) {
 				object = setResultSetToDto(clazz, fld, r);
 			}
-	
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		} finally {
@@ -187,6 +186,15 @@ public class DtoUtil {
 		return object;
 	}
 
+	/**
+	 * Sets the result set to dto.
+	 *
+	 * @param clazz [Class]
+	 * @param fld   [Field[]]
+	 * @param r     [ResultSet]
+	 * @return [Object]
+	 * @throws Exception the exception
+	 */
 	public static Object setResultSetToDto(Class clazz, Field[] fld, ResultSet r) throws Exception {
 		Constructor<?> ctor = clazz.getConstructor();
 		Object object = ctor.newInstance();
@@ -196,10 +204,10 @@ public class DtoUtil {
 			for (Annotation aa : as) {
 				if (aa instanceof xmaker) {
 					// field.set(object, String.valueOf(r.getObject(((xmaker) aa).name())));
-	
+
 					if (((xmaker) aa).isText()) {
 						field.set(object, (String) ((xmaker) aa).name());
-	
+
 					} else if (((xmaker) aa).isFlowStatus()) {
 						field.set(object, "");
 					} else {
@@ -252,22 +260,22 @@ public class DtoUtil {
 	 */
 	public static ArrayList<Object> resultSetToArrayList(ResultSet r, Class<Object> clazz) throws Exception {
 		ArrayList<Object> list = new ArrayList<Object>();
-	
+
 		Field[] fld = getFields(clazz);
 		// Field[] fld = clazz.getDeclaredFields();
 		Constructor<?> ctor = null;
 		Object object = null;
 		Annotation[] as = null;
-	
+
 		while (r.next()) {
 			System.out.println("isNew=YES");
 			ctor = clazz.getConstructor();
 			object = ctor.newInstance();
 			object = setResultSetToDto(clazz, fld, r);
-	
+
 			list.add(object);
 		}
-	
+
 		return list;
 	}
 
@@ -323,7 +331,7 @@ public class DtoUtil {
 	 */
 	public static String[][] arrayListTo2DStringArray(ArrayList<Object> arraylist, Class<Object> clazz)
 			throws Exception {
-	
+
 		Field[] fld = getFields(clazz);
 		// Field[] fld = clazz.getDeclaredFields();
 		String[][] ret = new String[arraylist.size()][fld.length];
@@ -332,7 +340,7 @@ public class DtoUtil {
 		Annotation[] as = null;
 		for (Object object : arraylist) {
 			c = 0;
-	
+
 			for (Field field : fld) {
 				field.setAccessible(true);
 				as = field.getDeclaredAnnotations();
@@ -345,9 +353,9 @@ public class DtoUtil {
 			}
 			rc++;
 		}
-	
+
 		return ret;
-	
+
 	}
 
 	/**
@@ -369,7 +377,7 @@ public class DtoUtil {
 		Annotation[] annotations = null;
 		xmaker myAnnotation = null;
 		try {
-	
+
 			for (Field field : fld) {
 				field.setAccessible(true);
 				annotations = field.getAnnotations();
@@ -388,12 +396,12 @@ public class DtoUtil {
 						} else {
 							whereStringForUpdatePkField = " where " + pkName + "='" + value + "'";
 						}
-	
+
 					}
 				}
-	
+
 			}
-	
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -472,6 +480,12 @@ public class DtoUtil {
 
 	}
 
+	/**
+	 * Gets the Fields.
+	 *
+	 * @param o [Object]
+	 * @return [Field[]]
+	 */
 	public static Field[] getFields(final Object o) {
 
 		return getFields(o.getClass());
@@ -492,6 +506,30 @@ public class DtoUtil {
 			return sonFld;
 		}
 
+	}
+
+	/**
+	 * 根據查詢頁面
+	 * 簽核狀態欄位所選擇的項目(簽核中 已結案 待處理)
+	 * 組相對應SQL查詢條件字串
+	 * @param queryFlowStatus [String]
+	 * @return the flow state sql str by query condition
+	 */
+	public static String getFlowStateSqlStrByQueryCondition(String queryFlowStatus) {
+
+		StringBuilder stateCondition = new StringBuilder();
+		String sc = "";
+		if (!queryFlowStatus.equals("")) {
+			if ("已結案".equals(queryFlowStatus))
+				sc = "= '結案'";
+			else if ("簽核中".equals(queryFlowStatus))
+				sc = "not in ('結案','取消')";
+			else if ("待處理".equals(queryFlowStatus))
+				sc = " = '待處理' ";
+
+			stateCondition.append("AND PNO in (SELECT PNO FROM SAMPLE_EVALUATION_FLOWC WHERE F_INP_STAT " + sc + " )");
+		}
+		return stateCondition.toString();
 	}
 
 }

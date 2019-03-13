@@ -1,7 +1,6 @@
 package oa.SampleEvaluationTest.flow.approve;
 
-//oa/SampleEvaluationTest/flow/approve/Approve
-import oa.SampleEvaluation.flow.approve.BaseSubApprove;
+import oa.SampleEvaluation.flow.BaseSubApprove;
 
 public class Approve extends BaseSubApprove {
 

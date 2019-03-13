@@ -7,12 +7,12 @@ import com.ysp.util.DateTimeUtil;
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.i.Flowc;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcHisService;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckFlowcService;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheck;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowc;
-import oa.SampleEvaluationCheck.dto.SampleEvaluationCheckFlowcHis;
+import oa.SampleEvaluationCheck.model.SampleEvaluationCheckPO;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckFlowcHisService;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckFlowcService;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
+import oa.SampleEvaluationCheck.model.SampleEvaluationCheckFlowcPO;
+import oa.SampleEvaluationCheck.model.SampleEvaluationCheckFlowcHisPO;
 import oa.global.BaseDao;
 
 public class CheckFlowBuilder extends SubFlowBuilder {
@@ -24,15 +24,15 @@ public class CheckFlowBuilder extends SubFlowBuilder {
 
 	@Override
 	public void setAndInsertFlowData() throws SQLException, Exception {
-		insertFlowData(new SampleEvaluationCheckFlowc());
-		insertFlowData(new SampleEvaluationCheckFlowcHis());
+		insertFlowData(new SampleEvaluationCheckFlowcPO());
+		insertFlowData(new SampleEvaluationCheckFlowcHisPO());
 	}
 
 	@Override
 	public void insertSubMainData() throws Exception {
 
 		SampleEvaluationCheckService secs = new SampleEvaluationCheckService(t);
-		SampleEvaluationCheck seCheckDto = (SampleEvaluationCheck) this.se;
+		SampleEvaluationCheckPO seCheckDto = (SampleEvaluationCheckPO) this.se;
 		seCheckDto.setOwnPno(seCheckDto.getOwnPno());
 		// insert check•D¿…
 		secs.upsert(this.se);

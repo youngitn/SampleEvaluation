@@ -1,7 +1,7 @@
 package oa.SampleEvaluationTp.rule;
 
 import jcx.jform.bRule;
-import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowStateEnum;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class Rule extends bRule {
 		String state = getState();
 		Vector<String> id = new Vector<String>();
 		String[] ret = null;
-		switch (FlowState.valueOf(state)) {
+		switch (FlowStateEnum.valueOf(state)) {
 
 		case 文管人員:
 			ret = getData("DOC_CTRLER_TP").trim().split(" ");

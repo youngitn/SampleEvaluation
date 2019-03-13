@@ -1,7 +1,7 @@
 package oa.SampleEvaluationCheck.flow.approve;
 
-import oa.SampleEvaluation.flow.approve.BaseSubApprove;
-import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluation.flow.BaseSubApprove;
+import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowStateEnum;
 
 public class Approve extends BaseSubApprove {
 
@@ -12,7 +12,7 @@ public class Approve extends BaseSubApprove {
 
 		String state = getState();
 		boolean ret = doReminder("");
-		switch (FlowState.valueOf(state)) {
+		switch (FlowStateEnum.valueOf(state)) {
 		case 文管人員:
 			/*
 			 * 判斷請驗單號欄位是否空值會在填寫請驗單號舊處理完畢 到實驗室經辦時 只會同步更新三表

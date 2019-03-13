@@ -1,7 +1,7 @@
 package oa.SampleEvaluationCheck.rule;
 
 import jcx.jform.bRule;
-import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowState;
+import oa.SampleEvaluationCheck.flow.approve.gateEnum.FlowStateEnum;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class Rule extends bRule {
 		Vector<String> id = new Vector<String>();
 		String[] u = null;
 		// 受理單位主管所分派之人員
-		switch (FlowState.valueOf(state)) {
+		switch (FlowStateEnum.valueOf(state)) {
 		case 文管人員:
 			id.addElement("admin");
 			u = getData("DOC_CTRLER_CHECK").trim().split(" ");

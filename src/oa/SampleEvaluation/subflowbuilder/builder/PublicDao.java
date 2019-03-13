@@ -6,8 +6,15 @@ import jcx.db.talk;
 import oa.global.BaseDao;
 
 public class PublicDao extends BaseDao {
-	public PublicDao setServiceClass(final Object o) throws SQLException, Exception {
-		this.clazz = o.getClass();
+	/**
+	 * 
+	 * @param PO [須擁有對應的資料表&XMAKER宣告]
+	 * @return
+	 * @throws SQLException
+	 * @throws Exception
+	 */
+	public PublicDao setServiceClass(final Object PO) throws SQLException, Exception {
+		this.clazz = PO.getClass();
 		return this;
 	}
 

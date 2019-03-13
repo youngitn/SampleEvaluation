@@ -8,9 +8,9 @@ import org.apache.commons.lang.StringUtils;
 
 import jcx.jform.hproc;
 import oa.SampleEvaluation.common.DateTool;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.BaseDao;
 import oa.global.UserData;
 

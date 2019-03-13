@@ -1,10 +1,10 @@
 package oa.SampleEvaluationTest.controller;
 
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluationCheck.dao.SampleEvaluationCheckService;
-import oa.SampleEvaluationTest.dao.SampleEvaluationTestService;
-import oa.SampleEvaluationTest.flow.approve.gateEnum.FlowState;
-import oa.SampleEvaluationTp.dao.SampleEvaluationTpService;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.flow.approve.gateEnum.FlowStateEnum;
+import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 
 /**
  *
@@ -33,7 +33,7 @@ public class SampleEvaluationTestController extends HprocImpl {
 
 		// 就算是default 名稱也要存在FlowState
 		// switch條件才會生效
-		switch (FlowState.valueOf(getState())) {
+		switch (FlowStateEnum.valueOf(getState())) {
 		case 配合人員:
 			setEditable("EVALUATION_RESULT", true);
 			break;
