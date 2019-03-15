@@ -1,7 +1,10 @@
 package oa.SampleEvaluation.controller;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.Detail;
@@ -53,12 +56,23 @@ public class SampleEvaluationActionController extends HprocImpl {
 				setTextAndCheckIsSubFlowRunning();
 				break;
 			case TEMP_CLICK:
-				new TempSaveService().save(this);
-				
+				try {
+					new TempSaveService(this).save();
+				} catch (SQLException e) {
+					if (e.getErrorCode() == 0) {
+						int result = showConfirmDialog("確定將原暫存檔覆蓋嗎?", "溫馨提醒", 0);
+						if (result == 1) {
+							message("取消送出!");
+						} else {
+							new TempSaveService(this).update();
+						}
+					}
+				}
 				break;
 			case LOAD_TEMP_CLICK:
-				new TempSaveService().load(this);
-				
+				new TempSaveService(this).load();
+				setValue("DL", getDeadLine(getValue("APP_DATE"), getValue("URGENCY")));
+
 				break;
 			default:
 				break;

@@ -12,12 +12,13 @@ public class EmailNotifyForCaseSubFlowFinish extends EmailNotify {
 	}
 
 	/**
-	 * 通知採購處經理
+	 * 通知採購處經理和組長
 	 */
 	@Override
 	protected void changeMailToUsr() {
 
 		usr.add(getEmail(getDeptBoss("21")));
+		usr.add(getEmail(se.getDesignee().trim().split(" ")[0]));
 	}
 
 }

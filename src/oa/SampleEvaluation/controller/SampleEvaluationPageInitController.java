@@ -59,7 +59,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 				// 流程畫面在各關卡的初始化switch處理方法
 				switchByStateForFlowInit(FlowStateEnum.valueOf(getState().trim()));
 
-				//判斷子流程checkBox勾選狀況作介面調整
+				// 判斷子流程checkBox勾選狀況作介面調整
 				setTextAndCheckIsSubFlowRunning();
 
 				break;
@@ -88,7 +88,6 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			setEditable("ASSESSOR", true);
 			setEditable("NOTE", true);
 			setEditable("LAB_EXE", true);
-			setEditable("QR_NO", true);
 			setEditable("DOC_CTRLER_TP", true);
 			setEditable("DOC_CTRLER_CHECK", true);
 			setEditable("QC_BOSS", true);
@@ -101,13 +100,13 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		case 受理單位主管分案:
 			setEditable("DESIGNEE", true);
 
-			//根據對應表填入預設組長
+			// 根據對應表填入預設組長
 			try {
 				String[][] designee = getTalk()
 						.queryFromPool("SELECT DESIGNEE FROM SAMPLE_EVALUATION_SUB_FLOW_SIGN_MAP WHERE DEPNO='"
 								+ getValue("RECEIPT_UNIT") + "'");
-				if (designee != null && designee.length > 0 ) {
-					setValue("DESIGNEE",designee[0][0]);
+				if (designee != null && designee.length > 0) {
+					setValue("DESIGNEE", designee[0][0]);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -119,6 +118,10 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		case 採購經辦:
 			setEditable("EVALUATION_RESULT", true);
 			setEditable("FILE_EVALUATION_RESULT", true);
+			break;
+		case 文管人員:
+			setAllFileUploadFieldEditable();
+			setEditable("QR_NO", true);
 			break;
 		default:
 			break;

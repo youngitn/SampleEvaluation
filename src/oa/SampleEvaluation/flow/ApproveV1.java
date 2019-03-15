@@ -41,10 +41,18 @@ public class ApproveV1 extends bProcFlow {
 
 		switch (FlowStateEnum.valueOf(nowState)) {
 		case 課主管:
-			daoservice.update(se);
-			// 通知經辦
-			String mailTitle = "您申請的 " + this.getFunctionName() + " 主管已核准 ( 單號：" + se.getPno() + ") ";
-			MailToolInApprove.sendNotifyToApplicant(new BaseService(this), se.getApplicant(), se, mailTitle);
+			String[][] doc = getTalk()
+					.queryFromPool("SELECT DOC_CTRLER_CHECK FROM SAMPLE_EVALUATION_SUB_FLOW_SIGN_MAP WHERE DEPNO='"
+							+ getValue("RECEIPT_UNIT") + "'");
+			if (doc.length > 0 && !"".equals(doc[0][0])) {
+				daoservice.update(se);
+				// 通知經辦
+				String mailTitle = "您申請的 " + this.getFunctionName() + " 主管已核准 ( 單號：" + se.getPno() + ") ";
+				MailToolInApprove.sendNotifyToApplicant(new BaseService(this), se.getApplicant(), se, mailTitle);
+			} else {
+				ret = false;
+				message("核准失敗,找不到下一關卡簽核人,請受理單位提供文管人員資料予資訊單位");
+			}
 			break;
 		case 組長:
 			SyncDataService.subFlowSync(t, this);
@@ -56,10 +64,7 @@ public class ApproveV1 extends bProcFlow {
 				message("子流程相關簽核人欄位不可空白");
 				ret = false;
 			}
-			if (getValue("QR_NO") == null || "".equals(getValue("QR_NO").trim())) {
-				message("QR號碼不可空白");
-				ret = false;
-			}
+
 			break;
 		case 受理單位主管分案:
 
@@ -70,7 +75,12 @@ public class ApproveV1 extends bProcFlow {
 				ret = false;
 			}
 			break;
-		case 採購經辦確認:
+		case 文管人員:
+			if (getValue("QR_NO") == null || "".equals(getValue("QR_NO").trim())) {
+				message("QR號碼不可空白");
+				ret = false;
+			}
+			break;
 		case 待處理:
 
 			if (ret) {
