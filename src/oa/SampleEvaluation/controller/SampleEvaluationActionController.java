@@ -4,48 +4,50 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-
 import oa.SampleEvaluation.common.AddUtil;
 import oa.SampleEvaluation.common.Detail;
 import oa.SampleEvaluation.enums.ActionsEnum;
 import oa.SampleEvaluation.model.QueryConditionDTO;
 import oa.SampleEvaluation.service.QueryResultService;
+import oa.SampleEvaluation.service.SampleEvaluationService;
 import oa.SampleEvaluation.service.TempSaveService;
 
 /**
- * 
- * 
- * 
- * @author u52116
+ * The Class SampleEvaluationActionController.
  *
+ * @author u52116
  */
 public class SampleEvaluationActionController extends HprocImpl {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 
 		// 類別屬性初始化設定
 		try {
 			// 按鈕動作處理進入點
-
+			String[][] ret = null;
 			switch (ActionsEnum.valueOf(getActionName(getName()))) {
 			case QUERY_CLICK:
-
-				// 從畫面取得查詢條件並塞入QueryConditionDto
-				QueryConditionDTO qcDto = new QueryConditionDTO();
-				qcDto.getFormData(this);
-				// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
-				String sql = qcDto.toSql();
-
-				// 實體化dao服務,因結果欄位需符合QueryResultDto的屬性所定義,所以實體化相對應Dao.
-				QueryResultService resultService = new QueryResultService(this);
-				String[][] ret = (String[][]) resultService.getResult(sql);
+				ret = doQuery();
 
 				if (ret == null || ret.length <= 0) {
 					message("查無紀錄");
 				}
 				setTableData("QUERY_LIST", ret);
+				break;
+			case EXPORT_TO_EXCEL_CLICK:
+
+				ret = doQuery();
+
+				if (ret == null || ret.length <= 0) {
+					message("查無紀錄");
+				}
+				setTableData("EXPORT_QUERY_LIST", ret);
 				break;
 			case SAVE_CLICK:
 				doSave();
@@ -84,10 +86,37 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	}
 
+	private String[][] doQuery() throws SQLException, Exception {
+		// 從畫面取得查詢條件並塞入QueryConditionDto
+		QueryConditionDTO qcDto = new QueryConditionDTO();
+		qcDto.getFormData(this);
+		// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
+		String sql = qcDto.toSql();
+
+		// 實體化dao服務,因結果欄位需符合QueryResultDto的屬性所定義,所以實體化相對應Dao.
+		QueryResultService resultService = new QueryResultService(this);
+		resultService.setForm(this);
+		String[][] ret = (String[][]) resultService.getResult(sql);
+		return ret;
+	}
+
+	private String[][] doExportQuery() throws SQLException, Exception {
+		// 從畫面取得查詢條件並塞入QueryConditionDto
+		QueryConditionDTO qcDto = new QueryConditionDTO();
+		qcDto.getFormData(this);
+		// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
+		String sql = qcDto.toSql();
+
+		// 實體化dao服務,因結果欄位需符合QueryResultDto的屬性所定義,所以實體化相對應Dao.
+
+		String[][] ret = getTalk().queryFromPool("SELECT * FROM SAMPLE_EVALUATION " + sql);
+		return ret;
+	}
+
 	/**
-	 * 起單
-	 * 
-	 * @throws Throwable
+	 * 起單.
+	 *
+	 * @throws Throwable the throwable
 	 */
 	private void doSave() throws Throwable {
 		// 手動建立必填欄位資料 (欄位名,欄位標題)
@@ -109,6 +138,12 @@ public class SampleEvaluationActionController extends HprocImpl {
 
 	}
 
+	/**
+	 * Gets the ActionName.
+	 *
+	 * @param name [String]
+	 * @return [String]
+	 */
 	private String getActionName(String name) {
 		name = name.toUpperCase();
 		if (name.contains(".")) {

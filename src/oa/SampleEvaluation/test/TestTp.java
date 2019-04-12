@@ -11,9 +11,22 @@ import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
 
+/**
+ * The Class TestTp.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class TestTp extends hproc {
+	
+	/** The t. */
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 
+	/**
+	 * The main method.
+	 *
+	 * @param arg the arguments
+	 * @throws Throwable the throwable
+	 */
 	public static void main(String[] arg) throws Throwable {
 		TestTp tes = new TestTp();
 		tes.testSync();
@@ -22,6 +35,11 @@ public class TestTp extends hproc {
 
 	}
 
+	/**
+	 * Test sync.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testSync() throws Throwable {
 
 		BaseDao service = new SampleEvaluationTpService(t);
@@ -41,6 +59,11 @@ public class TestTp extends hproc {
 		service.upsert(se);
 	}
 
+	/**
+	 * Test find by id.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testFindById() throws Throwable {
 
 		BaseDao bao = new SampleEvaluationTpService(t);
@@ -49,6 +72,11 @@ public class TestTp extends hproc {
 //
 	}
 
+	/**
+	 * Test add.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testAdd() throws Throwable {
 		SampleEvaluationTpPO s = new SampleEvaluationTpPO();
 		s.setOwnPno("20189981TP");
@@ -58,6 +86,11 @@ public class TestTp extends hproc {
 //
 	}
 
+	/**
+	 * Test update.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testUpdate() throws Throwable {
 		SampleEvaluationTpPO s = (SampleEvaluationTpPO) DtoUtil.getDtoById(SampleEvaluationTpPO.class, t,
 				"20189981TP");
@@ -67,6 +100,9 @@ public class TestTp extends hproc {
 //
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		// TODO Auto-generated method stub

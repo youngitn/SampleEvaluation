@@ -1,4 +1,4 @@
-package oa.SampleEvaluation.common;
+package oa.global;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -8,10 +8,21 @@ import com.ysp.service.BaseService;
 import jcx.jform.bNotify;
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
-import oa.global.DtoUtil;
 import oa.global.annotation.xmaker;
 
+/**
+ * The Class Model.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public  abstract class Model {
+	
+	/**
+	 * Gets the FormData.
+	 *
+	 * @param service [Object]
+	 * @return [void]
+	 */
 	public void getFormData(Object service) {
 
 		try {
@@ -51,6 +62,11 @@ public  abstract class Model {
 		}
 	}
 
+	/**
+	 * Sets the DataToForm.
+	 *
+	 * @param service  void
+	 */
 	public void setDataToForm(Object service) {
 		try {
 			Field[] fld = DtoUtil.getFields(this);

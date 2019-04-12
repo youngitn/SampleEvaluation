@@ -27,3 +27,5 @@
 /SampleEvaluationFlowcPO.class
 /QueryResultDTO.class
 /QueryConditionDTO.class
+/ExportQueryResultDTO.class
+/ExportQueryResultDTO$SampleEvaluationPO.class

@@ -5,8 +5,16 @@ import oa.SampleEvaluation.model.QueryConditionDTO;
 import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.global.DtoUtil;
 
+/**
+ * The Class QueryTest.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class QueryTest extends hproc {
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		// TODO Auto-generated method stub

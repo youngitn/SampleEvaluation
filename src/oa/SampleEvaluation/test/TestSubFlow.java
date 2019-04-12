@@ -6,8 +6,18 @@ import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
 import oa.SampleEvaluationTp.model.SampleEvaluationTpPO;
 
+/**
+ * The Class TestSubFlow.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class TestSubFlow {
 
+	/**
+	 * Test.
+	 *
+	 * @param args [String[]]
+	 */
 	public void test(String[] args) {
 		SubFlowBuilder sfb = new TpFlowBuilder();
 		SampleEvaluationTpPO se = new SampleEvaluationTpPO();

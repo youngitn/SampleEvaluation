@@ -11,13 +11,17 @@ import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.UIHidderString;
 
 /**
- * 判斷頁面名稱並於載入後執行
- * 
- * @author u52116
+ * 判斷頁面名稱並於載入後執行.
  *
+ * @author u52116
  */
 public class SampleEvaluationPageInitController extends HprocImpl {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		// 表單載入後處理
@@ -74,6 +78,11 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 
 	}
 
+	/**
+	 * Switch by state for flow init.
+	 *
+	 * @param en [FlowStateEnum]
+	 */
 	private void switchByStateForFlowInit(FlowStateEnum en) {
 
 		switch (en) {
@@ -82,6 +91,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		case 組長:
 			// 夾檔欄位可編輯
 			setAllFileUploadFieldEditable();
+			setEditable("IS_ELSE", true);
 			setEditable("IS_CHECK", true);
 			setEditable("IS_TEST", true);
 			setEditable("IS_TRIAL_PRODUCTION", true);
@@ -92,6 +102,7 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 			setEditable("DOC_CTRLER_CHECK", true);
 			setEditable("QC_BOSS", true);
 			setEditable("COORDINATOR", true);
+			setEditable("CHECK_DATE", true);
 
 			setEditable("START_CHECK_FLOW", true);
 			setEditable("START_TP_FLOW", true);
@@ -122,12 +133,22 @@ public class SampleEvaluationPageInitController extends HprocImpl {
 		case 文管人員:
 			setAllFileUploadFieldEditable();
 			setEditable("QR_NO", true);
+
+			// 文管可輸入請驗單號
+			setEditable("NOTIFY_NO_TRIAL_PROD", true);
+			setEditable("NOTIFY_NO_CHECK", true);
 			break;
 		default:
 			break;
 		}
 	}
 
+	/**
+	 * Gets the ActionName.
+	 *
+	 * @param name [String]
+	 * @return [String]
+	 */
 	private String getActionName(String name) {
 
 		name = name.toUpperCase();

@@ -7,13 +7,15 @@ import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
 import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 
 /**
- * 
- * 
- * @author u52116
+ * The Class SampleEvaluationCheckController.
  *
+ * @author u52116
  */
 public class SampleEvaluationCheckController extends HprocImpl {
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		// 申請人基本資料
@@ -32,8 +34,13 @@ public class SampleEvaluationCheckController extends HprocImpl {
 		System.out.println("getState----->" + getState());
 		switch (FlowStateEnum.valueOf(getState().trim())) {
 		case 文管人員:
-			setEditable("NOTIFY_NO_CHECK", true);
+//			setEditable("NOTIFY_NO_CHECK", true);
+//			setEditable("NOTIFY_NO_TRIAL_PROD", true);
+			setEditable("CHECK_DATE", true);
+			break;
+		case 品保課長:
 			setEditable("NOTIFY_NO_TRIAL_PROD", true);
+			
 			break;
 		default:
 			break;

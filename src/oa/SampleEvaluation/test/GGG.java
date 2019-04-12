@@ -12,7 +12,16 @@ import oa.SampleEvaluation.model.SampleEvaluationPO;
 import jcx.html.*;
 import jcx.db.*;
 
+/**
+ * The Class GGG.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class GGG extends hproc {
+	
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	public String action(String value) throws Throwable {
 		SampleEvaluationPO s = new SampleEvaluationPO();
 		s.getFormData(this);
@@ -21,6 +30,11 @@ public class GGG extends hproc {
 		return value;
 	}
 
+	/**
+	 * Gets the Information.
+	 *
+	 * @return [String]
+	 */
 	public String getInformation() {
 		return "---------------button5(button5).html_action()----------------";
 	}

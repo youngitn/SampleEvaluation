@@ -9,6 +9,8 @@ import jcx.db.talk;
 
 /**
  * The Class DateTool.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
  */
 public class DateTool {
 

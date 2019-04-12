@@ -15,7 +15,16 @@ import jcx.db.talk;
 import jcx.jform.bNotify;
 import oa.SampleEvaluation.common.DateTool;
 
+/**
+ * The Class SampleEvaluationAlert.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class SampleEvaluationAlert extends bNotify {
+	
+	/* (non-Javadoc)
+	 * @see jcx.jform.bNotify#actionPerformed(java.lang.String)
+	 */
 	public void actionPerformed(String arg) throws Throwable {
 		talk t = getTalk();
 
@@ -81,6 +90,16 @@ public class SampleEvaluationAlert extends bNotify {
 		return;
 	}
 
+	/**
+	 * Go email.
+	 *
+	 * @param al [ArrayList<String[][]>]
+	 * @param t [talk]
+	 * @param count [int]
+	 * @param isBeforeAppDate [boolean]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public void goEmail(ArrayList<String[][]> al, talk t, int count, boolean isBeforeAppDate)
 			throws SQLException, Exception {
 		System.out.println("will send mail");
@@ -133,6 +152,13 @@ public class SampleEvaluationAlert extends bNotify {
 		ms.sendMailbccUTF8(to, title, content, null, "", Mail.MAIL_HTML_CONTENT_TYPE);
 	}
 
+	/**
+	 * Gets the Empid.
+	 *
+	 * @param empid [String]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
 	public String getEmpid(String empid) throws Exception {
 		if (empid.length() == 5) {
 			return empid;
@@ -143,6 +169,12 @@ public class SampleEvaluationAlert extends bNotify {
 		}
 	}
 
+	/**
+	 * Gets the Today.
+	 *
+	 * @param d [int]
+	 * @return [String]
+	 */
 	public String getToday(int d) {
 		Date date = new Date();
 		SimpleDateFormat bartDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -154,6 +186,16 @@ public class SampleEvaluationAlert extends bNotify {
 		return str;
 	}
 
+	/**
+	 * get Ret By AppDate.
+	 *
+	 * @param date [String]
+	 * @param urgency [String]
+	 * @param t [talk]
+	 * @return the ret by app date
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public String[][] getRetByAppDate(String date, String urgency, talk t) throws SQLException, Exception {
 		return t.queryFromPool(
 				"SELECT PNO,'('+APPLICANT+')'+(select hecname from hruser where empid = APPLICANT),APP_DATE,APP_TYPE,MATERIAL,SAP_CODE FROM SAMPLE_EVALUATION WHERE APP_DATE = "
@@ -162,6 +204,17 @@ public class SampleEvaluationAlert extends bNotify {
 
 	}
 
+	/**
+	 * Gets the DataTd.
+	 *
+	 * @param strings [String[]]
+	 * @param week [String]
+	 * @param day [int]
+	 * @param t [talk]
+	 * @param isBeforeAppDate [boolean]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
 	public String getDataTd(String[] strings, String week, int day, talk t, boolean isBeforeAppDate) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<TD>");
@@ -190,6 +243,12 @@ public class SampleEvaluationAlert extends bNotify {
 		return sb.toString();
 	}
 
+	/**
+	 * get FinishStr By Week.
+	 *
+	 * @param week [String]
+	 * @return the finish str by week
+	 */
 	public String getFinishStrByWeek(String week) {
 		if ("一".equals(week))
 			return "預計完成日的前50天";
@@ -202,6 +261,12 @@ public class SampleEvaluationAlert extends bNotify {
 
 	}
 
+	/**
+	 * Gets the AppTypeName.
+	 *
+	 * @param code [String]
+	 * @return [String]
+	 */
 	public String getAppTypeName(String code) {
 		if (code.equals("A")) {
 			return "新原物料";
@@ -213,6 +278,9 @@ public class SampleEvaluationAlert extends bNotify {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.bBase#getInformation()
+	 */
 	public String getInformation() {
 		return "---------------\u8ab2\u4e3b\u7ba1.Auto Notify()----------------";
 	}

@@ -292,12 +292,14 @@ public class DtoUtil {
 			throws SQLException {
 		ArrayList list = new ArrayList();
 		ResultSet r = null;
-
+		System.out.println("IN resultSetToArrayList->");
 		try {
 			r = DtoUtil.getResultSetWithCondition(clazz, t, condition);
+			
 			list = resultSetToArrayList(r, clazz);
 			System.out.println("getDbDataToDtoList->" + list.size());
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} finally {
 			if (r != null)
@@ -317,7 +319,7 @@ public class DtoUtil {
 	 */
 	public static String[][] getDbDataTo2DStringArray(final Class<Object> clazz, talk t, String condition)
 			throws Exception {
-
+		
 		return arrayListTo2DStringArray(resultSetToArrayList(clazz, t, condition), clazz);
 	}
 
@@ -331,7 +333,7 @@ public class DtoUtil {
 	 */
 	public static String[][] arrayListTo2DStringArray(ArrayList<Object> arraylist, Class<Object> clazz)
 			throws Exception {
-
+		System.out.println("IN arrayListTo2DStringArray");
 		Field[] fld = getFields(clazz);
 		// Field[] fld = clazz.getDeclaredFields();
 		String[][] ret = new String[arraylist.size()][fld.length];
@@ -460,6 +462,7 @@ public class DtoUtil {
 	 */
 	public static ResultSet getResultSetWithCondition(final Class clazz, talk t, String condition)
 			throws SQLException, ClassNotFoundException {
+		System.out.println("in  getResultSetWithCondition-->"  + condition);
 		dbTable a = (dbTable) clazz.getAnnotation(dbTable.class);
 		String tableName = a.name();
 		ResultSet r = null;
@@ -511,7 +514,8 @@ public class DtoUtil {
 	/**
 	 * 根據查詢頁面
 	 * 簽核狀態欄位所選擇的項目(簽核中 已結案 待處理)
-	 * 組相對應SQL查詢條件字串
+	 * 組相對應SQL查詢條件字串.
+	 *
 	 * @param queryFlowStatus [String]
 	 * @return the flow state sql str by query condition
 	 */

@@ -1,5 +1,8 @@
 package oa.SampleEvaluation.flow;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.ysp.service.BaseService;
 
 import jcx.db.talk;
@@ -9,21 +12,43 @@ import oa.SampleEvaluation.enums.FlowStateEnum;
 import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.SampleEvaluation.service.SampleEvaluationService;
 import oa.SampleEvaluation.service.SyncDataService;
-import oa.SampleEvaluation.subflowbuilder.builder.CheckFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
-import oa.SampleEvaluation.subflowbuilder.builder.TestFlowBuilder;
-import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
-import oa.SampleEvaluationCheck.model.SampleEvaluationCheckPO;
-import oa.global.DtoUtil;
+import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
+import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
+import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
+import oa.global.BaseDao;
 
+/**
+ * The Class ApproveV1.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class ApproveV1 extends bProcFlow {
 
+	/** The now state. */
 	String nowState;
+
+	/** The t. */
 	talk t;
+
+	/** The is check value. */
 	String isCheckValue;
+
+	/** The is trial prod value. */
 	String isTrialProdValue;
+
+	/** The is test value. */
 	String isTestValue;
 
+	String isElse;
+
+	ArrayList<String> errorMsgList = new ArrayList<String>();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see jcx.jform.bProcFlow#action(java.lang.String)
+	 */
 	public boolean action(String value) throws Throwable {
 		fileItemSetChecked();
 		nowState = getState();
@@ -33,6 +58,7 @@ public class ApproveV1 extends bProcFlow {
 		this.isCheckValue = getValue("IS_CHECK").trim();
 		this.isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
 		this.isTestValue = getValue("IS_TEST").trim();
+		this.isElse = getValue("IS_ELSE").trim();
 		boolean ret = doReminder("");
 
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
@@ -56,15 +82,24 @@ public class ApproveV1 extends bProcFlow {
 			break;
 		case 組長:
 			SyncDataService.subFlowSync(t, this);
+			String pno = getValue("PNO").trim();
+			String subFlowBuilderPath = "oa.SampleEvaluation.subflowbuilder.builder.";
+			String servicePath = "oa.SampleEvaluationTp.service.";
+			checkSubflowNecessaryInformation(this.isCheckValue, subFlowBuilderPath + "CheckFlowBuilder",
+					new SampleEvaluationCheckService(t), "請驗", pno + "CHECK");
+			checkSubflowNecessaryInformation(this.isTrialProdValue, subFlowBuilderPath + "TpFlowBuilder",
+					new SampleEvaluationTpService(t), "試製", pno + "TP");
+			checkSubflowNecessaryInformation(this.isTestValue, subFlowBuilderPath + "TestFlowBuilder",
+					new SampleEvaluationTestService(t), "試車", pno + "TEST");
 
-			SubFlowBuilder sfbCheck = new CheckFlowBuilder();
-			SubFlowBuilder sfbTp = new TpFlowBuilder();
-			SubFlowBuilder sfbTest = new TestFlowBuilder();
-			if (!sfbCheck.isReady(this) || !sfbTp.isReady(this) || !sfbTest.isReady(this)) {
-				message("子流程相關簽核人欄位不可空白");
+			String errorMage = "";
+			if (errorMsgList.size() > 0) {
 				ret = false;
+				for (String strings : errorMsgList) {
+					errorMage += strings + "<BR>";
+				}
+				message(errorMage);
 			}
-
 			break;
 		case 受理單位主管分案:
 
@@ -79,6 +114,9 @@ public class ApproveV1 extends bProcFlow {
 			if (getValue("QR_NO") == null || "".equals(getValue("QR_NO").trim())) {
 				message("QR號碼不可空白");
 				ret = false;
+			}
+			if (ret) {
+				daoservice.update(se);
 			}
 			break;
 		case 待處理:
@@ -109,6 +147,9 @@ public class ApproveV1 extends bProcFlow {
 		return ret;
 	}
 
+	/**
+	 * File item set checked.
+	 */
 	private void fileItemSetChecked() {
 
 		if (!getValue("FILE_SPEC").equals("")) {
@@ -128,6 +169,13 @@ public class ApproveV1 extends bProcFlow {
 		}
 	}
 
+	/**
+	 * Do reminder.
+	 *
+	 * @param addStr [String]
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	private boolean doReminder(String addStr) throws Exception {
 		int result = showConfirmDialog(addStr + "確定送出?", "溫馨提醒", 0);
 		if (result == 1) {
@@ -141,6 +189,49 @@ public class ApproveV1 extends bProcFlow {
 		percent(100, space.toString() + "處理中<font color=white>");
 		message("已送出");
 		return true;
+	}
+
+	private void checkSubflowNecessaryInformation(String isChecked, String builderClassName, BaseDao serviceClass,
+			String subFlowTypeName, String subpno) throws SQLException, Exception {
+		boolean ret = true;
+		if ("1".equals(isChecked)) {
+			SubFlowBuilder sfb = (SubFlowBuilder) createObject(builderClassName);
+			try {
+				// 請驗必要欄位未填妥
+				if (!sfb.isReady(this)) {
+					errorMsgList.add(subFlowTypeName + "子流程相關簽核人欄位不可空白");
+					// ret = false;
+				}
+			} catch (NullPointerException e) {
+				e.getMessage();
+				message("SubFlowBuilder可能為null,請通知IT人員");
+			}
+			// 填妥欄位卻未執行子流程就送出
+			// BaseDao Service = (BaseDao) createObject(serviceClassName);
+
+			if (serviceClass.findById(subpno) == null) {
+				errorMsgList.add("請按下''執行" + subFlowTypeName + "流程''按鈕以進行請驗流程");
+				// ret = false;
+			}
+		}
+
+		// return ret;
+
+	}
+
+	private Object createObject(String className) {
+		Object object = null;
+		try {
+			Class classDefinition = Class.forName(className);
+			object = classDefinition.newInstance();
+		} catch (InstantiationException e) {
+			System.out.println(e);
+		} catch (IllegalAccessException e) {
+			System.out.println(e);
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		}
+		return object;
 	}
 
 }

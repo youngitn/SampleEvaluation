@@ -7,16 +7,25 @@ import jcx.util.datetime;
 import oa.global.UserData;
 
 /**
- * 
- * @author u52116
+ * The Class FormInitUtil.
  *
+ * @author u52116
  */
 public class FormInitUtil {
 
+	/** The userdata. */
 	UserData userdata;
+	
+	/** The c. */
 	// form
 	hproc c;
 
+	/**
+	 * Instantiates a new form init util.
+	 *
+	 * @param c [hproc]
+	 * @throws NullPointerException the null pointer exception
+	 */
 	public FormInitUtil(hproc c) throws NullPointerException {
 
 		try {
@@ -30,6 +39,11 @@ public class FormInitUtil {
 		}
 	}
 
+	/**
+	 * Do query page process.
+	 *
+	 * @throws Exception the exception
+	 */
 	public void doQueryPageProcess() throws Exception {
 		userdata = getNowApplicant();
 		// 取得user資料類別
@@ -47,6 +61,11 @@ public class FormInitUtil {
 		c.setNewView("QueryPage");
 	}
 
+	/**
+	 * Do add page process.
+	 *
+	 * @throws Exception the exception
+	 */
 	public void doAddPageProcess() throws Exception {
 		userdata = getNowApplicant();
 		// 新增欄位申請人基本資料填入
@@ -60,11 +79,10 @@ public class FormInitUtil {
 
 	/**
 	 * 表單申請人 != 目前使用者 <br>
-	 * 明細 待處理 查詢(設定預設值)用
-	 * 
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 * 明細 待處理 查詢(設定預設值)用.
+	 *
+	 * @return [UserData]
+	 * @throws Exception the exception
 	 */
 	public UserData getBillApplicant() throws Exception {
 		String empid = c.getValue("APPLICANT");
@@ -77,11 +95,10 @@ public class FormInitUtil {
 
 	/**
 	 * 表單申請人 = 目前使用者 <br>
-	 * 起單用<br>
-	 * 
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 * 起單用<br>.
+	 *
+	 * @return [UserData]
+	 * @throws Exception the exception
 	 */
 	public UserData getNowApplicant() throws Exception {
 		return new UserData(c.getUser(), c.getTalk());
@@ -90,27 +107,31 @@ public class FormInitUtil {
 
 	/**
 	 * 表單申請人 = 目前使用者 <br>
-	 * 起單用<br>
-	 * 
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 * 起單用<br>.
+	 *
+	 * @param empid [String]
+	 * @return [UserData]
+	 * @throws Exception the exception
 	 */
 	public UserData getSpecUserData(String empid) throws Exception {
 		return new UserData(empid, c.getTalk());
 
 	}
 
+	/**
+	 * Do detail page process.
+	 *
+	 * @throws Exception the exception
+	 */
 	public void doDetailPageProcess() throws Exception {
 		setBillOtherData();
 
 	}
 
 	/**
-	 * 顯示表單沒儲存在資料庫的資訊 如申請人公司別,姓名等
-	 * 
-	 * @throws SQLException
-	 * @throws Exception
+	 * 顯示表單沒儲存在資料庫的資訊 如申請人公司別,姓名等.
+	 *
+	 * @throws Exception the exception
 	 */
 	public void setBillOtherData() throws Exception {
 		// 申請人正常必填 其基本資料應該都有

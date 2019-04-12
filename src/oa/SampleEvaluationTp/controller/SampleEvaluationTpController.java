@@ -7,14 +7,18 @@ import oa.SampleEvaluationTp.flow.approve.gateEnum.FlowStateEnum;
 import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 
 /**
- * 
- * @author u52116
+ * The Class SampleEvaluationTpController.
  *
+ * @author u52116
  */
 public class SampleEvaluationTpController extends HprocImpl {
 
+	/** The confirm. */
 	public boolean confirm;
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		// message(getState().trim());

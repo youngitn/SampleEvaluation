@@ -9,27 +9,28 @@ import java.util.HashMap;
 import org.apache.commons.lang.ArrayUtils;
 
 import jcx.db.talk;
-import oa.SampleEvaluation.model.QueryConditionDTO;
 import oa.global.annotation.dbTable;
 import oa.global.annotation.xmaker;
 
 /**
- * 根據DTO進行資料庫操作的方法集合
- * 
- * @author u52116
+ * 根據DTO進行資料庫操作的方法集合.
  *
+ * @author u52116
  */
 public abstract class BaseDao {
 
+	/** The t. */
 	protected talk t;
+
+	/** The clazz. */
 	protected Class clazz;
 
 	/**
 	 * 將傳入的DTO進行INSERT動作.
-	 * 
-	 * @param o
-	 * @throws SQLException
-	 * @throws Exception
+	 *
+	 * @param o [Object]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
 	public void add(final Object o) throws SQLException, Exception {
 
@@ -38,11 +39,11 @@ public abstract class BaseDao {
 	}
 
 	/**
-	 * 將傳入的DTO進行資料更新
-	 * 
-	 * @param o
-	 * @throws SQLException
-	 * @throws Exception
+	 * 將傳入的DTO進行資料更新.
+	 *
+	 * @param o [Object]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
 	public void update(final Object o) throws SQLException, Exception {
 		HashMap<DbProcessType, String> m = DtoUtil.getSqlStringForDbCreateAndUpdate(o);
@@ -52,10 +53,10 @@ public abstract class BaseDao {
 	/**
 	 * 如果資料存在則進行更新<br>
 	 * 否則新增.
-	 * 
-	 * @param o
-	 * @throws SQLException
-	 * @throws Exception
+	 *
+	 * @param o [Object]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
 	public void upsert(final Object o) throws SQLException, Exception {
 		HashMap<DbProcessType, String> m = DtoUtil.getSqlStringForDbCreateAndUpdate(o);
@@ -88,12 +89,12 @@ public abstract class BaseDao {
 	}
 
 	/**
-	 * 根據單號進行查詢
-	 * 
-	 * @param pno
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 * 根據單號進行查詢.
+	 *
+	 * @param pno [String]
+	 * @return [Object]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
 	public Object findById(String pno) throws SQLException, Exception {
 		return DtoUtil.getDtoById(clazz, t, pno);
@@ -102,11 +103,11 @@ public abstract class BaseDao {
 	/**
 	 * 根據傳入SQL條件字串進行查詢<br>
 	 * condition字串需以"WHERE"開頭.<br>
-	 * 
-	 * @param condition
-	 * @return
-	 * @throws SQLException
-	 * @throws Exception
+	 *
+	 * @param condition [String]
+	 * @return [ArrayList<?>]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
 	public ArrayList<?> findByCondition(String condition) throws SQLException, Exception {
 		return DtoUtil.resultSetToArrayList(clazz, t, condition);
@@ -117,13 +118,14 @@ public abstract class BaseDao {
 	 * 回傳二維陣列資料,<br>
 	 * 每筆資料Sing[n][x=比照dto屬性宣告順序]<br>
 	 * condition字串需以"WHERE"開頭.<br>
-	 * 
+	 *
 	 * @param condition [String]
 	 * @return String[][]
-	 * @throws SQLException
-	 * @throws Exception
+	 * @throws SQLException the SQL exception
+	 * @throws Exception    the exception
 	 */
 	public String[][] getResultBySqlWhereString(String condition) throws SQLException, Exception {
+		System.out.print("getResultBySqlWhereString-->" + condition);
 		return DtoUtil.getDbDataTo2DStringArray(clazz, t, condition);
 	}
 

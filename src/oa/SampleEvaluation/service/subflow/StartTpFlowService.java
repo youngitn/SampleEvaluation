@@ -16,13 +16,31 @@ import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
 
+/**
+ * The Class StartTpFlowService.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class StartTpFlowService extends HprocImpl {
+	
+	/** The is trial prod value. */
 	String isTrialProdValue;
+	
+	/** The doc ctrler tp. */
 	String docCtrlerTp;
+	
+	/** The assessor. */
 	String assessor;
+	
+	/** The lab exe. */
 	String labExe;
+	
+	/** The t. */
 	talk t;
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		setNeedValue();
@@ -63,6 +81,11 @@ public class StartTpFlowService extends HprocImpl {
 		return arg0;
 	}
 
+	/**
+	 * Sets the need value.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void setNeedValue() throws Throwable {
 		isTrialProdValue = getValue("IS_TRIAL_PRODUCTION").trim();
 		docCtrlerTp = getValue("DOC_CTRLER_TP").trim();

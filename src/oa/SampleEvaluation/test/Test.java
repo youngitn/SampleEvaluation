@@ -15,9 +15,22 @@ import oa.global.BaseDao;
 import oa.global.DtoUtil;
 import oa.global.UserData;
 
+/**
+ * The Class Test.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class Test extends hproc {
+	
+	/** The t. */
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 
+	/**
+	 * The main method.
+	 *
+	 * @param arg the arguments
+	 * @throws Throwable the throwable
+	 */
 	public static void main(String[] arg) throws Throwable {
 		Test tes = new Test();
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
@@ -96,6 +109,13 @@ public class Test extends hproc {
 		System.exit(0);
 	}
 
+	/**
+	 * Gets the QueryRightSql.
+	 *
+	 * @return [String]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	// 取得查詢權限SQL條件
 	public String getQueryRightSql() throws SQLException, Exception {
 		String sql = "";
@@ -135,6 +155,11 @@ public class Test extends hproc {
 		return sql;
 	}
 
+	/**
+	 * Testtest.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testtest() throws Throwable {
 		String condition = " where 1= 1 " + getQueryRightSql();
 		System.out.println(condition);
@@ -160,6 +185,11 @@ public class Test extends hproc {
 //
 	}
 
+	/**
+	 * Test find by id.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testFindById() throws Throwable {
 
 		BaseDao bao = new SampleEvaluationService(t);
@@ -168,6 +198,11 @@ public class Test extends hproc {
 //
 	}
 
+	/**
+	 * Test add.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testAdd() throws Throwable {
 		SampleEvaluationPO s = new SampleEvaluationPO();
 		s.setPno("20189988");
@@ -177,6 +212,11 @@ public class Test extends hproc {
 //
 	}
 
+	/**
+	 * Test update.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void testUpdate() throws Throwable {
 		SampleEvaluationPO s = (SampleEvaluationPO) DtoUtil.getDtoById(SampleEvaluationPO.class, t, "20189999");
 		s.setQty("99.99");
@@ -185,6 +225,11 @@ public class Test extends hproc {
 //
 	}
 
+	/**
+	 * Test 4.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void test4() throws Throwable {
 //		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 //
@@ -198,6 +243,11 @@ public class Test extends hproc {
 //
 	}
 
+	/**
+	 * Test 3.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void test3() throws Throwable {
 //		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 //
@@ -210,16 +260,29 @@ public class Test extends hproc {
 //
 	}
 
+	/**
+	 * Test 2.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void test2() throws Throwable {
 		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 		SampleEvaluationPO s = (SampleEvaluationPO) DtoUtil.getDtoById(SampleEvaluationPO.class, t, "20180003");
 		s.setDataToForm(this);
 	}
 
+	/**
+	 * Test 1.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void test1() throws Throwable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		// TODO Auto-generated method stub

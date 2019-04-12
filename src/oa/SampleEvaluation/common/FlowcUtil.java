@@ -15,12 +15,30 @@ import oa.SampleEvaluationTp.service.SampleEvaluationTpFlowcHisService;
 import oa.SampleEvaluationTp.service.SampleEvaluationTpFlowcService;
 import oa.global.BaseDao;
 
+/**
+ * The Class FlowcUtil.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class FlowcUtil {
 
+	/**
+	 * Instantiates a new flowc util.
+	 */
 	private FlowcUtil() {
 		throw new IllegalStateException("Utility class");
 	}
 
+	/**
+	 * Go check sub flow.
+	 *
+	 * @param ownPno [String]
+	 * @param applicant [String]
+	 * @param gateName [String]
+	 * @param t [talk]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public static void goCheckSubFlow(String ownPno, String applicant, String gateName, talk t)
 			throws SQLException, Exception {
 
@@ -42,6 +60,16 @@ public class FlowcUtil {
 
 	}
 
+	/**
+	 * Go tp sub flow.
+	 *
+	 * @param ownPno [String]
+	 * @param applicant [String]
+	 * @param gateName [String]
+	 * @param t [talk]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public static void goTpSubFlow(String ownPno, String applicant, String gateName, talk t)
 			throws SQLException, Exception {
 

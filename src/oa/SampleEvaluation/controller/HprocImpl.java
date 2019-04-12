@@ -17,6 +17,8 @@ import oa.global.UserData;
 // TODO: Auto-generated Javadoc
 /**
  * The Class HprocImpl.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
  */
 public abstract class HprocImpl extends hproc {
 
@@ -204,20 +206,28 @@ public abstract class HprocImpl extends hproc {
 		}
 	}
 
+	/**
+	 * Sets the text and check is sub flow running.
+	 */
 	public void setTextAndCheckIsSubFlowRunning() {
 		// 根據勾選的子流程顯示其是否已進行過
 		if ("1".equals(getValue("IS_CHECK").trim())) {
 			setVisible("SUB_FLOW_TAB_CHECK", true);
+			setVisible("START_CHECK_FLOW", true);
 			setTextAndCheckIsSubFlowRunning(new SampleEvaluationCheckService(getTalk()), getValue("PNO") + "CHECK");
-
+			
 		}
 		if ("1".equals(getValue("IS_TRIAL_PRODUCTION").trim())) {
 			setVisible("SUB_FLOW_TAB_TP", true);
+			setVisible("START_TP_FLOW", true);
 			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTpService(getTalk()), getValue("PNO") + "TP");
+			
 		}
 		if ("1".equals(getValue("IS_TEST").trim())) {
 			setVisible("SUB_FLOW_TAB_TEST", true);
+			setVisible("START_TEST_FLOW", true);
 			setTextAndCheckIsSubFlowRunning(new SampleEvaluationTestService(getTalk()), getValue("PNO") + "TEST");
+			
 		}
 	}
 

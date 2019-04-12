@@ -7,14 +7,30 @@ import com.ysp.field.Mail;
 import com.ysp.service.BaseService;
 import jcx.util.convert;
 
+/**
+ * The Class EmailUtil.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class EmailUtil {
 
+	/** The service. */
 	BaseService service;
 
+	/**
+	 * Instantiates a new email util.
+	 *
+	 * @param service [BaseService]
+	 */
 	public EmailUtil(BaseService service) {
 		this.service = service;
 	}
 
+	/**
+	 * Gets the AllSignedPeopleEmailForLastGateToSend.
+	 *
+	 * @return [ArrayList<String>]
+	 */
 	public ArrayList<String> getAllSignedPeopleEmailForLastGateToSend() {
 		String[][] vid = service.getFlowHistory();
 		String[] ausr = new String[vid.length];
@@ -34,6 +50,11 @@ public class EmailUtil {
 		return v;
 	}
 
+	/**
+	 * Gets the HisOpinion.
+	 *
+	 * @return [String]
+	 */
 	// 意見記錄
 	public String getHisOpinion() {
 		String[][] his = service.getFlowHistory();
@@ -47,6 +68,13 @@ public class EmailUtil {
 		return value.toString();
 	}
 
+	/**
+	 * Gets the DepName.
+	 *
+	 * @param depNo [String]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
 	// 用單位代碼抓→單位名稱
 	public String getDepName(String depNo) throws Exception {
 		String sql = "select DEP_NAME from DEP_ACTIVE_VIEW where DEP_NO = '" + depNo + "'";

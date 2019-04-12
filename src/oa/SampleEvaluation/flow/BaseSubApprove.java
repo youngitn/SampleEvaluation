@@ -13,7 +13,19 @@ import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
 
+/**
+ * The Class BaseSubApprove.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public abstract class BaseSubApprove extends bProcFlow {
+	
+	/**
+	 * Sync data.
+	 *
+	 * @return true, if successful
+	 * @throws Throwable the throwable
+	 */
 	public boolean syncData() throws Throwable {
 		// 回傳值為 true 表示執行接下來的流程處理
 		// 回傳值為 false 表示接下來不執行任何流程處理
@@ -54,7 +66,11 @@ public abstract class BaseSubApprove extends bProcFlow {
 	}
 
 	/**
-	 * 溫馨提醒 不傳入 回傳true/false
+	 * 溫馨提醒 不傳入 回傳true/false.
+	 *
+	 * @param addStr [String]
+	 * @return true, if successful
+	 * @throws Exception the exception
 	 */
 	public boolean doReminder(String addStr) throws Exception {
 		int result = showConfirmDialog(addStr + "確定送出表單？", "溫馨提醒", 0);
@@ -71,12 +87,18 @@ public abstract class BaseSubApprove extends bProcFlow {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.bProcFlow#action(java.lang.String)
+	 */
 	@Override
 	public boolean action(String arg0) throws Throwable {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	/**
+	 * File item set checker.
+	 */
 	protected void fileItemSetChecker() {
 
 		if (!getValue("FILE_SPEC").equals("") || !getValue("FILE_SPEC_NOTE").equals("")) {

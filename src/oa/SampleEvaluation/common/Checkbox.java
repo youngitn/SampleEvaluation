@@ -12,10 +12,24 @@ import jcx.jform.hproc;
  */
 public class Checkbox extends hproc {
 
+	/**
+	 * The Enum SubFlowCheckboxName.
+	 *
+	 * @author YoungCheng(u52116) 2019/3/19
+	 */
 	public enum SubFlowCheckboxName {
-		IS_CHECK, IS_TEST, IS_TRIAL_PRODUCTION
+		
+		/** The is check. */
+		IS_CHECK, 
+ /** The is test. */
+ IS_TEST, 
+ /** The is trial production. */
+ IS_TRIAL_PRODUCTION
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	public String action(String value) {
 		try {
 			switch (SubFlowCheckboxName.valueOf(getName())) {
@@ -68,6 +82,14 @@ public class Checkbox extends hproc {
 		return value;
 	}
 
+	/**
+	 * Gets the SubFlowSignPeople.
+	 *
+	 * @param selectFields [String]
+	 * @return [String[][]]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public String[][] getSubFlowSignPeople(String selectFields) throws SQLException, Exception {
 		return getTalk().queryFromPool("SELECT " + selectFields
 				+ " FROM SAMPLE_EVALUATION_SUB_FLOW_SIGN_MAP WHERE DEPNO='" + getValue("RECEIPT_UNIT") + "'");

@@ -1,5 +1,10 @@
 package oa.global;
 
+/**
+ * The Class UIHidderString.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class UIHidderString {
 	
 	/**
@@ -7,7 +12,9 @@ public class UIHidderString {
 	 * 傳入：無<br>
 	 * 回傳：無<br>
 	 * 說明：隱藏Dmaker底層新增按鈕<br>
-	 * 開發人：51884
+	 * 開發人：51884.
+	 *
+	 * @return  [String]
 	 */
 	public static  String hideDmakerAddButton() {
 		return "try{document.getElementById('em_add_button').style.display = 'none';}catch(err){}";
@@ -18,7 +25,9 @@ public class UIHidderString {
 	 * 傳入：無<br>
 	 * 回傳：無<br>
 	 * 說明：隱藏Dmaker上方標籤<br>
-	 * 開發人：51884
+	 * 開發人：51884.
+	 *
+	 * @return  [String]
 	 */
 	public static  String hideDmakerFlowPanel() {
 		return "try{document.getElementById('flow_panel').style.display = 'none';}catch(err){}";
@@ -29,7 +38,9 @@ public class UIHidderString {
 	 * 傳入：無<br>
 	 * 回傳：無<br>
 	 * 說明：隱藏詳細詳細列表功能<br>
-	 * 開發人：51884
+	 * 開發人：51884.
+	 *
+	 * @return  [String]
 	 */
 	public static  String hideFlowButtonDetail() {
 		return "try{document.getElementById('flow_button_detail').style.display = 'none';}catch(e){}";
@@ -40,7 +51,9 @@ public class UIHidderString {
 	 * 傳入：無<br>
 	 * 回傳：無<br>
 	 * 說明：隱藏詳細列表的簽核意見與簽核按鈕，本方法只能隱藏錢10顆按鈕，超過就必須再修改<br>
-	 * 開發人：51884
+	 * 開發人：51884.
+	 *
+	 * @return  [String]
 	 */
 	public static  String hideBatchApproveFunction() {
 		StringBuffer js = new StringBuffer();

@@ -10,8 +10,16 @@ import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.global.MailString;
 import oa.global.UserData;
 
+/**
+ * The Class EmailNotify.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class EmailNotify extends BaseEmailNotify {
 
+	/* (non-Javadoc)
+	 * @see oa.SampleEvaluation.notify.BaseEmailNotify#buildContent(oa.SampleEvaluation.model.SampleEvaluationPO)
+	 */
 	@Override
 	public String buildContent(SampleEvaluationPO se) throws SQLException, Exception {
 		try {
@@ -65,11 +73,21 @@ public class EmailNotify extends BaseEmailNotify {
 		return content;
 	}
 
+	/* (non-Javadoc)
+	 * @see oa.SampleEvaluation.notify.BaseEmailNotify#setIsLastGate()
+	 */
 	@Override
 	protected void setIsLastGate() {
 		this.isLastGate = false;
 	}
 
+	/**
+	 * Builds the approve confirm msg str.
+	 *
+	 * @param se [SampleEvaluationPO]
+	 * @return  [String]
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	protected String buildApproveConfirmMsgStr(SampleEvaluationPO se) throws IOException {
 		String alertStr = "";
 		String isCheckStr = se.getIsCheck();
@@ -93,6 +111,9 @@ public class EmailNotify extends BaseEmailNotify {
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see oa.SampleEvaluation.notify.BaseEmailNotify#changeMailToUsr()
+	 */
 	@Override
 	protected void changeMailToUsr() {
 		// TODO Auto-generated method stub

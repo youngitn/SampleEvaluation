@@ -9,17 +9,32 @@ import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
 import oa.SampleEvaluationTest.model.SampleEvaluationTestFlowcPO;
 import oa.SampleEvaluationTest.model.SampleEvaluationTestFlowcHisPO;
 
+/**
+ * The Class TestFlowBuilder.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class TestFlowBuilder extends SubFlowBuilder {
+	
+	/**
+	 * Instantiates a new test flow builder.
+	 */
 	public TestFlowBuilder() {
 		this.startGateName = "配合人員";
 	}
 
+	/* (non-Javadoc)
+	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#setAndInsertFlowData()
+	 */
 	@Override
 	public void setAndInsertFlowData() throws SQLException, Exception {
 		insertFlowData(new SampleEvaluationTestFlowcPO());
 		insertFlowData(new SampleEvaluationTestFlowcHisPO());
 	}
 
+	/* (non-Javadoc)
+	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#insertSubMainData()
+	 */
 	@Override
 	public void insertSubMainData() throws Exception {
 		SampleEvaluationTestService secs = new SampleEvaluationTestService(t);
@@ -31,6 +46,9 @@ public class TestFlowBuilder extends SubFlowBuilder {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#isReady(java.lang.Object)
+	 */
 	public boolean isReady(Object form) {
 
 		if (form instanceof hproc) {

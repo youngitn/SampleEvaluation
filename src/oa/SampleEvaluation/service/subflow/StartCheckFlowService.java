@@ -16,13 +16,28 @@ import oa.SampleEvaluationCheck.service.SampleEvaluationCheckService;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
 
+/**
+ * The Class StartCheckFlowService.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class StartCheckFlowService extends HprocImpl {
+	
+	/** The is check value. */
 	String isCheckValue;
+	
+	/** The doc ctrler check. */
 	String docCtrlerCheck;
+	
+	/** The qc boss. */
 	String qcBoss;
 
+	/** The t. */
 	talk t;
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		setNeedValue();
@@ -65,6 +80,11 @@ public class StartCheckFlowService extends HprocImpl {
 		return arg0;
 	}
 
+	/**
+	 * Sets the need value.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void setNeedValue() throws Throwable {
 		isCheckValue = getValue("IS_CHECK").trim();
 		docCtrlerCheck = getValue("DOC_CTRLER_CHECK").trim();

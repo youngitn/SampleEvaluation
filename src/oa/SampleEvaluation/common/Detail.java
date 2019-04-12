@@ -11,6 +11,8 @@ import oa.global.UIHidderString;
 // TODO: Auto-generated Javadoc
 /**
  * The Class Detail.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
  */
 public class Detail {
 

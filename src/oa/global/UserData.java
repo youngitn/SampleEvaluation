@@ -11,8 +11,18 @@ import jcx.db.talk;
  *
  */
 public class UserData {
+	
+	/** The empid. */
 	private String cpnyid, hecname, dep_no, ext, dep_name, empid;
 
+	/**
+	 * Instantiates a new user data.
+	 *
+	 * @param empid [String]
+	 * @param t [talk]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public UserData(String empid, talk t) throws SQLException, Exception {
 		if (empid == null || empid.equals("")) {
 			setCpnyid("查無此人");
@@ -34,11 +44,18 @@ public class UserData {
 		}
 	}
 
+	/**
+	 * Gets the Empid.
+	 *
+	 * @return [String]
+	 */
 	public String getEmpid() {
 		return this.empid;
 	}
 
 	/**
+	 * Gets the Cpnyid.
+	 *
 	 * @return the cpnyid
 	 */
 	public String getCpnyid() {
@@ -46,6 +63,8 @@ public class UserData {
 	}
 
 	/**
+	 * Sets the Cpnyid.
+	 *
 	 * @param cpnyid the cpnyid to set
 	 */
 	public void setCpnyid(String cpnyid) {
@@ -53,6 +72,8 @@ public class UserData {
 	}
 
 	/**
+	 * Gets the Hecname.
+	 *
 	 * @return the hecname
 	 */
 	public String getHecname() {
@@ -60,6 +81,8 @@ public class UserData {
 	}
 
 	/**
+	 * Sets the Hecname.
+	 *
 	 * @param hecname the hecname to set
 	 */
 	public void setHecname(String hecname) {
@@ -67,6 +90,8 @@ public class UserData {
 	}
 
 	/**
+	 * Gets the DepNo.
+	 *
 	 * @return the dep_no
 	 */
 	public String getDepNo() {
@@ -74,6 +99,8 @@ public class UserData {
 	}
 
 	/**
+	 * Sets the DepNo.
+	 *
 	 * @param dep_no the dep_no to set
 	 */
 	public void setDepNo(String dep_no) {
@@ -81,6 +108,8 @@ public class UserData {
 	}
 
 	/**
+	 * Gets the Ext.
+	 *
 	 * @return the ext
 	 */
 	public String getExt() {
@@ -88,6 +117,8 @@ public class UserData {
 	}
 
 	/**
+	 * Sets the Ext.
+	 *
 	 * @param ext the ext to set
 	 */
 	public void setExt(String ext) {
@@ -95,6 +126,8 @@ public class UserData {
 	}
 
 	/**
+	 * Gets the DepName.
+	 *
 	 * @return the dep_name
 	 */
 	public String getDepName() {
@@ -102,6 +135,8 @@ public class UserData {
 	}
 
 	/**
+	 * Sets the DepName.
+	 *
 	 * @param dep_name the dep_name to set
 	 */
 	public void setDepName(String dep_name) {

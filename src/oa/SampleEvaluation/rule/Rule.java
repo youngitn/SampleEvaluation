@@ -15,7 +15,16 @@ import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.TestFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
 
+/**
+ * The Class Rule.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class Rule extends bRule {
+	
+	/* (non-Javadoc)
+	 * @see jcx.jform.bRule#getIDs(java.lang.String)
+	 */
 	public Vector<String> getIDs(String value) throws Throwable {
 		// 回傳值為 Vector contails 符合這條規格的帳號
 		String state = getState();
@@ -62,6 +71,9 @@ public class Rule extends bRule {
 		return id;
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.bBase#getInformation()
+	 */
 	public String getInformation() {
 		return "---------------\u8b93\u552e\u901a\u77e5\u55ae.Rule()----------------";
 	}

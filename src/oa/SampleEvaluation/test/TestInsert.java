@@ -16,14 +16,21 @@ import org.junit.Test;
 
 import com.ysp.service.BaseService;
 
+/**
+ * The Class TestInsert.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class TestInsert {
+	
+	/** The t. */
 	talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
 
 	/**
-	 * 增加一筆紀錄到table SampleEvaluation
-	 * 
-	 * @throws SQLException
-	 * @throws Exception
+	 * 增加一筆紀錄到table SampleEvaluation.
+	 *
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
 	 */
 	@Test
 	public void se() throws SQLException, Exception {
@@ -38,6 +45,9 @@ public class TestInsert {
 		System.out.println(sePO.getMfrCountry());
 	}
 	
+	/**
+	 * Test notify.
+	 */
 	@Test
 	public void testNotify() {
 		

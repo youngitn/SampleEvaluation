@@ -13,7 +13,21 @@ import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
 
+/**
+ * The Class SyncDataService.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class SyncDataService {
+	
+	/**
+	 * Sub flow sync.
+	 *
+	 * @param t [talk]
+	 * @param h [Object]
+	 * @return true, if successful
+	 * @throws Throwable the throwable
+	 */
 	public static boolean subFlowSync(talk t, Object h) throws Throwable {
 		// 回傳值為 true 表示執行接下來的流程處理
 		// 回傳值為 false 表示接下來不執行任何流程處理

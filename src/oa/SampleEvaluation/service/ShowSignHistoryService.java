@@ -6,10 +6,18 @@ import com.ysp.util.DateFormatUtil;
 
 import jcx.jform.hproc;
 
+/**
+ * The Class ShowSignHistoryService.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class ShowSignHistoryService extends hproc {
 
 	// private Log log = LogUtil.getLog(this.getClass());11
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	public String action(String value) throws Throwable {
 		String id = "a.PNO= '" + getValue("QUERY_LIST.PNO") + "'";
 		String rec[][] = getFlowHistory(getFunctionName(), id);
@@ -52,9 +60,12 @@ public class ShowSignHistoryService extends hproc {
 	}
 
 	/**
-	 * @param id
-	 * @param rec
-	 * @return
+	 * Gets the MainFlowHistory.
+	 *
+	 * @param id [String]
+	 * @param rec [String[][]]
+	 * @param fName [String]
+	 * @return [StringBuilder]
 	 */
 	private StringBuilder getMainFlowHistory(String id, String[][] rec, String fName) {
 		StringBuilder sb = new StringBuilder();
@@ -116,6 +127,12 @@ public class ShowSignHistoryService extends hproc {
 		return sb;
 	}
 
+	/**
+	 * Gets the HeaderStr.
+	 *
+	 * @param fName [String]
+	 * @return [String]
+	 */
 	private String getHeaderStr(String fName) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<tr>");
@@ -127,6 +144,11 @@ public class ShowSignHistoryService extends hproc {
 		return sb.toString();
 	}
 
+	/**
+	 * Gets the Information.
+	 *
+	 * @return [String]
+	 */
 	public String getInformation() {
 		return "---------------null(null).SIGN_HISTORY_V.defaultValue()----------------";
 	}

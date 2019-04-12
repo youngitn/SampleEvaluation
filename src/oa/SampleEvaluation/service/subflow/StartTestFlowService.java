@@ -16,11 +16,25 @@ import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
 import oa.global.BaseDao;
 import oa.global.DtoUtil;
 
+/**
+ * The Class StartTestFlowService.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public class StartTestFlowService extends HprocImpl {
+	
+	/** The is test value. */
 	String isTestValue;
+	
+	/** The coordinator. */
 	String coordinator;
+	
+	/** The t. */
 	talk t;
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.hproc#action(java.lang.String)
+	 */
 	@Override
 	public String action(String arg0) throws Throwable {
 		setNeedValue();
@@ -62,6 +76,11 @@ public class StartTestFlowService extends HprocImpl {
 		return arg0;
 	}
 
+	/**
+	 * Sets the need value.
+	 *
+	 * @throws Throwable the throwable
+	 */
 	public void setNeedValue() throws Throwable {
 		isTestValue = getValue("IS_TEST").trim();
 		coordinator = getValue("COORDINATOR").trim();

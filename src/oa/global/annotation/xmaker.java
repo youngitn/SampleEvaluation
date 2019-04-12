@@ -6,13 +6,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The Interface xmaker.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ FIELD })
 public @interface xmaker {
 	
 	/**
-	 * 設定UI欄位名稱
-	 * @return
+	 * 設定UI欄位名稱.
+	 *
+	 * @return  [String]
 	 */
 	public String name();
 	
@@ -24,35 +30,39 @@ public @interface xmaker {
 	 *  如EMPID在查詢頁面的UI名稱會加一個Q :Q_EMPID
 	 *  則須設置此識別參數=DB欄位名稱 以作為對應.
 	 *  
-	 * @return
+	 *
+	 * @return  [String]
 	 */
 	public String mappingDbFieldName() default "";;
 	
 	/**
 	 * 適用當該欄位為查詢條件時
-	 * 欄位如為日期起日 須設置
-	 * 
-	 * @return
+	 * 欄位如為日期起日 須設置.
+	 *
+	 * @return true, if is date start
 	 */
 	public boolean isDateStart() default false;
 
 	/**
 	 * 適用當該欄位為查詢條件時
-	 *  欄位如為日期迄日 須設置
-	 * @return
+	 *  欄位如為日期迄日 須設置.
+	 *
+	 * @return true, if is date end
 	 */
 	public boolean isDateEnd() default false;
 	
 	/**
 	 * select結果欄位如希望直接顯示欄位名稱text 如:select 'text'.. 須設置
-	 * @return
+	 *
+	 * @return true, if is text
 	 */
 	public boolean isText() default false;
 	
 	
 	/**
-	 * 作為查詢條件或結果時用來判斷該欄位是否為流程狀態
-	 * @return 
+	 * 作為查詢條件或結果時用來判斷該欄位是否為流程狀態.
+	 *
+	 * @return true, if is flow status
 	 */
 	public boolean isFlowStatus() default false;
 }

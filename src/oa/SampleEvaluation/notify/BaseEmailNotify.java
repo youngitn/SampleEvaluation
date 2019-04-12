@@ -15,17 +15,40 @@ import oa.SampleEvaluation.common.MailToolInApprove;
 import oa.SampleEvaluation.model.SampleEvaluationPO;
 import oa.global.EmailUtil;
 
+/**
+ * The Class BaseEmailNotify.
+ *
+ * @author YoungCheng(u52116) 2019/3/19
+ */
 public abstract class BaseEmailNotify extends bNotify {
 
+	/** The mail service. */
 	protected MailService mailService;
+	
+	/** The usr. */
 	protected ArrayList<String> usr = new ArrayList<String>();
+	
+	/** The is last gate. */
 	protected boolean isLastGate;
+	
+	/** The email util. */
 	protected EmailUtil emailUtil;
+	
+	/** The service. */
 	protected BaseService service;
+	
+	/** The t. */
 	protected talk t;
+	
+	/** The se. */
 	protected SampleEvaluationPO se;
+	
+	/** The content. */
 	protected String content;
 
+	/**
+	 * Initialization.
+	 */
 	public void initialization() {
 		service = new BaseService(this);
 		emailUtil = new EmailUtil(service);
@@ -39,6 +62,9 @@ public abstract class BaseEmailNotify extends bNotify {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.bNotify#actionPerformed(java.lang.String)
+	 */
 	public void actionPerformed(String value) throws Throwable {
 
 		// try {
@@ -68,42 +94,84 @@ public abstract class BaseEmailNotify extends bNotify {
 
 	}
 
+	/**
+	 * Change mail to usr.
+	 */
 	protected abstract void changeMailToUsr();
 
+	/**
+	 * Sets the Service.
+	 *
+	 * @param service  void
+	 */
 	public void setService(BaseService service) {
 		this.service = service;
 		this.emailUtil = new EmailUtil(service);
 		this.t = service.getTalk();
 	}
 
+	/**
+	 * Sets the BaseService.
+	 *
+	 * @param service  void
+	 */
 	public void setBaseService(BaseService service) {
 		this.service = service;
 		this.t = service.getTalk();
 
 	}
 
+	/**
+	 * Sets the EmailUtil.
+	 *
+	 * @param eu  void
+	 */
 	public void setEmailUtil(EmailUtil eu) {
 		this.emailUtil = eu;
 
 	}
 
+	/**
+	 * Sets the Talk.
+	 *
+	 * @param t  void
+	 */
 	public void setTalk(talk t) {
 		this.t = t;
 
 	}
 
+	/**
+	 * Sets the is last gate.
+	 */
 	protected void setIsLastGate() {
 		isLastGate = false;
 	}
 
+	/**
+	 * Builds the content.
+	 *
+	 * @param se [SampleEvaluationPO]
+	 * @return  [String]
+	 * @throws SQLException the SQL exception
+	 * @throws Exception the exception
+	 */
 	public abstract String buildContent(SampleEvaluationPO se) throws SQLException, Exception;
 
+	/**
+	 * Email title builder for final gate.
+	 *
+	 * @return  [String]
+	 */
 	protected String emailTitleBuilderForFinalGate() {
 
 		return "結案通知：" + getFunctionName() + MailToolInApprove.titleText(service);
 
 	}
 
+	/* (non-Javadoc)
+	 * @see jcx.jform.bBase#getInformation()
+	 */
 	@Override
 	public String getInformation() {
 		return "---------------\u76f4\u5c6c\u4e3b\u7ba1.Notify()----------------";

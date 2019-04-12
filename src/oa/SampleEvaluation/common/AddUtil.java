@@ -9,30 +9,37 @@ import com.ysp.service.BaseService;
 import oa.SampleEvaluation.controller.HprocImpl;
 
 /**
- * 起單時會用到的動作
- * 
- * @author u52116
+ * 起單時會用到的動作.
  *
+ * @author u52116
  */
 public class AddUtil {
 
+	/** The service. */
 	private HprocImpl service;
 
+	/**
+	 * Instantiates a new adds the util.
+	 */
 	public AddUtil() {
 
 	}
 
+	/**
+	 * Instantiates a new adds the util.
+	 *
+	 * @param service [HprocImpl]
+	 */
 	public AddUtil(HprocImpl service) {
 		this.service = service;
 	}
 
 	/**
-	 * 檢查必填欄位&儲存資料<br>
-	 * 
-	 * @param fieldMap
-	 * @return
+	 * 檢查必填欄位&儲存資料<br>.
+	 *
+	 * @param fieldMap [Map<String,String>]
 	 * @return 回傳List
-	 * @throws Exception
+	 * @throws Exception the exception
 	 */
 	public void doAdd(Map<String, String> fieldMap) throws Exception {
 
@@ -58,6 +65,12 @@ public class AddUtil {
 		}
 	}
 
+	/**
+	 * Gets the ValidateEmptyField.
+	 *
+	 * @param fieldMap [Map<String,String>]
+	 * @return [ArrayList<String>]
+	 */
 	public ArrayList<String> getValidateEmptyField(Map<String, String> fieldMap) {
 		ArrayList<String> ret = new ArrayList<String>();
 		String value = null;
@@ -71,6 +84,13 @@ public class AddUtil {
 		return ret;
 	}
 
+	/**
+	 * Gets the UUID.
+	 *
+	 * @param tableName [String]
+	 * @return [String]
+	 * @throws Exception the exception
+	 */
 	public String getUUID(String tableName) throws Exception {
 
 		String uuid = "";
