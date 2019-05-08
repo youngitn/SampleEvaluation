@@ -18,16 +18,18 @@ public class Checkbox extends hproc {
 	 * @author YoungCheng(u52116) 2019/3/19
 	 */
 	public enum SubFlowCheckboxName {
-		
-		/** The is check. */
-		IS_CHECK, 
- /** The is test. */
- IS_TEST, 
- /** The is trial production. */
- IS_TRIAL_PRODUCTION
+
+	/** The is check. */
+	IS_CHECK,
+	/** The is test. */
+	IS_TEST,
+	/** The is trial production. */
+	IS_TRIAL_PRODUCTION, IS_ELSE
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jcx.jform.hproc#action(java.lang.String)
 	 */
 	public String action(String value) {
@@ -71,6 +73,18 @@ public class Checkbox extends hproc {
 					setVisible("START_TP_FLOW", false);
 				}
 				break;
+			case IS_ELSE:
+				if (value.trim().equals("1")) {
+					setValue("LAB_EXE", "");
+					setValue("QC_BOSS", "");
+					setEditable("LAB_EXE", false);
+					setEditable("QC_BOSS", false);
+
+				} else {
+					setEditable("LAB_EXE", true);
+					setEditable("QC_BOSS", true);
+				}
+				break;
 			default:
 				break;
 			}
@@ -88,7 +102,7 @@ public class Checkbox extends hproc {
 	 * @param selectFields [String]
 	 * @return [String[][]]
 	 * @throws SQLException the SQL exception
-	 * @throws Exception the exception
+	 * @throws Exception    the exception
 	 */
 	public String[][] getSubFlowSignPeople(String selectFields) throws SQLException, Exception {
 		return getTalk().queryFromPool("SELECT " + selectFields

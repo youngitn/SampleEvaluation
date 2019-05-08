@@ -38,6 +38,8 @@ public class SampleEvaluationTpController extends HprocImpl {
 		// switch條件才會生效
 		switch (FlowStateEnum.valueOf(getState())) {
 		case 文管人員:
+			setEditable("NOTIFY_NO_CHECK", true);
+			setEditable("NOTIFY_NO_TRIAL_PROD", true);
 			setEditable("EVALUATION_RESULT", true);
 			break;
 		default:

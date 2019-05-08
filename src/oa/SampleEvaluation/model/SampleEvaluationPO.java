@@ -17,219 +17,219 @@ public class SampleEvaluationPO extends Model {
 	/** The pno. */
 	@xmaker(name = "PNO")
 	protected String pno;
-	
+
 	/** The app type. */
 	@xmaker(name = "APP_TYPE")
 	protected String appType;
-	
+
 	/** The urgency. */
 	@xmaker(name = "URGENCY")
 	protected String urgency;
-	
+
 	/** The material. */
 	@xmaker(name = "MATERIAL")
 	protected String material;
-	
+
 	/** The sap code. */
 	@xmaker(name = "SAP_CODE")
 	protected String sapCode;
-	
+
 	/** The ab code. */
 	@xmaker(name = "AB_CODE")
 	protected String abCode;
-	
+
 	/** The mfg lot no. */
 	@xmaker(name = "MFG_LOT_NO")
 	protected String mfgLotNo;
-	
+
 	/** The qty. */
 	@xmaker(name = "QTY")
 	protected String qty = "0";
-	
+
 	/** The pack. */
 	@xmaker(name = "PACK")
 	protected String pack;
-	
+
 	/** The unit. */
 	@xmaker(name = "UNIT")
 	protected String unit;
-	
+
 	/** The mfr. */
 	@xmaker(name = "MFR")
 	protected String mfr;
-	
+
 	/** The supplier. */
 	@xmaker(name = "SUPPLIER")
 	protected String supplier;
-	
+
 	/** The provide coa. */
 	@xmaker(name = "PROVIDE_COA")
 	protected String provideCoa;
-	
+
 	/** The provide spec. */
 	@xmaker(name = "PROVIDE_SPEC")
 	protected String provideSpec;
-	
+
 	/** The provide test method. */
 	@xmaker(name = "PROVIDE_TEST_METHOD")
 	protected String provideTestMethod;
-	
+
 	/** The provide sds. */
 	@xmaker(name = "PROVIDE_SDS")
 	protected String provideSds;
-	
+
 	/** The provide others. */
 	@xmaker(name = "PROVIDE_OTHERS")
 	protected String provideOthers;
-	
+
 	/** The note. */
 	@xmaker(name = "NOTE")
 	protected String note;
-	
+
 	/** The applicant. */
 	@xmaker(name = "APPLICANT")
 	protected String applicant;
-	
+
 	/** The app date. */
 	@xmaker(name = "APP_DATE")
 	protected String appDate;
-	
+
 	/** The receipt unit. */
 	@xmaker(name = "RECEIPT_UNIT")
 	protected String receiptUnit;
-	
+
 	/** The project code. */
 	@xmaker(name = "PROJECT_CODE")
 	protected String projectCode;
-	
+
 	/** The project leader. */
 	@xmaker(name = "PROJECT_LEADER")
 	protected String projectLeader;
-	
+
 	/** The notify no check. */
 	@xmaker(name = "NOTIFY_NO_CHECK")
 	protected String notifyNoCheck;
-	
+
 	/** The notify no trial prod. */
 	@xmaker(name = "NOTIFY_NO_TRIAL_PROD")
 	protected String notifyNoTrialProd;
-	
+
 	/** The qr no. */
 	@xmaker(name = "QR_NO")
 	protected String qrNo;
-	
+
 	/** The is check. */
 	@xmaker(name = "IS_CHECK")
 	protected String isCheck;
-	
+
 	/** The is trial production. */
 	@xmaker(name = "IS_TRIAL_PRODUCTION")
 	protected String isTrialProduction;
-	
+
 	/** The assessor. */
 	@xmaker(name = "ASSESSOR")
 	protected String assessor;
-	
+
 	/** The designee. */
 	@xmaker(name = "DESIGNEE")
 	protected String designee;
-	
+
 	/** The lab exe. */
 	@xmaker(name = "LAB_EXE")
 	protected String labExe;
-	
+
 	/** The doc ctrler. */
 	@xmaker(name = "DOC_CTRLER")
 	protected String docCtrler;
-	
+
 	/** The evaluation result. */
 	@xmaker(name = "EVALUATION_RESULT")
 	protected String evaluationResult;
-	
+
 	/** The file spec. */
 	@xmaker(name = "FILE_SPEC")
 	protected String fileSpec;
-	
+
 	/** The file coa. */
 	@xmaker(name = "FILE_COA")
 	protected String fileCoa;
-	
+
 	/** The file test method. */
 	@xmaker(name = "FILE_TEST_METHOD")
 	protected String fileTestMethod;
-	
+
 	/** The file others. */
 	@xmaker(name = "FILE_OTHERS")
 	protected String fileOthers;
-	
+
 	/** The file sds. */
 	@xmaker(name = "FILE_SDS")
 	protected String fileSds;
-	
+
 	/** The file spec note. */
 	@xmaker(name = "FILE_SPEC_NOTE")
 	protected String fileSpecNote;
-	
+
 	/** The file coa note. */
 	@xmaker(name = "FILE_COA_NOTE")
 	protected String fileCoaNote;
-	
+
 	/** The file test method note. */
 	@xmaker(name = "FILE_TEST_METHOD_NOTE")
 	protected String fileTestMethodNote;
-	
+
 	/** The file others note. */
 	@xmaker(name = "FILE_OTHERS_NOTE")
 	protected String fileOthersNote;
-	
+
 	/** The file sds note. */
 	@xmaker(name = "FILE_SDS_NOTE")
 	protected String fileSdsNote;
-	
+
 	/** The file 1. */
 	@xmaker(name = "FILE_1")
 	protected String file1;
-	
+
 	/** The file 2. */
 	@xmaker(name = "FILE_2")
 	protected String file2;
-	
+
 	/** The file 3. */
 	@xmaker(name = "FILE_3")
 	protected String file3;
-	
+
 	/** The file 4. */
 	@xmaker(name = "FILE_4")
 	protected String file4;
-	
+
 	/** The file 5. */
 	@xmaker(name = "FILE_5")
 	protected String file5;
-	
+
 	/** The file 6. */
 	@xmaker(name = "FILE_6")
 	protected String file6;
-	
+
 	/** The file 7. */
 	@xmaker(name = "FILE_7")
 	protected String file7;
-	
+
 	/** The file 8. */
 	@xmaker(name = "FILE_8")
 	protected String file8;
-	
+
 	/** The file 9. */
 	@xmaker(name = "FILE_9")
 	protected String file9;
-	
+
 	/** The file 10. */
 	@xmaker(name = "FILE_10")
 	protected String file10;
-	
+
 	/** The file 1 note. */
 	@xmaker(name = "FILE_1_NOTE")
 	protected String file1Note;
-	
+
 	/** The file 2 note. */
 	@xmaker(name = "FILE_2_NOTE")
 	protected String file2Note;
@@ -237,77 +237,82 @@ public class SampleEvaluationPO extends Model {
 	/** The file 3 note. */
 	@xmaker(name = "FILE_3_NOTE")
 	protected String file3Note;
-	
+
 	/** The file 4 note. */
 	@xmaker(name = "FILE_4_NOTE")
 	protected String file4Note;
-	
+
 	/** The file 5 note. */
 	@xmaker(name = "FILE_5_NOTE")
 	protected String file5Note;
-	
+
 	/** The file 6 note. */
 	@xmaker(name = "FILE_6_NOTE")
 	protected String file6Note;
-	
+
 	/** The file 7 note. */
 	@xmaker(name = "FILE_7_NOTE")
 	protected String file7Note;
-	
+
 	/** The file 8 note. */
 	@xmaker(name = "FILE_8_NOTE")
 	protected String file8Note;
-	
+
 	/** The file 9 note. */
 	@xmaker(name = "FILE_9_NOTE")
 	protected String file9Note;
-	
+
 	/** The file 10 note. */
 	@xmaker(name = "FILE_10_NOTE")
 	protected String file10Note;
-	
+
 	/** The doc ctrler check. */
 	@xmaker(name = "DOC_CTRLER_CHECK")
 	protected String docCtrlerCheck;
-	
+
 	/** The doc ctrler tp. */
 	@xmaker(name = "DOC_CTRLER_TP")
 	protected String docCtrlerTp;
-	
+
 	/** The qc boss. */
 	@xmaker(name = "QC_BOSS")
 	protected String qcBoss;
-	
+
 	/** The coordinator. */
 	@xmaker(name = "COORDINATOR")
 	protected String coordinator;
-	
+
 	/** The file evaluation result. */
 	@xmaker(name = "FILE_EVALUATION_RESULT")
 	protected String fileEvaluationResult;
-	
+
 	/** The is test. */
 	@xmaker(name = "IS_TEST")
 	protected String isTest;
-	
+
 	/** The app reason. */
 	@xmaker(name = "APP_REASON")
 	protected String appReason;
-	
+
 	/** The mfr address. */
 	@xmaker(name = "MFR_ADDRESS")
 	protected String mfrAddress;
-	
+
 	/** The urgencyt type. */
 	@xmaker(name = "URGENCY_TYPE")
 	protected String urgencytType;
-	
+
 	/** The mfr country. */
 	@xmaker(name = "MFR_COUNTRY")
 	protected String mfrCountry;
 
 	@xmaker(name = "CHECK_DATE")
 	protected String checkDate;
+
+	/** The is else. */
+	@xmaker(name = "IS_ELSE")
+	protected String isElse;
+
 	/**
 	 * Gets the FileSpecNote.
 	 *
@@ -320,7 +325,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileSpecNote.
 	 *
-	 * @param fileSpecNote  void
+	 * @param fileSpecNote void
 	 */
 	public void setFileSpecNote(String fileSpecNote) {
 		this.fileSpecNote = fileSpecNote;
@@ -338,7 +343,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileCoaNote.
 	 *
-	 * @param fileCoaNote  void
+	 * @param fileCoaNote void
 	 */
 	public void setFileCoaNote(String fileCoaNote) {
 		this.fileCoaNote = fileCoaNote;
@@ -356,7 +361,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileTestMethodNote.
 	 *
-	 * @param fileTestMethodNote  void
+	 * @param fileTestMethodNote void
 	 */
 	public void setFileTestMethodNote(String fileTestMethodNote) {
 		this.fileTestMethodNote = fileTestMethodNote;
@@ -374,7 +379,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileOthersNote.
 	 *
-	 * @param fileOthersNote  void
+	 * @param fileOthersNote void
 	 */
 	public void setFileOthersNote(String fileOthersNote) {
 		this.fileOthersNote = fileOthersNote;
@@ -392,7 +397,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileSdsNote.
 	 *
-	 * @param fileSdsNote  void
+	 * @param fileSdsNote void
 	 */
 	public void setFileSdsNote(String fileSdsNote) {
 		this.fileSdsNote = fileSdsNote;
@@ -410,7 +415,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File1Note.
 	 *
-	 * @param file1Note  void
+	 * @param file1Note void
 	 */
 	public void setFile1Note(String file1Note) {
 		this.file1Note = file1Note;
@@ -428,7 +433,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File2Note.
 	 *
-	 * @param file2Note  void
+	 * @param file2Note void
 	 */
 	public void setFile2Note(String file2Note) {
 		this.file2Note = file2Note;
@@ -446,7 +451,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File3Note.
 	 *
-	 * @param file3Note  void
+	 * @param file3Note void
 	 */
 	public void setFile3Note(String file3Note) {
 		this.file3Note = file3Note;
@@ -464,7 +469,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File4Note.
 	 *
-	 * @param file4Note  void
+	 * @param file4Note void
 	 */
 	public void setFile4Note(String file4Note) {
 		this.file4Note = file4Note;
@@ -482,7 +487,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File5Note.
 	 *
-	 * @param file5Note  void
+	 * @param file5Note void
 	 */
 	public void setFile5Note(String file5Note) {
 		this.file5Note = file5Note;
@@ -500,7 +505,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File6Note.
 	 *
-	 * @param file6Note  void
+	 * @param file6Note void
 	 */
 	public void setFile6Note(String file6Note) {
 		this.file6Note = file6Note;
@@ -518,7 +523,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File7Note.
 	 *
-	 * @param file7Note  void
+	 * @param file7Note void
 	 */
 	public void setFile7Note(String file7Note) {
 		this.file7Note = file7Note;
@@ -536,7 +541,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File8Note.
 	 *
-	 * @param file8Note  void
+	 * @param file8Note void
 	 */
 	public void setFile8Note(String file8Note) {
 		this.file8Note = file8Note;
@@ -554,7 +559,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File9Note.
 	 *
-	 * @param file9Note  void
+	 * @param file9Note void
 	 */
 	public void setFile9Note(String file9Note) {
 		this.file9Note = file9Note;
@@ -572,7 +577,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File10Note.
 	 *
-	 * @param file10Note  void
+	 * @param file10Note void
 	 */
 	public void setFile10Note(String file10Note) {
 		this.file10Note = file10Note;
@@ -590,7 +595,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the DocCtrlerCheck.
 	 *
-	 * @param docCtrlerCheck  void
+	 * @param docCtrlerCheck void
 	 */
 	public void setDocCtrlerCheck(String docCtrlerCheck) {
 		this.docCtrlerCheck = docCtrlerCheck;
@@ -608,7 +613,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the DocCtrlerTp.
 	 *
-	 * @param docCtrlerTp  void
+	 * @param docCtrlerTp void
 	 */
 	public void setDocCtrlerTp(String docCtrlerTp) {
 		this.docCtrlerTp = docCtrlerTp;
@@ -624,7 +629,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the DocCtrler.
 	 *
-	 * @param value  void
+	 * @param value void
 	 */
 	public void setDocCtrler(String value) {
 		this.docCtrler = value;
@@ -651,7 +656,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Pno.
 	 *
-	 * @param pno  void
+	 * @param pno void
 	 */
 	public void setPno(String pno) {
 		this.pno = pno;
@@ -669,7 +674,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the AppType.
 	 *
-	 * @param appType  void
+	 * @param appType void
 	 */
 	public void setAppType(String appType) {
 		this.appType = appType;
@@ -687,7 +692,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Urgency.
 	 *
-	 * @param urgency  void
+	 * @param urgency void
 	 */
 	public void setUrgency(String urgency) {
 		this.urgency = urgency;
@@ -705,7 +710,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Material.
 	 *
-	 * @param material  void
+	 * @param material void
 	 */
 	public void setMaterial(String material) {
 		this.material = material;
@@ -723,7 +728,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the SapCode.
 	 *
-	 * @param sapCode  void
+	 * @param sapCode void
 	 */
 	public void setSapCode(String sapCode) {
 		this.sapCode = sapCode;
@@ -741,7 +746,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the AbCode.
 	 *
-	 * @param abCode  void
+	 * @param abCode void
 	 */
 	public void setAbCode(String abCode) {
 		this.abCode = abCode;
@@ -759,7 +764,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the MfgLotNo.
 	 *
-	 * @param mfgLotNo  void
+	 * @param mfgLotNo void
 	 */
 	public void setMfgLotNo(String mfgLotNo) {
 		this.mfgLotNo = mfgLotNo;
@@ -777,7 +782,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Qty.
 	 *
-	 * @param qty  void
+	 * @param qty void
 	 */
 	public void setQty(String qty) {
 		this.qty = qty;
@@ -795,7 +800,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Pack.
 	 *
-	 * @param pack  void
+	 * @param pack void
 	 */
 	public void setPack(String pack) {
 		this.pack = pack;
@@ -813,7 +818,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Unit.
 	 *
-	 * @param unit  void
+	 * @param unit void
 	 */
 	public void setUnit(String unit) {
 		this.unit = unit;
@@ -831,7 +836,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Mfr.
 	 *
-	 * @param mfr  void
+	 * @param mfr void
 	 */
 	public void setMfr(String mfr) {
 		this.mfr = mfr;
@@ -849,7 +854,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Supplier.
 	 *
-	 * @param supplier  void
+	 * @param supplier void
 	 */
 	public void setSupplier(String supplier) {
 		this.supplier = supplier;
@@ -867,7 +872,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProvideCoa.
 	 *
-	 * @param provideCoa  void
+	 * @param provideCoa void
 	 */
 	public void setProvideCoa(String provideCoa) {
 		this.provideCoa = provideCoa;
@@ -885,7 +890,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProvideSpec.
 	 *
-	 * @param provideSpec  void
+	 * @param provideSpec void
 	 */
 	public void setProvideSpec(String provideSpec) {
 		this.provideSpec = provideSpec;
@@ -903,7 +908,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProvideTestMethod.
 	 *
-	 * @param provideTestMethod  void
+	 * @param provideTestMethod void
 	 */
 	public void setProvideTestMethod(String provideTestMethod) {
 		this.provideTestMethod = provideTestMethod;
@@ -921,7 +926,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProvideSds.
 	 *
-	 * @param provideSds  void
+	 * @param provideSds void
 	 */
 	public void setProvideSds(String provideSds) {
 		this.provideSds = provideSds;
@@ -939,7 +944,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProvideOthers.
 	 *
-	 * @param provideOthers  void
+	 * @param provideOthers void
 	 */
 	public void setProvideOthers(String provideOthers) {
 		this.provideOthers = provideOthers;
@@ -957,7 +962,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Note.
 	 *
-	 * @param note  void
+	 * @param note void
 	 */
 	public void setNote(String note) {
 		this.note = note;
@@ -975,7 +980,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Applicant.
 	 *
-	 * @param applicant  void
+	 * @param applicant void
 	 */
 	public void setApplicant(String applicant) {
 		this.applicant = applicant;
@@ -993,7 +998,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the AppDate.
 	 *
-	 * @param appDate  void
+	 * @param appDate void
 	 */
 	public void setAppDate(String appDate) {
 		this.appDate = appDate;
@@ -1011,7 +1016,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ReceiptUnit.
 	 *
-	 * @param receiptUnit  void
+	 * @param receiptUnit void
 	 */
 	public void setReceiptUnit(String receiptUnit) {
 		this.receiptUnit = receiptUnit;
@@ -1029,7 +1034,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProjectCode.
 	 *
-	 * @param projectCode  void
+	 * @param projectCode void
 	 */
 	public void setProjectCode(String projectCode) {
 		this.projectCode = projectCode;
@@ -1047,7 +1052,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the ProjectLeader.
 	 *
-	 * @param projectLeader  void
+	 * @param projectLeader void
 	 */
 	public void setProjectLeader(String projectLeader) {
 		this.projectLeader = projectLeader;
@@ -1065,7 +1070,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the NotifyNoCheck.
 	 *
-	 * @param notifyNoCheck  void
+	 * @param notifyNoCheck void
 	 */
 	public void setNotifyNoCheck(String notifyNoCheck) {
 		this.notifyNoCheck = notifyNoCheck;
@@ -1083,7 +1088,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the NotifyNoTrialProd.
 	 *
-	 * @param notifyNoTrialProd  void
+	 * @param notifyNoTrialProd void
 	 */
 	public void setNotifyNoTrialProd(String notifyNoTrialProd) {
 		this.notifyNoTrialProd = notifyNoTrialProd;
@@ -1101,7 +1106,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the QrNo.
 	 *
-	 * @param qrNo  void
+	 * @param qrNo void
 	 */
 	public void setQrNo(String qrNo) {
 		this.qrNo = qrNo;
@@ -1119,7 +1124,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the IsCheck.
 	 *
-	 * @param isCheck  void
+	 * @param isCheck void
 	 */
 	public void setIsCheck(String isCheck) {
 		this.isCheck = isCheck;
@@ -1137,7 +1142,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the IsTrialProduction.
 	 *
-	 * @param isTrialProduction  void
+	 * @param isTrialProduction void
 	 */
 	public void setIsTrialProduction(String isTrialProduction) {
 		this.isTrialProduction = isTrialProduction;
@@ -1155,7 +1160,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Designee.
 	 *
-	 * @param designee  void
+	 * @param designee void
 	 */
 	public void setDesignee(String designee) {
 		this.designee = designee;
@@ -1173,7 +1178,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Assessor.
 	 *
-	 * @param assessor  void
+	 * @param assessor void
 	 */
 	public void setAssessor(String assessor) {
 		this.assessor = assessor;
@@ -1191,7 +1196,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the LabExe.
 	 *
-	 * @param labExe  void
+	 * @param labExe void
 	 */
 	public void setLabExe(String labExe) {
 		this.labExe = labExe;
@@ -1209,7 +1214,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the EvaluationResult.
 	 *
-	 * @param evaluationResult  void
+	 * @param evaluationResult void
 	 */
 	public void setEvaluationResult(String evaluationResult) {
 		this.evaluationResult = evaluationResult;
@@ -1227,7 +1232,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileSpec.
 	 *
-	 * @param fileSpec  void
+	 * @param fileSpec void
 	 */
 	public void setFileSpec(String fileSpec) {
 		this.fileSpec = fileSpec;
@@ -1245,7 +1250,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileCoa.
 	 *
-	 * @param fileCoa  void
+	 * @param fileCoa void
 	 */
 	public void setFileCoa(String fileCoa) {
 		this.fileCoa = fileCoa;
@@ -1263,7 +1268,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileTestMethod.
 	 *
-	 * @param fileTestMethod  void
+	 * @param fileTestMethod void
 	 */
 	public void setFileTestMethod(String fileTestMethod) {
 		this.fileTestMethod = fileTestMethod;
@@ -1281,7 +1286,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileOthers.
 	 *
-	 * @param fileOthers  void
+	 * @param fileOthers void
 	 */
 	public void setFileOthers(String fileOthers) {
 		this.fileOthers = fileOthers;
@@ -1299,7 +1304,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileSds.
 	 *
-	 * @param fileSds  void
+	 * @param fileSds void
 	 */
 	public void setFileSds(String fileSds) {
 		this.fileSds = fileSds;
@@ -1317,7 +1322,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File1.
 	 *
-	 * @param file1  void
+	 * @param file1 void
 	 */
 	public void setFile1(String file1) {
 		this.file1 = file1;
@@ -1335,7 +1340,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File2.
 	 *
-	 * @param file2  void
+	 * @param file2 void
 	 */
 	public void setFile2(String file2) {
 		this.file2 = file2;
@@ -1353,7 +1358,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File3.
 	 *
-	 * @param file3  void
+	 * @param file3 void
 	 */
 	public void setFile3(String file3) {
 		this.file3 = file3;
@@ -1371,7 +1376,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File4.
 	 *
-	 * @param file4  void
+	 * @param file4 void
 	 */
 	public void setFile4(String file4) {
 		this.file4 = file4;
@@ -1389,7 +1394,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File5.
 	 *
-	 * @param file5  void
+	 * @param file5 void
 	 */
 	public void setFile5(String file5) {
 		this.file5 = file5;
@@ -1407,7 +1412,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File6.
 	 *
-	 * @param file6  void
+	 * @param file6 void
 	 */
 	public void setFile6(String file6) {
 		this.file6 = file6;
@@ -1425,7 +1430,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File7.
 	 *
-	 * @param file7  void
+	 * @param file7 void
 	 */
 	public void setFile7(String file7) {
 		this.file7 = file7;
@@ -1443,7 +1448,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File8.
 	 *
-	 * @param file8  void
+	 * @param file8 void
 	 */
 	public void setFile8(String file8) {
 		this.file8 = file8;
@@ -1461,7 +1466,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File9.
 	 *
-	 * @param file9  void
+	 * @param file9 void
 	 */
 	public void setFile9(String file9) {
 		this.file9 = file9;
@@ -1479,7 +1484,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the File10.
 	 *
-	 * @param file10  void
+	 * @param file10 void
 	 */
 	public void setFile10(String file10) {
 		this.file10 = file10;
@@ -1497,7 +1502,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the FileEvaluationResult.
 	 *
-	 * @param fileEvaluationResult  void
+	 * @param fileEvaluationResult void
 	 */
 	public void setFileEvaluationResult(String fileEvaluationResult) {
 		this.fileEvaluationResult = fileEvaluationResult;
@@ -1515,7 +1520,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the AppReason.
 	 *
-	 * @param appReason  void
+	 * @param appReason void
 	 */
 	public void setAppReason(String appReason) {
 		this.appReason = appReason;
@@ -1533,7 +1538,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the QcBoss.
 	 *
-	 * @param qcBoss  void
+	 * @param qcBoss void
 	 */
 	public void setQcBoss(String qcBoss) {
 		this.qcBoss = qcBoss;
@@ -1551,7 +1556,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the Coordinator.
 	 *
-	 * @param coordinator  void
+	 * @param coordinator void
 	 */
 	public void setCoordinator(String coordinator) {
 		this.coordinator = coordinator;
@@ -1569,7 +1574,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the IsTest.
 	 *
-	 * @param isTest  void
+	 * @param isTest void
 	 */
 	public void setIsTest(String isTest) {
 		this.isTest = isTest;
@@ -1587,7 +1592,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the MfrAddress.
 	 *
-	 * @param mfrAddress  void
+	 * @param mfrAddress void
 	 */
 	public void setMfrAddress(String mfrAddress) {
 		this.mfrAddress = mfrAddress;
@@ -1605,7 +1610,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the UrgencytType.
 	 *
-	 * @param urgencytType  void
+	 * @param urgencytType void
 	 */
 	public void setUrgencytType(String urgencytType) {
 		this.urgencytType = urgencytType;
@@ -1623,7 +1628,7 @@ public class SampleEvaluationPO extends Model {
 	/**
 	 * Sets the MfrCountry.
 	 *
-	 * @param mfrCountry  void
+	 * @param mfrCountry void
 	 */
 	public void setMfrCountry(String mfrCountry) {
 		this.mfrCountry = mfrCountry;
@@ -1635,6 +1640,14 @@ public class SampleEvaluationPO extends Model {
 
 	public void setCheckDate(String checkDate) {
 		this.checkDate = checkDate;
+	}
+
+	public String getIsElse() {
+		return isElse;
+	}
+
+	public void setIsElse(String isElse) {
+		this.isElse = isElse;
 	}
 
 }
