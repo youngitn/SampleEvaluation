@@ -34,8 +34,8 @@ public class SampleEvaluationCheckController extends HprocImpl {
 		System.out.println("getState----->" + getState());
 		switch (FlowStateEnum.valueOf(getState().trim())) {
 		case 文管人員:
-//			setEditable("NOTIFY_NO_CHECK", true);
-//			setEditable("NOTIFY_NO_TRIAL_PROD", true);
+			setEditable("NOTIFY_NO_CHECK", true);
+			setEditable("NOTIFY_NO_TRIAL_PROD", true);
 			setEditable("CHECK_DATE", true);
 			break;
 		case 品保課長:

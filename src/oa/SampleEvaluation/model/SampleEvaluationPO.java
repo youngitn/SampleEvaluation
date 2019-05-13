@@ -313,6 +313,10 @@ public class SampleEvaluationPO extends Model {
 	@xmaker(name = "IS_ELSE")
 	protected String isElse;
 
+	/** The is else. */
+	@xmaker(name = "M_CODE")
+	protected String mCode;
+
 	/**
 	 * Gets the FileSpecNote.
 	 *
@@ -1648,6 +1652,14 @@ public class SampleEvaluationPO extends Model {
 
 	public void setIsElse(String isElse) {
 		this.isElse = isElse;
+	}
+
+	public String getmCode() {
+		return mCode;
+	}
+
+	public void setmCode(String mCode) {
+		this.mCode = mCode;
 	}
 
 }

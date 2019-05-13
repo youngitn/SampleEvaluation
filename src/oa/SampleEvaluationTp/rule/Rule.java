@@ -11,8 +11,10 @@ import java.util.*;
  * @author YoungCheng(u52116) 2019/3/19
  */
 public class Rule extends bRule {
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jcx.jform.bRule#getIDs(java.lang.String)
 	 */
 	public Vector<String> getIDs(String value) throws Throwable {
@@ -30,9 +32,13 @@ public class Rule extends bRule {
 
 			break;
 		case 檢驗人員:
-			id.addElement("admin");
-			ret = getData("LAB_EXE").trim().split(" ");
-			id.addElement(ret[0]);
+			if (!"1".equals(getData("IS_ELSE").trim())) {
+				id.addElement("admin");
+				ret = getData("LAB_EXE").trim().split(" ");
+				id.addElement(ret[0]);
+			} else {
+				id.addElement(null);
+			}
 			break;
 		case 試製人員:
 			id.addElement("admin");
@@ -46,7 +52,9 @@ public class Rule extends bRule {
 		return id;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jcx.jform.bBase#getInformation()
 	 */
 	public String getInformation() {

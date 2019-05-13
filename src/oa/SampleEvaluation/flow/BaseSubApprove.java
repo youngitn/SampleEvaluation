@@ -19,7 +19,7 @@ import oa.global.DtoUtil;
  * @author YoungCheng(u52116) 2019/3/19
  */
 public abstract class BaseSubApprove extends bProcFlow {
-	
+
 	/**
 	 * Sync data.
 	 *
@@ -44,7 +44,7 @@ public abstract class BaseSubApprove extends bProcFlow {
 			service = new SampleEvaluationCheckService(t);
 			SampleEvaluationCheckPO ck = new SampleEvaluationCheckPO();
 			ck.getFormData(this);
-			ck.setOwnPno(ck.getOwnPno());
+			ck.setOwnPno(ck.getPno() + "CHECK");
 			service.update(ck);
 		}
 
@@ -52,7 +52,7 @@ public abstract class BaseSubApprove extends bProcFlow {
 			service = new SampleEvaluationTestService(t);
 			SampleEvaluationTestPO test = new SampleEvaluationTestPO();
 			test.getFormData(this);
-			test.setOwnPno(test.getOwnPno());
+			test.setOwnPno(test.getPno() + "TEST");
 			service.update(test);
 		}
 
@@ -87,7 +87,9 @@ public abstract class BaseSubApprove extends bProcFlow {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jcx.jform.bProcFlow#action(java.lang.String)
 	 */
 	@Override
