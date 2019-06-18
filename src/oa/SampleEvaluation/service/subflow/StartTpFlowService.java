@@ -6,11 +6,12 @@ import com.ysp.service.BaseService;
 import jcx.db.talk;
 import oa.SampleEvaluation.common.MailToolInApprove;
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluation.model.SampleEvaluationPO;
-import oa.SampleEvaluation.service.SampleEvaluationService;
+import oa.SampleEvaluation.i.Flowc;
 import oa.SampleEvaluation.service.SyncDataService;
 import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
+import oa.SampleEvaluationTp.model.SampleEvaluationTpFlowcHisPO;
+import oa.SampleEvaluationTp.model.SampleEvaluationTpFlowcPO;
 import oa.SampleEvaluationTp.model.SampleEvaluationTpPO;
 import oa.SampleEvaluationTp.service.SampleEvaluationTpService;
 import oa.global.BaseDao;
@@ -22,27 +23,36 @@ import oa.global.DtoUtil;
  * @author YoungCheng(u52116) 2019/3/19
  */
 public class StartTpFlowService extends HprocImpl {
-	
+
 	/** The is trial prod value. */
 	String isTrialProdValue;
-	
+
 	/** The doc ctrler tp. */
 	String docCtrlerTp;
-	
+
 	/** The assessor. */
 	String assessor;
-	
+
 	/** The lab exe. */
 	String labExe;
-	
+
 	/** The t. */
 	talk t;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jcx.jform.hproc#action(java.lang.String)
 	 */
 	@Override
 	public String action(String arg0) throws Throwable {
+
+		SubFlowBuilder sfb = null;
+		sfb = new TpFlowBuilder();
+		if (!sfb.isReady(this)) {
+			message("試製流程中之文管人員,試製人員,檢驗人員欄位皆不得為空");
+			return arg0;
+		}
 		setNeedValue();
 		BaseDao dao = new SampleEvaluationTpService(t);
 		SampleEvaluationTpPO tp = (SampleEvaluationTpPO) dao.findById(getValue("PNO") + "TP");
@@ -50,17 +60,8 @@ public class StartTpFlowService extends HprocImpl {
 			message("已執行過試製流程");
 			return arg0;
 		}
-		// if ("1".equals(isTrialProdValue)) {
-		SubFlowBuilder sfb = null;
-		sfb = new TpFlowBuilder();
-		if (!sfb.isReady(this)) {
-			message("試製流程中之文管人員,試製人員,檢驗人員欄位皆不得為空");
-			return arg0;
-		}
-		// }
-		SampleEvaluationService daoservice = new SampleEvaluationService(t);
-		SampleEvaluationPO se = (SampleEvaluationPO) DtoUtil.setFormDataIntoDto(new SampleEvaluationPO(), this);
-		daoservice.update(se);
+
+		SyncDataService.mainFlowSync(t, this);
 
 		String mailTitle = "簽核通知：" + this.getFunctionName();
 
@@ -69,7 +70,9 @@ public class StartTpFlowService extends HprocImpl {
 
 		sfb.setMainDto(tp);
 		sfb.setTalk(t);
-		sfb.construct();
+		Flowc flowc = new SampleEvaluationTpFlowcPO();
+		Flowc flowcHis = new SampleEvaluationTpFlowcHisPO();
+		sfb.construct(flowc, flowcHis);
 		SyncDataService.subFlowSync(t, this);
 		// 有請驗流程 寄出通知信
 		String title = mailTitle + "_試製流程";

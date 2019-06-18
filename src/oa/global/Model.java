@@ -23,7 +23,7 @@ public  abstract class Model {
 	 * @param service [Object]
 	 * @return [void]
 	 */
-	public void getFormData(Object service) {
+	public void getDataFromForm(Object service) {
 
 		try {
 

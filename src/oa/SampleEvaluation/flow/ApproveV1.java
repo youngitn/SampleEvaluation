@@ -20,7 +20,7 @@ import oa.global.BaseDao;
 
 /**
  * The Class ApproveV1.
- *
+ * 20190612 需重構 子流程起單部分過度設計 難理解 現在來看很辛苦.
  * @author YoungCheng(u52116) 2019/3/19
  */
 public class ApproveV1 extends bProcFlow {
@@ -63,7 +63,7 @@ public class ApproveV1 extends bProcFlow {
 
 		SampleEvaluationService daoservice = new SampleEvaluationService(t);
 		SampleEvaluationPO se = new SampleEvaluationPO();
-		se.getFormData(this);
+		se.getDataFromForm(this);
 
 		switch (FlowStateEnum.valueOf(nowState)) {
 		case 課主管:

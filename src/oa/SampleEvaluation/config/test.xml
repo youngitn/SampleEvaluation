@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <config>
 	<!--RefinedAbstraction -->
-	<item>bridge.JPGImage</item>
-	<item>bridge.JPGImage</item>
-	<item>bridge.JPGImage</item>
-	<item>bridge.JPGImage</item>
+	<item name='AN'>A</item>
+	<item name='BN'>B</item>
+	<item name='CN'>C</item>
+	<item name='DN'>D</item>
 </config>

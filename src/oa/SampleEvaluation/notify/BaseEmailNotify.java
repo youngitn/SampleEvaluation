@@ -55,7 +55,7 @@ public abstract class BaseEmailNotify extends bNotify {
 		mailService = new MailService(service);
 		setIsLastGate();
 		se = new SampleEvaluationPO();
-		se.getFormData(this);
+		se.getDataFromForm(this);
 		this.t = this.getTalk();
 		if (this.t == null) {
 			this.t = getTalk();

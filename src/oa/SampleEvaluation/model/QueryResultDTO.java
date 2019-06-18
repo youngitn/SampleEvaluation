@@ -73,6 +73,10 @@ public class QueryResultDTO {
 	/** The urgencyType. */
 	@xmaker(name = "URGENCY_TYPE")
 	private String urgencyType;
+	
+	/** The urgencyType. */
+	@xmaker(name = "M_CODE")
+	private String mCode;
 	/**
 	 * Gets the Pno.
 	 *

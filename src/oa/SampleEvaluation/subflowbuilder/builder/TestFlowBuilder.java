@@ -1,13 +1,9 @@
 package oa.SampleEvaluation.subflowbuilder.builder;
 
-import java.sql.SQLException;
-
 import jcx.jform.bProcFlow;
 import jcx.jform.hproc;
 import oa.SampleEvaluationTest.model.SampleEvaluationTestPO;
 import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
-import oa.SampleEvaluationTest.model.SampleEvaluationTestFlowcPO;
-import oa.SampleEvaluationTest.model.SampleEvaluationTestFlowcHisPO;
 
 /**
  * The Class TestFlowBuilder.
@@ -26,12 +22,8 @@ public class TestFlowBuilder extends SubFlowBuilder {
 	/* (non-Javadoc)
 	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#setAndInsertFlowData()
 	 */
-	@Override
-	public void setAndInsertFlowData() throws SQLException, Exception {
-		insertFlowData(new SampleEvaluationTestFlowcPO());
-		insertFlowData(new SampleEvaluationTestFlowcHisPO());
-	}
 
+	
 	/* (non-Javadoc)
 	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#insertSubMainData()
 	 */

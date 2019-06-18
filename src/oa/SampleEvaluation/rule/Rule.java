@@ -34,6 +34,7 @@ public class Rule extends bRule {
 		talk t = getTalk();
 		// 無enum 純字串判斷
 		switch (FlowStateEnum.valueOf(state)) {
+		case 受理單位主管:
 		case 受理單位主管分案:
 			String ret[][] = t.queryFromPool(
 					" select DEP_CHIEF from DEP_ACTIVE_VIEW where DEP_NO = '" + depNo + "' and CPNYID = 'YT01' ");

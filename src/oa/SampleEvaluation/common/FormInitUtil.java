@@ -54,8 +54,6 @@ public class FormInitUtil {
 		c.setValue("Q_DEP_NAME", userdata.getDepName());
 		String today = c.getToday("YYYYmmdd");
 		String edate = today;
-		String sdate = datetime.dateAdd(edate, "d", -14);
-		c.setValue("Q_SDATE", sdate);
 		c.setValue("Q_EDATE", edate);
 		userdata = null;
 		c.setNewView("QueryPage");

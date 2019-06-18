@@ -19,7 +19,13 @@ import oa.global.DtoUtil;
  * @author YoungCheng(u52116) 2019/3/19
  */
 public class SyncDataService {
-	
+
+	public static void mainFlowSync(talk t, Object h) throws Throwable {
+		SampleEvaluationService daoservice = new SampleEvaluationService(t);
+		SampleEvaluationPO se = (SampleEvaluationPO) DtoUtil.setFormDataIntoDto(new SampleEvaluationPO(), h);
+		daoservice.update(se);
+	}
+
 	/**
 	 * Sub flow sync.
 	 *
@@ -56,8 +62,8 @@ public class SyncDataService {
 		}
 		if ("1".equals(isCheck)) {
 			service = new SampleEvaluationCheckService(t);
-			SampleEvaluationCheckPO ck = (SampleEvaluationCheckPO) DtoUtil.setFormDataIntoDto(new SampleEvaluationCheckPO(),
-					h);
+			SampleEvaluationCheckPO ck = (SampleEvaluationCheckPO) DtoUtil
+					.setFormDataIntoDto(new SampleEvaluationCheckPO(), h);
 			ck.setOwnPno(ck.getOwnPno());
 			if (service.findById(ck.getOwnPno()) != null) {
 				service.update(ck);
@@ -67,8 +73,8 @@ public class SyncDataService {
 
 		if ("1".equals(isTest)) {
 			service = new SampleEvaluationTestService(t);
-			SampleEvaluationTestPO test = (SampleEvaluationTestPO) DtoUtil.setFormDataIntoDto(new SampleEvaluationTestPO(),
-					h);
+			SampleEvaluationTestPO test = (SampleEvaluationTestPO) DtoUtil
+					.setFormDataIntoDto(new SampleEvaluationTestPO(), h);
 			test.setOwnPno(test.getOwnPno());
 			if (service.findById(test.getOwnPno()) != null) {
 				service.update(test);

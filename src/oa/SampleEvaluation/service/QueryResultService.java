@@ -70,6 +70,11 @@ public class QueryResultService extends BaseDao {
 	/**
 	 * 對查詢結果二維陣列進行所需資料處理&置換 處理欄位:簽核狀態,逾期天數.
 	 * 
+	 * 本方法需重構,難理解,異動需修改程式.
+	 * 增加查詢結果欄位:
+	 * 1. DTO加入欄位相關屬性成員 
+	 * 2 . 在em設計模式欄位增加 
+	 * 3.  在本方法
 	 * @param result [String[][]]
 	 * @return [String[][]]
 	 * @throws Exception the exception
@@ -82,8 +87,8 @@ public class QueryResultService extends BaseDao {
 		int appDateFieldIndex = 10;// 逾期天數會用到申請日期資料,位於查詢結果第11欄
 		int urgencyFieldIndex = 0;// 逾期天數會用到急迫性資料,位於查詢結果第1欄
 		int appUserFieldIndex = 9;// 申請人位於查詢結果第10欄
-		int appTypeFieldIndex =11;// 申請人位於查詢結果第10欄
-		int urgencyTypeFieldIndex =13;// 申請人位於查詢結果第10欄
+		int appTypeFieldIndex =11;// 申請類型位於查詢結果第12欄
+		int urgencyTypeFieldIndex =13;// 急迫性位於查詢結果第14欄
 		String overdueDays = "";
 		String appDate = "";
 		String urgency = "";
@@ -107,6 +112,11 @@ public class QueryResultService extends BaseDao {
 			if (!"".equals(result[i][appTypeFieldIndex]) && !"".equals(result[i][urgencyTypeFieldIndex])) {
 				result[i][11] = AppTypeEnum.getAppType(result[i][appTypeFieldIndex]) + "-" + UrgencyType.getUrgency(result[i][urgencyTypeFieldIndex]);
 			}
+			/***新+欄位作法***/
+			System.out.println(result[i][11]+","+result[i][12]+","+result[i][13]+","+result[i][14]); 
+			//UI要顯示M_CODE在第13欄,則塞入值14(新欄位 14表示該成原屬性在DTO的順序 M_CODE為例)
+			result[i][13] = result[i][14];
+			
 			// 將符合目前user查詢權限的資料丟進ArrayList
 			if (isUserGotRight(result[i][pnoFieldIndex], result[i][appUserFieldIndex])) {
 				al.add(result[i]);

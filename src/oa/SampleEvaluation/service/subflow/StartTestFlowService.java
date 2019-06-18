@@ -6,11 +6,12 @@ import com.ysp.service.BaseService;
 import jcx.db.talk;
 import oa.SampleEvaluation.common.MailToolInApprove;
 import oa.SampleEvaluation.controller.HprocImpl;
-import oa.SampleEvaluation.model.SampleEvaluationPO;
-import oa.SampleEvaluation.service.SampleEvaluationService;
+import oa.SampleEvaluation.i.Flowc;
 import oa.SampleEvaluation.service.SyncDataService;
 import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.TestFlowBuilder;
+import oa.SampleEvaluationTest.model.SampleEvaluationTestFlowcHisPO;
+import oa.SampleEvaluationTest.model.SampleEvaluationTestFlowcPO;
 import oa.SampleEvaluationTest.model.SampleEvaluationTestPO;
 import oa.SampleEvaluationTest.service.SampleEvaluationTestService;
 import oa.global.BaseDao;
@@ -22,21 +23,29 @@ import oa.global.DtoUtil;
  * @author YoungCheng(u52116) 2019/3/19
  */
 public class StartTestFlowService extends HprocImpl {
-	
+
 	/** The is test value. */
 	String isTestValue;
-	
+
 	/** The coordinator. */
 	String coordinator;
-	
+
 	/** The t. */
 	talk t;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jcx.jform.hproc#action(java.lang.String)
 	 */
 	@Override
 	public String action(String arg0) throws Throwable {
+		SubFlowBuilder sfb = null;
+		sfb = new TestFlowBuilder();
+		if (!sfb.isReady(this)) {
+			message("試車流程中之配合人員不得為空");
+			return arg0;
+		}
 		setNeedValue();
 		BaseDao dao = new SampleEvaluationTestService(t);
 		SampleEvaluationTestPO test = (SampleEvaluationTestPO) dao.findById(getValue("PNO") + "TEST");
@@ -44,16 +53,9 @@ public class StartTestFlowService extends HprocImpl {
 			message("已執行過試車流程");
 			return arg0;
 		}
-		SubFlowBuilder sfb = null;
-		sfb = new TestFlowBuilder();
-		if (!sfb.isReady(this)) {
-			message("試車流程中之配合人員不得為空");
-			return arg0;
-		}
+
 		// update main data
-		SampleEvaluationService daoservice = new SampleEvaluationService(t);
-		SampleEvaluationPO se = (SampleEvaluationPO) DtoUtil.setFormDataIntoDto(new SampleEvaluationPO(), this);
-		daoservice.update(se);
+		SyncDataService.mainFlowSync(t, this);
 
 		// start sub flow
 
@@ -64,7 +66,9 @@ public class StartTestFlowService extends HprocImpl {
 
 		sfb.setMainDto(test);
 		sfb.setTalk(t);
-		sfb.construct();
+		Flowc flowc = new SampleEvaluationTestFlowcPO();
+		Flowc flowcHis = new SampleEvaluationTestFlowcHisPO();
+		sfb.construct(flowc, flowcHis);
 		SyncDataService.subFlowSync(t, this);
 		// 有試製流程 寄出通知信
 		String title = mailTitle + "_試車流程";

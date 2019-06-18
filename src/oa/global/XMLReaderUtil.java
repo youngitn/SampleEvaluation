@@ -8,10 +8,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
 /**
- * 建構式:輸入XML路徑取得檔案池
- * 設置節點名稱,取得節點列表
- * 取得vector
+ * 建構式:輸入XML路徑取得檔案池 設置節點名稱,取得節點列表 取得vector
+ * 
  * @author u52116
  *
  */
@@ -28,6 +28,16 @@ public class XMLReaderUtil {
 		DocumentBuilder builder = dFactory.newDocumentBuilder();
 		this.doc = builder.parse(new File(path));
 		// this.nl = doc.getElementsByTagName(nodeName);
+	}
+
+	public NodeList getNodeList() {
+
+		return nl;
+	}
+
+	public int getNodeListNum() {
+		
+		return nl.getLength();
 	}
 
 	public void setNodeName(String nodeName) {

@@ -1,9 +1,13 @@
 package oa.SampleEvaluation.test;
 
+import org.junit.Test;
+
 import jcx.db.talk;
-import oa.SampleEvaluation.model.SampleEvaluationPO;
+import oa.SampleEvaluation.i.Flowc;
 import oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder;
 import oa.SampleEvaluation.subflowbuilder.builder.TpFlowBuilder;
+import oa.SampleEvaluationTp.model.SampleEvaluationTpFlowcHisPO;
+import oa.SampleEvaluationTp.model.SampleEvaluationTpFlowcPO;
 import oa.SampleEvaluationTp.model.SampleEvaluationTpPO;
 
 /**
@@ -18,7 +22,8 @@ public class TestSubFlow {
 	 *
 	 * @param args [String[]]
 	 */
-	public void test(String[] args) {
+	@Test
+	public void test() {
 		SubFlowBuilder sfb = new TpFlowBuilder();
 		SampleEvaluationTpPO se = new SampleEvaluationTpPO();
 		se.setPno("88888");
@@ -26,7 +31,9 @@ public class TestSubFlow {
 		sfb.setMainDto(se);
 		sfb.setTalk(t);
 		try {
-			sfb.construct();
+			Flowc flowc = new SampleEvaluationTpFlowcPO();
+			Flowc flowcHis = new SampleEvaluationTpFlowcHisPO();
+			sfb.construct(flowc, flowcHis);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

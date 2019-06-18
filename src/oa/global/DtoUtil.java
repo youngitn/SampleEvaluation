@@ -56,8 +56,9 @@ public class DtoUtil {
 						xmaker myAnnotation = (xmaker) annotation;
 						String adapName = myAnnotation.mappingDbFieldName();
 						String val = (String) field.get(dto);
-
+						
 						if (!"".equals(val) && !(null == val)) {
+							//**日期欄位查詢條件處理**
 							// 該欄位是日期起日則組合對應字串
 							if (myAnnotation.isDateStart()) {
 								sqlWhere.append(adapName).append(">=").append(field.get(dto)).append(" AND ");
@@ -65,13 +66,16 @@ public class DtoUtil {
 							else if (myAnnotation.isDateEnd()) {
 								sqlWhere.append(adapName).append("<=").append(field.get(dto)).append(" AND ");
 							}
+							//**簽核狀態查詢條件處理**
 							// 該欄位是簽核狀態則使用getFlowStateSqlStrByQueryCondition("待處理 or 結案 or 簽核中")
 							// 組出查詢字串
 							else if (myAnnotation.isFlowStatus()) {
 								// dto為來自客戶端輸入值的查詢條件物件
 								status = getFlowStateSqlStrByQueryCondition((String) field.get(dto));
 
-							} // 其他非特殊欄位皆使用'db欄位名稱 like % 值%'組出字串
+							}
+							//**沒有特殊限定查詢條件處理(純文字 like )**
+							// 其他非特殊欄位皆使用'db欄位名稱 like % 值%'組出字串
 							else if (!"".equals(adapName)) {
 								System.out.println("name: " + myAnnotation.mappingDbFieldName());
 								sqlWhere.append(adapName).append(" like ").append("'%").append(field.get(dto))
@@ -110,9 +114,9 @@ public class DtoUtil {
 
 	/**
 	 * 將表單畫面欄位資料塞入物件.
-	 *
-	 * @param o       需為實體物件,且需搭配xmaker,作為資料藍圖使用
-	 * @param service [hproc,BaseService,bProcFlow....]
+	 * 
+	 * @param o       需為實體物件,且需搭配xmaker,作為資料藍圖對應使用
+	 * @param service [hproc,BaseService,bProcFlow....] emaker,dmaker
 	 * @return [Object]
 	 */
 	public static Object setFormDataIntoDto(final Object o, Object service) {
@@ -128,6 +132,7 @@ public class DtoUtil {
 					if (annotation instanceof xmaker) {
 						xmaker myAnnotation = (xmaker) annotation;
 						// System.out.println("xmaker.name: " + myAnnotation.name());
+						//以xmaker的name = DB = form 欄位名稱
 						if (service instanceof hproc) {
 							field.set(o, ((hproc) service).getValue(myAnnotation.name()));
 						}

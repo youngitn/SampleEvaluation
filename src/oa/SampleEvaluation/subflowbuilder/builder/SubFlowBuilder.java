@@ -59,7 +59,11 @@ public abstract class SubFlowBuilder {
 	 * @throws SQLException the SQL exception
 	 * @throws Exception the exception
 	 */
-	public abstract void setAndInsertFlowData() throws SQLException, Exception;
+	public void setAndInsertFlowData(Flowc flowc,Flowc flowcHis) throws SQLException, Exception {
+		insertFlowData(flowc);
+		insertFlowData(flowcHis);
+	}
+
 
 	/**
 	 * Sets the Talk.
@@ -76,15 +80,15 @@ public abstract class SubFlowBuilder {
 	 *
 	 * @throws Exception the exception
 	 */
-	public void construct() throws Exception {
+	public void construct(Flowc flowc,Flowc flowcHis) throws Exception {
 		this.insertSubMainData();
-		this.setAndInsertFlowData();
+		this.setAndInsertFlowData( flowc,flowcHis);
 
 	}
 
 	/**
 	 * Insert flow data.
-	 *
+	 * 
 	 * @param c [Flowc]
 	 * @return  [Flowc]
 	 * @throws SQLException the SQL exception
@@ -93,6 +97,7 @@ public abstract class SubFlowBuilder {
 	public Flowc insertFlowData(Flowc c) throws SQLException, Exception {
 		this.now = DateTimeUtil.getApproveAddSeconds(0);
 		c.setOwnPno(this.ownPno);
+		checkEmpty(this.se.getDesignee());
 		c.setfInpId(this.se.getDesignee().split(" ")[0]);//
 		c.setfInpStat(this.startGateName);
 		c.setfInpTime(this.now);

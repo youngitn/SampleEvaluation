@@ -11,7 +11,7 @@ import oa.global.annotation.xmaker;
  */
 @dbTable(name = "SAMPLE_EVALUATION_TP", pkName = "OWN_PNO")
 public class SampleEvaluationTpPO extends SampleEvaluationPO {
-	
+
 	/** ownPno. */
 	@xmaker(name = "OWN_PNO")
 	protected String ownPno;
@@ -27,7 +27,7 @@ public class SampleEvaluationTpPO extends SampleEvaluationPO {
 	 * Builds the own pno.
 	 *
 	 * @param pno [String]
-	 * @return  [String]
+	 * @return [String]
 	 */
 	protected String buildOwnPno(String pno) {
 
@@ -40,7 +40,7 @@ public class SampleEvaluationTpPO extends SampleEvaluationPO {
 	 * @return [String]
 	 */
 	public String getOwnPno() {
-		if (this.ownPno.length() == 0) {
+		if (this.ownPno == null || this.ownPno.length() == 0) {
 			return buildOwnPno(this.getPno());
 		}
 		return this.ownPno;
@@ -49,7 +49,7 @@ public class SampleEvaluationTpPO extends SampleEvaluationPO {
 	/**
 	 * Sets the OwnPno.
 	 *
-	 * @param ownPno  void
+	 * @param ownPno void
 	 */
 	public void setOwnPno(String ownPno) {
 		this.ownPno = ownPno;

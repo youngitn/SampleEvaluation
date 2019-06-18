@@ -26,18 +26,7 @@ public class CheckFlowBuilder extends SubFlowBuilder {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#
-	 * setAndInsertFlowData()
-	 */
-	@Override
-	public void setAndInsertFlowData() throws SQLException, Exception {
-		insertFlowData(new SampleEvaluationCheckFlowcPO());
-		insertFlowData(new SampleEvaluationCheckFlowcHisPO());
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -79,7 +68,7 @@ public class CheckFlowBuilder extends SubFlowBuilder {
 		if (form instanceof bProcFlow) {
 
 			checkEmpty(((bProcFlow) form).getValue("IS_CHECK").trim());
-			checkEmpty(((bProcFlow) form).getValue("DOC_CTRLER_CHECK").trim());
+			checkEmpty(((bProcFlow) form).getValue("DOC_CTRLER_CHECK").trim()); 
 			//子流程如勾選'其他'選項將簡化流程,
 			//送出時不檢查QC主管欄位,
 			//留空白時簽核的話會跳簽是為簡化

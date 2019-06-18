@@ -89,7 +89,7 @@ public class SampleEvaluationActionController extends HprocImpl {
 	private String[][] doQuery() throws SQLException, Exception {
 		// 從畫面取得查詢條件並塞入QueryConditionDto
 		QueryConditionDTO qcDto = new QueryConditionDTO();
-		qcDto.getFormData(this);
+		qcDto.getDataFromForm(this);
 		// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
 		String sql = qcDto.toSql();
 
@@ -97,13 +97,14 @@ public class SampleEvaluationActionController extends HprocImpl {
 		QueryResultService resultService = new QueryResultService(this);
 		resultService.setForm(this);
 		String[][] ret = (String[][]) resultService.getResult(sql);
+		System.out.println("********>"+sql);
 		return ret;
 	}
 
 	private String[][] doExportQuery() throws SQLException, Exception {
 		// 從畫面取得查詢條件並塞入QueryConditionDto
 		QueryConditionDTO qcDto = new QueryConditionDTO();
-		qcDto.getFormData(this);
+		qcDto.getDataFromForm(this);
 		// 將前一步驟取得的QueryConditionDto轉換成SQL WHERE敘述式
 		String sql = qcDto.toSql();
 

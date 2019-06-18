@@ -33,7 +33,8 @@ public class ShowSignHistoryService extends hproc {
 		if (subRec != null && subRec.length != 0) {
 			sbCheck = getMainFlowHistory(subid, subRec, getFunctionName() + "_請驗流程");
 		}
-
+		
+		//產生三個子流程的簽核歷程
 		String subidTp = "a.OWN_PNO= '" + getValue("QUERY_LIST.PNO") + "TP'";
 		String[][] subRecTp = getFlowHistory(getFunctionName() + "_試製流程", subidTp);
 		StringBuilder sbTp = new StringBuilder("");
@@ -58,7 +59,7 @@ public class ShowSignHistoryService extends hproc {
 		return value;
 
 	}
-
+	
 	/**
 	 * Gets the MainFlowHistory.
 	 *

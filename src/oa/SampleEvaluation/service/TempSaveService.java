@@ -41,7 +41,7 @@ public class TempSaveService {
 	 * @throws Exception the exception
 	 */
 	public void save() throws SQLException, Exception {
-		se.getFormData(h);
+		se.getDataFromForm(h);
 		if ("".equals(se.getQty()))
 			se.setQty("0");
 		se.setPno(h.getUser());
@@ -73,7 +73,7 @@ public class TempSaveService {
 	 */
 	public void update() throws SQLException, Exception {
 
-		se.getFormData(h);
+		se.getDataFromForm(h);
 		if ("".equals(se.getQty()))
 			se.setQty("0");
 		se.setPno(h.getUser());

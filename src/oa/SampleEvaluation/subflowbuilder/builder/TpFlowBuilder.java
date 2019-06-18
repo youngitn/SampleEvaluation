@@ -23,18 +23,7 @@ public class TpFlowBuilder extends SubFlowBuilder {
 		this.startGateName = "試製人員";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see oa.SampleEvaluation.subflowbuilder.builder.SubFlowBuilder#
-	 * setAndInsertFlowData()
-	 */
-	@Override
-	public void setAndInsertFlowData() throws SQLException, Exception {
-		insertFlowData(new SampleEvaluationTpFlowcPO());
-		insertFlowData(new SampleEvaluationTpFlowcHisPO());
-	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 

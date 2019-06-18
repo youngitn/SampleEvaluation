@@ -4,3 +4,5 @@
 /StartCheckFlowService.class
 /StartTestFlowService.class
 /StartTpFlowService.class
+/SubFlowService.class
+/StartSubFlowService.class

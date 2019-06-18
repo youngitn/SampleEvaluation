@@ -20,5 +20,6 @@ public enum FlowStateEnum {
  /** The 採購經辦. */
  採購經辦,
 /** The 文管人員. */
-文管人員
+文管人員, 
+受理單位主管
 }
