@@ -35,11 +35,11 @@ public class QueryResultDTO {
 	/** SUPPLIER */
 	@xmaker(name = "SUPPLIER")
 	private String supplier;
-	
-	/**製造商*/
+
+	/** 製造商 */
 	@xmaker(name = "MFR")
 	private String mfr;
-	
+
 	/** The text. */
 	@xmaker(name = "簽核狀態", isFlowStatus = true)
 	private String text;
@@ -51,20 +51,19 @@ public class QueryResultDTO {
 	/** The number of overdue days. */
 	@xmaker(name = "逾期天數", isText = true)
 	private String numberOfOverdueDays;
-	
+
+	//10
 	/** The applicant. */
 	@xmaker(name = "APPLICANT")
 	private String applicant;
-	
+
 	/** The app date. */
 	@xmaker(name = "APP_DATE")
 	private String appDate;
-	
-	
+
 	/** The app type. */
 	@xmaker(name = "APP_TYPE")
 	private String appType;
-
 
 	/** The flow his. */
 	@xmaker(name = "簽核紀錄", isText = true)
@@ -73,10 +72,54 @@ public class QueryResultDTO {
 	/** The urgencyType. */
 	@xmaker(name = "URGENCY_TYPE")
 	private String urgencyType;
-	
-	/** The urgencyType. */
+
+	/** The M_CODE. */
 	@xmaker(name = "M_CODE")
 	private String mCode;
+
+	/**
+	 * 預計完成日 受理單位 申請人單位 QR編號 簽核狀態 製造商國別 製造商批號 製造商廠址 數量 單位
+	 */
+	/** The urgencyType. */
+	@xmaker(name = "預計完成日", isText = true)
+	private String dl;
+	//17
+	/** 受理單位. */
+	@xmaker(name = "RECEIPT_UNIT")
+	private String receiptUnit;
+
+	//18
+	/** The urgencyType. */
+	@xmaker(name = "申請人單位", isText = true)
+	private String appDept;
+	//19
+	/** The urgencyType. */
+	@xmaker(name = "QR_NO")
+	private String qrNo;
+	//20
+	/** The text. */
+	@xmaker(name = "簽核狀態",  isText = true)
+	private String text2;
+	//21
+	/** The urgencyType. */
+	@xmaker(name = "MFR_COUNTRY")
+	private String mfrCountry;
+	//22
+	/** The urgencyType. */
+	@xmaker(name = "MFG_LOT_NO")
+	private String mfgLotNo;
+	//23
+	/** The urgencyType. */
+	@xmaker(name = "MFR_ADDRESS")
+	private String mfrAddress;
+	//24
+	/** The urgencyType. */
+	@xmaker(name = "QTY")
+	private String qty;
+	//25
+	/** The urgencyType. */
+	@xmaker(name = "UNIT")
+	private String unit;
 	/**
 	 * Gets the Pno.
 	 *

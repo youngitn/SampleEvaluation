@@ -1,5 +1,7 @@
 package oa.SampleEvaluation.test;
 
+import java.util.ArrayList;
+
 import jcx.db.talk;
 import jcx.jform.hproc;
 import oa.SampleEvaluation.model.SampleEvaluationPO;
@@ -32,6 +34,10 @@ public class TestTp extends hproc {
 		tes.testSync();
 		//tes.testFindById();
 		System.exit(0);
+		ArrayList<String[]> al = new ArrayList();
+		for (String[] string : al) {
+			
+		}
 
 	}
 

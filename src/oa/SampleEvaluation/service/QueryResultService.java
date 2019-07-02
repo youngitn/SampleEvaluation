@@ -70,11 +70,8 @@ public class QueryResultService extends BaseDao {
 	/**
 	 * 對查詢結果二維陣列進行所需資料處理&置換 處理欄位:簽核狀態,逾期天數.
 	 * 
-	 * 本方法需重構,難理解,異動需修改程式.
-	 * 增加查詢結果欄位:
-	 * 1. DTO加入欄位相關屬性成員 
-	 * 2 . 在em設計模式欄位增加 
-	 * 3.  在本方法
+	 * 本方法需重構,難理解,異動需修改程式. 增加查詢結果欄位: 1. DTO加入欄位相關屬性成員 2 . 在em設計模式欄位增加 3. 在本方法手動位移陣列
+	 * 
 	 * @param result [String[][]]
 	 * @return [String[][]]
 	 * @throws Exception the exception
@@ -87,14 +84,16 @@ public class QueryResultService extends BaseDao {
 		int appDateFieldIndex = 10;// 逾期天數會用到申請日期資料,位於查詢結果第11欄
 		int urgencyFieldIndex = 0;// 逾期天數會用到急迫性資料,位於查詢結果第1欄
 		int appUserFieldIndex = 9;// 申請人位於查詢結果第10欄
-		int appTypeFieldIndex =11;// 申請類型位於查詢結果第12欄
-		int urgencyTypeFieldIndex =13;// 急迫性位於查詢結果第14欄
+		int appTypeFieldIndex = 11;// 申請類型位於查詢結果第12欄
+		int urgencyTypeFieldIndex = 13;// 急迫性位於查詢結果第14欄
+		int custnoAndCustName = 4;
 		String overdueDays = "";
 		String appDate = "";
 		String urgency = "";
 		String[][] ret = new String[1][];
 		ArrayList<String[]> al = new ArrayList<String[]>();
 		for (int i = 0; i < result.length; i++) {
+
 			// 簽核狀態處理好後放到指定欄位,有簽核流程的案件才執行這段.
 			// 單號8碼表示送出後的單據,小於8碼為暫存
 			if (result[i][pnoFieldIndex].length() == 8) {
@@ -108,17 +107,33 @@ public class QueryResultService extends BaseDao {
 				overdueDays = setNumberOfOverdueDaysToField(appDate, urgency);
 			}
 			result[i][numberOfOverdueDaysFieldIndex] = overdueDays;
-			
+
 			if (!"".equals(result[i][appTypeFieldIndex]) && !"".equals(result[i][urgencyTypeFieldIndex])) {
-				result[i][11] = AppTypeEnum.getAppType(result[i][appTypeFieldIndex]) + "-" + UrgencyType.getUrgency(result[i][urgencyTypeFieldIndex]);
+				result[i][11] = AppTypeEnum.getAppType(result[i][appTypeFieldIndex]) + "-"
+						+ UrgencyType.getUrgency(result[i][urgencyTypeFieldIndex]);
 			}
-			/***新+欄位作法***/
-			System.out.println(result[i][11]+","+result[i][12]+","+result[i][13]+","+result[i][14]); 
-			//UI要顯示M_CODE在第13欄,則塞入值14(新欄位 14表示該成原屬性在DTO的順序 M_CODE為例)
-			result[i][13] = result[i][14];
-			
+
+			result[i][13] = getDeadLine(urgency, h.getTalk(), result[i][appDateFieldIndex]);// 預計完成日
+																							// 表單欄位13
+																							// sql
+																							// select欄位15(dto)
+			result[i][14] = result[i][16];// 受理單位
+			result[i][15] = new UserData(result[i][appUserFieldIndex], t).getDepName();// 申請人單位
+			result[i][16] = result[i][18];// QR編號
+			result[i][17] = result[i][stateFieldIndex];// 簽核狀態
+			result[i][18] = result[i][20];// 製造商國別
+			result[i][19] = result[i][21];// 製造商批號
+			result[i][20] = result[i][22];// 製造商廠址
+			result[i][21] = result[i][23];// 數量
+			result[i][22] = result[i][24];// 單位
+
+			if (result[i][custnoAndCustName] != null && result[i][custnoAndCustName].length() > 4) {
+				result[i][custnoAndCustName] = result[i][custnoAndCustName].substring(5);
+			}
 			// 將符合目前user查詢權限的資料丟進ArrayList
+
 			if (isUserGotRight(result[i][pnoFieldIndex], result[i][appUserFieldIndex])) {
+				result[i][appUserFieldIndex] = result[i][appUserFieldIndex] + h.getName(result[i][appUserFieldIndex]);
 				al.add(result[i]);
 			}
 		}
@@ -134,7 +149,6 @@ public class QueryResultService extends BaseDao {
 	 * @return [String]
 	 */
 	public String setNowFlowStateAndNowSignPeopleToField(String pno) {
-		Vector nowPeople = h.getApprovablePeople(h.getFunctionName(), "pno='" + pno + "'");
 
 		// 取得簽核歷史(底層可能還是使用SQL,這邊維持API形式呼叫)
 		String[][] flowHis = h.getFlowHistory(h.getFunctionName(), "a.pno='" + pno + "'");
@@ -143,16 +157,22 @@ public class QueryResultService extends BaseDao {
 		StringBuilder nowFlowInfo = new StringBuilder();
 		// 判斷該筆單號是否存在簽核狀態
 		// 如無簽核狀態則顯示"查無簽核關卡"
+		int lastFlowStateIndex = flowHis.length - 1;
 		if (flowHis.length == 0) {
+
 			nowFlowInfo.append("<font color=\"red\">查無簽核關卡</font>");
+			return nowFlowInfo.toString();
 		} else {
 			// 最新一筆簽核歷史=當前關卡
-			int lastFlowStateIndex = flowHis.length - 1;
+
 			nowFlowInfo.append("<font color=\"blue\">" + flowHis[lastFlowStateIndex][0] + "</font>");
 		}
-
+		if (flowHis[lastFlowStateIndex][0].equals("結案")) {
+			return nowFlowInfo.toString();
+		}
 		// 判斷該筆單號是否存在簽核者
 		// 如無簽核狀態則顯示"查無簽核人"
+		Vector nowPeople = h.getApprovablePeople(h.getFunctionName(), "pno='" + pno + "'");
 		String peopleId = "<font color=\"red\">(查無簽核人)</font>";
 		if (nowPeople == null || nowPeople.isEmpty()) {
 			nowFlowInfo.append(peopleId);
@@ -192,6 +212,33 @@ public class QueryResultService extends BaseDao {
 				return "已逾期 " + days + " 日";
 			}
 		}
+
+	}
+
+	private String getDeadLine(String value, talk t, String appDate) {
+		int addDaysNum = 0;
+		String dl = "";
+		System.out.println("value=========>" + value);
+		if (value.equals("A")) {
+			addDaysNum = 100;
+		} else if (value.equals("B")) {
+			addDaysNum = 110;
+		} else if (value.equals("C")) {
+			addDaysNum = 130;
+		}
+		// c.add(Calendar.DATE, addDaysNum);
+		// Date d = c.getTime();
+		// SimpleDateFormat sdFormat = new SimpleDateFormat("yyyyMMdd");
+		// String dldate = sdFormat.format(d);
+		try {
+			dl = DateTool.getAfterWorkDate(appDate, addDaysNum, t);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dl;
+
+		// setValue("DL", DateTool.getAfterWorkDate(getValue("APP_DATE"),addDaysNum,
+		// getTalk()));
 
 	}
 
