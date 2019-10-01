@@ -61,16 +61,19 @@ public class QueryConditionDTO extends Model {
 	@xmaker(name = "Q_QR_NO", mappingDbFieldName = "QR_NO")
 	private String Q_QR_NO;
 
-	/** The q receipt unit. */
+	/** 受理單位. */
 	@xmaker(name = "Q_RECEIPT_UNIT", mappingDbFieldName = "RECEIPT_UNIT")
 	private String Q_RECEIPT_UNIT;
 
+	//申請類型
 	@xmaker(name = "Q_APP_TYPE", mappingDbFieldName = "APP_TYPE")
 	private String Q_APP_TYPE;
 
+	//子範圍編碼
 	@xmaker(name = "Q_M_CODE", mappingDbFieldName = "M_CODE")
 	private String Q_M_CODE;
 
+	//供應商
 	@xmaker(name = "Q_SUPPLIER", mappingDbFieldName = "SUPPLIER")
 	private String Q_SUPPLIER;
 

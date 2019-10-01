@@ -1,8 +1,16 @@
 package oa.SampleEvaluation.test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.security.MessageDigest;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+
+import com.sun.jndi.misc.BASE64Decoder;
+import com.sun.jndi.misc.BASE64Encoder;
 
 import jcx.db.talk;
 import jcx.jform.hproc;
@@ -33,17 +41,24 @@ public class Test extends hproc {
 	 */
 	public static void main(String[] arg) throws Throwable {
 		Test tes = new Test();
-		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
-
-		SampleEvaluationPO sePO = new SampleEvaluationPO();
-		SampleEvaluationService seService = new SampleEvaluationService(t);
-		sePO.setPno("20190006");
-		QueryConditionDTO targetLikeThis = new QueryConditionDTO();
-		targetLikeThis.setQ_PNO("20190001");
-		String sqlWhereString = DtoUtil.queryConditionDtoConvertToSqlWhereString(targetLikeThis);
-		ArrayList as = seService.findByCondition(sqlWhereString);
-		System.out.println("@@@@@@@@@@@@@>"+sqlWhereString);
-		System.out.println("@@@@@@@@@@@@@>"+as.size());
+		 System.out.println(tes.decrypt("52116", "HcASuOGdIfNXmI0v"));
+		  String credentials;
+	        BASE64Decoder decoder = new BASE64Decoder();
+	        System.out.println(decoder.decodeBuffer("HcASuOGdIfNXmI0v").toString());
+	        tes.encrypt_passwd1("admin");
+		//System.out.println(tes.decoding("99rmuNrrZYi7ltnT"));
+		
+//		talk t = new talk("mssql", "10.1.1.64", "ysphr", "1qaz@WSX", "ysphr");
+//
+//		SampleEvaluationPO sePO = new SampleEvaluationPO();
+//		SampleEvaluationService seService = new SampleEvaluationService(t);
+//		sePO.setPno("20190006");
+//		QueryConditionDTO targetLikeThis = new QueryConditionDTO();
+//		targetLikeThis.setQ_PNO("20190001");
+//		String sqlWhereString = DtoUtil.queryConditionDtoConvertToSqlWhereString(targetLikeThis);
+//		ArrayList as = seService.findByCondition(sqlWhereString);
+//		System.out.println("@@@@@@@@@@@@@>"+sqlWhereString);
+//		System.out.println("@@@@@@@@@@@@@>"+as.size());
 
 		
 //		targetLikeThis.setQ_EMPID("52116");
@@ -53,19 +68,19 @@ public class Test extends hproc {
 //		targetLikeThis.setQ_SAP_CODE("11111111111111");
 //		targetLikeThis.setQ_MATERIAL("2222222222222222");
 //		targetLikeThis.setQ_MFR("3333333333");
-		targetLikeThis.setQ_STATUS("已結案");
+//		targetLikeThis.setQ_STATUS("已結案");
 		// 用條件執行查詢
 		// s.doQuery();
 		// 或取得SQL查詢字串
 
-		String targetCondition = DtoUtil.queryConditionDtoConvertToSqlWhereString(targetLikeThis);
-		QueryResultService qrs = new QueryResultService(t);
-		String[][] al = (String[][]) qrs.getResultBySqlWhereString(targetCondition);
+//		String targetCondition = DtoUtil.queryConditionDtoConvertToSqlWhereString(targetLikeThis);
+//		QueryResultService qrs = new QueryResultService(t);
+//		String[][] al = (String[][]) qrs.getResultBySqlWhereString(targetCondition);
 		/*
 		 * 使用方式 ----> 在繼承hproc狀況下 String[][] list = new
 		 * Query(this).get2DStringArrayResult();
 		 */
-		System.out.println("ret=>" + al.length);
+//		System.out.println("ret=>" + al.length);
 		// System.out.println(al[0][0]);
 		// System.out.println(al[0][1]);
 		// tes.test1();
@@ -84,7 +99,7 @@ public class Test extends hproc {
 //		}
 
 		// System.out.println(DateTool.getBeforeWorkDate("20181220", 11, t));
-		System.out.println("------->" + DateTool.getAfterWorkDate("20190103", 150, t));
+//		System.out.println("------->" + DateTool.getAfterWorkDate("20190103", 150, t));
 		// System.out.println( DateTool.getBeforeWorkDateOver25Day("20181224",1, t));
 //		SampleEvaluationTpFlowcHis secfh = new SampleEvaluationTpFlowcHis();
 //		secfh.setOwnPno("sss");
@@ -94,21 +109,73 @@ public class Test extends hproc {
 //		SampleEvaluationTpFlowcHisService service = new SampleEvaluationTpFlowcHisService(t);
 //		service.upsert(secfh);
 		List<?>[] lsa = new List<?>[10]; // OK, array of unbounded wildcard type.
-		Object o = lsa;
-		Object[] oa = (Object[]) o;
-		List<Integer> li = new ArrayList<Integer>();
-		li.add(new Integer(3));
-		li.add(5555);
-		oa[1] = li; // Correct.
-		Integer i = (Integer) lsa[1].get(0); // OK
-		System.out.println(i);
-		System.out.println(lsa[1].get(1));
-		System.out.println(((List) oa[1]).get(1));
-
-		// System.out.println(aa);
-		System.exit(0);
+//		Object o = lsa;
+//		Object[] oa = (Object[]) o;
+//		List<Integer> li = new ArrayList<Integer>();
+//		li.add(new Integer(3));
+//		li.add(5555);
+//		oa[1] = li; // Correct.
+//		Integer i = (Integer) lsa[1].get(0); // OK
+//		System.out.println(i);
+//		System.out.println(lsa[1].get(1));
+//		System.out.println(((List) oa[1]).get(1));
+//
+//		// System.out.println(aa);
+//		System.exit(0);
 	}
+	
 
+	public String encrypt_passwd1(String s)
+    {
+        try
+        {
+            MessageDigest messagedigest = MessageDigest.getInstance("SHA");
+            byte abyte0[] = s.getBytes();
+            byte abyte1[] = new byte[abyte0.length * 2];
+            for(int i = 0; i < abyte0.length; i++)
+            {
+                abyte1[i * 2] = (byte)(abyte0[i] ^ 0x12);
+                abyte1[i * 2 + 1] = (byte)(abyte0[i] ^ 0x11);
+            }
+
+            messagedigest.update(abyte1);
+            messagedigest.update("Interinfo".getBytes());
+            byte abyte2[] = messagedigest.digest();
+            byte abyte3[] = new byte[12];
+            System.arraycopy(abyte2, 4, abyte3, 0, 12);
+            BASE64Encoder base64encoder = new BASE64Encoder();
+            String s1 = (new String(base64encoder.encode(abyte3))).replace('=', '.');
+            System.out.println(abyte3);
+            return s1;
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
+        }
+        return s;
+    }
+	
+	public static Object decoding(String s) {
+		byte abyte0[] = new byte[s.length() / 2];
+		for (int i = 0; i < s.length(); i += 2) {
+			String s1 = s.substring(i, i + 2);
+			int j = Integer.parseInt(s1, 16) ^ 0x3f;
+			abyte0[i / 2] = (byte) j;
+		}
+
+		Object obj = null;
+		try {
+			ByteArrayInputStream bytearrayinputstream = new ByteArrayInputStream(
+					abyte0);
+			ObjectInputStream objectinputstream = new ObjectInputStream(
+					bytearrayinputstream);
+			obj = objectinputstream.readObject();
+			objectinputstream.close();
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return obj;
+	}
 	/**
 	 * Gets the QueryRightSql.
 	 *

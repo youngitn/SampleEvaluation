@@ -24,7 +24,7 @@ public class QueryTest extends hproc {
 		// 表單輸入值讀取進入物件
 		QueryConditionDTO targetLikeThis = new QueryConditionDTO();
 		targetLikeThis = (QueryConditionDTO) DtoUtil.setFormDataIntoDto(new QueryConditionDTO(), this);
-
+		
 		// 用條件執行查詢
 		// s.doQuery();
 		// 或取得SQL查詢字串
